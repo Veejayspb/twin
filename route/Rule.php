@@ -1,8 +1,8 @@
 <?php
 
-namespace core\route;
+namespace twin\route;
 
-use core\helper\Address;
+use twin\helper\Address;
 
 class Rule implements RuleInterface
 {

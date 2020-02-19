@@ -1,6 +1,6 @@
 <?php
 
-use core\route\RouteManager;
+use twin\route\RouteManager;
 
 return [
     'name' => 'Twin Application',

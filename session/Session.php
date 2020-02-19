@@ -1,9 +1,9 @@
 <?php
 
-namespace core\session;
+namespace twin\session;
 
-use core\common\Component;
-use core\Twin;
+use twin\common\Component;
+use twin\Twin;
 
 class Session extends Component
 {

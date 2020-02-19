@@ -1,8 +1,8 @@
 <?php
 
-namespace core\widget;
+namespace twin\widget;
 
-use core\view\RenderTrait;
+use twin\view\RenderTrait;
 
 abstract class Widget
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace core\helper;
+namespace twin\helper;
 
 Request::$scheme = $_SERVER['REQUEST_SCHEME'];
 Request::$host = $_SERVER['HTTP_HOST'];

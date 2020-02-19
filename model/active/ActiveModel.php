@@ -1,11 +1,11 @@
 <?php
 
-namespace core\model\active;
+namespace twin\model\active;
 
-use core\common\Exception;
-use core\db\Database;
-use core\model\Model;
-use core\Twin;
+use twin\common\Exception;
+use twin\db\Database;
+use twin\model\Model;
+use twin\Twin;
 use ReflectionClass;
 
 abstract class ActiveModel extends Model implements ActiveModelInterface

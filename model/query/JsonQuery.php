@@ -1,9 +1,9 @@
 <?php
 
-namespace core\model\query;
+namespace twin\model\query;
 
-use core\db\json\Json;
-use core\model\active\ActiveJsonModel;
+use twin\db\json\Json;
+use twin\model\active\ActiveJsonModel;
 
 /**
  * Class JsonQuery

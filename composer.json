@@ -1,0 +1,20 @@
+{
+    "name": "veejayspb/twin",
+    "description": "Twin PHP Framework",
+    "keywords": [
+        "twin",
+        "framework"
+    ],
+    "type": "library",
+    "require": {
+        "php": ">=7.0",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-pdo": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "twin\\": ""
+        }
+    }
+}

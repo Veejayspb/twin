@@ -1,6 +1,6 @@
 <?php
 
-namespace core\validator;
+namespace twin\validator;
 
 class Email extends Str
 {

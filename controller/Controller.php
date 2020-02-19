@@ -1,9 +1,9 @@
 <?php
 
-namespace core\controller;
+namespace twin\controller;
 
-use core\common\Exception;
-use core\route\Route;
+use twin\common\Exception;
+use twin\route\Route;
 use ReflectionClass;
 use ReflectionMethod;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace core\validator;
+namespace twin\validator;
 
 abstract class Numeric extends Validator
 {

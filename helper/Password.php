@@ -1,8 +1,8 @@
 <?php
 
-namespace core\helper;
+namespace twin\helper;
 
-use core\common\Exception;
+use twin\common\Exception;
 
 final class Password
 {

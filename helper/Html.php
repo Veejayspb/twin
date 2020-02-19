@@ -1,6 +1,6 @@
 <?php
 
-namespace core\helper;
+namespace twin\helper;
 
 class Html
 {

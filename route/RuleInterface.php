@@ -1,6 +1,6 @@
 <?php
 
-namespace core\route;
+namespace twin\route;
 
 interface RuleInterface
 {

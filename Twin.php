@@ -1,16 +1,16 @@
 <?php
 
-namespace core;
+namespace twin;
 
-use core\common\Component;
-use core\common\Exception;
-use core\controller\ConsoleController;
-use core\controller\WebController;
-use core\helper\Request;
-use core\route\Route;
-use core\route\RouteManager;
-use core\session\Session;
-use core\view\View;
+use twin\common\Component;
+use twin\common\Exception;
+use twin\controller\ConsoleController;
+use twin\controller\WebController;
+use twin\helper\Request;
+use twin\route\Route;
+use twin\route\RouteManager;
+use twin\session\Session;
+use twin\view\View;
 
 define('LOCALHOST', $_SERVER['SERVER_ADDR'] == '127.0.0.1' && $_SERVER['REMOTE_ADDR'] == '127.0.0.1');
 

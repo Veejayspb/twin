@@ -1,10 +1,10 @@
 <?php
 
-namespace core\route;
+namespace twin\route;
 
-use core\common\Component;
-use core\common\Exception;
-use core\Twin;
+use twin\common\Component;
+use twin\common\Exception;
+use twin\Twin;
 
 class RouteManager extends Component
 {
@@ -100,7 +100,7 @@ class RouteManager extends Component
      * @param string $route - строковый роут или название класса
      * @return string
      * @throws Exception
-     * @see \core\route\Rule
+     * @see \twin\route\Rule
      */
     private function getRuleClass(string $route): string
     {

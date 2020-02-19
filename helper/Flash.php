@@ -1,10 +1,10 @@
 <?php
 
-namespace core\helper;
+namespace twin\helper;
 
-use core\common\Exception;
-use core\session\Session;
-use core\Twin;
+use twin\common\Exception;
+use twin\session\Session;
+use twin\Twin;
 
 final class Flash
 {

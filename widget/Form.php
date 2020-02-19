@@ -1,9 +1,9 @@
 <?php
 
-namespace core\widget;
+namespace twin\widget;
 
-use core\helper\Html;
-use core\model\Model;
+use twin\helper\Html;
+use twin\model\Model;
 use ReflectionClass;
 
 class Form extends Widget

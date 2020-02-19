@@ -1,10 +1,10 @@
 <?php
 
-namespace core\helper;
+namespace twin\helper;
 
-use core\controller\Controller;
-use core\route\Route;
-use core\Twin;
+use twin\controller\Controller;
+use twin\route\Route;
+use twin\Twin;
 
 class Url
 {

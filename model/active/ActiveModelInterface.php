@@ -1,8 +1,8 @@
 <?php
 
-namespace core\model\active;
+namespace twin\model\active;
 
-use core\model\query\Query;
+use twin\model\query\Query;
 
 interface ActiveModelInterface
 {

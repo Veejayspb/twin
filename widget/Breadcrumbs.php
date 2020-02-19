@@ -1,8 +1,8 @@
 <?php
 
-namespace core\widget;
+namespace twin\widget;
 
-use core\helper\Html;
+use twin\helper\Html;
 
 class Breadcrumbs extends Widget
 {

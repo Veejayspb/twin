@@ -1,8 +1,8 @@
 <?php
 
-namespace core\helper;
+namespace twin\helper;
 
-use core\common\Component;
+use twin\common\Component;
 
 class Cookie extends Component
 {

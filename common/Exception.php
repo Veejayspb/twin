@@ -1,6 +1,6 @@
 <?php
 
-namespace core\common;
+namespace twin\common;
 
 class Exception extends \Exception
 {

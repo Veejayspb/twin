@@ -1,11 +1,11 @@
 <?php
 
-namespace core\model\active;
+namespace twin\model\active;
 
-use core\db\sql\Sql;
-use core\helper\ArrayHelper;
-use core\model\query\Query;
-use core\model\query\SqlQuery;
+use twin\db\sql\Sql;
+use twin\helper\ArrayHelper;
+use twin\model\query\Query;
+use twin\model\query\SqlQuery;
 
 /**
  * Class ActiveJsonModel

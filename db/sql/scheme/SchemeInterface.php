@@ -1,6 +1,6 @@
 <?php
 
-namespace core\db\sql\scheme;
+namespace twin\db\sql\scheme;
 
 interface SchemeInterface
 {

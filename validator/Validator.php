@@ -1,8 +1,8 @@
 <?php
 
-namespace core\validator;
+namespace twin\validator;
 
-use core\model\Model;
+use twin\model\Model;
 use ReflectionClass;
 
 abstract class Validator

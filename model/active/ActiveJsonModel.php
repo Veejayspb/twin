@@ -1,12 +1,12 @@
 <?php
 
-namespace core\model\active;
+namespace twin\model\active;
 
-use core\common\Exception;
-use core\db\json\Json;
-use core\helper\ArrayHelper;
-use core\model\query\JsonQuery;
-use core\model\query\Query;
+use twin\common\Exception;
+use twin\db\json\Json;
+use twin\helper\ArrayHelper;
+use twin\model\query\JsonQuery;
+use twin\model\query\Query;
 
 /**
  * Class ActiveJsonModel

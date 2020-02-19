@@ -1,6 +1,6 @@
 <?php
 
-namespace core\validator;
+namespace twin\validator;
 
 class Integer extends Numeric
 {

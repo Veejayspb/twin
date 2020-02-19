@@ -1,10 +1,10 @@
 <?php
 
-namespace core\db\json;
+namespace twin\db\json;
 
-use core\common\Exception;
-use core\db\Database;
-use core\Twin;
+use twin\common\Exception;
+use twin\db\Database;
+use twin\Twin;
 
 class Json extends Database
 {

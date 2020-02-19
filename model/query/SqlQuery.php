@@ -1,10 +1,10 @@
 <?php
 
-namespace core\model\query;
+namespace twin\model\query;
 
-use core\db\Database;
-use core\db\sql\Sql;
-use core\model\active\ActiveSqlModel;
+use twin\db\Database;
+use twin\db\sql\Sql;
+use twin\model\active\ActiveSqlModel;
 
 /**
  * Class SqlQuery

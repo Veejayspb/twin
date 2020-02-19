@@ -1,8 +1,8 @@
 <?php
 
-use core\route\RouteManager;
-use core\session\Session;
-use core\view\View;
+use twin\route\RouteManager;
+use twin\session\Session;
+use twin\view\View;
 
 return [
     'name' => 'Twin Application',

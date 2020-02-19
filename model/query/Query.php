@@ -1,9 +1,9 @@
 <?php
 
-namespace core\model\query;
+namespace twin\model\query;
 
-use core\db\Database;
-use core\model\active\ActiveModel;
+use twin\db\Database;
+use twin\model\active\ActiveModel;
 
 abstract class Query
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace core\db\sql;
+namespace twin\db\sql;
 
-use core\common\Exception;
-use core\Twin;
+use twin\common\Exception;
+use twin\Twin;
 use PDO;
 
 class Sqlite extends Sql

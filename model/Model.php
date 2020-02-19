@@ -1,6 +1,6 @@
 <?php
 
-namespace core\model;
+namespace twin\model;
 
 use ReflectionClass;
 use ReflectionProperty;

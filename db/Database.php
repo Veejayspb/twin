@@ -1,9 +1,9 @@
 <?php
 
-namespace core\db;
+namespace twin\db;
 
-use core\common\Component;
-use core\common\Exception;
+use twin\common\Component;
+use twin\common\Exception;
 
 abstract class Database extends Component
 {

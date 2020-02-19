@@ -1,8 +1,8 @@
 <?php
 
-namespace core\view;
+namespace twin\view;
 
-use core\Twin;
+use twin\Twin;
 
 trait RenderTrait
 {

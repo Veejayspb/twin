@@ -1,10 +1,10 @@
 <?php
 
-namespace core\view;
+namespace twin\view;
 
-use core\common\Component;
-use core\common\Exception;
-use core\Twin;
+use twin\common\Component;
+use twin\common\Exception;
+use twin\Twin;
 
 class View extends Component
 {

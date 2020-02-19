@@ -1,10 +1,10 @@
 <?php
 
-namespace core\controller;
+namespace twin\controller;
 
-use core\common\Exception;
-use core\route\Route;
-use core\view\View;
+use twin\common\Exception;
+use twin\route\Route;
+use twin\view\View;
 use ReflectionMethod;
 
 abstract class WebController extends Controller

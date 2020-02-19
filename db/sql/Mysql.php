@@ -1,8 +1,8 @@
 <?php
 
-namespace core\db\sql;
+namespace twin\db\sql;
 
-use core\common\Exception;
+use twin\common\Exception;
 use PDO;
 
 class Mysql extends Sql

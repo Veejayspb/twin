@@ -1,9 +1,9 @@
 <?php
 
-namespace core\db\sql;
+namespace twin\db\sql;
 
-use core\db\Database;
-use core\helper\ArrayHelper;
+use twin\db\Database;
+use twin\helper\ArrayHelper;
 use PDO;
 
 abstract class Sql extends Database

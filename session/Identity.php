@@ -1,9 +1,9 @@
 <?php
 
-namespace core\session;
+namespace twin\session;
 
-use core\helper\Cookie;
-use core\Twin;
+use twin\helper\Cookie;
+use twin\Twin;
 
 class Identity
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace core\validator;
+namespace twin\validator;
 
-use core\common\Exception;
-use core\model\active\ActiveModel;
-use core\model\Model;
+use twin\common\Exception;
+use twin\model\active\ActiveModel;
+use twin\model\Model;
 
 /**
  * Class Unique
