@@ -22,7 +22,7 @@ class Json extends Database
      * Путь до директории с файлами БД.
      * @var string
      */
-    protected $path;
+    protected $path = '@app/runtime/db/json';
 
     /**
      * Кешируемые данные таблиц для предотвращения повторных обращений.
@@ -86,7 +86,7 @@ class Json extends Database
         // Создать директорию для хранения файлов БД.
         $databasePath = $this->getDatabasePath();
         if (!file_exists($databasePath)) {
-            return mkdir($databasePath, 0777, true);
+            return mkdir($databasePath, 0775, true);
         }
         return true;
     }
@@ -120,6 +120,6 @@ class Json extends Database
      */
     private function getFileName(string $table): string
     {
-        return "$table." . self::FILE_EXT;
+        return $table . '.' . self::FILE_EXT;
     }
 }
