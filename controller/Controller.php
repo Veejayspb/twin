@@ -10,6 +10,11 @@ use ReflectionMethod;
 abstract class Controller
 {
     /**
+     * Постфикс названия контроллера.
+     */
+    const POSTFIX = 'Controller';
+
+    /**
      * Текущий роут.
      * @var Route
      */
@@ -45,6 +50,7 @@ abstract class Controller
      */
     protected static function getController(string $namespace, string $controller): self
     {
+        $controller.= static::POSTFIX;
         $controllerName = "$namespace\\$controller";
         if (!class_exists($controllerName)) {
             throw new Exception(404);
