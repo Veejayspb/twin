@@ -46,7 +46,7 @@ abstract class Database extends Component
      * Название БД.
      * @return string
      */
-    public function getDbname(): string
+    public function getDbName(): string
     {
         return $this->dbname;
     }

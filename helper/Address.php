@@ -93,9 +93,7 @@ class Address
      */
     public function __get($name)
     {
-        if (property_exists($this, $name)) {
-            return $this->$name;
-        }
+        return $this->$name;
     }
 
     /**
@@ -105,7 +103,7 @@ class Address
      * @param bool $anchor - включить якорь
      * @return string
      */
-    public function getUrl(bool $params = true, bool $absolute = false, bool $anchor = false)
+    public function getUrl(bool $params = true, bool $absolute = false, bool $anchor = false): string
     {
         $url = '';
         if ($absolute && isset($this->host)) {

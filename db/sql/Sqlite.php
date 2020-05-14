@@ -94,6 +94,6 @@ class Sqlite extends Sql
      */
     private function getFileName(): string
     {
-        return "$this->dbname." . self::FILE_EXT;
+        return $this->dbname . '.' . self::FILE_EXT;
     }
 }

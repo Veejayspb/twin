@@ -12,7 +12,7 @@ use twin\route\RouteManager;
 use twin\session\Session;
 use twin\view\View;
 
-define('LOCALHOST', $_SERVER['SERVER_ADDR'] == '127.0.0.1' && $_SERVER['REMOTE_ADDR'] == '127.0.0.1');
+define('LOCALHOST', isset($_SERVER['SERVER_ADDR'], $_SERVER['REMOTE_ADDR']) && $_SERVER['SERVER_ADDR'] == '127.0.0.1' && $_SERVER['REMOTE_ADDR'] == '127.0.0.1');
 
 /**
  * Class Twin
@@ -86,10 +86,10 @@ class Twin
         mb_internal_encoding('UTF-8');
 
         // Установка алиасов.
-        self::setAlias('@root', dirname(__DIR__));
-        self::setAlias('@app', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'app');
-        self::setAlias('@core', __DIR__);
-        self::setAlias('@web', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'web');
+        static::setAlias('@root', dirname(__DIR__));
+        static::setAlias('@app', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'app');
+        static::setAlias('@core', __DIR__);
+        static::setAlias('@web', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'web');
     }
 
     private function __clone() {}
@@ -107,17 +107,18 @@ class Twin
 
     /**
      * Вернуть экземпляр приложения.
-     * @return self
+     * @return static
      */
     public static function app(): self
     {
-        return self::$instance = self::$instance ?: new static;
+        return static::$instance = static::$instance ?: new static;
     }
 
     /**
      * Запуск приложения.
      * @param array $config - конфигурация
      * @return void
+     * @throws Exception
      */
     public function run(array $config = [])
     {
@@ -224,14 +225,8 @@ class Twin
      */
     private function getDefaultConfig(string $type): array
     {
-        switch ($type) {
-            case static::TYPE_WEB:
-                return require static::getAlias('@core/config/web.php');
-            case static::TYPE_CONSOLE:
-                return require static::getAlias('@core/config/console.php');
-            default:
-                return [];
-        }
+        $path = static::getAlias("@core/config/$type.php");
+        return (file_exists($path)) ? require $path : [];
     }
 
     /**
@@ -246,7 +241,7 @@ class Twin
         if (!array_key_exists('class', $properties)) {
             throw new Exception(500, "Component's class not specified: $name");
         } elseif (!class_exists($properties['class'])) {
-            throw new Exception(500, "Component's class not exiss: {$properties['class']}");
+            throw new Exception(500, "Component's class not exist: {$properties['class']}");
         }
         $class = $properties['class'];
         $component = new $class($properties); /* @var Component $component */
