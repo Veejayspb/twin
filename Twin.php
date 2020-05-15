@@ -31,6 +31,11 @@ class Twin
      */
     const VERSION = '0.0.1';
 
+    /**
+     * Паттерн алиаса.
+     */
+    const ALIAS_PATTERN = '@[a-z]+';
+
     const TYPE_WEB = 'web';
     const TYPE_CONSOLE = 'console';
 
@@ -263,7 +268,10 @@ class Twin
      */
     public static function setAlias(string $alias, string $path)
     {
-        self::$aliases[$alias] = $path;
+        $pattern = '/^' . static::ALIAS_PATTERN . '$/';
+        if (preg_match($pattern, $alias)) {
+            self::$aliases[$alias] = $path;
+        }
     }
 
     /**
@@ -274,7 +282,8 @@ class Twin
      */
     public static function getAlias(string $alias): string
     {
-        preg_match('/^@[a-z]+/', $alias, $matches);
+        $pattern = '/^' . static::ALIAS_PATTERN . '/';
+        preg_match($pattern, $alias, $matches);
         if (!isset($matches[0])) return $alias;
         $key = $matches[0];
         if (!array_key_exists($key, self::$aliases)) return $alias;
