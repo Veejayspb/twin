@@ -191,8 +191,9 @@ class Twin
     {
         if ($class == self::class) return self::app();
         $object = new $class;
+        $vars = get_object_vars($object);
         foreach ($properties as $name => $value) {
-            if (!property_exists($object, $name)) continue;
+            if (!array_key_exists($name, $vars)) continue;
             $object->$name = $value;
         }
         return $object;
