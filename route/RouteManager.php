@@ -69,7 +69,7 @@ class RouteManager extends Component
     {
         foreach ($this->rules as $pattern => $route) {
             $class = $this->getRuleClass($route);
-            $rule = Twin::object($class, compact('pattern', 'route')); /* @var RuleInterface $rule */
+            $rule = Twin::createObject($class, compact('pattern', 'route')); /* @var RuleInterface $rule */
             $route = $rule->parseUrl($url);
             if ($route) return $route;
         }
@@ -86,7 +86,7 @@ class RouteManager extends Component
         foreach ($this->rules as $pattern => $route) {
             if (!$r->compare($route)) continue;
             $class = $this->getRuleClass($route);
-            $rule = Twin::object($class, compact('pattern', 'route')); /* @var RuleInterface $rule */
+            $rule = Twin::createObject($class, compact('pattern', 'route')); /* @var RuleInterface $rule */
             $url = $rule->createUrl($r);
             if ($url !== false) return $url;
         }

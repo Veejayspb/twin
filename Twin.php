@@ -182,7 +182,7 @@ class Twin
      * @param array $properties - свойства класса
      * @return object
      */
-    public static function object(string $class, array $properties = [])
+    public static function createObject(string $class, array $properties = [])
     {
         if ($class == self::class) return self::app();
         $object = new $class;
