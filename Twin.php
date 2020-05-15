@@ -287,6 +287,11 @@ class Twin
         if (!isset($matches[0])) return $alias;
         $key = $matches[0];
         if (!array_key_exists($key, self::$aliases)) return $alias;
-        return str_replace($key, self::$aliases[$key], $alias);
+        $result = str_replace($key, self::$aliases[$key], $alias);
+        // Если в пути остался алиас, то выполнить повторное преобразование
+        if (preg_match($pattern, $result)) {
+            return static::getAlias($result);
+        }
+        return $result;
     }
 }
