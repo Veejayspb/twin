@@ -5,16 +5,7 @@ use twin\route\RouteManager;
 use twin\session\Session;
 use twin\view\View;
 
-return [
-    'name' => 'Twin application',
-    'language' => 'ru',
-    'params' => [],
-    'aliases' => [
-        '@root' => dirname(__DIR__, 2),
-        '@app' => '@root/app',
-        '@twin' => '@root/twin',
-        '@web' => '@root/web',
-    ],
+$config = [
     'components' => [
         'route' => [
             'class' => RouteManager::class,
@@ -39,3 +30,8 @@ return [
         ],
     ],
 ];
+
+return array_replace_recursive(
+    include __DIR__ . DIRECTORY_SEPARATOR . '/common.php',
+    $config
+);
