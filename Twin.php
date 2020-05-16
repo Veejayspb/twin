@@ -95,7 +95,7 @@ class Twin
         // Установка алиасов.
         static::setAlias('@root', dirname(__DIR__));
         static::setAlias('@app', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'app');
-        static::setAlias('@core', __DIR__);
+        static::setAlias('@twin', __DIR__);
         static::setAlias('@web', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'web');
     }
 
@@ -233,7 +233,7 @@ class Twin
      */
     private function getDefaultConfig(string $type): array
     {
-        $path = static::getAlias("@core/config/$type.php");
+        $path = static::getAlias("@twin/config/$type.php");
         return (file_exists($path)) ? require $path : [];
     }
 
