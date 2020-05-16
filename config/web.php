@@ -6,9 +6,15 @@ use twin\session\Session;
 use twin\view\View;
 
 return [
-    'name' => 'Twin Application',
+    'name' => 'Twin application',
     'language' => 'ru',
     'params' => [],
+    'aliases' => [
+        '@root' => dirname(__DIR__, 2),
+        '@app' => '@root/app',
+        '@twin' => '@root/twin',
+        '@web' => '@root/web',
+    ],
     'components' => [
         'route' => [
             'class' => RouteManager::class,

@@ -91,12 +91,6 @@ class Twin
             error_reporting(E_ALL);
         }
         mb_internal_encoding('UTF-8');
-
-        // Установка алиасов.
-        static::setAlias('@root', dirname(__DIR__));
-        static::setAlias('@app', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'app');
-        static::setAlias('@twin', __DIR__);
-        static::setAlias('@web', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'web');
     }
 
     private function __clone() {}
@@ -219,6 +213,12 @@ class Twin
             $this->$property = $config[$property];
         }
 
+        // Регистрация алиасов.
+        $aliases = array_key_exists('aliases', $config) ? $config['aliases'] : [];
+        foreach ($aliases as $alias => $path) {
+            static::setAlias($alias, $path);
+        }
+
         // Регистрация компонентов.
         foreach ($config['components'] as $name => $data) {
             if (empty($data)) continue;
@@ -233,7 +233,7 @@ class Twin
      */
     private function getDefaultConfig(string $type): array
     {
-        $path = static::getAlias("@twin/config/$type.php");
+        $path = __DIR__ . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . $type . '.php';
         return (file_exists($path)) ? require $path : [];
     }
 
