@@ -140,6 +140,7 @@ class Twin
         } catch (Exception $e) {
             $route = new Route;
             $route->setRoute(Twin::app()->route->error);
+            $route->params = ['code' => $e->getCode(), 'message' => $e->getMessage()];
             $namespace = $this->route->getNamespace($route->module);
             WebController::run($namespace, $route, $this->view);
         }
@@ -171,7 +172,7 @@ class Twin
             $namespace = $this->route->getNamespace($route->module);
             ConsoleController::run($namespace, $route);
         } catch (Exception $e) {
-            echo "Error: {$e->getMessage()}";
+            echo "Error {$e->getCode()}: {$e->getMessage()}";
         }
     }
 

@@ -89,21 +89,4 @@ class Exception extends \Exception
     {
         return array_key_exists($this->code, $this->errors) ? $this->errors[$this->code] : null;
     }
-
-    /**
-     * Рендер страницы ошибки.
-     * @return void
-     */
-    /*public function render()
-    {
-        $routeManager = App::init()->getComponent('routeManager');
-
-        $route = Route::createFromString($routeManager->error, [
-            'code' => $this->getCode(),
-            'message' => $this->getMessage(),
-        ]);
-
-        $namespace = $routeManager->getNamespace($route->module);
-        Controller::run($namespace, $route);
-    }*/
 }
