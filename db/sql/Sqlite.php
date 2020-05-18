@@ -73,7 +73,7 @@ class Sqlite extends Sql
     {
         $path = Twin::getAlias($this->path);
         if (!file_exists($path)) {
-            return mkdir($path, 0777, true);
+            return mkdir($path, 0775, true);
         }
         return true;
     }

@@ -166,7 +166,7 @@ class Session extends Component
     {
         $savePath = $this->getSavePath();
         if (!is_dir($savePath)) {
-            return mkdir($savePath, 0777, true);
+            return mkdir($savePath, 0775, true);
         }
         return true;
     }
