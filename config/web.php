@@ -1,6 +1,5 @@
 <?php
 
-use twin\cache\CacheFile;
 use twin\route\RouteManager;
 use twin\session\Session;
 use twin\view\View;
