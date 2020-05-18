@@ -2,7 +2,6 @@
 
 namespace twin;
 
-use twin\cache\CacheInterface;
 use twin\common\Component;
 use twin\common\Exception;
 use twin\controller\ConsoleController;
@@ -22,7 +21,6 @@ define('LOCALHOST', isset($_SERVER['SERVER_ADDR'], $_SERVER['REMOTE_ADDR']) && $
  * @property RouteManager $route
  * @property Session $session
  * @property View $view
- * @property CacheInterface $cache
  */
 class Twin
 {

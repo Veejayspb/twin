@@ -25,9 +25,6 @@ $config = [
         'session' => [
             'class' => Session::class,
         ],
-        'cache' => [
-            'class' => CacheFile::class,
-        ],
     ],
 ];
 
