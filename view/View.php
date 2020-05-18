@@ -32,16 +32,16 @@ class View extends Component
      * Путь/алиас к директории с видами.
      * @var string
      */
-    protected $viewPath = '@app/view';
+    protected $path = '@app/view';
 
     /**
      * Установить путь/алиас до директории с видами.
      * @param string $path - путь до директории с видами
      * @return void
      */
-    public function setViewPath(string $path)
+    public function setPath(string $path)
     {
-        $this->viewPath = $path;
+        $this->path = $path;
     }
 
     /**
@@ -52,7 +52,7 @@ class View extends Component
      */
     public function render(string $route, array $data = []): string
     {
-        $alias = $this->viewPath . DIRECTORY_SEPARATOR . "$route.php";
+        $alias = $this->path . DIRECTORY_SEPARATOR . $route . '.php';
         $path = Twin::getAlias($alias);
         return $this->renderPath($path, $data);
     }
@@ -66,7 +66,7 @@ class View extends Component
     public function renderLayout(string $route, array $data = []): string
     {
         $content = $this->render($route, $data);
-        $layout = "$this->layoutDir/$this->layout";
+        $layout = $this->layoutDir . '/' . $this->layout;
         return $this->render($layout, ['content' => $content]);
     }
 
