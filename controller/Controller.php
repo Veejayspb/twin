@@ -26,10 +26,7 @@ abstract class Controller
      */
     public static $instance;
 
-    final private function __construct()
-    {
-        $this->init();
-    }
+    private function __construct() {}
 
     private function __clone() {}
 

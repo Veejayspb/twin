@@ -31,6 +31,7 @@ abstract class WebController extends Controller
         $controller = self::$instance = static::getController($namespace, $route->controller);
         $controller->view = $view;
         $controller->route = $route;
+        $controller->init();
 
         if (!$controller->actionExists($route->action)) {
             throw new Exception(404);
