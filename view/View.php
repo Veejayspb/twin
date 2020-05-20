@@ -71,22 +71,24 @@ class View extends Component
     }
 
     /**
-     * Стили и скрипты в HEAD.
-     * @return string
-     * @throws Exception
+     * Начало родительского шаблона.
+     * @return void
      */
-    public function head()
+    public function start()
     {
-        // TODO...
+        ob_start();
     }
 
     /**
-     * Скрипты в BODY.
-     * @return string
-     * @throws Exception
+     * Конец родительского шаблона.
+     * @param string $path - путь до родительского шаблона
+     * @return void
      */
-    public function body()
+    public function end(string $path)
     {
-        // TODO...
+        $content = ob_get_clean();
+        echo $this->renderPath($path, [
+            'content' => $content,
+        ]);
     }
 }
