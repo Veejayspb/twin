@@ -3,7 +3,6 @@
 namespace twin\view;
 
 use twin\common\Component;
-use twin\common\Exception;
 use twin\Twin;
 
 class View extends Component
@@ -32,17 +31,7 @@ class View extends Component
      * Путь/алиас к директории с видами.
      * @var string
      */
-    protected $path = '@app/view';
-
-    /**
-     * Установить путь/алиас до директории с видами.
-     * @param string $path - путь до директории с видами
-     * @return void
-     */
-    public function setPath(string $path)
-    {
-        $this->path = $path;
-    }
+    public $path = '@app/view';
 
     /**
      * Рендер вида без шаблона.
@@ -81,14 +70,13 @@ class View extends Component
 
     /**
      * Конец родительского шаблона.
-     * @param string $path - путь до родительского шаблона
+     * @param string $layout - название родительского шаблона
      * @return void
      */
-    public function end(string $path)
+    public function end(string $layout)
     {
         $content = ob_get_clean();
-        echo $this->renderPath($path, [
-            'content' => $content,
-        ]);
+        $route = $this->layoutDir . '/' . $layout;
+        echo $this->render($route, ['content' => $content]);
     }
 }
