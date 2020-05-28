@@ -17,7 +17,7 @@ class Sqlite extends Sql
      * Путь до директории с файлами БД.
      * @var string
      */
-    protected $path = '@app/runtime/db/sqlite';
+    protected $path = '@runtime/db/sqlite';
 
     /**
      * {@inheritdoc}

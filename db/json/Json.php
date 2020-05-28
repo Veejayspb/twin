@@ -22,7 +22,7 @@ class Json extends Database
      * Путь до директории с файлами БД.
      * @var string
      */
-    protected $path = '@app/runtime/db/json';
+    protected $path = '@runtime/db/json';
 
     /**
      * Кешируемые данные таблиц для предотвращения повторных обращений.

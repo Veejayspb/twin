@@ -15,7 +15,7 @@ class CacheFile extends Cache
      * Путь до директории с файлами кеша.
      * @var string
      */
-    protected $path = '@app/runtime/cache';
+    protected $path = '@runtime/cache';
 
     /**
      * {@inheritdoc}
