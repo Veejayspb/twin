@@ -162,8 +162,11 @@ class Twin
                 throw new Exception(500, 'controller/action must be specified');
             }
 
-            $route = new Route();
-            $route->setRoute($argv[1]);
+            $route = $this->route->parseUrl($argv[1]);
+            if ($route === false) {
+                throw new Exception(404);
+            }
+
             unset($argv[0], $argv[1]);
             $route->params = array_values($argv);
 

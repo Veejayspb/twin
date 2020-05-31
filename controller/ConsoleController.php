@@ -44,7 +44,7 @@ abstract class ConsoleController extends Controller
             if (array_key_exists($i, $params)) {
                 $result[] = $params[$i];
             } elseif (!$parameter->isOptional()) {
-                throw new Exception(404, 'Required attribute is not specified: ' . $parameter->name);
+                throw new Exception(400, 'Required attribute is not specified: ' . $parameter->name);
             }
         }
         call_user_func_array([$this, $action], $result);
