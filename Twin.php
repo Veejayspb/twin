@@ -27,7 +27,7 @@ class Twin
     /**
      * Версия приложения.
      */
-    const VERSION = '0.0.1';
+    const VERSION = '0.0.2';
 
     /**
      * Паттерн алиаса.

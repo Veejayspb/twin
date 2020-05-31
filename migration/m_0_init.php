@@ -2,14 +2,14 @@
 
 use twin\migration\Migration;
 
-class {{class}} extends Migration
+class m_0_init extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function up(): bool
     {
-        return true; // TODO: Implement up() method.
+        return true;
     }
 
     /**
@@ -17,6 +17,6 @@ class {{class}} extends Migration
      */
     public function down(): bool
     {
-        return true; // TODO: Implement down() method.
+        return true;
     }
 }
