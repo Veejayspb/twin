@@ -168,7 +168,7 @@ abstract class Sql extends Database
      */
     public function deleteTable(string $name): bool
     {
-        return $this->execute("DROP TABLE `$name`");
+        return $this->execute("DROP TABLE IF EXISTS `$name`");
     }
 
     /**
