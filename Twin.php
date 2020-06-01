@@ -204,9 +204,10 @@ class Twin
     private function registerConfig(array $config, string $type)
     {
         // Склейка пользовательского конфига с конфигом по-умолчанию.
+        $default = $this->getDefaultConfig($type);
         $config = array_replace_recursive(
-            $this->getDefaultConfig($type),
-            $config
+            $this->prepareConfig($default),
+            $this->prepareConfig($config)
         );
 
         // Присвоение свойств.
@@ -229,6 +230,24 @@ class Twin
     }
 
     /**
+     * Подготовить конфиг, добавив родительские элементы.
+     * @param array $config - данные конфига
+     * @return array
+     * @throws Exception
+     */
+    private function prepareConfig(array $config): array
+    {
+        if (!array_key_exists('parent', $config)) return $config;
+        $path = $config['parent'];
+        unset($config['parent']);
+        if (!is_file($path)) {
+            throw new Exception(500, "Can't find config file: $path");
+        }
+        $parent = $this->prepareConfig(include $path);
+        return array_replace_recursive($parent, $config);
+    }
+
+    /**
      * Конфиг по-умолчанию.
      * @param string $type - тип конфига web|console
      * @return array
@@ -236,7 +255,7 @@ class Twin
     private function getDefaultConfig(string $type): array
     {
         $path = __DIR__ . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . $type . '.php';
-        return (file_exists($path)) ? require $path : [];
+        return require $path;
     }
 
     /**

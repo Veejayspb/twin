@@ -3,7 +3,8 @@
 use twin\migration\MigrationManager;
 use twin\route\RouteManager;
 
-$config = [
+return [
+    'parent' => __DIR__ . DIRECTORY_SEPARATOR . 'common.php',
     'components' => [
         'route' => [
             'class' => RouteManager::class,
@@ -23,8 +24,3 @@ $config = [
         ],
     ],
 ];
-
-return array_replace_recursive(
-    include __DIR__ . DIRECTORY_SEPARATOR . 'common.php',
-    $config
-);
