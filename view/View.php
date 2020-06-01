@@ -16,12 +16,6 @@ class View extends Component
     public $layout = 'main';
 
     /**
-     * Заголовок страницы.
-     * @var string
-     */
-    public $title = 'Page title';
-
-    /**
      * Название директории с шаблонами.
      * @var string
      */
@@ -32,6 +26,24 @@ class View extends Component
      * @var string
      */
     public $path = '@app/view';
+
+    /**
+     * Заголовок страницы.
+     * @var string
+     */
+    public $title = 'Page title';
+
+    /**
+     * Заголовок H1.
+     * @var string
+     */
+    public $h1 = 'Header';
+
+    /**
+     * Хлебные крошки.
+     * @var array
+     */
+    public $breadcrumbs = ['Главная' => '/'];
 
     /**
      * Рендер вида без шаблона.
