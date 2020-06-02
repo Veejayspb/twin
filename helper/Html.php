@@ -211,7 +211,7 @@ class Html
                 $result.= " $key";
             } elseif ($value !== false) {
                 if (is_array($value)) {
-                    $value = implode(' ', $value);
+                    $value = implode(static::SPACE, $value);
                 }
                 $result.= " $key=\"$value\"";
             }

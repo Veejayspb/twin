@@ -4,6 +4,7 @@ namespace twin\model\query;
 
 use twin\db\Database;
 use twin\db\sql\Sql;
+use twin\helper\Html;
 use twin\model\active\ActiveSqlModel;
 
 /**
@@ -199,6 +200,6 @@ class SqlQuery extends Query
         if (!empty($this->limit)) {
             $result[] = "LIMIT $this->limit";
         }
-        return implode(' ', $result);
+        return implode(Html::SPACE, $result);
     }
 }
