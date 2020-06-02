@@ -9,10 +9,10 @@ class Html
 
     /**
      * Экранирование спецсимволов.
-     * @param mixed $text - исходный текст
+     * @param string $text - исходный текст
      * @return string
      */
-    public static function encode($text): string
+    public static function encode(string $text): string
     {
         return htmlspecialchars($text, ENT_QUOTES);
     }
@@ -32,39 +32,35 @@ class Html
 
     /**
      * Открыть тег.
-     * @param string $tag - название тега
+     * @param string $name - название тега
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public static function tagOpen(string $tag, array $htmlAttributes = []): string
+    public static function tagOpen(string $name, array $htmlAttributes = []): string
     {
-        $renderAttributes = static::renderAttributes($htmlAttributes);
-        return "<$tag$renderAttributes>";
+        return (new Tag($name, $htmlAttributes))->open();
     }
 
     /**
      * Закрыть тег.
-     * @param string $tag - название тега
+     * @param string $name - название тега
      * @return string
      */
-    public static function tagClose(string $tag): string
+    public static function tagClose(string $name): string
     {
-        return "</$tag>";
+        return (new Tag($name))->close();
     }
 
     /**
      * Парный тег.
-     * @param string $tag - название тега
+     * @param string $name - название тега
      * @param array $htmlAttributes - HTML-атрибуты
      * @param string $content - содержимое тега
      * @return string
      */
-    public static function tag(string $tag, array $htmlAttributes = [], string $content = ''): string
+    public static function tag(string $name, array $htmlAttributes = [], string $content = ''): string
     {
-        $result = static::tagOpen($tag, $htmlAttributes);
-        $result.= $content;
-        $result.= static::tagClose($tag);
-        return $result;
+        return (string)new Tag($name, $htmlAttributes, $content);
     }
 
     /**
@@ -97,7 +93,7 @@ class Html
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public static function inputText($value, array $htmlAttributes = []): string
+    public static function inputText(string $value, array $htmlAttributes = []): string
     {
         $htmlAttributes['type'] = 'text';
         $htmlAttributes['value'] = $value;
@@ -110,7 +106,7 @@ class Html
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public static function inputPassword($value, array $htmlAttributes = []): string
+    public static function inputPassword(string $value, array $htmlAttributes = []): string
     {
         $htmlAttributes['type'] = 'password';
         $htmlAttributes['value'] = $value;
@@ -123,7 +119,7 @@ class Html
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public static function inputHidden($value, array $htmlAttributes = []): string
+    public static function inputHidden(string $value, array $htmlAttributes = []): string
     {
         $htmlAttributes['type'] = 'hidden';
         $htmlAttributes['value'] = $value;
@@ -136,7 +132,7 @@ class Html
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public static function textArea($value, array $htmlAttributes = []): string
+    public static function textArea(string $value, array $htmlAttributes = []): string
     {
         return static::tag('textarea', $htmlAttributes, $value);
     }
@@ -148,7 +144,7 @@ class Html
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public static function select($value, array $options, array $htmlAttributes = []): string
+    public static function select(string $value, array $options, array $htmlAttributes = []): string
     {
         $result = static::tagOpen('select', $htmlAttributes);
         foreach ($options as $key => $val) {
@@ -169,7 +165,7 @@ class Html
      * @param string $separator - разделитель
      * @return string
      */
-    public static function radio($value, array $options, array $htmlAttributes = [], string $separator = PHP_EOL): string
+    public static function radio(string $value, array $options, array $htmlAttributes = [], string $separator = PHP_EOL): string
     {
         $result = [];
         $htmlAttributes['type'] = 'radio';
@@ -190,32 +186,11 @@ class Html
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public static function checkbox($value, $label, array $htmlAttributes = []): string
+    public static function checkbox(string $value, string $label, array $htmlAttributes = []): string
     {
         $htmlAttributes['type'] = 'checkbox';
         $htmlAttributes['value'] = $value;
         $input = static::tagOpen('input', $htmlAttributes);
         return static::label($input . self::SPACE . $label);
-    }
-
-    /**
-     * Сформировать строку с атрибутами для тега.
-     * @param array $htmlAttributes - HTML-атрибуты
-     * @return string
-     */
-    private static function renderAttributes(array $htmlAttributes): string
-    {
-        $result = '';
-        foreach ($htmlAttributes as $key => $value) {
-            if ($value === true) {
-                $result.= " $key";
-            } elseif ($value !== false) {
-                if (is_array($value)) {
-                    $value = implode(static::SPACE, $value);
-                }
-                $result.= " $key=\"$value\"";
-            }
-        }
-        return $result;
     }
 }
