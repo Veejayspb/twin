@@ -2,6 +2,7 @@
 
 namespace twin;
 
+use twin\asset\AssetManager;
 use twin\common\Component;
 use twin\common\Exception;
 use twin\controller\ConsoleController;
@@ -21,13 +22,14 @@ define('LOCALHOST', isset($_SERVER['SERVER_ADDR'], $_SERVER['REMOTE_ADDR']) && $
  * @property RouteManager $route
  * @property Session $session
  * @property View $view
+ * @property AssetManager $asset
  */
 class Twin
 {
     /**
      * Версия приложения.
      */
-    const VERSION = '0.0.2';
+    const VERSION = '0.0.3';
 
     /**
      * Паттерн алиаса.

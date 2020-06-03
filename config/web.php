@@ -1,5 +1,6 @@
 <?php
 
+use twin\asset\AssetManager;
 use twin\route\RouteManager;
 use twin\session\Session;
 use twin\view\View;
@@ -22,6 +23,11 @@ return [
         ],
         'view' => [
             'class' => View::class,
+        ],
+        'asset' => [
+            'class' => AssetManager::class,
+            'publicationPath' => '@web/asset',
+            'webPath' => '/asset',
         ],
         'session' => [
             'class' => Session::class,

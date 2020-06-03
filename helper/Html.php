@@ -6,6 +6,7 @@ class Html
 {
     const BR = '<br>';
     const SPACE = ' ';
+    const TAB = "\t";
 
     /**
      * Экранирование спецсимволов.
