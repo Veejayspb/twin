@@ -18,19 +18,6 @@ class Html
     }
 
     /**
-     * Ссылка.
-     * @param string $url - адрес
-     * @param string $content - содержимое ссылки
-     * @param array $htmlAttributes - HTML-атрибуты
-     * @return string
-     */
-    public static function a(string $url, string $content = '', array $htmlAttributes = []): string
-    {
-        $htmlAttributes['href'] = $url;
-        return static::tag('a', $htmlAttributes, $content);
-    }
-
-    /**
      * Открыть тег.
      * @param string $name - название тега
      * @param array $htmlAttributes - HTML-атрибуты
@@ -61,6 +48,19 @@ class Html
     public static function tag(string $name, array $htmlAttributes = [], string $content = ''): string
     {
         return (string)new Tag($name, $htmlAttributes, $content);
+    }
+
+    /**
+     * Ссылка.
+     * @param string $url - адрес
+     * @param string $content - содержимое ссылки
+     * @param array $htmlAttributes - HTML-атрибуты
+     * @return string
+     */
+    public static function a(string $url, string $content = '', array $htmlAttributes = []): string
+    {
+        $htmlAttributes['href'] = $url;
+        return static::tag('a', $htmlAttributes, $content);
     }
 
     /**
@@ -173,7 +173,7 @@ class Html
             $htmlAttributes['value'] = $key;
             $htmlAttributes['checked'] = $value == $key ? true : false;
             $content = static::tagOpen('input', $htmlAttributes);
-            $content.= self::SPACE . $val;
+            $content.= static::SPACE . $val;
             $result[] = static::label($content);
         }
         return implode($separator, $result);
@@ -191,6 +191,6 @@ class Html
         $htmlAttributes['type'] = 'checkbox';
         $htmlAttributes['value'] = $value;
         $input = static::tagOpen('input', $htmlAttributes);
-        return static::label($input . self::SPACE . $label);
+        return static::label($input . static::SPACE . $label);
     }
 }

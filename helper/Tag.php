@@ -79,7 +79,7 @@ class Tag
 
     /**
      * @param string $name - название атрибута
-     * @param string|null $value - значение
+     * @param string|array|null $value - значение
      */
     public function __set($name, $value)
     {
