@@ -115,7 +115,7 @@ abstract class Asset
             $tag = new Tag('script', [
                 'src' => $this->prepareAddress($address),
             ]);
-            $result[] = $this->prepareCss($tag, $key);
+            $result[] = $this->prepareJs($tag, $key);
         }
         return $result;
     }
