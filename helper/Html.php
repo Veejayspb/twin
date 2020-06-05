@@ -194,4 +194,23 @@ class Html
         $input = static::tagOpen('input', $htmlAttributes);
         return static::label($input . static::SPACE . $label);
     }
+
+    /**
+     * Добавить CSS-класс (если он не сущ-ет) в массив HTML-атрибутов.
+     * @param array $attributes - HTML-атрибуты
+     * @param string $class - название класса
+     * @return void
+     */
+    public static function addCssClass(array &$attributes, string $class)
+    {
+        if (array_key_exists('class', $attributes)) {
+            $items = explode(static::SPACE, $attributes['class']);
+        } else {
+            $items = [];
+        }
+        if (!in_array($class, $items)) {
+            $items[] = $class;
+            $attributes['class'] = implode(static::SPACE, $items);
+        }
+    }
 }
