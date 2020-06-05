@@ -21,12 +21,12 @@ class Html
     /**
      * Открыть тег.
      * @param string $name - название тега
-     * @param array $htmlAttributes - HTML-атрибуты
+     * @param array $attributes - HTML-атрибуты
      * @return string
      */
-    public static function tagOpen(string $name, array $htmlAttributes = []): string
+    public static function tagOpen(string $name, array $attributes = []): string
     {
-        return (new Tag($name, $htmlAttributes))->open();
+        return (new Tag($name, $attributes))->open();
     }
 
     /**
@@ -42,112 +42,112 @@ class Html
     /**
      * Парный тег.
      * @param string $name - название тега
-     * @param array $htmlAttributes - HTML-атрибуты
+     * @param array $attributes - HTML-атрибуты
      * @param string $content - содержимое тега
      * @return string
      */
-    public static function tag(string $name, array $htmlAttributes = [], string $content = ''): string
+    public static function tag(string $name, array $attributes = [], string $content = ''): string
     {
-        return (string)new Tag($name, $htmlAttributes, $content);
+        return (string)new Tag($name, $attributes, $content);
     }
 
     /**
      * Ссылка.
      * @param string $url - адрес
      * @param string $content - содержимое ссылки
-     * @param array $htmlAttributes - HTML-атрибуты
+     * @param array $attributes - HTML-атрибуты
      * @return string
      */
-    public static function a(string $url, string $content = '', array $htmlAttributes = []): string
+    public static function a(string $url, string $content = '', array $attributes = []): string
     {
-        $htmlAttributes['href'] = $url;
-        return static::tag('a', $htmlAttributes, $content);
+        $attributes['href'] = $url;
+        return static::tag('a', $attributes, $content);
     }
 
     /**
      * Тег LABEL.
      * @param string $value - значение
-     * @param array $htmlAttributes - HTML-атрибуты
+     * @param array $attributes - HTML-атрибуты
      * @return string
      */
-    public static function label(string $value, array $htmlAttributes = []): string
+    public static function label(string $value, array $attributes = []): string
     {
-        return static::tag('label', $htmlAttributes, $value);
+        return static::tag('label', $attributes, $value);
     }
 
     /**
      * Кнопка отправки формы.
      * @param string $value - значение
-     * @param array $htmlAttributes - HTML-атрибуты
+     * @param array $attributes - HTML-атрибуты
      * @return string
      */
-    public static function submit(string $value, array $htmlAttributes = []): string
+    public static function submit(string $value, array $attributes = []): string
     {
-        $htmlAttributes['type'] = 'submit';
-        $htmlAttributes['value'] = $value;
-        return static::tagOpen('input', $htmlAttributes);
+        $attributes['type'] = 'submit';
+        $attributes['value'] = $value;
+        return static::tagOpen('input', $attributes);
     }
 
     /**
      * Текстовое поле.
      * @param string $value - значение
-     * @param array $htmlAttributes - HTML-атрибуты
+     * @param array $attributes - HTML-атрибуты
      * @return string
      */
-    public static function inputText(string $value, array $htmlAttributes = []): string
+    public static function inputText(string $value, array $attributes = []): string
     {
-        $htmlAttributes['type'] = 'text';
-        $htmlAttributes['value'] = $value;
-        return static::tagOpen('input', $htmlAttributes);
+        $attributes['type'] = 'text';
+        $attributes['value'] = $value;
+        return static::tagOpen('input', $attributes);
     }
 
     /**
      * Поле для пароля.
      * @param string $value - значение
-     * @param array $htmlAttributes - HTML-атрибуты
+     * @param array $attributes - HTML-атрибуты
      * @return string
      */
-    public static function inputPassword(string $value, array $htmlAttributes = []): string
+    public static function inputPassword(string $value, array $attributes = []): string
     {
-        $htmlAttributes['type'] = 'password';
-        $htmlAttributes['value'] = $value;
-        return static::tagOpen('input', $htmlAttributes);
+        $attributes['type'] = 'password';
+        $attributes['value'] = $value;
+        return static::tagOpen('input', $attributes);
     }
 
     /**
      * Скрытое поле.
      * @param string $value - значение
-     * @param array $htmlAttributes - HTML-атрибуты
+     * @param array $attributes - HTML-атрибуты
      * @return string
      */
-    public static function inputHidden(string $value, array $htmlAttributes = []): string
+    public static function inputHidden(string $value, array $attributes = []): string
     {
-        $htmlAttributes['type'] = 'hidden';
-        $htmlAttributes['value'] = $value;
-        return static::tagOpen('input', $htmlAttributes);
+        $attributes['type'] = 'hidden';
+        $attributes['value'] = $value;
+        return static::tagOpen('input', $attributes);
     }
 
     /**
      * Текстовая область.
      * @param string $value - значение
-     * @param array $htmlAttributes - HTML-атрибуты
+     * @param array $attributes - HTML-атрибуты
      * @return string
      */
-    public static function textArea(string $value, array $htmlAttributes = []): string
+    public static function textArea(string $value, array $attributes = []): string
     {
-        return static::tag('textarea', $htmlAttributes, $value);
+        return static::tag('textarea', $attributes, $value);
     }
 
     /**
      * Выпадающий список.
      * @param string $value - значение
      * @param array $options - список опций
-     * @param array $htmlAttributes - HTML-атрибуты
+     * @param array $attributes - HTML-атрибуты
      * @return string
      */
-    public static function select(string $value, array $options, array $htmlAttributes = []): string
+    public static function select(string $value, array $options, array $attributes = []): string
     {
-        $result = static::tagOpen('select', $htmlAttributes);
+        $result = static::tagOpen('select', $attributes);
         foreach ($options as $key => $val) {
             $result.= static::tag('option', [
                 'value' => $key,
@@ -162,18 +162,18 @@ class Html
      * Радиокнопки.
      * @param string $value - значение
      * @param array $options - список опций
-     * @param array $htmlAttributes - HTML-атрибуты
+     * @param array $attributes - HTML-атрибуты
      * @param string $separator - разделитель
      * @return string
      */
-    public static function radio(string $value, array $options, array $htmlAttributes = [], string $separator = PHP_EOL): string
+    public static function radio(string $value, array $options, array $attributes = [], string $separator = PHP_EOL): string
     {
         $result = [];
-        $htmlAttributes['type'] = 'radio';
+        $attributes['type'] = 'radio';
         foreach ($options as $key => $val) {
-            $htmlAttributes['value'] = $key;
-            $htmlAttributes['checked'] = $value == $key ? true : false;
-            $content = static::tagOpen('input', $htmlAttributes);
+            $attributes['value'] = $key;
+            $attributes['checked'] = $value == $key ? true : false;
+            $content = static::tagOpen('input', $attributes);
             $content.= static::SPACE . $val;
             $result[] = static::label($content);
         }
@@ -184,14 +184,14 @@ class Html
      * Чекбокс.
      * @param string $value - значение
      * @param string $label - ярлык
-     * @param array $htmlAttributes - HTML-атрибуты
+     * @param array $attributes - HTML-атрибуты
      * @return string
      */
-    public static function checkbox(string $value, string $label, array $htmlAttributes = []): string
+    public static function checkbox(string $value, string $label, array $attributes = []): string
     {
-        $htmlAttributes['type'] = 'checkbox';
-        $htmlAttributes['value'] = $value;
-        $input = static::tagOpen('input', $htmlAttributes);
+        $attributes['type'] = 'checkbox';
+        $attributes['value'] = $value;
+        $input = static::tagOpen('input', $attributes);
         return static::label($input . static::SPACE . $label);
     }
 

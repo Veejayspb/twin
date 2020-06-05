@@ -34,7 +34,7 @@ class Form extends Widget
      * HTML-атрибуты.
      * @var array
      */
-    protected $htmlAttributes = [];
+    protected $attributes = [];
 
     public function __toString()
     {
@@ -47,10 +47,10 @@ class Form extends Widget
      */
     public function start()
     {
-        $htmlAttributes = $this->htmlAttributes;
-        $htmlAttributes['action'] = $this->action;
-        $htmlAttributes['method'] = $this->method;
-        return Html::tagOpen('form', $htmlAttributes);
+        $attributes = $this->attributes;
+        $attributes['action'] = $this->action;
+        $attributes['method'] = $this->method;
+        return Html::tagOpen('form', $attributes);
     }
 
     /**
@@ -66,76 +66,76 @@ class Form extends Widget
      * Тег LABEL.
      * @param Model $model - модель
      * @param string $attribute - название атрибута
-     * @param array $htmlAttributes - HTML-атрибуты
+     * @param array $attributes - HTML-атрибуты
      * @return string
      */
-    public function label(Model $model, string $attribute, array $htmlAttributes = []): string
+    public function label(Model $model, string $attribute, array $attributes = []): string
     {
         $label = $model->getLabel($attribute);
-        return Html::label($label, $htmlAttributes);
+        return Html::label($label, $attributes);
     }
 
     /**
      * Вывод ошибки.
      * @param Model $model - модель
      * @param string $attribute - название атрибута
-     * @param array $htmlAttributes - HTML-атрибуты
+     * @param array $attributes - HTML-атрибуты
      * @return string
      */
-    public function error(Model $model, string $attribute, array $htmlAttributes = []): string
+    public function error(Model $model, string $attribute, array $attributes = []): string
     {
         $error = $model->getError($attribute);
-        return $error ? Html::tag('div', $htmlAttributes, $error) : '';
+        return $error ? Html::tag('div', $attributes, $error) : '';
     }
 
     /**
      * Кнопка отправки формы.
      * @param string $value - значение
-     * @param array $htmlAttributes - HTML-атрибуты
+     * @param array $attributes - HTML-атрибуты
      * @return string
      */
-    public function submit(string $value, array $htmlAttributes = []): string
+    public function submit(string $value, array $attributes = []): string
     {
-        return Html::submit($value, $htmlAttributes);
+        return Html::submit($value, $attributes);
     }
 
     /**
      * Текстовое поле.
      * @param Model $model - модель
      * @param string $attribute - название атрибута
-     * @param array $htmlAttributes - HTML-атрибуты
+     * @param array $attributes - HTML-атрибуты
      * @return string
      */
-    public function inputText(Model $model, string $attribute, array $htmlAttributes = []): string
+    public function inputText(Model $model, string $attribute, array $attributes = []): string
     {
-        $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
-        return Html::inputText($model->$attribute, $htmlAttributes);
+        $attributes['name'] = $this->getAttributeName($model, $attribute);
+        return Html::inputText($model->$attribute, $attributes);
     }
 
     /**
      * Поле для пароля.
      * @param Model $model - модель
      * @param string $attribute - название атрибута
-     * @param array $htmlAttributes - HTML-атрибуты
+     * @param array $attributes - HTML-атрибуты
      * @return string
      */
-    public function inputPassword(Model $model, string $attribute, array $htmlAttributes = []): string
+    public function inputPassword(Model $model, string $attribute, array $attributes = []): string
     {
-        $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
-        return Html::inputPassword($model->$attribute, $htmlAttributes);
+        $attributes['name'] = $this->getAttributeName($model, $attribute);
+        return Html::inputPassword($model->$attribute, $attributes);
     }
 
     /**
      * Скрытое поле.
      * @param Model $model - модель
      * @param string $attribute - название атрибута
-     * @param array $htmlAttributes - HTML-атрибуты
+     * @param array $attributes - HTML-атрибуты
      * @return string
      */
-    public function inputHidden(Model $model, string $attribute, array $htmlAttributes = []): string
+    public function inputHidden(Model $model, string $attribute, array $attributes = []): string
     {
-        $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
-        return Html::inputHidden($model->$attribute, $htmlAttributes);
+        $attributes['name'] = $this->getAttributeName($model, $attribute);
+        return Html::inputHidden($model->$attribute, $attributes);
     }
 
     /**
@@ -143,13 +143,13 @@ class Form extends Widget
      * @param Model $model - модель
      * @param string $attribute - название атрибута
      * @param array $options - список опций
-     * @param array $htmlAttributes - HTML-атрибуты
+     * @param array $attributes - HTML-атрибуты
      * @return string
      */
-    public function select(Model $model, string $attribute, array $options = [], array $htmlAttributes = []): string
+    public function select(Model $model, string $attribute, array $options = [], array $attributes = []): string
     {
-        $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
-        return Html::select($model->$attribute, $options, $htmlAttributes);
+        $attributes['name'] = $this->getAttributeName($model, $attribute);
+        return Html::select($model->$attribute, $options, $attributes);
     }
 
     /**
@@ -157,29 +157,29 @@ class Form extends Widget
      * @param Model $model - модель
      * @param string $attribute - название атрибута
      * @param array $options - список опций
-     * @param array $htmlAttributes - HTML-атрибуты
+     * @param array $attributes - HTML-атрибуты
      * @param string $separator - разделитель
      * @return string
      */
-    public function radio(Model $model, string $attribute, array $options = [], array $htmlAttributes = [], string $separator = PHP_EOL): string
+    public function radio(Model $model, string $attribute, array $options = [], array $attributes = [], string $separator = PHP_EOL): string
     {
-        $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
-        return Html::radio($model->$attribute, $options, $htmlAttributes, $separator);
+        $attributes['name'] = $this->getAttributeName($model, $attribute);
+        return Html::radio($model->$attribute, $options, $attributes, $separator);
     }
 
     /**
      * Чекбокс.
      * @param Model $model - модель
      * @param string $attribute - название атрибута
-     * @param array $htmlAttributes - HTML-атрибуты
+     * @param array $attributes - HTML-атрибуты
      * @return string
      */
-    public function checkbox(Model $model, string $attribute, array $htmlAttributes = []): string
+    public function checkbox(Model $model, string $attribute, array $attributes = []): string
     {
-        $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
+        $attributes['name'] = $this->getAttributeName($model, $attribute);
         $label = $model->getLabel($attribute);
-        $result = Html::inputHidden(0, $htmlAttributes);
-        $result.= Html::checkbox(1, $label, $htmlAttributes);
+        $result = Html::inputHidden(0, $attributes);
+        $result.= Html::checkbox(1, $label, $attributes);
         return $result;
     }
 
