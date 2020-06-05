@@ -2,10 +2,12 @@
 
 namespace twin\widget;
 
+use twin\common\SetPropertiesTrait;
 use twin\view\RenderTrait;
 
 abstract class Widget
 {
+    use SetPropertiesTrait;
     use RenderTrait;
 
     /**
@@ -13,11 +15,7 @@ abstract class Widget
      */
     public function __construct(array $properties = [])
     {
-        foreach ($properties as $name => $value) {
-            if (property_exists($this, $name)) {
-                $this->$name = $value;
-            }
-        }
+        $this->setProperties($properties);
     }
 
     public function __toString()
