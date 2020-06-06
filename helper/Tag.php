@@ -65,14 +65,14 @@ class Tag
 
     /**
      * @param string $name - название тега
-     * @param array $attributes - атрибуты тега
+     * @param array $htmlAttributes - атрибуты тега
      * @param string $content - содержимое тега
      * @param bool|null $single - является ли тег одиночным (если NULL, то определяется автоматически)
      */
-    public function __construct(string $name, array $attributes = [], string $content = '', bool $single = null)
+    public function __construct(string $name, array $htmlAttributes = [], string $content = '', bool $single = null)
     {
         $this->name = $name;
-        $this->attributes = $attributes;
+        $this->attributes = $htmlAttributes;
         $this->content = $content;
         $this->single = $single === null ? in_array($name, static::$singleTags) : $single;
     }
@@ -117,7 +117,7 @@ class Tag
      */
     public function open(): string
     {
-        $attributes = static::renderAttributes($this->attributes);
+        $attributes = static::renderAttributes();
         return "<$this->name$attributes>";
     }
 
@@ -132,13 +132,12 @@ class Tag
 
     /**
      * Сформировать строку с атрибутами для тега.
-     * @param array $attributes - HTML-атрибуты
      * @return string
      */
-    protected function renderAttributes(array $attributes): string
+    protected function renderAttributes(): string
     {
         $result = '';
-        foreach ($attributes as $key => $value) {
+        foreach ($this->attributes as $key => $value) {
             if ($value === true) {
                 $result.= " $key";
             } elseif ($value !== false && $value !== null) {

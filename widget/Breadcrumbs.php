@@ -25,10 +25,10 @@ class Breadcrumbs extends Widget
     public $activeClass = 'active';
 
     /**
-     * Опции контейнера.
+     * HTML-атрибуты контейнера.
      * @var array
      */
-    public $attributes = [
+    public $htmlAttributes = [
         'class' => 'breadcrumb',
     ];
 
@@ -67,7 +67,7 @@ class Breadcrumbs extends Widget
         foreach ($items as $label => $url) {
             $result.= $this->renderItem($label, $url);
         }
-        return Html::tag($this->tagContainer, $this->attributes, $result);
+        return Html::tag($this->tagContainer, $this->htmlAttributes, $result);
     }
 
     /**

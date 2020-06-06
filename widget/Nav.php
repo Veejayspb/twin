@@ -20,7 +20,7 @@ class Nav extends Widget
      * HTML-атрибуты главного тега UL.
      * @var array
      */
-    public $attributes = [];
+    public $htmlAttributes = [];
 
     /**
      * CSS-класс активного пункта меню.
@@ -37,7 +37,7 @@ class Nav extends Widget
         foreach ($this->items as $options) {
             $items[] = $this->getItem($options);
         }
-        return Html::tag('ul', $this->attributes, implode(PHP_EOL, $items));
+        return Html::tag('ul', $this->htmlAttributes, implode(PHP_EOL, $items));
     }
 
     /**
@@ -49,7 +49,7 @@ class Nav extends Widget
     {
         $item = new NavItem($options);
         if ($item->isActive()) {
-            Html::addCssClass($item->attributes, $this->activeClass);
+            Html::addCssClass($item->htmlAttributes, $this->activeClass);
         }
         return $item;
     }
@@ -96,7 +96,7 @@ final class NavItem
      * HTML-атрибуты пункта меню <li>...</li>.
      * @var array
      */
-    public $attributes = [];
+    public $htmlAttributes = [];
 
     /**
      * HTML-атрибуты ссылки <a>...</a>.
@@ -135,7 +135,7 @@ final class NavItem
     private function getItem(): string
     {
         $link = $this->url === null ? $this->label : $this->getLink();
-        return new Tag('li', $this->attributes, $link . $this->extra);
+        return new Tag('li', $this->htmlAttributes, $link . $this->extra);
     }
 
     /**
