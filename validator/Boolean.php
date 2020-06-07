@@ -7,10 +7,10 @@ class Boolean extends Integer
     /**
      * {@inheritdoc}
      */
-    protected $min = 0;
+    public $min = 0;
 
     /**
      * {@inheritdoc}
      */
-    protected $max = 1;
+    public $max = 1;
 }
