@@ -34,6 +34,7 @@ class Unique extends Validator
      */
     public function similar($value, string $label): bool
     {
+        $this->message = "Неуникальное значение";
         $modelName = get_class($this->model); /* @var ActiveModel $modelName */
         $attributes = $this->model->getAttributes($this->attributes);
         $count = $modelName::findByAttributes($attributes)->count();

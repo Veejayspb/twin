@@ -32,7 +32,7 @@ abstract class Validator
      * Разрешить пустое значение.
      * @var bool
      */
-    protected $empty = true;
+    protected $empty = false;
 
     /**
      * @param Model $model - валидируемая модель
