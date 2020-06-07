@@ -144,6 +144,7 @@ class Tag
                 if (is_array($value)) {
                     $value = implode(' ', $value);
                 }
+                $value = htmlentities($value, ENT_QUOTES);
                 $result.= " $key=\"$value\"";
             }
         }
