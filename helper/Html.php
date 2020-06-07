@@ -182,17 +182,15 @@ class Html
 
     /**
      * Чекбокс.
-     * @param string $value - значение
-     * @param string $label - ярлык
+     * @param string|int $value - значение
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public static function checkbox($value, string $label, array $htmlAttributes = []): string
+    public static function checkbox($value = 1, array $htmlAttributes = []): string
     {
         $htmlAttributes['type'] = 'checkbox';
         $htmlAttributes['value'] = $value;
-        $input = static::tagOpen('input', $htmlAttributes);
-        return static::label($input . static::SPACE . $label);
+        return static::tagOpen('input', $htmlAttributes);
     }
 
     /**

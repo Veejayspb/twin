@@ -191,9 +191,8 @@ class Form extends Widget
     public function checkbox(Model $model, string $attribute, array $htmlAttributes = []): string
     {
         $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
-        $label = $model->getLabel($attribute);
         $result = Html::inputHidden(0, $htmlAttributes);
-        $result.= Html::checkbox(1, $label, $htmlAttributes);
+        $result.= Html::checkbox(1, $htmlAttributes);
         return $result;
     }
 
