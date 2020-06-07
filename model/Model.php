@@ -157,7 +157,7 @@ abstract class Model
      * Безопасные атрибуты.
      * @return array
      */
-    public function getSafeAttributes(): array
+    public function safe(): array
     {
         $attributes = $this->getAttributes();
         return array_keys($attributes);
@@ -170,7 +170,7 @@ abstract class Model
      */
     public function isSafeAttribute(string $name): bool
     {
-        $safeAttributes = $this->getSafeAttributes();
+        $safeAttributes = $this->safe();
         return in_array($name, $safeAttributes);
     }
 
