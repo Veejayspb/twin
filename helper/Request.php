@@ -27,6 +27,15 @@ class Request
     public static $url;
 
     /**
+     * Проверка на AJAX-запрос.
+     * @return bool
+     */
+    public static function isAjax(): bool
+    {
+        return !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
+    }
+
+    /**
      * Вернуть значение GET-параметра.
      * @param string $name - название параметра
      * @param mixed $default - значение по-умолчанию
