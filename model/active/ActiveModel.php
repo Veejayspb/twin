@@ -76,12 +76,23 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
      * @return array
      * @see $_original
      */
-    public function getOriginalAttributes(array $attributes = [])
+    public function getOriginalAttributes(array $attributes = []): array
     {
         if (empty($attributes)) return $this->_original;
         return array_filter($this->_original, function ($name) use ($attributes) {
             return in_array($name, $attributes);
         }, ARRAY_FILTER_USE_KEY);
+    }
+
+    /**
+     * Вернуть оригинальное значение атрибута.
+     * @param string $name - название атрибута
+     * @return string|null
+     */
+    public function getOriginalAttribute(string $name)
+    {
+        $attributes = $this->getOriginalAttributes();
+        return array_key_exists($name, $attributes) ? $attributes[$name] : null;
     }
 
     /**
