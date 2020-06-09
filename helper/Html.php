@@ -9,6 +9,19 @@ class Html
     const TAB = "\t";
 
     /**
+     * Плейсхолдер уникального числа.
+     * @see uniqueStr()
+     */
+    const UNIQUE_PLACEHOLDER = '{num}';
+
+    /**
+     * Счетчик уникального числового значения.
+     * @var int
+     * @see uniqueStr()
+     */
+    protected static $uniqueNumber = 0;
+
+    /**
      * Экранирование спецсимволов.
      * @param string $text - исходный текст
      * @return string
@@ -191,6 +204,19 @@ class Html
         $htmlAttributes['type'] = 'checkbox';
         $htmlAttributes['value'] = $value;
         return static::tagOpen('input', $htmlAttributes);
+    }
+
+    /**
+     * Генератор уникальной строки для использования в кач-ве значений HTML-атрибутов.
+     * @param string $pattern - паттерн строки вида: str-{num}
+     * @return string
+     */
+    public static function uniqueStr(string $pattern = 'str-' . self::UNIQUE_PLACEHOLDER): string
+    {
+        if (!strstr($pattern, static::UNIQUE_PLACEHOLDER)) {
+            $pattern.= '-' . static::UNIQUE_PLACEHOLDER;
+        }
+        return str_replace(static::UNIQUE_PLACEHOLDER, ++static::$uniqueNumber, $pattern);
     }
 
     /**
