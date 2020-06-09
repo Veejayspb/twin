@@ -183,6 +183,9 @@ class Html
     {
         $result = [];
         $htmlAttributes['type'] = 'radio';
+        if (!array_key_exists('name', $htmlAttributes)) {
+            $htmlAttributes['name'] = static::uniqueStr('name-' . static::UNIQUE_PLACEHOLDER);
+        }
         foreach ($options as $key => $val) {
             $htmlAttributes['value'] = $key;
             $htmlAttributes['checked'] = $value == $key ? true : false;
