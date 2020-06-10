@@ -20,7 +20,7 @@ class CacheFile extends Cache
     /**
      * {@inheritdoc}
      */
-    public function saveItem(CacheItem $item): bool
+    protected function saveItem(CacheItem $item): bool
     {
         $path = $this->getFilePath($item);
         return (bool)file_put_contents($path, $item, LOCK_EX);
