@@ -41,9 +41,9 @@ abstract class Validator
      */
     public function __construct(Model $model, $attributes, array $params = [])
     {
+        $this->setProperties($params);
         $this->model = $model;
         $this->attributes = (array)$attributes;
-        $this->setProperties($params);
         $this->run();
     }
 
