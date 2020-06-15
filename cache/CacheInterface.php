@@ -7,9 +7,10 @@ interface CacheInterface
     /**
      * Получить информацию из актуального кеша.
      * @param string $key - ключ
-     * @return mixed|bool - FALSE в случае отсутствия кеша
+     * @param mixed|null $default - значение по-умолчанию в случае отсутствия кеша
+     * @return mixed|null
      */
-    public function get(string $key);
+    public function get(string $key, $default = null);
 
     /**
      * Кешировать информацию.

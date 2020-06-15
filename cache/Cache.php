@@ -15,11 +15,11 @@ abstract class Cache extends Component implements CacheInterface
     /**
      * {@inheritdoc}
      */
-    public function get(string $key)
+    public function get(string $key, $default = null)
     {
         $item = $this->getItem($key);
-        if ($item === false) return false;
-        if ($item->isExpired()) return false;
+        if ($item === false) return $default;
+        if ($item->isExpired()) return $default;
         return $item->data;
     }
 
