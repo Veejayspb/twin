@@ -73,6 +73,16 @@ class Mysql extends Sql
     /**
      * {@inheritdoc}
      */
+    public function transactionBegin(): bool
+    {
+        if ($this->transaction) return false;
+        $this->transaction = true;
+        return $this->execute('START TRANSACTION');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function connect(): bool
     {
         $this->connection = $dbh = new PDO("mysql:host=localhost;dbname=$this->dbname", $this->username, $this->password);

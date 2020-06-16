@@ -25,6 +25,12 @@ abstract class Sql extends Database
     protected $type = self::TYPE_SQL;
 
     /**
+     * Индикатор запуска транзакции.
+     * @var bool
+     */
+    protected $transaction = false;
+
+    /**
      * Лог SQL-запросов в рамках текущего HTTP-запроса.
      * Предотвращает одинаковые повторные обращения к БД.
      * Ключ - SQL-выражение.
@@ -47,6 +53,7 @@ abstract class Sql extends Database
      * @param string $sql - SQL-выражение
      * @param array $params - параметры
      * @return array|bool - FALSE в случае ошибки
+     * @todo: добавить 3й параметр cache, который будет использовать кеш запросов
      */
     public function query(string $sql, array $params = [])
     {
@@ -187,6 +194,38 @@ abstract class Sql extends Database
         }
         return false;
     }
+
+    /**
+     * Применить транзакцию.
+     * @return bool
+     */
+    public function transactionCommit(): bool
+    {
+        if (!$this->transaction) {
+            $this->transaction = false;
+            return $this->execute('COMMIT');
+        }
+        return false;
+    }
+
+    /**
+     * Откатить транзакцию.
+     * @return bool
+     */
+    public function transactionRollback(): bool
+    {
+        if (!$this->transaction) {
+            $this->transaction = false;
+            return $this->execute('ROLLBACK');
+        }
+        return false;
+    }
+
+    /**
+     * Начать транзакцию.
+     * @return bool
+     */
+    abstract public function transactionBegin(): bool;
 
     /**
      * Список таблиц.

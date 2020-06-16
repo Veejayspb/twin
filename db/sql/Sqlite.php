@@ -57,6 +57,16 @@ class Sqlite extends Sql
     /**
      * {@inheritdoc}
      */
+    public function transactionBegin(): bool
+    {
+        if ($this->transaction) return false;
+        $this->transaction = true;
+        return $this->execute('BEGIN TRANSACTION');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function connect(): bool
     {
         if (!$this->createDir()) return false;
