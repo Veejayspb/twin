@@ -105,7 +105,7 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
         $names = $this->attributeNames();
         $result = [];
         foreach ($names as $name) {
-            if ($this->$name === $this->_original[$name]) continue;
+            if ($this->$name == $this->_original[$name]) continue;
             $result[] = $name;
         }
         return $result;
