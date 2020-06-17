@@ -5,6 +5,7 @@ namespace twin\model\active;
 use twin\common\Exception;
 use twin\db\Database;
 use twin\model\Model;
+use twin\model\relation\Relation;
 use twin\Twin;
 use ReflectionClass;
 
@@ -23,6 +24,12 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
     protected $_original;
 
     /**
+     * Связи с другими моделями.
+     * @var Relation[]
+     */
+    protected $_relations = [];
+
+    /**
      * Название компонента соединения с БД.
      * @var string
      */
@@ -34,6 +41,35 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
     public function __construct(bool $newRecord = true)
     {
         $this->_newRecord = $newRecord;
+        $this->_relations = $this->relations();
+    }
+
+    /**
+     * @param string $name
+     * @return static|static[]
+     * @throws Exception
+     */
+    public function __get($name)
+    {
+        $relation = $this->getRelation($name);
+        if ($relation) {
+            return $relation->getData($this);
+        }
+        throw new Exception(500, "Property $name doesn't exists");
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @throws Exception
+     */
+    public function __set($name, $value)
+    {
+        $relation = $this->getRelation($name);
+        if (!$relation) {
+            throw new Exception(500, "Property $name doesn't exists");
+        }
+        $relation->setData($value);
     }
 
     /**
@@ -156,6 +192,27 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
             $this->_original = $this->getAttributes();
         }
         return $result;
+    }
+
+    /**
+     * Вернуть объект со связью.
+     * @param string $name - название связи
+     * @return Relation|null
+     */
+    public function getRelation(string $name): Relation
+    {
+        return array_key_exists($name, $this->_relations) ? $this->_relations[$name] : null;
+    }
+
+    /**
+     * Связи с другими моделями.
+     * key - название связи
+     * value - объект связи
+     * @return Relation[]
+     */
+    protected function relations(): array
+    {
+        return [];
     }
 
     /**
