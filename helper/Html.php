@@ -153,18 +153,19 @@ class Html
 
     /**
      * Выпадающий список.
-     * @param string $value - значение
+     * @param string|array $value - значение / массив значений (если есть атрибут multiple)
      * @param array $options - список опций
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
     public static function select($value, array $options, array $htmlAttributes = []): string
     {
+        $value = (array)$value;
         $result = static::tagOpen('select', $htmlAttributes);
         foreach ($options as $key => $val) {
             $result.= static::tag('option', [
                 'value' => $key,
-                'selected' => $value == $key,
+                'selected' => in_array($key, $value),
             ], $val);
         }
         $result.= static::tagClose('select');
