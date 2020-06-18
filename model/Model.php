@@ -115,19 +115,16 @@ abstract class Model
      */
     public function setAttributes(array $attributes, bool $safeOnly = true)
     {
-        $modelAttributes = $this->getAttributes();
+        $names = $safeOnly ? $this->safe() : $this->attributeNames();
         foreach ($attributes as $name => $value) {
-            if (!array_key_exists($name, $modelAttributes)) continue;
-            $isSafe = $this->isSafeAttribute($name);
-            if (!$safeOnly || $isSafe) {
-                $this->$name = $value;
-            }
+            if (!in_array($name, $names)) continue;
+            $this->$name = $value;
         }
     }
 
     /**
      * Вернуть значения атрибутов.
-     * @param array $attributes - атрибуты и их значения (если указано, то вернет только указанные атрибуты)
+     * @param array $attributes - названия атрибутов (если указано, то вернет только указанные атрибуты)
      * @return array
      */
     public function getAttributes(array $attributes = []): array
@@ -149,18 +146,17 @@ abstract class Model
      */
     public function hasAttribute(string $name): bool
     {
-        $attributes = $this->attributeNames();
-        return in_array($name, $attributes);
+        $names = $this->attributeNames();
+        return in_array($name, $names);
     }
 
     /**
-     * Безопасные атрибуты.
+     * Названия безопасных атрибутов.
      * @return array
      */
     public function safe(): array
     {
-        $attributes = $this->getAttributes();
-        return array_keys($attributes);
+        return $this->attributeNames();
     }
 
     /**
@@ -177,7 +173,8 @@ abstract class Model
     /**
      * Присвоить значения атрибутов и провалидировать.
      * @param array $attributes - значения атрибутов
-     * @return bool
+     * @return bool - результат валидации
+     * @see validate()
      */
     public function load(array $attributes): bool
     {
