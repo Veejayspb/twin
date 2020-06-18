@@ -192,6 +192,7 @@ class Form extends Widget
     {
         $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
         $result = Html::inputHidden(0, $htmlAttributes);
+        $htmlAttributes['checked'] = (bool)$model->getAttribute($attribute);
         $result.= Html::checkbox(1, $htmlAttributes);
         return $result;
     }
