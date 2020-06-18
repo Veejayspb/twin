@@ -162,7 +162,11 @@ class Form extends Widget
      */
     public function select(Model $model, string $attribute, array $options = [], array $htmlAttributes = []): string
     {
-        $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
+        $name = $this->getAttributeName($model, $attribute);
+        if (isset($htmlAttributes['multiple'])) {
+            $name.= '[]';
+        }
+        $htmlAttributes['name'] = $name;
         return Html::select($model->$attribute, $options, $htmlAttributes);
     }
 
