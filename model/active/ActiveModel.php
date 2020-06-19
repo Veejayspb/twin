@@ -117,17 +117,6 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
     }
 
     /**
-     * Вернуть оригинальное значение атрибута.
-     * @param string $name - название атрибута
-     * @return string|null
-     */
-    public function getOriginalAttribute(string $name)
-    {
-        $attributes = $this->getOriginalAttributes();
-        return array_key_exists($name, $attributes) ? $attributes[$name] : null;
-    }
-
-    /**
      * Вернуть названия измененных атрибутов.
      * @return array
      */
