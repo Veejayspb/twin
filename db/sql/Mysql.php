@@ -75,8 +75,6 @@ class Mysql extends Sql
      */
     public function transactionBegin(): bool
     {
-        if ($this->transaction) return false;
-        $this->transaction = true;
         return $this->execute('START TRANSACTION');
     }
 

@@ -6,15 +6,28 @@ use twin\db\sql\Sql;
 use twin\helper\ArrayHelper;
 use twin\model\query\Query;
 use twin\model\query\SqlQuery;
+use twin\model\Transaction;
 
 /**
  * Class ActiveJsonModel
  * @package core\model\active
  *
+ * @property Transaction $transaction
  * @method static Sql db()
  */
 abstract class ActiveSqlModel extends ActiveModel
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function __get($name)
+    {
+        if ($name == 'transaction') {
+            return $this->getTransaction();
+        }
+        return parent::__get($name);
+    }
+
     /**
      * {@inheritdoc}
      * @return SqlQuery
@@ -30,7 +43,7 @@ abstract class ActiveSqlModel extends ActiveModel
      */
     public static function findByAttributes(array $attributes): Query
     {
-        $sql = ArrayHelper::stringExpression($attributes, function ($key, $value) {
+        $sql = ArrayHelper::stringExpression($attributes, function ($key) {
             return "`$key`=:$key";
         }, ' AND ');
         return static::find()->where($sql, $attributes);
@@ -41,20 +54,23 @@ abstract class ActiveSqlModel extends ActiveModel
      */
     public function delete(): bool
     {
+        if ($this->transaction->error) return false;
         if ($this->isNewRecord()) return false;
         if (!$this->beforeDelete()) return false;
         $pk = $this->pk();
         if (empty($pk)) return false;
 
-        $table = static::tableName();
         $pkAttributes = $this->getAttributes($pk);
-        $sql = ArrayHelper::stringExpression($pkAttributes, function ($key, $value) {
+        $sql = ArrayHelper::stringExpression($pkAttributes, function ($key) {
             return "$key=:$key";
         }, ' AND ');
 
-        $result = static::db()->delete($table, $sql, $pkAttributes);
+        $result = static::db()->delete(static::tableName(), $sql, $pkAttributes);
         if ($result) {
             $this->afterDelete();
+        }
+        if (!$result && $this->transaction->running) {
+            $this->transaction->error();
         }
         return $result;
     }
@@ -66,6 +82,19 @@ abstract class ActiveSqlModel extends ActiveModel
     {
         $table = static::tableName();
         return static::db()->getPk($table);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function save(bool $validate = true): bool
+    {
+        if ($this->transaction->error) return false;
+        $result = parent::save($validate);
+        if (!$result && $this->transaction->running) {
+            $this->transaction->error();
+        }
+        return $result;
     }
 
     /**
@@ -90,13 +119,20 @@ abstract class ActiveSqlModel extends ActiveModel
     {
         $pk = $this->pk();
         if (empty($pk)) return false;
-
-        $table = static::tableName();
         $attributes = $this->getAttributes();
         $pkAttributes = $this->getOriginalAttributes($pk);
-        $sql = ArrayHelper::stringExpression($pkAttributes, function ($key, $value) {
+        $sql = ArrayHelper::stringExpression($pkAttributes, function ($key) {
             return "$key=:$key";
         }, ', ');
-        return static::db()->update($table, $attributes, $sql, $pkAttributes);
+        return static::db()->update(static::tableName(), $attributes, $sql, $pkAttributes);
+    }
+
+    /**
+     * Вернуть объект для работы с транзакцией.
+     * @return Transaction
+     */
+    protected function getTransaction(): Transaction
+    {
+        return Transaction::get(static::db());
     }
 }

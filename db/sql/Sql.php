@@ -25,12 +25,6 @@ abstract class Sql extends Database
     protected $type = self::TYPE_SQL;
 
     /**
-     * Индикатор запуска транзакции.
-     * @var bool
-     */
-    protected $transaction = false;
-
-    /**
      * Лог SQL-запросов в рамках текущего HTTP-запроса.
      * Предотвращает одинаковые повторные обращения к БД.
      * Ключ - SQL-выражение.
@@ -201,11 +195,7 @@ abstract class Sql extends Database
      */
     public function transactionCommit(): bool
     {
-        if (!$this->transaction) {
-            $this->transaction = false;
-            return $this->execute('COMMIT');
-        }
-        return false;
+        return $this->execute('COMMIT');
     }
 
     /**
@@ -214,11 +204,7 @@ abstract class Sql extends Database
      */
     public function transactionRollback(): bool
     {
-        if (!$this->transaction) {
-            $this->transaction = false;
-            return $this->execute('ROLLBACK');
-        }
-        return false;
+        return $this->execute('ROLLBACK');
     }
 
     /**
