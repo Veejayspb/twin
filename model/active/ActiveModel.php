@@ -45,9 +45,7 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
     }
 
     /**
-     * @param string $name
-     * @return static|static[]
-     * @throws Exception
+     * {@inheritdoc}
      */
     public function __get($name)
     {
@@ -55,21 +53,19 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
         if ($relation) {
             return $relation->getData($this);
         }
-        throw new Exception(500, "Property $name doesn't exists");
+        return parent::__get($name);
     }
 
     /**
-     * @param string $name
-     * @param mixed $value
-     * @throws Exception
+     * {@inheritdoc}
      */
     public function __set($name, $value)
     {
         $relation = $this->getRelation($name);
-        if (!$relation) {
-            throw new Exception(500, "Property $name doesn't exists");
+        if ($relation) {
+            $relation->setData($value);
         }
-        $relation->setData($value);
+        parent::__set($name, $value);
     }
 
     /**
@@ -199,7 +195,7 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
      * @param string $name - название связи
      * @return Relation|null
      */
-    public function getRelation(string $name): Relation
+    public function getRelation(string $name)
     {
         return array_key_exists($name, $this->_relations) ? $this->_relations[$name] : null;
     }

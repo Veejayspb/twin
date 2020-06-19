@@ -4,6 +4,7 @@ namespace twin\model;
 
 use ReflectionClass;
 use ReflectionProperty;
+use twin\common\Exception;
 
 abstract class Model
 {
@@ -12,6 +13,31 @@ abstract class Model
      * @var array
      */
     protected $_errors = [];
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        if ($this->isServiceAttribute($name)) {
+            throw new Exception(500, "Undefined attribute $name");
+        }
+        return $this->$name;
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
+    public function __set($name, $value)
+    {
+        if ($this->isServiceAttribute($name)) {
+            throw new Exception(500, "Attribute $name doesn't exists");
+        }
+        $this->setAttribute($name, $value);
+    }
 
     /**
      * Ярлыки атрибутов.
@@ -108,6 +134,23 @@ abstract class Model
     }
 
     /**
+     * Присвоить значение атрибута и привести его к нужному типу (если указано значение по-умолчанию).
+     * @param string $name - название атрибута
+     * @param mixed $value - значение
+     * @return void
+     */
+    protected function setAttribute(string $name, $value)
+    {
+        $type = gettype($this->$name);
+        if ($type == 'array' && empty($value)) {
+            $value = [];
+        } elseif (in_array($type, ['integer', 'double', 'boolean', 'string', 'array'])) {
+            settype($value, $type);
+        }
+        $this->$name = $value;
+    }
+
+    /**
      * Присвоить значения атрибутов.
      * @param array $attributes - значения атрибутов
      * @param bool $safeOnly - только безопасные
@@ -118,7 +161,7 @@ abstract class Model
         $names = $safeOnly ? $this->safe() : $this->attributeNames();
         foreach ($attributes as $name => $value) {
             if (!in_array($name, $names)) continue;
-            $this->$name = $value;
+            $this->setAttribute($name, $value);
         }
     }
 
@@ -212,4 +255,14 @@ abstract class Model
      * @return void
      */
     protected function afterValidate() {}
+
+    /**
+     * Является ли атрибут сервисным.
+     * @param string $name - название атрибута
+     * @return bool
+     */
+    private function isServiceAttribute(string $name): bool
+    {
+        return substr($name, 0, 1) == '_';
+    }
 }

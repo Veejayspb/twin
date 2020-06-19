@@ -131,7 +131,7 @@ abstract class ActiveSqlModel extends ActiveModel
      * Вернуть объект для работы с транзакцией.
      * @return Transaction
      */
-    protected function getTransaction(): Transaction
+    private function getTransaction(): Transaction
     {
         return Transaction::get(static::db());
     }

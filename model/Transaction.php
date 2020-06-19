@@ -11,6 +11,7 @@ use twin\db\sql\Sql;
  *
  * @property bool $running
  * @property bool $error
+ * @todo: использовать счетчик запусков и окончаний транзакций. Если транзакции вложенные, то стартовать на самой 1ой, а заканчивать на самой последней
  */
 final class Transaction
 {
