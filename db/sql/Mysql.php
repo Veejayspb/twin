@@ -71,6 +71,21 @@ class Mysql extends Sql
     }
 
     /**
+     * {@inheridoc}
+     */
+    public function getAutoIncrement(string $table)
+    {
+        $items = $this->query("SHOW FULL COLUMNS FROM `$table`");
+        if ($items === false) return false;
+        foreach ($items as $item) {
+            if (array_key_exists('Extra', $item) && $item['Extra'] == 'auto_increment') {
+                return $item['Field'];
+            }
+        }
+        return false;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function transactionBegin(): bool

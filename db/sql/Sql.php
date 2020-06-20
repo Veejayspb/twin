@@ -173,23 +173,6 @@ abstract class Sql extends Database
     }
 
     /**
-     * Вернуть название автоинкрементного поля.
-     * @param string $table - название таблицы
-     * @return string|bool - FALSE в случае отсутствия автоинкремента, либо ошибки
-     */
-    public function getAutoIncrement(string $table)
-    {
-        $items = $this->query("SHOW FULL COLUMNS FROM `$table`");
-        if ($items === false) return false;
-        foreach ($items as $item) {
-            if (array_key_exists('Extra', $item) && $item['Extra'] == 'auto_increment') {
-                return $item['Field'];
-            }
-        }
-        return false;
-    }
-
-    /**
      * Применить транзакцию.
      * @return bool
      */
@@ -206,6 +189,13 @@ abstract class Sql extends Database
     {
         return $this->execute('ROLLBACK');
     }
+
+    /**
+     * Вернуть название автоинкрементного поля.
+     * @param string $table - название таблицы
+     * @return string|bool - FALSE в случае отсутствия автоинкремента, либо ошибки
+     */
+    abstract public function getAutoIncrement(string $table);
 
     /**
      * Начать транзакцию.

@@ -55,6 +55,22 @@ class Sqlite extends Sql
     }
 
     /**
+     * {@inheridoc}
+     */
+    public function getAutoIncrement(string $table)
+    {
+        $items = $this->query("PRAGMA table_info ('$table')");
+        $result = null;
+        $count = 0;
+        foreach ($items as $item) {
+            if (empty($item['pk'])) continue;
+            if (mb_strtoupper($item['type']) == 'INTEGER') $count++;
+            $result = $item['name'];
+        }
+        return $count == 1 && $result !== null ? $result : false;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function transactionBegin(): bool
