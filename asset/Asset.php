@@ -182,7 +182,7 @@ abstract class Asset
             $to = Twin::getAlias($alias);
             $placeholder = '{' . $name . '}';
             $this->placeholders[$placeholder] = $this->assetManager->webPath . '/' . $hash;
-            if (is_dir($to)) continue; // Если asset уже опубликован
+            if (!$this->assetManager->force && is_dir($to)) continue; // Если asset уже опубликован
             if (!File::copy($from, $to)) {
                 throw new Exception(500, "Can't publish asset: $from");
             }

@@ -21,6 +21,12 @@ class AssetManager extends Component
     public $webPath = '/asset';
 
     /**
+     * Принудительная публикация asset.
+     * @var bool
+     */
+    public $force = false;
+
+    /**
      * Добавленные asset.
      * @var Asset[]
      */
