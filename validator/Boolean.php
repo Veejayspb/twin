@@ -2,15 +2,18 @@
 
 namespace twin\validator;
 
-class Boolean extends Integer
+class Boolean extends Validator
 {
     /**
-     * {@inheritdoc}
+     * Проверка типа.
+     * @param mixed $value
+     * @param string $label
+     * @param string $attribute
+     * @return bool
      */
-    public $min = 0;
-
-    /**
-     * {@inheritdoc}
-     */
-    public $max = 1;
+    public function type($value, string $label, string $attribute): bool
+    {
+        $this->message = 'Должно равняться 0 или 1';
+        return $value == 1 || $value == 0;
+    }
 }
