@@ -46,24 +46,23 @@ abstract class Sql extends Database
      * Осуществить запрос в БД, используя лог запросов, и вернуть ответ.
      * @param string $sql - SQL-выражение
      * @param array $params - параметры
+     * @param bool $useCache - использовать кэш запросов (предотвращает повторные запросы)
      * @return array|bool - FALSE в случае ошибки
-     * @todo: добавить 3й параметр cache, который будет использовать кеш запросов
      */
-    public function query(string $sql, array $params = [])
+    public function query(string $sql, array $params = [], bool $useCache = false)
     {
-        if (empty($params)) {
-            if (array_key_exists($sql, $this->queryLog)) {
-                $data = $this->queryLog[$sql];
-            } else {
-                $data = $this->directQuery($sql);
-                if ($data !== false) {
-                    $this->queryLog[$sql] = $data;
-                }
-            }
+        ksort($params);
+        $key = md5($sql . serialize($params));
+
+        if ($useCache && array_key_exists($key, $this->queryLog)) {
+            return $this->queryLog[$key];
         } else {
             $data = $this->directQuery($sql, $params);
+            if ($data !== false) {
+                $this->queryLog[$key] = $data;
+            }
+            return $data;
         }
-        return $data;
     }
 
     /**
@@ -96,7 +95,7 @@ abstract class Sql extends Database
         $keysStr = implode('`, `', $keys);
         $phStr = implode(', ', $placeholders);
         $sql = "INSERT INTO `$table` (`$keysStr`) VALUES ($phStr)";
-        $result = $this->query($sql, array_combine($placeholders, $data));
+        $result = $this->execute($sql, array_combine($placeholders, $data));
 
         if ($result === false) return false;
         return $this->connection->lastInsertId();
@@ -134,7 +133,7 @@ abstract class Sql extends Database
     public function delete(string $table, string $where, array $params = []): bool
     {
         $sql = "DELETE FROM `$table` WHERE $where";
-        $result = $this->query($sql, $params);
+        $result = $this->execute($sql, $params);
         return $result !== false;
     }
 

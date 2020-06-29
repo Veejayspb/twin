@@ -52,7 +52,7 @@ class Mysql extends Sql
     public function getTables()
     {
         $sql = 'SHOW TABLES';
-        $items = $this->query($sql);
+        $items = $this->query($sql, [], true);
         if ($items === false) return false;
         $result = [];
         foreach ($items as $item) {
@@ -66,7 +66,7 @@ class Mysql extends Sql
      */
     public function getPk(string $table): array
     {
-        $items = $this->query("SHOW KEYS FROM `$table` WHERE Key_name='PRIMARY'");
+        $items = $this->query("SHOW KEYS FROM `$table` WHERE Key_name='PRIMARY'", [], true);
         return array_column($items, 'Column_name');
     }
 
@@ -75,7 +75,7 @@ class Mysql extends Sql
      */
     public function getAutoIncrement(string $table)
     {
-        $items = $this->query("SHOW FULL COLUMNS FROM `$table`");
+        $items = $this->query("SHOW FULL COLUMNS FROM `$table`", [], true);
         if ($items === false) return false;
         foreach ($items as $item) {
             if (array_key_exists('Extra', $item) && $item['Extra'] == 'auto_increment') {
