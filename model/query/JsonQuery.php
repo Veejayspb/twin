@@ -59,6 +59,7 @@ class JsonQuery extends Query
         foreach ($items as $item) {
             $model = new $this->modelName(false); /* @var ActiveJsonModel $model */
             $model->setAttributes($item, false);
+            $model->afterFind();
             $models[] = $model;
         }
         return $this->apply($models);

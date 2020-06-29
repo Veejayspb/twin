@@ -96,9 +96,8 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
     {
         parent::setAttributes($attributes, $safeOnly);
 
-        if ($this->_original == null) {
+        if ($this->_original == null && !$this->isNewRecord()) {
             $this->_original = $this->getAttributes();
-            $this->afterFind();
         }
     }
 
@@ -204,7 +203,7 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
      * Вызов события после поиска записи.
      * @return void
      */
-    protected function afterFind() {}
+    public function afterFind() {}
 
     /**
      * Вызов события до сохранения.

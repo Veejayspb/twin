@@ -231,7 +231,7 @@ abstract class Model
      */
     public function validate(): bool
     {
-        $this->beforeValidate();
+        if (!$this->beforeValidate()) return false;
         $this->rules();
         $result = !$this->hasErrors();
         $this->afterValidate();
@@ -246,9 +246,12 @@ abstract class Model
 
     /**
      * Вызов события до валидации.
-     * @return void
+     * @return bool
      */
-    protected function beforeValidate() {}
+    protected function beforeValidate(): bool
+    {
+        return true;
+    }
 
     /**
      * Вызов события после валидации.

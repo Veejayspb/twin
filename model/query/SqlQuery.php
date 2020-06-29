@@ -79,6 +79,7 @@ class SqlQuery extends Query
         if (empty($items)) return null;
         $model = new $this->modelName(false); /* @var ActiveSqlModel $model */
         $model->setAttributes($items[0], false);
+        $model->afterFind();
         return $model;
     }
 
@@ -94,6 +95,7 @@ class SqlQuery extends Query
         foreach ($items as $item) {
             $model = new $this->modelName(false); /* @var ActiveSqlModel $model */
             $model->setAttributes($item, false);
+            $model->afterFind();
             $models[] = $model;
         }
         return $models;

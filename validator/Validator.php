@@ -66,7 +66,8 @@ abstract class Validator
     protected function validateAttribute(string $attribute)
     {
         $methods = $this->getPublicMethods();
-        if ($this->empty && empty($this->model->$attribute)) return;
+        $value = $this->model->$attribute;
+        if ($this->empty && ($value === null || $value === '')) return;
         foreach ($methods as $method) {
             $result = call_user_func([$this, $method], $this->model->$attribute, $this->model->getLabel($attribute), $attribute);
             if (!$result) {
