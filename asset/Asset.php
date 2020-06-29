@@ -147,11 +147,12 @@ abstract class Asset
     /**
      * Генерация CRC32-хэша для использования в кач-ве названия новой директории.
      * @param string $path - путь до директории
-     * @return string
+     * @return string|bool - FALSE в случае отсутствия директории
      * @todo: если изменились вложенные директории, то дата изменения род. директории не изменится
      */
-    protected function hash(string $path): string
+    protected function hash(string $path)
     {
+        if (!is_dir($path)) return false;
         $str = $path . filemtime($path);
         return sprintf('%x', crc32($str . Twin::VERSION));
     }
@@ -178,6 +179,9 @@ abstract class Asset
         foreach ($this->publish as $name => $path) {
             $from = Twin::getAlias($path);
             $hash = $this->hash($from);
+            if (!$hash) {
+                throw new Exception(500, "Asset path not exists: $from");
+            }
             $alias = $this->assetManager->publicationPath . DIRECTORY_SEPARATOR . $hash;
             $to = Twin::getAlias($alias);
             $placeholder = '{' . $name . '}';
