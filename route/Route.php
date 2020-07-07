@@ -92,6 +92,72 @@ final class Route
     }
 
     /**
+     * Заполнить свойства объекта.
+     * Сначала заполняются module, controller, action.
+     * Остальные значения попадают в params.
+     * @param array $properties - данные
+     * @return self
+     */
+    public function setProperties(array $properties): Route
+    {
+        foreach ($properties as $name => $value) {
+            if (in_array($name, self::$reserved)) {
+                $this->setProperty($name, $value);
+            } else {
+                $this->params[$name] = $value;
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Вернуть текстовый роут.
+     * @return string - module/controller/action
+     */
+    public function getRoute(): string
+    {
+        $parts = [];
+        foreach (self::$reserved as $param) {
+            if ($this->$param !== null) {
+                $parts[] = $this->$param;
+            }
+        }
+        return implode('/', $parts);
+    }
+
+    /**
+     * Установить значения зарезервированных параметров на основе текстового роута.
+     * @param string $route - текстовый роут вида:
+     * module/controller/action
+     * controller/action
+     * action
+     * @return void
+     */
+    public function setRoute(string $route)
+    {
+        $parts = explode('/', $route);
+        $part = array_pop($parts);
+        if ($part !== null) $this->setAction($part);
+        $part = array_pop($parts);
+        if ($part !== null) $this->setController($part);
+        $part = array_pop($parts);
+        if ($part !== null) $this->setModule($part);
+    }
+
+    /**
+     * Сравнить строковый роут и текущий.
+     * @param string $route - строковый роут для сравнения
+     * @return bool
+     */
+    public function compare(string $route): bool
+    {
+        $route = str_replace('<action>', $this->action, $route);
+        $route = str_replace('<controller>', $this->controller, $route);
+        $route = str_replace('<module>', $this->module, $route);
+        return $route == $this->getRoute();
+    }
+
+    /**
      * Установка модуля.
      * @param mixed $value - значение
      * @return void
@@ -168,69 +234,5 @@ final class Route
                 $this->setParams($value);
                 break;
         }
-    }
-
-    /**
-     * Заполнить свойства объекта.
-     * Сначала заполняются module, controller, action.
-     * Остальные значения попадают в params.
-     * @param array $properties - данные
-     * @return self
-     */
-    public function setProperties(array $properties): Route
-    {
-        foreach ($properties as $name => $value) {
-            if (in_array($name, self::$reserved)) {
-                $this->setProperty($name, $value);
-            } else {
-                $this->params[$name] = $value;
-            }
-        }
-        return $this;
-    }
-
-    /**
-     * Вернуть текстовый роут.
-     * @return string - module/controller/action
-     */
-    public function getRoute(): string
-    {
-        $parts = [];
-        foreach (self::$reserved as $param) {
-            if ($this->$param !== null) {
-                $parts[] = $this->$param;
-            }
-        }
-        return implode('/', $parts);
-    }
-
-    /**
-     * Установить значения зарезервированных параметров на основе текстового роута.
-     * @param string $route - текстовый роут вида: module/controller/action
-     * @return void
-     */
-    public function setRoute(string $route)
-    {
-        $parts = explode('/', $route);
-        $params = array_reverse(self::$reserved);
-        foreach ($params as $param) {
-            if ($part = array_pop($parts)) {
-                if ($part === null) break;
-                $this->setProperty($param, $part);
-            }
-        }
-    }
-
-    /**
-     * Сравнить строковый роут и текущий.
-     * @param string $route - строковый роут для сравнения
-     * @return bool
-     */
-    public function compare(string $route): bool
-    {
-        $route = str_replace('<action>', $this->action, $route);
-        $route = str_replace('<controller>', $this->controller, $route);
-        $route = str_replace('<module>', $this->module, $route);
-        return $route == $this->getRoute();
     }
 }
