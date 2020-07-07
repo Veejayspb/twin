@@ -12,25 +12,25 @@ class RouteManager extends Component
      * Роут главной страницы.
      * @var string
      */
-    public $main = 'site/index';
+    public $main = '/site/index';
 
     /**
      * Роут страницы login.
      * @var string
      */
-    public $login = 'auth/login';
+    public $login = '/auth/login';
 
     /**
      * Роут страницы logout.
      * @var string
      */
-    public $logout = 'auth/logout';
+    public $logout = '/auth/logout';
 
     /**
      * Роут страницы ошибки.
      * @var string
      */
-    public $error = 'site/error';
+    public $error = '/site/error';
 
     /**
      * Неймспейсы контроллеров.
