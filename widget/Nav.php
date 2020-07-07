@@ -2,7 +2,9 @@
 
 namespace twin\widget;
 
+use app\component\Twin;
 use twin\common\SetPropertiesTrait;
+use twin\controller\Controller;
 use twin\helper\Html;
 use twin\helper\Request;
 use twin\helper\Tag;
@@ -125,7 +127,9 @@ final class NavItem
     {
         if ($this->active === false) return false;
         if ($this->active === true) return true;
-        return $this->url == Request::$url;
+        $linkRoute = Twin::app()->route->parseUrl($this->url)->getRoute();
+        $currentRoute = Controller::$instance->route->getRoute();
+        return $linkRoute == $currentRoute;
     }
 
     /**
