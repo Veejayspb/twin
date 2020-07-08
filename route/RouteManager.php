@@ -12,7 +12,7 @@ class RouteManager extends Component
      * Роут главной страницы.
      * @var string
      */
-    public $main = '/site/index';
+    public $home = '/site/index';
 
     /**
      * Роут страницы login.

@@ -51,9 +51,9 @@ class Url
      * @param bool $absolute - абсолютный адрес
      * @return string
      */
-    public static function main(array $params = [], bool $absolute = false): string
+    public static function home(array $params = [], bool $absolute = false): string
     {
-        return static::to(Twin::app()->route->main, $params, $absolute);
+        return static::to(Twin::app()->route->home, $params, $absolute);
     }
 
     /**
