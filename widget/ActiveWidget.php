@@ -25,7 +25,7 @@ abstract class ActiveWidget extends Widget
 
     /**
      * Текущее состояние виджета.
-     * @var bool
+     * @var mixed
      */
     public $value;
 
@@ -43,14 +43,14 @@ abstract class ActiveWidget extends Widget
     {
         $htmlAttributes = $this->htmlAttributes;
         $htmlAttributes['data-url'] = $this->url;
-        $htmlAttributes['data-params'] = json_encode($this->params);
+        $htmlAttributes['data-params'] = json_encode((object)$this->params);
         Html::addCssClass($htmlAttributes, static::CSS_CLASS);
         return $htmlAttributes;
     }
 
     /**
      * Формирование ответа на запрос.
-     * @param bool $value - новое значение
+     * @param mixed $value - новое значение
      * @return string
      */
     public static function response($value): string
