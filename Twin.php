@@ -180,6 +180,30 @@ class Twin
     }
 
     /**
+     * Регистрация компонента.
+     * @param string $name - название компонента
+     * @param string $class - название класса
+     * @param array $properties - свойства
+     * @return bool
+     * @throws Exception
+     */
+    public function registerComponent(string $name, string $class, array $properties): bool
+    {
+        if (!class_exists($class)) {
+            throw new Exception(500, "Component's class not exist: $class");
+        } elseif (!is_subclass_of($class, Component::class)) {
+            throw new Exception(500, "Component $class must extends " . Component::class);
+        } elseif (array_key_exists($name, $this->components)) {
+            throw new Exception(500, "Component with name $name already exists");
+        }
+        if (array_key_exists('class', $properties)) {
+            unset($properties['class']);
+        }
+        $this->components[$name] = new $class($properties);
+        return true;
+    }
+
+    /**
      * Инстанцировать объект.
      * @param string $class - название класса
      * @param array $properties - свойства класса
@@ -225,9 +249,9 @@ class Twin
         }
 
         // Регистрация компонентов.
-        foreach ($config['components'] as $name => $data) {
-            if (empty($data)) continue;
-            $this->registerComponent($name, $data);
+        foreach ($config['components'] as $name => $properties) {
+            $class = array_key_exists('class', $properties) ? $properties['class'] : '';
+            $this->registerComponent($name, $class, $properties);
         }
     }
 
@@ -258,29 +282,6 @@ class Twin
     {
         $path = __DIR__ . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . $type . '.php';
         return require $path;
-    }
-
-    /**
-     * Регистрация компонента.
-     * @param string $name - название компонента
-     * @param array $properties - свойства
-     * @return bool
-     * @throws Exception
-     */
-    private function registerComponent(string $name, array $properties = []): bool
-    {
-        if (!array_key_exists('class', $properties)) {
-            throw new Exception(500, "Component's class not specified: $name");
-        } elseif (!class_exists($properties['class'])) {
-            throw new Exception(500, "Component's class not exist: {$properties['class']}");
-        }
-        $class = $properties['class'];
-        $component = new $class($properties); /* @var Component $component */
-        if (!is_subclass_of($component, Component::class)) {
-            throw new Exception(500, "Component {$properties['class']} must extends " . Component::class);
-        }
-        $this->components[$name] = $component;
-        return true;
     }
 
     /**
