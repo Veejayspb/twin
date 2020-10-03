@@ -2,12 +2,11 @@
 
 namespace twin\widget;
 
-use app\component\Twin;
 use twin\common\SetPropertiesTrait;
 use twin\controller\Controller;
 use twin\helper\Html;
-use twin\helper\Request;
 use twin\helper\Tag;
+use twin\Twin;
 
 class Nav extends Widget
 {
