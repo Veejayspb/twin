@@ -187,7 +187,7 @@ class Twin
      * @return bool
      * @throws Exception
      */
-    public function registerComponent(string $name, string $class, array $properties): bool
+    public function registerComponent(string $name, string $class, array $properties = []): bool
     {
         if (!class_exists($class)) {
             throw new Exception(500, "Component's class not exist: $class");
@@ -281,6 +281,7 @@ class Twin
     private function getDefaultConfig(string $type): array
     {
         $path = __DIR__ . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . $type . '.php';
+        if (!is_file($path)) return [];
         return require $path;
     }
 
