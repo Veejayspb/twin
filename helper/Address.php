@@ -7,7 +7,7 @@ namespace twin\helper;
  * @package core\helper
  *
  * @property bool $ssl
- * @property string|null $host
+ * @property string|null $domain
  * @property string|null $path
  * @property array $params
  * @property string|null $anchor
@@ -21,10 +21,10 @@ class Address
     private $ssl = false;
 
     /**
-     * Имя хоста.
+     * Имя домена.
      * @var string|null
      */
-    private $host;
+    private $domain;
 
     /**
      * Относительный путь.
@@ -55,7 +55,7 @@ class Address
                 $this->ssl = $parts['scheme'] == 'https';
             }
             if (isset($parts['host'])) {
-                $this->host = $parts['host'];
+                $this->domain = $parts['host'];
             }
             if (isset($parts['path'])) {
                 $this->path = $parts['path'];
@@ -106,9 +106,9 @@ class Address
     public function getUrl(bool $params = true, bool $absolute = false, bool $anchor = false): string
     {
         $url = '';
-        if ($absolute && isset($this->host)) {
+        if ($absolute && isset($this->domain)) {
             $url.= $this->ssl ? 'https://' : 'http://';
-            $url.= $this->host;
+            $url.= $this->domain;
         }
         $url.= $this->path;
         if ($params && !empty($this->params)) {
