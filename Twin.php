@@ -242,12 +242,6 @@ class Twin
             $this->$property = $config[$property];
         }
 
-        // Регистрация алиасов.
-        $aliases = array_key_exists('aliases', $config) ? $config['aliases'] : [];
-        foreach ($aliases as $alias => $path) {
-            static::setAlias($alias, $path);
-        }
-
         // Регистрация компонентов.
         foreach ($config['components'] as $name => $properties) {
             $class = array_key_exists('class', $properties) ? $properties['class'] : '';
