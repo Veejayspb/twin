@@ -130,11 +130,11 @@ class Address
 /**
  * Class AddressBuilder
  *
- * @method self scheme(bool $value) - указать наличие протокола
- * @method self domain(bool $value) - указать наличие домена
- * @method self path(bool $value) - указать наличие пути
- * @method self params(bool $value) - указать наличие параметров
- * @method self anchor(bool $value) - указать наличие якоря
+ * @method self scheme(bool $value = true) - указать наличие протокола
+ * @method self domain(bool $value = true) - указать наличие домена
+ * @method self path(bool $value = true) - указать наличие пути
+ * @method self params(bool $value = true) - указать наличие параметров
+ * @method self anchor(bool $value = true) - указать наличие якоря
  */
 final class AddressBuilder
 {
@@ -145,7 +145,7 @@ final class AddressBuilder
     private $parts = [
         'scheme' => false,
         'domain' => false,
-        'path' => true,
+        'path' => false,
         'params' => false,
         'anchor' => false,
     ];
