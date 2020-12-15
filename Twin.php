@@ -15,6 +15,12 @@ use twin\view\View;
 
 define('LOCALHOST', isset($_SERVER['SERVER_ADDR'], $_SERVER['REMOTE_ADDR']) && $_SERVER['SERVER_ADDR'] == '127.0.0.1' && $_SERVER['REMOTE_ADDR'] == '127.0.0.1');
 
+Twin::setAlias('@root', dirname(__DIR__));
+Twin::setAlias('@twin', __DIR__);
+Twin::setAlias('@app', '@root/app');
+Twin::setAlias('@runtime', '@app/runtime');
+Twin::setAlias('@web', '@root/web');
+
 /**
  * Class Twin
  * @package core
