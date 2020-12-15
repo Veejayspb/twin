@@ -6,7 +6,7 @@ use twin\session\Session;
 use twin\view\View;
 
 return [
-    'parent' => __DIR__ . DIRECTORY_SEPARATOR . 'common.php',
+    'parent' => '@twin/config/common.php',
     'components' => [
         'route' => [
             'class' => RouteManager::class,

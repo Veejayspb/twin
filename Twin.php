@@ -264,12 +264,11 @@ class Twin
     private function prepareConfig(array $config): array
     {
         if (!array_key_exists('parent', $config)) return $config;
-        $path = $config['parent'];
-        unset($config['parent']);
-        if (!is_file($path)) {
-            throw new Exception(500, "Can't find config file: $path");
+        $parentConfig = static::import($config['parent']);
+        if ($parentConfig === false) {
+            throw new Exception(500, "Can't find config file: " . $config['parent']);
         }
-        $parent = $this->prepareConfig(include $path);
+        $parent = $this->prepareConfig($parentConfig);
         return array_replace_recursive($parent, $config);
     }
 
@@ -280,9 +279,9 @@ class Twin
      */
     private function getDefaultConfig(string $type): array
     {
-        $path = __DIR__ . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . $type . '.php';
-        if (!is_file($path)) return [];
-        return require $path;
+        $alias = "@twin/config/$type.php";
+        $config = static::import($alias);
+        return $config === false ? [] : $config;
     }
 
     /**
@@ -319,5 +318,22 @@ class Twin
             return static::getAlias($result);
         }
         return $result;
+    }
+
+    /**
+     * Импорт файла.
+     * @param string $alias - алиас пути до файла
+     * @param bool $once - использовать require_once
+     * @return mixed|bool - FALSE, если файл не существует, TRUE, если $once=true и файл уже был импортирован
+     */
+    public static function import(string $alias, bool $once = false)
+    {
+        $path = static::getAlias($alias);
+        if (!is_file($path)) return false;
+        if ($once) {
+            return require_once $path;
+        } else {
+            return require $path;
+        }
     }
 }

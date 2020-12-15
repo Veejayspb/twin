@@ -4,7 +4,7 @@ use twin\migration\MigrationManager;
 use twin\route\RouteManager;
 
 return [
-    'parent' => __DIR__ . DIRECTORY_SEPARATOR . 'common.php',
+    'parent' => '@twin/config/common.php',
     'components' => [
         'route' => [
             'class' => RouteManager::class,
