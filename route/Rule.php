@@ -25,27 +25,18 @@ class Rule implements RuleInterface
     {
         // Убрать из адреса GET-параметры.
         $address = new Address($url);
-        $url = $address->getUrl(false);
+        $url = $address->build()->path()->get();
 
-        // Подготовить паттерн.
-        $pattern = str_replace('/', '\/', $this->pattern);
-        preg_match_all('/<([a-z]+)(?::(.+?))?>/', $this->pattern, $matches);
-        foreach ($matches[0] as $i => $str) {
-            $replacement = $matches[2][$i] ?: '.+?';
-            $pattern = str_replace($str, "($replacement)", $pattern);
-        }
-        $pattern = "/^$pattern$/";
+        $placeholders = $this->extractPlaceholders($url);
+        if ($placeholders === false) return false;
 
-        // Разбор адреса.
-        if (!preg_match($pattern, $url, $values)) return false;
-        unset($values[0]);
+        $strRoute = $this->fillRoute($placeholders); // Строковый роут вида: module/controller/action или controller/action
+        if (!preg_match('/^([a-z]+\/)?[a-z]+\/[a-z]+$/', $strRoute)) return false;
 
-        // Формирование роута.
         $route = new Route;
+        $route->setRoute($strRoute);
         $route->params = $address->params;
-        $route->setProperties(array_combine($matches[1], $values));
-        $route->setRoute($this->route);
-
+        $route->setProperties($placeholders);
         return $route;
     }
 
@@ -54,28 +45,66 @@ class Rule implements RuleInterface
      */
     public function createUrl(Route $route)
     {
-        // Зарезервированные параметры
-        $url = $this->pattern;
-        foreach (Route::$reserved as $param) {
-            $url = preg_replace("/<$param(:.+?)?>/", $route->$param, $url);
-        }
+        $reserved = $route->getReservedParams();
+        $strRoute = $this->fillRoute($reserved);
+        if ($strRoute != $route->getRoute()) return false;
 
-        // Параметры
-        $params = $route->params;
-        if (array_key_exists('#', $params)) {
-            $anchor = $params['#'];
-            unset($params['#']);
+        $pattern = $this->fillPattern($reserved + $route->params);
+        if (preg_match('/<.*?>/', $pattern)) return false; // Если в паттерне еще остались плейсхолдеры
+        return $pattern;
+    }
+
+    /**
+     * Заполнить текстовый роут параметрами.
+     * @param array $params - параметры: ключ => значение
+     * @return string
+     */
+    private function fillRoute(array $params): string
+    {
+        $route = $this->route;
+        foreach ($params as $name => $value) {
+            $route = str_replace("<$name>", $value, $route);
         }
-        foreach ($params as $key => $value) {
-            $url = preg_replace("/<$key(:.+?)?>/", $value, $url, -1, $count);
-            if ($count) unset($params[$key]);
+        return $route;
+    }
+
+    /**
+     * Заполнить паттерн параметрами.
+     * @param array $params - параметры: ключ => значение
+     * @return string
+     */
+    private function fillPattern(array $params): string
+    {
+        $pattern = $this->pattern;
+        foreach ($params as $name => $value) {
+            $pattern = preg_replace("/<$name(:.+?)?>/", $value, $pattern);
         }
-        if (preg_match("/<[a-z]+(:.+?)?>/", $url)) return false; // Если были указаны не все параметры
-        $address = new Address($url);
-        $address->params = $params;
-        if (isset($anchor)) {
-            $address->anchor = $anchor;
+        return $pattern;
+    }
+
+    /**
+     * Извлечь значения плейсхолдеров из адреса, согласно паттерну.
+     * @param string $url - адрес
+     * @return array|bool - FALSE, если адрес не соответствует паттерну.
+     */
+    private function extractPlaceholders(string $url)
+    {
+        $pattern = str_replace('/', '\/', $this->pattern);
+
+        // Создать регулярное выражение с именованными параметрами.
+        $pattern = preg_replace_callback('/<(.+?)(:(.+?))?\>/', function ($m) {
+            $range = isset($m[3]) ? $m[3] : '.+?';
+            $name = $m[1];
+            return "(?P<$name>$range)";
+        }, $pattern);
+
+        if (!preg_match_all("/^$pattern$/", $url, $m)) return false;
+
+        $result = [];
+        foreach ($m as $key => $value) {
+            if (is_int($key)) continue;
+            $result[$key] = $value[0];
         }
-        return $address->getUrl(true, false, true);
+        return $result;
     }
 }

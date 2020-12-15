@@ -12,25 +12,25 @@ class RouteManager extends Component
      * Роут главной страницы.
      * @var string
      */
-    public $home = '/site/index';
+    public $home = 'site/index';
 
     /**
      * Роут страницы login.
      * @var string
      */
-    public $login = '/auth/login';
+    public $login = 'auth/login';
 
     /**
      * Роут страницы logout.
      * @var string
      */
-    public $logout = '/auth/logout';
+    public $logout = 'auth/logout';
 
     /**
      * Роут страницы ошибки.
      * @var string
      */
-    public $error = '/site/error';
+    public $error = 'site/error';
 
     /**
      * Неймспейсы контроллеров.
@@ -46,13 +46,12 @@ class RouteManager extends Component
 
     /**
      * Вернуть неймспейс контроллеров указанного модуля.
-     * @param string|null $module - название модуля
+     * @param string $module - название модуля
      * @return string
      * @throws Exception
      */
-    public function getNamespace(string $module = null): string
+    public function getNamespace(string $module = ''): string
     {
-        $module = $module ?: '';
         if (!array_key_exists($module, $this->namespaces)) {
             throw new Exception(500, "Module not found: $module");
         }
@@ -63,34 +62,24 @@ class RouteManager extends Component
      * Разобрать адрес.
      * @param string $url - адрес
      * @return Route|bool - FALSE в случае ошибки
-     * @throws Exception
      */
     public function parseUrl(string $url)
     {
-        foreach ($this->rules as $pattern => $route) {
-            $class = $this->getRuleClass($route);
-            $rule = Twin::createObject($class, compact('pattern', 'route')); /* @var RuleInterface $rule */
-            $route = $rule->parseUrl($url);
-            if ($route) return $route;
-        }
-        return false;
+        return $this->compareRoutes(function (RuleInterface $rule) use ($url) {
+            return $rule->parseUrl($url);
+        });
     }
 
     /**
      * Создать адрес.
-     * @param Route $r - роут
+     * @param Route $route - роут
      * @return string|bool
      */
-    public function createUrl(Route $r)
+    public function createUrl(Route $route)
     {
-        foreach ($this->rules as $pattern => $route) {
-            if (!$r->compare($route)) continue;
-            $class = $this->getRuleClass($route);
-            $rule = Twin::createObject($class, compact('pattern', 'route')); /* @var RuleInterface $rule */
-            $url = $rule->createUrl($r);
-            if ($url !== false) return $url;
-        }
-        return false;
+        return $this->compareRoutes(function (RuleInterface $rule) use ($route) {
+            return $rule->createUrl($route);
+        });
     }
 
     /**
@@ -100,17 +89,32 @@ class RouteManager extends Component
      * @param string $route - строковый роут или название класса
      * @return string
      * @throws Exception
-     * @see \twin\route\Rule
      */
-    private function getRuleClass(string $route): string
+    protected function getRuleClass(string $route): string
     {
         if (class_exists($route)) {
             if (!is_subclass_of($route, RuleInterface::class)) {
-                throw new Exception(500, 'Rule object: ' . get_class($route) . ' must extends ' . RuleInterface::class);
+                throw new Exception(500, 'Rule object: ' . get_class($route) . ' must be implemented ' . RuleInterface::class);
             }
             return $route;
         } else {
             return Rule::class;
         }
+    }
+
+    /**
+     * Выбрать правило, удовлетворяющее коллбэк-функции.
+     * @param callable $func - функция, проверяющая соответствие роута
+     * @return string|Route|bool - FALSE, если ни одно правило не соответствует
+     */
+    private function compareRoutes(callable $func)
+    {
+        foreach ($this->rules as $pattern => $route) {
+            $class = $this->getRuleClass($route);
+            $rule = Twin::createObject($class, compact('pattern', 'route')); /* @var RuleInterface $rule */
+            $result = $func($rule);
+            if ($result !== false) return $result;
+        }
+        return false;
     }
 }

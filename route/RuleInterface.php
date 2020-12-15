@@ -7,7 +7,7 @@ interface RuleInterface
     /**
      * Разбор адреса.
      * @param string $url - адрес
-     * @return Route|bool - FALSE, если адрес не соответствует
+     * @return Route|bool - FALSE, если адрес не соответствует текущему правилу
      */
     public function parseUrl(string $url);
 

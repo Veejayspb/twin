@@ -2,15 +2,6 @@
 
 namespace twin\route;
 
-/**
- * Class Route
- * @package core\route
- *
- * @property string|null $module
- * @property string $controller
- * @property string $action
- * @property array $params
- */
 final class Route
 {
     /**
@@ -31,33 +22,33 @@ final class Route
 
     /**
      * Модуль.
-     * @var string|null
+     * @var string
      */
-    private $module;
+    public $module = '';
 
     /**
      * Контроллер.
      * @var string
      */
-    private $controller = self::CONTROLLER;
+    public $controller = self::CONTROLLER;
 
     /**
      * Действие.
      * @var string
      */
-    private $action = self::ACTION;
+    public $action = self::ACTION;
 
     /**
      * Параметры.
      * @var array
      */
-    private $params = [];
+    public $params = [];
 
     /**
      * Зарезервированные названия параметров.
      * @var array
      */
-    public static $reserved = ['module', 'controller', 'action'];
+    private $reserved = ['module', 'controller', 'action'];
 
     /**
      * @param string|null $module - модуль
@@ -74,34 +65,16 @@ final class Route
     }
 
     /**
-     * @param string $name
-     * @param mixed $value
-     */
-    public function __set($name, $value)
-    {
-        $this->setProperty($name, $value);
-    }
-
-    /**
-     * @param string $name
-     * @return string|array|null
-     */
-    public function __get($name)
-    {
-        return property_exists($this, $name) ? $this->$name : null;
-    }
-
-    /**
      * Заполнить свойства объекта.
      * Сначала заполняются module, controller, action.
      * Остальные значения попадают в params.
      * @param array $properties - данные
      * @return self
      */
-    public function setProperties(array $properties): Route
+    public function setProperties(array $properties): self
     {
         foreach ($properties as $name => $value) {
-            if (in_array($name, self::$reserved)) {
+            if (in_array($name, $this->reserved)) {
                 $this->setProperty($name, $value);
             } else {
                 $this->params[$name] = $value;
@@ -111,18 +84,27 @@ final class Route
     }
 
     /**
+     * Вернуть значения зарезервированных параметров: module, controller, action.
+     * @return array
+     */
+    public function getReservedParams(): array
+    {
+        $result = [];
+        foreach ($this->reserved as $name) {
+            if (empty($this->$name)) continue;
+            $result[$name] = $this->$name;
+        }
+        return $result;
+    }
+
+    /**
      * Вернуть текстовый роут.
      * @return string - module/controller/action
      */
     public function getRoute(): string
     {
-        $parts = [];
-        foreach (self::$reserved as $param) {
-            if ($this->$param !== null) {
-                $parts[] = $this->$param;
-            }
-        }
-        return implode('/', $parts);
+        $reservedParams = $this->getReservedParams();
+        return implode('/', $reservedParams);
     }
 
     /**
@@ -145,19 +127,6 @@ final class Route
     }
 
     /**
-     * Сравнить строковый роут и текущий.
-     * @param string $route - строковый роут для сравнения
-     * @return bool
-     */
-    public function compare(string $route): bool
-    {
-        $route = str_replace('<action>', $this->action, $route);
-        $route = str_replace('<controller>', $this->controller, $route);
-        $route = str_replace('<module>', $this->module, $route);
-        return $route == $this->getRoute();
-    }
-
-    /**
      * Установка модуля.
      * @param mixed $value - значение
      * @return void
@@ -165,7 +134,7 @@ final class Route
     private function setModule($value)
     {
         if (empty($value)) {
-            $this->module = null;
+            $this->module = '';
         } elseif (is_string($value) && preg_match(self::PATTERN, $value)) {
             $this->module = $value;
         }
