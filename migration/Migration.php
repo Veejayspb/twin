@@ -18,7 +18,7 @@ abstract class Migration
     /**
      * Паттерн названия миграции.
      */
-    const NAME_PATTERN = '[a-z]+(?:[a-z_]+[a-z]+)?';
+    const NAME_PATTERN = '[a-z0-9_]+';
 
     /**
      * Название миграции.

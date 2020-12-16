@@ -6,7 +6,6 @@ use DirectoryIterator;
 use Iterator;
 use m_0_init;
 use twin\common\Component;
-use twin\common\Exception;
 use twin\Twin;
 
 class MigrationManager extends Component implements Iterator
@@ -43,32 +42,6 @@ class MigrationManager extends Component implements Iterator
         $this->createDir();
         $this->items = $this->getItems();
         $this->index = $this->getIndex();
-    }
-
-    /**
-     * Применить миграцию.
-     * @param string|null $name - название миграции (если не указано)
-     * @return bool
-     * @throws Exception
-     */
-    public function apply(string $name = null): bool
-    {
-        $migration = $name === null ? $this->getLast() : $this->getByName($name);
-        if (!$migration) throw new Exception(400, "Wrong migration name: $name");
-
-        $current = $this->current();
-
-        if ($current->timestamp < $migration->timestamp) {
-            while ($this->current()->timestamp < $migration->timestamp) {
-                if (!$this->up()) return false;
-            }
-        } elseif ($migration->timestamp < $current->timestamp) {
-            while ($migration->timestamp < $this->current()->timestamp) {
-                if (!$this->down()) return false;
-            }
-        }
-
-        return true;
     }
 
     /**
@@ -138,7 +111,7 @@ class MigrationManager extends Component implements Iterator
      * Применить следующую миграцию.
      * @return bool
      */
-    protected function up(): bool
+    public function up(): bool
     {
         $this->next();
         $migration = $this->current();
@@ -154,7 +127,7 @@ class MigrationManager extends Component implements Iterator
      * Отменить текущую миграцию.
      * @return bool
      */
-    protected function down(): bool
+    public function down(): bool
     {
         $migration = $this->current();
         if ($migration === false || !$migration->down()) {
@@ -173,7 +146,7 @@ class MigrationManager extends Component implements Iterator
      * @param string $name - полное название миграции
      * @return Migration|bool - FALSE в случае ошибки
      */
-    protected function getByName(string $name)
+    public function getByName(string $name)
     {
         foreach ($this->items as $item) {
             if ($name == $item->class) {
@@ -187,7 +160,7 @@ class MigrationManager extends Component implements Iterator
      * Вернуть последнюю миграцию.
      * @return Migration
      */
-    protected function getLast(): Migration
+    public function getLast(): Migration
     {
         return end($this->items);
     }

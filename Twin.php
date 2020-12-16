@@ -160,11 +160,8 @@ class Twin
             $this->registerConfig($config, static::TYPE_CONSOLE);
 
             global $argv;
-            if (empty($argv[1])) {
-                throw new Exception(500, 'controller/action must be specified');
-            }
 
-            $route = $this->route->parseUrl($argv[1]);
+            $route = $this->route->parseUrl((string)$argv[1]);
             if ($route === false) {
                 throw new Exception(404);
             }

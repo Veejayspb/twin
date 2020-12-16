@@ -9,6 +9,30 @@ use ReflectionMethod;
 abstract class ConsoleController extends Controller
 {
     /**
+     * Help list.
+     * @var array
+     */
+    protected $help = [
+        'help - reference',
+    ];
+
+    /**
+     * Ссылка на список команд.
+     */
+    public function index()
+    {
+        $this->help();
+    }
+
+    /**
+     * Список команд.
+     */
+    public function help()
+    {
+        echo implode(PHP_EOL, $this->help);
+    }
+
+    /**
      * Вызвать указанные контроллер/действие.
      * @param string $namespace - неймспейс контроллера
      * @param Route $route - роут
@@ -20,7 +44,7 @@ abstract class ConsoleController extends Controller
         if (self::class != get_called_class()) {
             throw new Exception(500, 'Denied to run controller not from class: ' . self::class);
         }
-        $controller = self::$instance = static::getController($namespace, $route->controller);
+        $controller = static::$instance = static::getController($namespace, $route->controller);
         $controller->route = $route;
         $controller->init();
 

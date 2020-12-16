@@ -9,21 +9,29 @@ use twin\Twin;
 class MigrationController extends ConsoleController
 {
     /**
-     * Ссылка на список команд.
+     * {@inheritdoc}
      */
-    public function index()
-    {
-        $this->help();
-    }
+    protected $help = [
+        'help - reference',
+        'create {name} - create new migration file',
+        'up - move to 1 migration up',
+        'down - move to 1 migration down',
+        'apply {name} - apply all migrations up to specified (if name is empty, all migrations will be applied)',
+    ];
 
     /**
-     * Список команд.
+     * Компонент с менеджером миграций.
+     * @var MigrationManager
      */
-    public function help()
+    protected $migration;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function init()
     {
-        echo 'help - reference' . PHP_EOL;
-        echo 'create {name} - create new migration file' . PHP_EOL;
-        echo 'apply {name} - apply all migrations up to specified (if name is empty, all migrations will be applied)';
+        parent::init();
+        $this->migration = Twin::app()->migration;
     }
 
     /**
@@ -33,8 +41,7 @@ class MigrationController extends ConsoleController
      */
     public function create($name)
     {
-        $manager = Twin::app()->migration; /* @var MigrationManager $manager */
-        if ($manager->create($name)) {
+        if ($this->migration->create($name)) {
             echo 'Migration file was created';
         } else {
             throw new Exception(400, 'Error while creating migration file');
@@ -46,10 +53,58 @@ class MigrationController extends ConsoleController
      * Если указана конкретная миграция, то произойдет сдвиг до нее.
      * Если ничего не указано, то применятся все доступные миграции.
      * @param string|null $name - полное название
+     * @throws Exception
      */
     public function apply($name = null)
     {
-        $manager = Twin::app()->migration; /* @var MigrationManager $manager */
-        $manager->apply($name);
+        $migration = $name === null ? $this->migration->getLast() : $this->migration->getByName($name);
+        if (!$migration) throw new Exception(400, "Wrong migration name: $name");
+
+        $current = $this->migration->current();
+
+        if ($current->timestamp < $migration->timestamp) {
+            while ($this->migration->current()->timestamp < $migration->timestamp) {
+                $last = $this->migration->current();
+                if (!$this->migration->up()) break;
+                $current = $this->migration->current();
+                echo "Migration up: $last->name -> $current->name" . PHP_EOL;
+            }
+        } elseif ($migration->timestamp < $current->timestamp) {
+            while ($migration->timestamp < $this->migration->current()->timestamp) {
+                $last = $this->migration->current();
+                if (!$this->migration->down()) break;
+                $current = $this->migration->current();
+                echo "Migration down: $current->name <- $last->name" . PHP_EOL;
+            }
+        }
+        echo 'Successfully migrated to: ' . $this->migration->current()->name;
+    }
+
+    /**
+     * Миграция - шаг вперед.
+     */
+    public function up()
+    {
+        $last = $this->migration->current();
+        if ($this->migration->up()) {
+            $current = $this->migration->current();
+            echo "Migration up: $last->name -> $current->name";
+        } else {
+            echo 'Migration failed';
+        }
+    }
+
+    /**
+     * Миграция - шаг назад.
+     */
+    public function down()
+    {
+        $last = $this->migration->current();
+        if ($this->migration->down()) {
+            $current = $this->migration->current();
+            echo "Migration down: $current->name <- $last->name";
+        } else {
+            echo 'Migration failed';
+        }
     }
 }

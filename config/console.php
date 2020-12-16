@@ -8,11 +8,11 @@ return [
         'route' => [
             'namespaces' => [
                 '' => 'app\\command',
-                'migration' => 'twin\\controller',
+                'service' => 'twin\\controller',
             ],
             'rules' => [
-                'migration' => 'migration/migration/help',
-                'migration/<action:[a-z]+>' => 'migration/migration/<action>',
+                'migration' => 'service/migration/help',
+                'migration/<action:[a-z]+>' => 'service/migration/<action>',
                 '<controller:[a-z]+>/<action:[a-z]+>' => '<controller>/<action>',
             ],
         ],

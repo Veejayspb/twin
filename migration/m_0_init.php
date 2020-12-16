@@ -17,6 +17,6 @@ class m_0_init extends Migration
      */
     public function down(): bool
     {
-        return true;
+        return false;
     }
 }
