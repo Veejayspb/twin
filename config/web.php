@@ -1,7 +1,6 @@
 <?php
 
 use twin\asset\AssetManager;
-use twin\route\RouteManager;
 use twin\session\Session;
 use twin\view\View;
 
@@ -9,7 +8,6 @@ return [
     'parent' => '@twin/config/common.php',
     'components' => [
         'route' => [
-            'class' => RouteManager::class,
             'namespaces' => [
                 '' => 'app\\controller',
             ],

@@ -49,7 +49,7 @@ abstract class Migration
     public function __get($name)
     {
         if ($name == 'class') {
-            return $this->getClass();
+            return get_called_class();
         } else {
             return $this->$name;
         }
@@ -98,14 +98,5 @@ abstract class Migration
             $result.= '_' . $name;
         }
         return $result;
-    }
-
-    /**
-     * Полное название миграции.
-     * @return string
-     */
-    protected function getClass(): string
-    {
-        return get_called_class();
     }
 }

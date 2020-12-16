@@ -13,8 +13,6 @@ use twin\route\RouteManager;
 use twin\session\Session;
 use twin\view\View;
 
-define('LOCALHOST', isset($_SERVER['SERVER_ADDR'], $_SERVER['REMOTE_ADDR']) && $_SERVER['SERVER_ADDR'] == '127.0.0.1' && $_SERVER['REMOTE_ADDR'] == '127.0.0.1');
-
 Twin::setAlias('@root', dirname(__DIR__));
 Twin::setAlias('@twin', __DIR__);
 Twin::setAlias('@app', '@root/app');
@@ -92,10 +90,6 @@ class Twin
     private function __construct()
     {
         // Базовые настройки.
-        if (LOCALHOST) {
-            ini_set('display_errors', 1);
-            error_reporting(E_ALL);
-        }
         mb_internal_encoding('UTF-8');
     }
 

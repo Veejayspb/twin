@@ -1,13 +1,11 @@
 <?php
 
 use twin\migration\MigrationManager;
-use twin\route\RouteManager;
 
 return [
     'parent' => '@twin/config/common.php',
     'components' => [
         'route' => [
-            'class' => RouteManager::class,
             'namespaces' => [
                 '' => 'app\\command',
                 'migration' => 'twin\\controller',
