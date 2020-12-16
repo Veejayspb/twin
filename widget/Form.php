@@ -73,6 +73,7 @@ class Form extends Widget
     public function label(Model $model, string $attribute, array $htmlAttributes = []): string
     {
         $label = $model->getLabel($attribute);
+        $htmlAttributes['for'] = $htmlAttributes['for'] ?? $this->getAttributeId($model, $attribute);
         return Html::label($label, $htmlAttributes);
     }
 
@@ -110,6 +111,7 @@ class Form extends Widget
     public function inputText(Model $model, string $attribute, array $htmlAttributes = []): string
     {
         $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
+        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
         return Html::inputText($model->$attribute, $htmlAttributes);
     }
 
@@ -123,6 +125,7 @@ class Form extends Widget
     public function inputPassword(Model $model, string $attribute, array $htmlAttributes = []): string
     {
         $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
+        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
         return Html::inputPassword($model->$attribute, $htmlAttributes);
     }
 
@@ -136,6 +139,7 @@ class Form extends Widget
     public function inputHidden(Model $model, string $attribute, array $htmlAttributes = []): string
     {
         $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
+        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
         return Html::inputHidden($model->$attribute, $htmlAttributes);
     }
 
@@ -149,6 +153,7 @@ class Form extends Widget
     public function textArea(Model $model, string $attribute, array $htmlAttributes = []): string
     {
         $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
+        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
         return Html::textArea($model->$attribute, $htmlAttributes);
     }
 
@@ -169,6 +174,7 @@ class Form extends Widget
             $name.= '[]';
         }
         $htmlAttributes['name'] = $name;
+        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
         $result.= Html::select($model->$attribute, $options, $htmlAttributes);
         return $result;
     }
@@ -185,6 +191,7 @@ class Form extends Widget
     public function radio(Model $model, string $attribute, array $options = [], array $htmlAttributes = [], string $separator = PHP_EOL): string
     {
         $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
+        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
         return Html::radio($model->$attribute, $options, $htmlAttributes, $separator);
     }
 
@@ -199,6 +206,7 @@ class Form extends Widget
     {
         $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
         $result = Html::inputHidden(0, $htmlAttributes);
+        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
         $htmlAttributes['checked'] = (bool)$model->$attribute;
         $result.= Html::checkbox(1, $htmlAttributes);
         return $result;
@@ -215,5 +223,18 @@ class Form extends Widget
         $reflection = new ReflectionClass($model);
         $className = $reflection->getShortName();
         return "{$className}[$attribute]";
+    }
+
+    /**
+     * Сформировать ID поля формы на основе модели и атрибута.
+     * @param Model $model - модель
+     * @param string $attribute - название атрибута
+     * @return string
+     */
+    protected function getAttributeId(Model $model, string $attribute): string
+    {
+        $reflection = new ReflectionClass($model);
+        $className = $reflection->getShortName();
+        return mb_strtolower("$className-$attribute", 'utf-8');
     }
 }
