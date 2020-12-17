@@ -139,6 +139,7 @@ class Twin
             $namespace = $this->route->getNamespace($route->module);
             WebController::run($namespace, $route, $this->view);
         } catch (Exception $e) {
+            http_response_code($e->getCode());
             $route = new Route;
             $route->setRoute(Twin::app()->route->error);
             $route->params = ['code' => $e->getCode(), 'message' => $e->getMessage()];
