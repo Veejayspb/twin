@@ -13,11 +13,11 @@ use twin\route\RouteManager;
 use twin\session\Session;
 use twin\view\View;
 
-Twin::setAlias('@root', dirname(__DIR__));
+Twin::setAlias('@root', dirname(__DIR__, 3));
 Twin::setAlias('@twin', __DIR__);
 Twin::setAlias('@app', '@root/app');
 Twin::setAlias('@runtime', '@app/runtime');
-Twin::setAlias('@web', '@root/web');
+Twin::setAlias('@web', '@app/web');
 
 spl_autoload_register([Twin::class, 'autoload'], true, true);
 
@@ -336,7 +336,12 @@ class Twin
      */
     public static function autoload(string $className)
     {
-        $alias = '@root/' . str_replace('\\', '/', $className) . '.php';
-        static::import($alias, true);
+        $className = str_replace('\\', '/', $className);
+        if (substr($className, 0, 4) == 'twin') {
+            $alias = "@$className.php";
+        } else {
+            $alias = "@root/$className.php";
+        }
+        if (!static::import($alias, true)) die($alias);
     }
 }
