@@ -342,6 +342,6 @@ class Twin
         } else {
             $alias = "@root/$className.php";
         }
-        if (!static::import($alias, true)) die($alias);
+        static::import($alias, true);
     }
 }
