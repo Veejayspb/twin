@@ -19,6 +19,8 @@ Twin::setAlias('@app', '@root/app');
 Twin::setAlias('@runtime', '@app/runtime');
 Twin::setAlias('@web', '@root/web');
 
+spl_autoload_register([Twin::class, 'autoload'], true, true);
+
 /**
  * Class Twin
  * @package core
@@ -89,7 +91,6 @@ class Twin
 
     private function __construct()
     {
-        // Базовые настройки.
         mb_internal_encoding('UTF-8');
     }
 
@@ -326,5 +327,16 @@ class Twin
         } else {
             return require $path;
         }
+    }
+
+    /**
+     * Автозагрузка классов.
+     * @param string $className - название класса
+     * @return void
+     */
+    public static function autoload(string $className)
+    {
+        $alias = '@root/' . str_replace('\\', '/', $className) . '.php';
+        static::import($alias, true);
     }
 }

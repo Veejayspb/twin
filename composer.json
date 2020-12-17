@@ -11,10 +11,5 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-pdo": "*"
-    },
-    "autoload": {
-        "psr-4": {
-            "twin\\": ""
-        }
     }
 }

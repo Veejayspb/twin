@@ -111,7 +111,7 @@ class Address
         if ($params && !empty($this->params)) {
             $url.= '?' . http_build_query($this->params, '', '&');
         }
-        if ($anchor && isset($this->anchor)) {
+        if ($anchor && !empty($this->anchor)) {
             $url.= '#' . $this->anchor;
         }
         return $url;
