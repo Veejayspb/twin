@@ -2,6 +2,8 @@
 
 namespace twin\helper;
 
+use twin\helper\file\UploadedFile;
+
 Request::$scheme = $_SERVER['REQUEST_SCHEME'];
 Request::$host = $_SERVER['HTTP_HOST'];
 Request::$url = $_SERVER['REQUEST_URI'];
@@ -55,6 +57,17 @@ class Request
     public static function post(string $name, $default = null)
     {
         return array_key_exists($name, $_POST) ? $_POST[$name] : $default;
+    }
+
+    /**
+     * Вернуть данные массива $_FILES в виде набора объектов.
+     * @param string $name - название параметра
+     * @return array
+     */
+    public static function files(string $name): array
+    {
+        if (!array_key_exists($name, $_FILES)) return [];
+        return UploadedFile::parse($_FILES[$name]);
     }
 
     /**

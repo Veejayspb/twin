@@ -9,49 +9,22 @@ use ReflectionClass;
 class Form extends Widget
 {
     /**
-     * Адрес отправки формы по-умолчанию.
-     */
-    const ACTION = '';
-
-    /**
-     * Метод отправки формы по-умолчанию.
-     */
-    const METHOD = 'post';
-
-    /**
      * Адрес отправки формы.
      * @var string
      */
-    protected $action = self::ACTION;
+    public $action = '';
 
     /**
      * Метод отправки формы.
      * @var string
      */
-    protected $method = self::METHOD;
+    public $method = 'post';
 
     /**
      * HTML-атрибуты.
      * @var array
      */
-    protected $htmlAttributes = [];
-
-    public function __toString()
-    {
-        return $this->start();
-    }
-
-    /**
-     * Открытие формы.
-     * @return string
-     */
-    public function start()
-    {
-        $attributes = $this->htmlAttributes;
-        $attributes['action'] = $this->action;
-        $attributes['method'] = $this->method;
-        return Html::tagOpen('form', $attributes);
-    }
+    public $htmlAttributes = [];
 
     /**
      * Закрытие формы.
@@ -59,7 +32,10 @@ class Form extends Widget
      */
     public function run(): string
     {
-        return Html::tagClose('form');
+        $result = $this->start();
+        $result.= parent::run();
+        $result.= Html::tagClose('form');
+        return $result;
     }
 
     /**
@@ -68,7 +44,6 @@ class Form extends Widget
      * @param string $attribute - название атрибута
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
-     * @todo: for="field-id"
      */
     public function label(Model $model, string $attribute, array $htmlAttributes = []): string
     {
@@ -141,6 +116,25 @@ class Form extends Widget
         $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
         $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
         return Html::inputHidden($model->$attribute, $htmlAttributes);
+    }
+
+    /**
+     * Поле для загрузки файла.
+     * @param Model $model - модель
+     * @param string $attribute - название атрибута
+     * @param array $htmlAttributes - HTML-атрибуты
+     * @return string
+     */
+    public function inputFile(Model $model, string $attribute, array $htmlAttributes = [])
+    {
+        $this->htmlAttributes['enctype'] = 'multipart/form-data';
+        $name = $this->getAttributeName($model, $attribute);
+        if (!empty($htmlAttributes['multiple'])) {
+            $name.= '[]';
+        }
+        $htmlAttributes['name'] = $name;
+        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
+        return Html::inputFile($htmlAttributes);
     }
 
     /**
@@ -236,5 +230,17 @@ class Form extends Widget
         $reflection = new ReflectionClass($model);
         $className = $reflection->getShortName();
         return mb_strtolower("$className-$attribute", 'utf-8');
+    }
+
+    /**
+     * Открытие формы.
+     * @return string
+     */
+    private function start()
+    {
+        $attributes = $this->htmlAttributes;
+        $attributes['action'] = $this->action;
+        $attributes['method'] = $this->method;
+        return Html::tagOpen('form', $attributes);
     }
 }

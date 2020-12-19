@@ -141,6 +141,17 @@ class Html
     }
 
     /**
+     * Поле для загрузки файла.
+     * @param array $htmlAttributes - HTML-атрибуты
+     * @return string
+     */
+    public static function inputFile(array $htmlAttributes = []): string
+    {
+        $htmlAttributes['type'] = 'file';
+        return static::tagOpen('input', $htmlAttributes);
+    }
+
+    /**
      * Текстовая область.
      * @param string $value - значение
      * @param array $htmlAttributes - HTML-атрибуты
