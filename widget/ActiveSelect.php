@@ -33,7 +33,8 @@ class ActiveSelect extends ActiveWidget
      */
     public function run(): string
     {
-        return Html::select($this->value, $this->options, $this->getHtmlAttributes());
+        $content = parent::run();
+        return $content . Html::select($this->value, $this->options, $this->getHtmlAttributes());
     }
 }
 

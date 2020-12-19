@@ -27,7 +27,8 @@ class ActiveText extends ActiveWidget
      */
     public function run(): string
     {
-        return Html::tag('span', $this->getHtmlAttributes(), $this->value);
+        $content = parent::run();
+        return $content . Html::tag('span', $this->getHtmlAttributes(), $this->value);
     }
 
     /**
