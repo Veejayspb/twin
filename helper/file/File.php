@@ -27,7 +27,7 @@ class File
      * Расширения и MIME.
      * @var array
      */
-    private static $extensions = [
+    protected static $extensions = [
         'image/jpeg' => self::JPG,
         'image/pjpeg' => self::JPG,
         'image/png' => self::PNG,
