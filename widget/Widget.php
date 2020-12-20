@@ -16,7 +16,6 @@ abstract class Widget
     public function __construct(array $properties = [])
     {
         $this->setProperties($properties);
-        ob_start();
     }
 
     public function __toString()
@@ -28,8 +27,5 @@ abstract class Widget
      * Запустить виджет.
      * @return string
      */
-    public function run(): string
-    {
-        return ob_get_clean();
-    }
+    abstract public function run(): string;
 }

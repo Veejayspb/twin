@@ -57,7 +57,7 @@ class File
     {
         if (!$this->exists()) return false;
         if (@copy($this->path, $path)) {
-            return new static($path);
+            return new self($path);
         }
         return false;
     }

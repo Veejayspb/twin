@@ -27,8 +27,7 @@ class ActiveCheckbox extends ActiveWidget
      */
     public function run(): string
     {
-        $content = parent::run();
-        return $content . Html::checkbox(null, $this->getHtmlAttributes());
+        return Html::checkbox(null, $this->getHtmlAttributes());
     }
 
     /**

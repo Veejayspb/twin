@@ -34,12 +34,11 @@ class Nav extends Widget
      */
     public function run(): string
     {
-        $content = parent::run();
         $items = [];
         foreach ($this->items as $options) {
             $items[] = $this->getItem($options);
         }
-        return $content . Html::tag('ul', $this->htmlAttributes, implode(PHP_EOL, $items));
+        return Html::tag('ul', $this->htmlAttributes, implode(PHP_EOL, $items));
     }
 
     /**

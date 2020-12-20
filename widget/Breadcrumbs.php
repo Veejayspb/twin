@@ -47,14 +47,13 @@ class Breadcrumbs extends Widget
      */
     public function run(): string
     {
-        $content = parent::run();
         $items = $this->items;
         end($items);
         $lastKey = key($items);
         if ($lastKey) {
             $items[$lastKey] = null;
         }
-        return $content . $this->renderContainer($items);
+        return $this->renderContainer($items);
     }
 
     /**

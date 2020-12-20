@@ -27,13 +27,22 @@ class Form extends Widget
     public $htmlAttributes = [];
 
     /**
+     * {@inheritdoc}
+     */
+    public function __construct(array $properties = [])
+    {
+        parent::__construct($properties);
+        ob_start();
+    }
+
+    /**
      * Закрытие формы.
      * @return string
      */
     public function run(): string
     {
         $result = $this->start();
-        $result.= parent::run();
+        $result.= ob_get_clean();
         $result.= Html::tagClose('form');
         return $result;
     }
