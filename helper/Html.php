@@ -78,6 +78,18 @@ class Html
     }
 
     /**
+     * Изображение.
+     * @param string $src - адрес
+     * @param array $htmlAttributes - HTML-атрибуты
+     * @return string
+     */
+    public static function img(string $src, array $htmlAttributes = []): string
+    {
+        $htmlAttributes['src'] = $src;
+        return static::tag('img', $htmlAttributes);
+    }
+
+    /**
      * Тег LABEL.
      * @param string $value - значение
      * @param array $htmlAttributes - HTML-атрибуты
