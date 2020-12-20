@@ -234,6 +234,7 @@ class Twin
             $this->prepareConfig($default),
             $this->prepareConfig($config)
         );
+        $config = $this->reverse($config, 'components.route.rules');
 
         // Присвоение свойств.
         $properties = ['name', 'language', 'params'];
@@ -256,6 +257,7 @@ class Twin
      */
     private function prepareConfig(array $config): array
     {
+        $config = $this->reverse($config, 'components.route.rules');
         if (!array_key_exists('parent', $config)) return $config;
         $parentConfig = static::import($config['parent']);
         if ($parentConfig === false) {
@@ -275,6 +277,26 @@ class Twin
         $alias = "@twin/config/$type.php";
         $config = static::import($alias);
         return $config === false ? [] : $config;
+    }
+
+    /**
+     * Реверс вложенного массива.
+     * @param array $config - данные конфига
+     * @param string $path - путь до вложенной ячейки вида: components.name.property
+     * @return array
+     */
+    private function reverse(array $config, string $path = ''): array
+    {
+        if ($path == '') {
+            return array_reverse($config, true);
+        }
+        $path = explode('.', $path);
+        $key = array_shift($path);
+        if (!array_key_exists($key, $config)) {
+            return $config;
+        }
+        $config[$key] = $this->reverse($config[$key], implode('.', $path));
+        return $config;
     }
 
     /**
