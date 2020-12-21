@@ -11,8 +11,15 @@ class View extends Component
 {
     use RenderTrait;
 
-    const POS_HEAD = 'head';
-    const POS_BODY = 'body';
+    /**
+     * Плейсхолдер выводится перед закрывающим тегом </HEAD>.
+     */
+    const HEAD = '<![CDATA[TWIN-HEAD]]>';
+
+    /**
+     * Плейсхолдер выводится перед закрывающим тегом </BODY>.
+     */
+    const BODY = '<![CDATA[TWIN-BODY]]>';
 
     /**
      * Название шаблона.
@@ -33,10 +40,11 @@ class View extends Component
     public $path = '@app/view';
 
     /**
-     * Расположение скриптов.
-     * @var string - head|body
+     * Расположение скриптов - в BODY.
+     * Если FALSE, то скрипты будут размещены в HEAD.
+     * @var bool
      */
-    public $scriptPosition = self::POS_BODY;
+    public $scriptBody = true;
 
     /**
      * Заголовок страницы.
@@ -95,7 +103,13 @@ class View extends Component
     {
         $content = $this->render($route, $data);
         $layout = $this->layoutDir . '/' . $this->layout;
-        return $this->render($layout, ['content' => $content]);
+        $content = $this->render($layout, ['content' => $content]);
+        $content = str_replace(
+            [static::HEAD, static::BODY],
+            [$this->head(), $this->body()],
+            $content
+        );
+        return $content;
     }
 
     /**
@@ -120,49 +134,6 @@ class View extends Component
     }
 
     /**
-     * Вернуть контент для вывода в HEAD.
-     * Данный метод необходимо вставить в шаблон перед закрывающим тегом </head>.
-     * @return string
-     */
-    public function head(): string
-    {
-        $items = [];
-
-        // Asset CSS.
-        $items = array_merge($items, Twin::app()->asset->getCss());
-
-        // Asset JS.
-        if ($this->scriptPosition == static::POS_HEAD) {
-            $items = array_merge($items, Twin::app()->asset->getJs());
-        }
-
-        // Дополнительный контент.
-        $items = array_merge($items, $this->head);
-
-        return implode(PHP_EOL . Html::TAB, $items);
-    }
-
-    /**
-     * Вернуть контент для вывода в BODY.
-     * Данный метод необходимо вставить в шаблон перед закрывающим тегом </body>.
-     * @return string
-     */
-    public function body(): string
-    {
-        $items = [];
-
-        // Asset JS.
-        if ($this->scriptPosition == static::POS_BODY) {
-            $items = array_merge($items, Twin::app()->asset->getJs());
-        }
-
-        // Дополнительный контент.
-        $items = array_merge($items, $this->body);
-
-        return implode(PHP_EOL . Html::TAB, $items);
-    }
-
-    /**
      * Добавить контент для вывода в HEAD.
      * @param string $str
      * @return void
@@ -180,5 +151,46 @@ class View extends Component
     public function addBody(string $str)
     {
         $this->body[] = $str;
+    }
+
+    /**
+     * Вернуть контент для вывода в HEAD.
+     * @return string
+     */
+    protected function head(): string
+    {
+        $items = [];
+
+        // Asset CSS.
+        $items = array_merge($items, Twin::app()->asset->getCss());
+
+        // Asset JS.
+        if (!$this->scriptBody) {
+            $items = array_merge($items, Twin::app()->asset->getJs());
+        }
+
+        // Дополнительный контент.
+        $items = array_merge($items, $this->head);
+
+        return implode(PHP_EOL . Html::TAB, $items) . PHP_EOL;
+    }
+
+    /**
+     * Вернуть контент для вывода в BODY.
+     * @return string
+     */
+    protected function body(): string
+    {
+        $items = [];
+
+        // Asset JS.
+        if ($this->scriptBody) {
+            $items = array_merge($items, Twin::app()->asset->getJs());
+        }
+
+        // Дополнительный контент.
+        $items = array_merge($items, $this->body);
+
+        return implode(PHP_EOL . Html::TAB, $items) . PHP_EOL;
     }
 }
