@@ -69,7 +69,7 @@ abstract class Asset
 
     /**
      * Регистрация текущего asset.
-     * @return Asset
+     * @return static
      */
     public static function register(): self
     {
