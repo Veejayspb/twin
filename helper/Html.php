@@ -108,7 +108,7 @@ class Html
      */
     public static function submit(string $value, array $htmlAttributes = []): string
     {
-        $htmlAttributes['type'] = 'submit';
+        $htmlAttributes['type'] = $htmlAttributes['type'] ?? 'submit';
         $htmlAttributes['value'] = $value;
         return static::tagOpen('input', $htmlAttributes);
     }
@@ -121,7 +121,7 @@ class Html
      */
     public static function inputText($value, array $htmlAttributes = []): string
     {
-        $htmlAttributes['type'] = 'text';
+        $htmlAttributes['type'] = $htmlAttributes['type'] ?? 'text';
         $htmlAttributes['value'] = $value;
         return static::tagOpen('input', $htmlAttributes);
     }
@@ -134,7 +134,7 @@ class Html
      */
     public static function inputPassword($value, array $htmlAttributes = []): string
     {
-        $htmlAttributes['type'] = 'password';
+        $htmlAttributes['type'] = $htmlAttributes['type'] ?? 'password';
         $htmlAttributes['value'] = $value;
         return static::tagOpen('input', $htmlAttributes);
     }
@@ -147,7 +147,7 @@ class Html
      */
     public static function inputHidden($value, array $htmlAttributes = []): string
     {
-        $htmlAttributes['type'] = 'hidden';
+        $htmlAttributes['type'] = $htmlAttributes['type'] ?? 'hidden';
         $htmlAttributes['value'] = $value;
         return static::tagOpen('input', $htmlAttributes);
     }
@@ -159,7 +159,7 @@ class Html
      */
     public static function inputFile(array $htmlAttributes = []): string
     {
-        $htmlAttributes['type'] = 'file';
+        $htmlAttributes['type'] = $htmlAttributes['type'] ?? 'file';
         return static::tagOpen('input', $htmlAttributes);
     }
 
@@ -228,7 +228,7 @@ class Html
      */
     public static function checkbox($value = 1, array $htmlAttributes = []): string
     {
-        $htmlAttributes['type'] = 'checkbox';
+        $htmlAttributes['type'] = $htmlAttributes['type'] ?? 'checkbox';
         $htmlAttributes['value'] = $value;
         return static::tagOpen('input', $htmlAttributes);
     }
