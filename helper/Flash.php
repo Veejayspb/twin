@@ -31,9 +31,6 @@ final class Flash
      */
     private static $instance;
 
-    /**
-     * @throws Exception
-     */
     private function __construct()
     {
         $this->session = $this->getSession();
@@ -56,9 +53,8 @@ final class Flash
     /**
      * Вернуть экземпляр текущего класса.
      * @return self
-     * @throws Exception
      */
-    private static function instance()
+    private static function instance(): self
     {
         return self::$instance = self::$instance ?: new self;
     }
@@ -67,7 +63,6 @@ final class Flash
      * Имеется ли флеш-сообщение.
      * @param string $name - название флеш-сообщения
      * @return bool
-     * @throws Exception
      */
     public static function has(string $name): bool
     {
@@ -80,7 +75,6 @@ final class Flash
      * @param string $name - название флеш-сообщения
      * @param bool $clear - очистить сообщение
      * @return string|bool - FALSE, если флеш-сообщение отсутствует
-     * @throws Exception
      */
     public static function get(string $name, bool $clear = true)
     {
@@ -98,7 +92,6 @@ final class Flash
      * @param string $name - название флеш-сообщения
      * @param string $value - текст сообщения
      * @return void
-     * @throws Exception
      */
     public static function set(string $name, string $value)
     {
@@ -109,7 +102,6 @@ final class Flash
     /**
      * Вернуть экземпляр сессии.
      * @return Session
-     * @throws Exception
      */
     private function getSession()
     {
