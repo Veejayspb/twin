@@ -39,7 +39,7 @@ class Address
 
     /**
      * Якорь.
-     * @var string|null
+     * @var string
      */
     private $anchor = '';
 
@@ -74,6 +74,10 @@ class Address
     public function __set($name, $value)
     {
         if ($name == 'params' && is_array($value)) {
+            if (array_key_exists('#', $value)) {
+                $this->anchor = empty($value['#']) ? '' : $value['#'];
+                unset($value['#']);
+            }
             $this->params = array_filter($value, function ($value) {
                 return $value !== null;
             });

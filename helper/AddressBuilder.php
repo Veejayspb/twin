@@ -77,10 +77,10 @@ final class AddressBuilder
         if ($this->parts['path']) {
             $url.= $address->path;
         }
-        if ($this->parts['params']) {
+        if ($this->parts['params'] && $address->params) {
             $url.= '?' . http_build_query($address->params, '', '&');
         }
-        if ($this->parts['anchor']) {
+        if ($this->parts['anchor'] && $address->anchor) {
             $url.= '#' . $address->anchor;
         }
         return $url;
