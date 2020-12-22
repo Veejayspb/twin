@@ -45,13 +45,63 @@ class Rule implements RuleInterface
      */
     public function createUrl(Route $route)
     {
+        $address = new Address;
+        $url = $this->pattern;
+
+        // Проверка на соответствие строковому роуту
         $reserved = $route->getReservedParams();
         $strRoute = $this->fillRoute($reserved);
         if ($strRoute != $route->getRoute()) return false;
 
-        $pattern = $this->fillPattern($reserved + $route->params);
-        if (preg_match('/<.*?>/', $pattern)) return false; // Если в паттерне еще остались плейсхолдеры
-        return $pattern;
+        // Замена зарезервированных параметров
+        foreach ($reserved as $name => $value) {
+            $this->replacePlaceholder($url, $name, $value);
+        }
+
+        // Замена параметров
+        $params = [];
+        foreach ($route->params as $name => $value) {
+            $replacement = $this->replacePlaceholder($url, $name, $value);
+            if (!$replacement) {
+                $params[$name] = $value;
+            }
+        }
+
+        if ($this->hasPlaceholders($url)) return false;
+
+        $address->path = $url;
+        $address->params = $params;
+        return $address->build()->path()->params()->anchor()->get();
+    }
+
+    /**
+     * Заменить плейсхолдер на значение с проверкой (если указан паттерн).
+     * @param string $str - исходная строка с плейсхолдерами
+     * @param string $name - название плейсхолдера
+     * @param string $value - значение, на которое заменить
+     * @return bool
+     */
+    private function replacePlaceholder(string &$str, string $name, string $value): bool
+    {
+        $str = preg_replace_callback("/<$name(:(.+?))?>/", function ($m) use ($value) {
+            if (!array_key_exists(2, $m) || preg_match('/^' . $m[2] . '$/', $value)) {
+                return $value;
+            } else {
+                return $m[0];
+            }
+        }, $str, -1, $count);
+        return 0 < $count;
+    }
+
+    /**
+     * Проверяет наличие в строке плейсхолдеров.
+     * @param string $str - строка, в которой необходимо искать плейсхолдеры
+     * @return bool
+     */
+    private function hasPlaceholders(string $str): bool
+    {
+        $pattern = '/<.+?>/';
+        return preg_match($pattern, $str);
     }
 
     /**
@@ -66,20 +116,6 @@ class Rule implements RuleInterface
             $route = str_replace("<$name>", $value, $route);
         }
         return $route;
-    }
-
-    /**
-     * Заполнить паттерн параметрами.
-     * @param array $params - параметры: ключ => значение
-     * @return string
-     */
-    private function fillPattern(array $params): string
-    {
-        $pattern = $this->pattern;
-        foreach ($params as $name => $value) {
-            $pattern = preg_replace("/<$name(:.+?)?>/", $value, $pattern);
-        }
-        return $pattern;
     }
 
     /**
