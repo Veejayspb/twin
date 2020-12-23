@@ -95,7 +95,7 @@ abstract class ActiveJsonModel extends ActiveModel
         $table = self::tableName();
 
         $data = static::db()->getData($table);
-        array_push($data, $this->getAttributes());
+        array_push($data, $this->getAttributes([], true));
         return static::db()->setData($table, $data);
     }
 
@@ -110,7 +110,7 @@ abstract class ActiveJsonModel extends ActiveModel
         $pk = $this->pk();
         $index = ArrayHelper::findByParams($data, $this->getOriginalAttributes($pk));
         if ($index === false) return false;
-        $data[$index] = $this->getAttributes();
+        $data[$index] = $this->getAttributes([], true);
         return static::db()->setData($table, $data);
     }
 

@@ -172,8 +172,6 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
 
         if ($result) {
             $this->afterSave();
-            $this->_newRecord = false;
-            $this->_original = $this->getAttributes();
         }
         return $result;
     }
@@ -218,7 +216,11 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
      * Вызов события после сохранения.
      * @return void
      */
-    protected function afterSave() {}
+    protected function afterSave()
+    {
+        $this->_newRecord = false;
+        $this->_original = $this->getAttributes();
+    }
 
     /**
      * Вызов события после удаления.

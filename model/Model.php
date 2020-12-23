@@ -5,6 +5,8 @@ namespace twin\model;
 use ReflectionClass;
 use ReflectionProperty;
 use twin\common\Exception;
+use twin\type\Type;
+use twin\type\TypeString;
 
 abstract class Model
 {
@@ -40,6 +42,15 @@ abstract class Model
     }
 
     /**
+     * Типы атрибутов
+     * @return Type[]
+     */
+    public function types(): array
+    {
+        return [];
+    }
+
+    /**
      * Ярлыки атрибутов.
      * @return array
      */
@@ -55,6 +66,18 @@ abstract class Model
     public function hints(): array
     {
         return [];
+    }
+
+    /**
+     * Класс, соответствующий типу атрибута.
+     * @param string $attribute - название атрибута
+     * @return Type
+     */
+    public function getType(string $attribute): Type
+    {
+        $types = $this->types();
+        $className = array_key_exists($attribute, $types) ? $types[$attribute] : TypeString::class;
+        return $className::instance($this, $attribute);
     }
 
     /**
@@ -141,13 +164,8 @@ abstract class Model
      */
     protected function setAttribute(string $name, $value)
     {
-        $type = gettype($this->$name);
-        if ($type == 'array' && empty($value)) {
-            $value = [];
-        } elseif (in_array($type, ['integer', 'double', 'boolean', 'string', 'array'])) {
-            settype($value, $type);
-        }
-        $this->$name = $value;
+        $type = $this->getType($name);
+        $this->$name = $type->set($value);
     }
 
     /**
@@ -166,18 +184,29 @@ abstract class Model
     }
 
     /**
+     * Вернуть значение атрибута.
+     * @param string $name - название атрибута
+     * @return mixed
+     */
+    protected function getAttribute(string $name)
+    {
+        return $this->getType($name)->get();
+    }
+
+    /**
      * Вернуть значения атрибутов.
      * @param array $attributes - названия атрибутов (если указано, то вернет только указанные атрибуты)
+     * @param bool $setType - привести к нужному типу
      * @return array
      */
-    public function getAttributes(array $attributes = []): array
+    public function getAttributes(array $attributes = [], bool $setType = false): array
     {
         $names = $this->attributeNames();
         $skip = !empty($attributes);
         $result = [];
         foreach ($names as $name) {
             if ($skip && !in_array($name, $attributes)) continue;
-            $result[$name] = $this->$name;
+            $result[$name] = $setType ? $this->getAttribute($name) : $this->$name;
         }
         return $result;
     }
