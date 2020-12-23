@@ -10,6 +10,7 @@ class TypeJson extends Type
      */
     public function set($value)
     {
+        if (is_array($value)) return $value;
         return (array)json_decode((string)$value, true);
     }
 
