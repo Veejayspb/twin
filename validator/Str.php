@@ -2,7 +2,7 @@
 
 namespace twin\validator;
 
-class Str extends Validator
+class Str extends Range
 {
     /**
      * Минимальная длина

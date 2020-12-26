@@ -2,7 +2,7 @@
 
 namespace twin\validator;
 
-abstract class Numeric extends Validator
+abstract class Numeric extends Range
 {
     /**
      * Минимальное значение.
@@ -15,12 +15,6 @@ abstract class Numeric extends Validator
      * @var int|null
      */
     public $max;
-
-    /**
-     * Диапазон конкретных значений.
-     * @var array
-     */
-    public $range = [];
 
     /**
      * Ниже минимального значения.
@@ -46,18 +40,5 @@ abstract class Numeric extends Validator
         if ($this->max === null) return true;
         $this->message = "$label должен быть меньше или равен $this->max";
         return $value <= $this->max;
-    }
-
-    /**
-     * Входит ли в диапазон конкретных значений.
-     * @param mixed $value
-     * @param string $label
-     * @return bool
-     */
-    public function range($value, string $label): bool
-    {
-        if (empty($this->range)) return true;
-        $this->message = "$label не входит в диапазон допустимых значений";
-        return in_array($value, $this->range ,true);
     }
 }
