@@ -5,8 +5,6 @@ namespace twin\model;
 use ReflectionClass;
 use ReflectionProperty;
 use twin\common\Exception;
-use twin\type\Type;
-use twin\type\TypeString;
 
 abstract class Model
 {
@@ -38,16 +36,7 @@ abstract class Model
         if ($this->isServiceAttribute($name)) {
             throw new Exception(500, "Attribute $name doesn't exists");
         }
-        $this->setAttribute($name, $value);
-    }
-
-    /**
-     * Типы атрибутов
-     * @return Type[]
-     */
-    public function types(): array
-    {
-        return [];
+        $this->$name = $value;
     }
 
     /**
@@ -66,18 +55,6 @@ abstract class Model
     public function hints(): array
     {
         return [];
-    }
-
-    /**
-     * Класс, соответствующий типу атрибута.
-     * @param string $attribute - название атрибута
-     * @return Type
-     */
-    public function getType(string $attribute): Type
-    {
-        $types = $this->types();
-        $className = array_key_exists($attribute, $types) ? $types[$attribute] : TypeString::class;
-        return $className::instance($this, $attribute);
     }
 
     /**
@@ -157,18 +134,6 @@ abstract class Model
     }
 
     /**
-     * Присвоить значение атрибута и привести его к нужному типу (если указано значение по-умолчанию).
-     * @param string $name - название атрибута
-     * @param mixed $value - значение
-     * @return void
-     */
-    protected function setAttribute(string $name, $value)
-    {
-        $type = $this->getType($name);
-        $this->$name = $type->set($value);
-    }
-
-    /**
      * Присвоить значения атрибутов.
      * @param array $attributes - значения атрибутов
      * @param bool $safeOnly - только безопасные
@@ -179,34 +144,23 @@ abstract class Model
         $names = $safeOnly ? $this->safe() : $this->attributeNames();
         foreach ($attributes as $name => $value) {
             if (!in_array($name, $names)) continue;
-            $this->setAttribute($name, $value);
+            $this->$name = $value;
         }
-    }
-
-    /**
-     * Вернуть значение атрибута.
-     * @param string $name - название атрибута
-     * @return mixed
-     */
-    protected function getAttribute(string $name)
-    {
-        return $this->getType($name)->get();
     }
 
     /**
      * Вернуть значения атрибутов.
      * @param array $attributes - названия атрибутов (если указано, то вернет только указанные атрибуты)
-     * @param bool $setType - привести к нужному типу
      * @return array
      */
-    public function getAttributes(array $attributes = [], bool $setType = false): array
+    public function getAttributes(array $attributes = []): array
     {
         $names = $this->attributeNames();
         $skip = !empty($attributes);
         $result = [];
         foreach ($names as $name) {
             if ($skip && !in_array($name, $attributes)) continue;
-            $result[$name] = $setType ? $this->getAttribute($name) : $this->$name;
+            $result[$name] = $this->$name;
         }
         return $result;
     }

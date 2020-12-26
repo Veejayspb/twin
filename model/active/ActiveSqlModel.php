@@ -103,7 +103,7 @@ abstract class ActiveSqlModel extends ActiveModel
     protected function insert(): bool
     {
         $table = static::tableName();
-        $attributes = $this->getAttributes([], true);
+        $attributes = $this->getAttributes();
         $result = static::db()->insert($table, $attributes);
         $autoIncrement = static::db()->getAutoIncrement($table);
         if ($result && $autoIncrement !== false && $this->$autoIncrement === null) {
@@ -119,7 +119,7 @@ abstract class ActiveSqlModel extends ActiveModel
     {
         $pk = $this->pk();
         if (empty($pk)) return false;
-        $attributes = $this->getAttributes([], true);
+        $attributes = $this->getAttributes();
         $pkAttributes = $this->getOriginalAttributes($pk);
         $sql = ArrayHelper::stringExpression($pkAttributes, function ($key) {
             return "$key=:$key";
