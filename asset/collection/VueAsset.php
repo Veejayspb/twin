@@ -10,6 +10,6 @@ class VueAsset extends Asset
      * {@inheritdoc}
      */
     public $js = [
-        'https://cdn.jsdelivr.net/npm/vue',
+        'https://unpkg.com/vue@3.0.4/dist/vue.global.js',
     ];
 }
