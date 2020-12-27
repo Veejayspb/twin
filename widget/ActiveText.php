@@ -47,14 +47,14 @@ class ActiveTextAsset extends Asset
      * {@inheritdoc}
      */
     public $js = [
-        '{main}/script.js',
+        '{main}/ActiveText/script.js',
     ];
 
     /**
      * {@inheritdoc}
      */
     public $publish = [
-        'main' => '@twin/lib/asset/ActiveText',
+        'main' => '@twin/widget/src',
     ];
 
     /**

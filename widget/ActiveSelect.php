@@ -43,14 +43,14 @@ class ActiveSelectAsset extends Asset
      * {@inheritdoc}
      */
     public $js = [
-        '{main}/script.js',
+        '{main}/ActiveSelect/script.js',
     ];
 
     /**
      * {@inheritdoc}
      */
     public $publish = [
-        'main' => '@twin/lib/asset/ActiveSelect',
+        'main' => '@twin/widget/src',
     ];
 
     /**

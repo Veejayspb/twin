@@ -47,14 +47,14 @@ class ActiveCheckboxAsset extends Asset
      * {@inheritdoc}
      */
     public $js = [
-        '{main}/script.js',
+        '{main}/ActiveCheckbox/script.js',
     ];
 
     /**
      * {@inheritdoc}
      */
     public $publish = [
-        'main' => '@twin/lib/asset/ActiveCheckbox',
+        'main' => '@twin/widget/src',
     ];
 
     /**
