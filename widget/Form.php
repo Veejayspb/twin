@@ -2,6 +2,7 @@
 
 namespace twin\widget;
 
+use twin\common\Exception;
 use twin\helper\Html;
 use twin\model\Model;
 use ReflectionClass;
@@ -216,12 +217,37 @@ class Form extends Widget
     }
 
     /**
-     * Сформировать название поля формы на основе модели и атрибута.
+     * Вызов виджета.
+     * @param Model $model - модель
+     * @param string $attribute - название атрибута
+     * @param string $class - класс виджета
+     * @param array $properties - свойства
+     * @return string
+     * @throws Exception
+     */
+    public function widget(Model $model, string $attribute, string $class, array $properties = []): string
+    {
+        if (!is_subclass_of($class, FormField::class)) {
+            throw new Exception(500, "$class must extends " . FormField::class);
+        }
+
+        $properties = [
+            'model' => $model,
+            'attribute' => $attribute,
+            'parent' => $this,
+        ] + $properties;
+
+        $widget = new $class($properties); /* @var FormField $widget */
+        return $widget->run();
+    }
+
+    /**
+     * Сгенерировать название поля формы на основе модели и атрибута.
      * @param Model $model - модель
      * @param string $attribute - название атрибута
      * @return string
      */
-    protected function getAttributeName(Model $model, string $attribute): string
+    public function getAttributeName(Model $model, string $attribute): string
     {
         $reflection = new ReflectionClass($model);
         $className = $reflection->getShortName();
@@ -229,12 +255,12 @@ class Form extends Widget
     }
 
     /**
-     * Сформировать ID поля формы на основе модели и атрибута.
+     * Сгенерировать ID поля формы на основе модели и атрибута.
      * @param Model $model - модель
      * @param string $attribute - название атрибута
      * @return string
      */
-    protected function getAttributeId(Model $model, string $attribute): string
+    public function getAttributeId(Model $model, string $attribute): string
     {
         $reflection = new ReflectionClass($model);
         $className = $reflection->getShortName();
@@ -245,7 +271,7 @@ class Form extends Widget
      * Открытие формы.
      * @return string
      */
-    private function start()
+    protected function start()
     {
         $attributes = $this->htmlAttributes;
         $attributes['action'] = $this->action;
