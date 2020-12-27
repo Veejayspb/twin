@@ -18,6 +18,7 @@ Twin::setAlias('@twin', __DIR__);
 Twin::setAlias('@app', '@root/app');
 Twin::setAlias('@runtime', '@app/runtime');
 Twin::setAlias('@web', '@app/web');
+Twin::setAlias('@vendor', '@root/vendor');
 
 spl_autoload_register([Twin::class, 'autoload'], true, true);
 
