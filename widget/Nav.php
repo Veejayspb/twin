@@ -126,9 +126,9 @@ final class NavItem
     {
         if ($this->active === false) return false;
         if ($this->active === true) return true;
-        $linkRoute = Twin::app()->route->parseUrl($this->url)->getRoute();
-        $currentRoute = Controller::$instance->route->getRoute();
-        return $linkRoute == $currentRoute;
+        $route = Twin::app()->route->parseUrl($this->url);
+        if ($route === false) return false;
+        return $route->getRoute() == Controller::$instance->route->getRoute();
     }
 
     /**
