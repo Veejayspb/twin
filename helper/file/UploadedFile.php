@@ -47,6 +47,7 @@ class UploadedFile extends File
         $result = [];
         foreach ($rearranged as $field => $items) {
             foreach ($items as $i => $item) {
+                if ($item['error']) continue;
                 $result[$field][$i] = self::instance($item);
             }
         }
