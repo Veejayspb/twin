@@ -149,6 +149,38 @@ class SqlQuery extends Query
     }
 
     /**
+     * AND Where.
+     * @param string $sql - выражение
+     * @param array $params - параметры
+     * @return static
+     */
+    public function andWhere(string $sql, array $params = []): self
+    {
+        if (empty($this->where)) {
+            return $this->where($sql, $params);
+        }
+        $this->where = "($this->where) AND $sql";
+        $this->params+= $params;
+        return $this;
+    }
+
+    /**
+     * OR Where.
+     * @param string $sql - выражение
+     * @param array $params - параметры
+     * @return static
+     */
+    public function orWhere(string $sql, array $params = []): self
+    {
+        if (empty($this->where)) {
+            return $this->where($sql, $params);
+        }
+        $this->where = "($this->where) OR $sql";
+        $this->params+= $params;
+        return $this;
+    }
+
+    /**
      * Order.
      * @param string $sql - выражение
      * @return static
