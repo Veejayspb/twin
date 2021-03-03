@@ -1,7 +1,14 @@
 {
-    "name": "veejayspb/twin",
+    "name": "veejay/twin",
     "description": "Twin PHP Framework",
     "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "VeeJay",
+            "email": "veejayspb@gmail.com"
+        }
+    ],
     "keywords": [
         "twin",
         "framework"
