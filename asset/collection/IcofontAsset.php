@@ -5,7 +5,7 @@ namespace twin\asset\collection;
 use twin\asset\Asset;
 use twin\helper\Html;
 
-class Icofont extends Asset
+class IcofontAsset extends Asset
 {
     /**
      * {@inheritdoc}
