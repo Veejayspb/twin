@@ -78,7 +78,7 @@ abstract class Validator
     }
 
     /**
-     * Вернуть названия публичных методов.
+     * Вернуть названия публичных нестатических методов.
      * @return array
      */
     private function getPublicMethods(): array
@@ -87,7 +87,7 @@ abstract class Validator
         $methods = $reflection->getMethods();
         $result = [];
         foreach ($methods as $method) {
-            if ($method->isPublic() && !$method->isConstructor()) {
+            if ($method->isPublic() && !$method->isStatic() && !$method->isConstructor()) {
                 $result[] = $method->name;
             }
         }
