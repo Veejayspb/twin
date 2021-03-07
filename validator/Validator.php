@@ -29,12 +29,6 @@ abstract class Validator
     protected $message = 'Ошибка валидации';
 
     /**
-     * Разрешить пустое значение.
-     * @var bool
-     */
-    protected $empty = false;
-
-    /**
      * @param Model $model - валидируемая модель
      * @param array|string $attributes - валидируемый атрибут или атрибуты
      * @param array $params - значения свойств
@@ -54,6 +48,7 @@ abstract class Validator
     protected function run()
     {
         foreach ($this->attributes as $attribute) {
+            if ($this->isEmpty($attribute)) continue;
             $this->validateAttribute($attribute);
         }
     }
@@ -66,8 +61,6 @@ abstract class Validator
     protected function validateAttribute(string $attribute)
     {
         $methods = $this->getPublicMethods();
-        $value = $this->model->$attribute;
-        if ($this->empty && ($value === null || $value === '')) return;
         foreach ($methods as $method) {
             $result = call_user_func([$this, $method], $this->model->$attribute, $this->model->getLabel($attribute), $attribute);
             if (!$result) {
@@ -75,6 +68,17 @@ abstract class Validator
                 return;
             }
         }
+    }
+
+    /**
+     * Является ли атрибут пустым.
+     * @param string $attribute - название атрибута
+     * @return bool
+     */
+    protected function isEmpty(string $attribute): bool
+    {
+        $value = $this->model->$attribute;
+        return $value === null || $value === '';
     }
 
     /**
