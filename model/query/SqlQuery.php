@@ -40,6 +40,12 @@ class SqlQuery extends Query
     private $order = '';
 
     /**
+     * Group.
+     * @var string
+     */
+    private $group = '';
+
+    /**
      * Offset.
      * @var int
      */
@@ -192,6 +198,17 @@ class SqlQuery extends Query
     }
 
     /**
+     * Group.
+     * @param string $sql - выражение
+     * @return static
+     */
+    public function group(string $sql): self
+    {
+        $this->group = $sql;
+        return $this;
+    }
+
+    /**
      * Offset.
      * @param int $value - значение
      * @return static
@@ -224,6 +241,9 @@ class SqlQuery extends Query
         $result[] = "FROM `$this->from`";
         if (!empty($this->where)) {
             $result[] = "WHERE $this->where";
+        }
+        if (!empty($this->group)) {
+            $result[] = "GROUP BY $this->group";
         }
         if (!empty($this->order)) {
             $result[] = "ORDER BY $this->order";
