@@ -124,11 +124,11 @@ final class NavItem
      */
     public function isActive(): bool
     {
-        if ($this->active === false) return false;
-        if ($this->active === true) return true;
+        if (is_bool($this->active)) return $this->active; // Если статус указан явно
         $route = Twin::app()->route->parseUrl($this->url);
         if ($route === false) return false;
-        return $route->getRoute() == Controller::$instance->route->getRoute();
+        $current = Controller::$instance->route;
+        return $current->module === $route->module && $current->controller === $route->controller;
     }
 
     /**
