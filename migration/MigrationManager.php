@@ -19,7 +19,7 @@ class MigrationManager extends Component implements Iterator
      * Путь до директории с файлами миграций.
      * @var string
      */
-    public $path = '@app/command/migration';
+    public $path = '@app/migration';
 
     /**
      * Индекс текущей миграции.

@@ -18,7 +18,7 @@ return [
         ],
         'migration' => [
             'class' => MigrationManager::class,
-            'path' => '@app/command/migration',
+            'path' => '@app/migration',
         ],
     ],
 ];
