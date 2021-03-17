@@ -15,17 +15,28 @@ use twin\model\active\ActiveSqlModel;
  */
 class SqlQuery extends Query
 {
+    const LEFT_JOIN = 'LEFT JOIN';
+    const RIGHT_JOIN = 'RIGHT JOIN';
+    const INNER_JOIN = 'INNER JOIN';
+    const CROSS_JOIN = 'CROSS JOIN';
+
     /**
      * Select.
      * @var string
      */
-    private $select = '*';
+    private $select;
 
     /**
      * From.
      * @var string
      */
     private $from;
+
+    /**
+     * Join.
+     * @var array
+     */
+    private $join = [];
 
     /**
      * Where.
@@ -70,6 +81,7 @@ class SqlQuery extends Query
     {
         parent::__construct($modelName, $component);
         $table = $modelName::tableName();
+        $this->select("`$table`.*");
         $this->from($table);
     }
 
@@ -138,6 +150,19 @@ class SqlQuery extends Query
     private function from(string $sql): self
     {
         $this->from = $sql;
+        return $this;
+    }
+
+    /**
+     * Join.
+     * @param string $type - тип JOIN
+     * @param string $table - название таблицы
+     * @param string $on - выражение с условием
+     * @return static
+     */
+    public function join(string $type, string $table, string $on): self
+    {
+        $this->join[] = "$type `$table` ON $on";
         return $this;
     }
 
@@ -233,12 +258,14 @@ class SqlQuery extends Query
     /**
      * Сгенерировать SQL-выражение.
      * @return string
-     * @todo: заключить все названия столбцов и таблиц в `кавычки`
      */
     private function getExpression(): string
     {
         $result[] = "SELECT $this->select";
         $result[] = "FROM `$this->from`";
+        if (!empty($this->join)) {
+            $result[] = implode(' ', $this->join);
+        }
         if (!empty($this->where)) {
             $result[] = "WHERE $this->where";
         }
