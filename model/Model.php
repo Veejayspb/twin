@@ -119,6 +119,27 @@ abstract class Model
     }
 
     /**
+     * Очистить ошибки валидации атрибута.
+     * @param string $attribute - название атрибута
+     * @return void
+     */
+    public function clearError(string $attribute)
+    {
+        if (array_key_exists($attribute, $this->_errors)) {
+            unset($this->_errors[$attribute]);
+        }
+    }
+
+    /**
+     * Очистить все ошибки валидации.
+     * @return void
+     */
+    public function clearErrors()
+    {
+        $this->_errors = [];
+    }
+
+    /**
      * Атрибуты модели.
      * @return array
      */
