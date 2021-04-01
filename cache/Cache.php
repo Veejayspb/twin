@@ -4,7 +4,7 @@ namespace twin\cache;
 
 use twin\common\Component;
 
-abstract class Cache extends Component implements CacheInterface
+abstract class Cache extends Component
 {
     /**
      * Массив объектов с данными из кеша.
@@ -13,7 +13,10 @@ abstract class Cache extends Component implements CacheInterface
     protected $items = [];
 
     /**
-     * {@inheritdoc}
+     * Получить информацию из актуального кеша.
+     * @param string $key - ключ
+     * @param mixed|null $default - значение по-умолчанию в случае отсутствия кеша
+     * @return mixed|null
      */
     public function get(string $key, $default = null)
     {
@@ -24,7 +27,11 @@ abstract class Cache extends Component implements CacheInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Кешировать информацию.
+     * @param string $key - ключ
+     * @param mixed $value - значение
+     * @param int $ttl - время жизни в секундах (Time To Live)
+     * @return bool
      */
     public function set(string $key, $value, int $ttl): bool
     {
@@ -42,7 +49,9 @@ abstract class Cache extends Component implements CacheInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Имеется ли актуальный кеш.
+     * @param string $key - ключ
+     * @return bool
      */
     public function exists(string $key): bool
     {
@@ -52,7 +61,9 @@ abstract class Cache extends Component implements CacheInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Дата истечения жизни кеша.
+     * @param string $key - ключ
+     * @return int - 0, если кеш не существует или время жизни не ограничено
      */
     public function expires(string $key): int
     {
