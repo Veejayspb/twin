@@ -7,12 +7,6 @@ use twin\common\Component;
 abstract class Cache extends Component
 {
     /**
-     * Массив объектов с данными из кеша.
-     * @var CacheItem[]
-     */
-    protected $items = [];
-
-    /**
      * Получить информацию из актуального кеша.
      * @param string $key - ключ
      * @param mixed|null $default - значение по-умолчанию в случае отсутствия кеша
@@ -20,7 +14,7 @@ abstract class Cache extends Component
      */
     public function get(string $key, $default = null)
     {
-        $item = $this->getItem($key);
+        $item = $this->extractItem($key);
         if ($item === false) return $default;
         if ($item->isExpired()) return $default;
         return $item->data;
@@ -35,17 +29,12 @@ abstract class Cache extends Component
      */
     public function set(string $key, $value, int $ttl): bool
     {
-        $item = new CacheItem();
+        $item = new CacheItem;
         $item->key = $key;
         $item->data = $value;
         $item->expires = $ttl + time();
-        $this->items[$key] = $item;
 
-        $result = $this->saveItem($item);
-        if ($result) {
-            $this->items[$item->key] = $item;
-        }
-        return $result;
+        return $this->saveItem($item);
     }
 
     /**
@@ -55,7 +44,7 @@ abstract class Cache extends Component
      */
     public function exists(string $key): bool
     {
-        $item = $this->getItem($key);
+        $item = $this->extractItem($key);
         if ($item === false) return false;
         return !$item->isExpired();
     }
@@ -67,22 +56,9 @@ abstract class Cache extends Component
      */
     public function expires(string $key): int
     {
-        $item = $this->getItem($key);
+        $item = $this->extractItem($key);
         if ($item === false) return 0;
         return $item->expires - time();
-    }
-
-    /**
-     * Вернуть объект с данными кеша.
-     * @param string $key - ключ
-     * @return CacheItem|bool - FALSE в случае ошибки
-     */
-    protected function getItem(string $key)
-    {
-        if (!array_key_exists($key, $this->items)) {
-            $this->items[$key] = $this->extractItem($key);
-        }
-        return $this->items[$key];
     }
 
     /**
