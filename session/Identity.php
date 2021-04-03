@@ -34,7 +34,7 @@ class Identity
      * Инстанс текущего класса.
      * @var static
      */
-    private static $instance;
+    protected static $instance;
 
     private function __construct()
     {
