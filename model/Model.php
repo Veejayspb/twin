@@ -91,6 +91,21 @@ abstract class Model
     }
 
     /**
+     * Добавить ошибки валидации атрибутам.
+     * @param array $errors
+     * ключ - название атрибута
+     * значение - текст ошибки
+     * @return void
+     */
+    public function setErrors(array $errors)
+    {
+        foreach ($errors as $attribute => $message) {
+            if (!$this->hasAttribute($attribute)) continue;
+            $this->setError($attribute, $message);
+        }
+    }
+
+    /**
      * Вернуть последнюю ошибку валидации атрибута.
      * @param string $attribute - название атрибута
      * @return string|null - NULL, если ошибки отсутствуют
