@@ -117,11 +117,21 @@ abstract class Model
 
     /**
      * Вернуть массив ошибок валидации.
+     * @param array $attributes - если не указано, то вернет все ошибки
      * @return array
      */
-    public function getErrors(): array
+    public function getErrors(array $attributes = []): array
     {
-        return $this->_errors;
+        if (empty($attributes)) {
+            return $this->_errors;
+        }
+        $result = [];
+        foreach ($attributes as $attribute) {
+            $message = $this->getError($attribute);
+            if ($message === null) continue;
+            $result[$attribute] = $message;
+        }
+        return $result;
     }
 
     /**
