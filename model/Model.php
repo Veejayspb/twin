@@ -100,7 +100,6 @@ abstract class Model
     public function setErrors(array $errors)
     {
         foreach ($errors as $attribute => $message) {
-            if (!$this->hasAttribute($attribute)) continue;
             $this->setError($attribute, $message);
         }
     }
@@ -125,6 +124,7 @@ abstract class Model
         if (empty($attributes)) {
             return $this->_errors;
         }
+
         $result = [];
         foreach ($attributes as $attribute) {
             $message = $this->getError($attribute);
