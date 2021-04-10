@@ -85,7 +85,7 @@ abstract class Model
      * @param string $message - текст ошибки
      * @return void
      */
-    public function addError(string $attribute, string $message)
+    public function setError(string $attribute, string $message)
     {
         $this->_errors[$attribute] = $message;
     }
