@@ -2,7 +2,6 @@
 
 namespace twin\helper;
 
-use twin\common\Exception;
 use twin\session\Session;
 use twin\Twin;
 
@@ -61,7 +60,7 @@ final class Flash
 
     /**
      * Имеется ли флеш-сообщение.
-     * @param string $name - название флеш-сообщения
+     * @param string $name - название
      * @return bool
      */
     public static function has(string $name): bool
@@ -72,9 +71,9 @@ final class Flash
 
     /**
      * Вернуть флеш-сообщение.
-     * @param string $name - название флеш-сообщения
+     * @param string $name - название
      * @param bool $clear - очистить сообщение
-     * @return string|bool - FALSE, если флеш-сообщение отсутствует
+     * @return string|null - NULL, если флеш-сообщение отсутствует
      */
     public static function get(string $name, bool $clear = true)
     {
@@ -89,8 +88,8 @@ final class Flash
 
     /**
      * Добавить флеш-сообщение.
-     * @param string $name - название флеш-сообщения
-     * @param string $value - текст сообщения
+     * @param string $name - название
+     * @param string $value - сообщение
      * @return void
      */
     public static function set(string $name, string $value)
