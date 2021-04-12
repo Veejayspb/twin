@@ -65,8 +65,10 @@ final class Flash
      */
     public static function has(string $name): bool
     {
-        $flash = self::instance();
-        return array_key_exists($name, $flash->messages);
+        return array_key_exists(
+            $name,
+            self::instance()->messages
+        );
     }
 
     /**
@@ -78,11 +80,13 @@ final class Flash
     public static function get(string $name, bool $clear = true)
     {
         if (!self::has($name)) return false;
-        $flash = self::instance();
-        $result = (string)$flash->messages[$name];
+
+        $result = (string)self::instance()->messages[$name];
+
         if ($clear) {
-            unset($flash->messages[$name]);
+            self::delete($name);
         }
+
         return $result;
     }
 
@@ -94,8 +98,19 @@ final class Flash
      */
     public static function set(string $name, string $value)
     {
-        $flash = self::instance();
-        $flash->messages[$name] = $value;
+        self::instance()->messages[$name] = $value;
+    }
+
+    /**
+     * Удалить флеш-сообщение.
+     * @param string $name - название
+     * @return void
+     */
+    public static function delete(string $name)
+    {
+        if (self::has($name)) {
+            unset(self::instance()->messages[$name]);
+        }
     }
 
     /**
