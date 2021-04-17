@@ -8,8 +8,6 @@ use twin\model\Model;
 
 /**
  * Class Unique
- * @package core\validator
- *
  * @property ActiveModel $model
  */
 class Unique extends Validator
@@ -27,33 +25,20 @@ class Unique extends Validator
     }
 
     /**
-     * Проверить существование записи с идентичным PK.
+     * Проверить запись на уникальность.
      * @param mixed $value
      * @param string $label
      * @return bool
      */
     public function similar($value, string $label): bool
     {
-        $this->message = "Неуникальное значение";
-        $modelName = get_class($this->model); /* @var ActiveModel $modelName */
-        $attributes = $this->model->getAttributes($this->attributes);
-        $count = $modelName::findByAttributes($attributes)->count();
+        $this->message = 'Неуникальное значение';
 
-        // Для новой записи не должно сущ-вать дублей
         if ($this->model->isNewRecord()) {
-            return $count == 0;
+            return $this->newRecord();
+        } else {
+            return $this->notNewRecord();
         }
-        $pk = $this->model->pk();
-        // Если не указан PK, то невозможно определить оригинальную запись (не валидируем)
-        if (empty($pk)) {
-            return true;
-        }
-        // Если PK у сущ-щей записи сменился, то для нее также не должно сущ-вать дублей
-        if ($this->model->isChangedAttributes($pk)) {
-            return $count == 0;
-        }
-        // Если PK у сущ-щей записи остался прежним, то в БД присутствует одна запись - текущая
-        return $count <= 1;
     }
 
     /**
@@ -61,10 +46,50 @@ class Unique extends Validator
      */
     protected function run()
     {
-        $attributes = $this->attributes;
-        $attribute = array_pop($attributes);
+        $attribute = current($this->attributes);
+
         if ($attribute !== null) {
             $this->validateAttribute($attribute);
         }
+    }
+
+    /**
+     * Валидация новой записи.
+     * @return bool
+     */
+    private function newRecord(): bool
+    {
+        return !$this->hasSimilarRecord();
+    }
+
+    /**
+     * Валидация существующей записи.
+     * @return bool
+     */
+    private function notNewRecord(): bool
+    {
+        // Если не указан PK, то невозможно определить оригинальную запись (не валидируем)
+        $pk = $this->model->pk();
+        if (empty($pk)) {
+            return true;
+        }
+
+        // Если значения уникальных атрибутов не изменились (не валидируем)
+        if (!$this->model->isChangedAttributes($this->attributes)) {
+            return true;
+        }
+
+        return !$this->hasSimilarRecord();
+    }
+
+    /**
+     * Имеется ли запись с указанными атрибутами.
+     * @return bool
+     */
+    private function hasSimilarRecord(): bool
+    {
+        $modelName = get_class($this->model); /* @var ActiveModel $modelName */
+        $attributes = $this->model->getAttributes($this->attributes);
+        return (bool)$modelName::findByAttributes($attributes)->one();
     }
 }
