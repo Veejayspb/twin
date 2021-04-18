@@ -65,7 +65,7 @@ abstract class Model
     public function getLabel(string $attribute): string
     {
         $labels = $this->labels();
-        return array_key_exists($attribute, $labels) ? $labels[$attribute] : $attribute;
+        return $labels[$attribute] ?? $attribute;
     }
 
     /**
@@ -76,7 +76,7 @@ abstract class Model
     public function getHint(string $attribute)
     {
         $hints = $this->hints();
-        return array_key_exists($attribute, $hints) ? $hints[$attribute] : null;
+        return $hints[$attribute] ?? null;
     }
 
     /**
@@ -111,7 +111,7 @@ abstract class Model
      */
     public function getError(string $attribute)
     {
-        return array_key_exists($attribute, $this->_errors) ? $this->_errors[$attribute] : null;
+        return $this->_errors[$attribute] ?? null;
     }
 
     /**
@@ -132,6 +132,16 @@ abstract class Model
             $result[$attribute] = $message;
         }
         return $result;
+    }
+
+    /**
+     * Имеется ли ошибка валидации у указанного атрибута.
+     * @param string $attribute - название атрибута
+     * @return bool
+     */
+    public function hasError(string $attribute): bool
+    {
+        return null !== $this->getError($attribute);
     }
 
     /**
