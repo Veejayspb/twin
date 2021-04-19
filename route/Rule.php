@@ -78,10 +78,11 @@ class Rule implements RuleInterface
      * Заменить плейсхолдер на значение с проверкой (если указан паттерн).
      * @param string $str - исходная строка с плейсхолдерами
      * @param string $name - название плейсхолдера
-     * @param string $value - значение, на которое заменить
+     * @param string|null $value - значение, на которое заменить
+     * NULL нужно для того, чтобы можно было убирать параметры из адреса: Url::current(['param' => null])
      * @return bool
      */
-    private function replacePlaceholder(string &$str, string $name, string $value): bool
+    private function replacePlaceholder(string &$str, string $name, $value): bool
     {
         $str = preg_replace_callback("/<$name(:(.+?))?>/", function ($m) use ($value) {
             if (!array_key_exists(2, $m) || preg_match('/^' . $m[2] . '$/', $value)) {
