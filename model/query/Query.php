@@ -20,6 +20,18 @@ abstract class Query
     protected $component;
 
     /**
+     * Offset.
+     * @var int
+     */
+    protected $offset = 0;
+
+    /**
+     * Limit.
+     * @var int|null
+     */
+    protected $limit;
+
+    /**
      * @param string $modelName - название модели
      * @param Database $component - компонент базы данных
      */
@@ -27,6 +39,28 @@ abstract class Query
     {
         $this->modelName = $modelName;
         $this->component = $component;
+    }
+
+    /**
+     * Offset.
+     * @param int $value - значение
+     * @return static
+     */
+    public function offset(int $value = 0): self
+    {
+        $this->offset = $value;
+        return $this;
+    }
+
+    /**
+     * Limit.
+     * @param int $value - значение
+     * @return static
+     */
+    public function limit(int $value = 0): self
+    {
+        $this->limit = $value === 0 ? null : $value;
+        return $this;
     }
 
     /**

@@ -26,18 +26,6 @@ class JsonQuery extends Query
     private $filter;
 
     /**
-     * Отступ.
-     * @var int
-     */
-    private $offset = 0;
-
-    /**
-     * Лимит.
-     * @var int|null
-     */
-    private $limit;
-
-    /**
      * {@inheritdoc}
      * @return ActiveJsonModel|null
      */

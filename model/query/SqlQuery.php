@@ -57,18 +57,6 @@ class SqlQuery extends Query
     private $group = '';
 
     /**
-     * Offset.
-     * @var int
-     */
-    private $offset = 0;
-
-    /**
-     * Limit.
-     * @var int
-     */
-    private $limit = 0;
-
-    /**
      * Параметры.
      * @var array
      */
@@ -230,28 +218,6 @@ class SqlQuery extends Query
     public function group(string $sql): self
     {
         $this->group = $sql;
-        return $this;
-    }
-
-    /**
-     * Offset.
-     * @param int $value - значение
-     * @return static
-     */
-    public function offset(int $value = 0): self
-    {
-        $this->offset = $value;
-        return $this;
-    }
-
-    /**
-     * Limit.
-     * @param int $value - значение
-     * @return static
-     */
-    public function limit(int $value = 0): self
-    {
-        $this->limit = $value;
         return $this;
     }
 
