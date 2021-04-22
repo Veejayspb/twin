@@ -140,6 +140,7 @@ class Twin
             $namespace = $this->route->getNamespace($route->module);
             WebController::run($namespace, $route, $this->view);
         } catch (Exception $e) {
+            ob_clean(); // Если исключение выбрасывается во view, то на страницу ошибки выводится часть целевого шаблона
             http_response_code($e->getCode());
             $route = new Route;
             $route->setRoute(Twin::app()->route->error);
