@@ -112,8 +112,10 @@ class SqlQuery extends Query
      */
     public function count(): int
     {
+        $select = $this->select;
         $this->select('COUNT(*) as `amount`');
         $sql = $this->getExpression();
+        $this->select($select); // Вернуть прежние поля для выборки
         $items = $this->component->query($sql, $this->params);
         if (empty($items)) return 0;
         return $items[0]['amount'];
@@ -241,11 +243,11 @@ class SqlQuery extends Query
         if (!empty($this->order)) {
             $result[] = "ORDER BY $this->order";
         }
-        if (!empty($this->offset)) {
-            $result[] = "OFFSET $this->offset";
-        }
         if (!empty($this->limit)) {
             $result[] = "LIMIT $this->limit";
+        }
+        if (!empty($this->offset)) {
+            $result[] = "OFFSET $this->offset";
         }
         return implode(Html::SPACE, $result);
     }
