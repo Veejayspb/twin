@@ -95,7 +95,7 @@ class PaginationWidget extends Nav
 
             $result[] = $this->getItem([
                 'label' => $i,
-                'url' => $disabled ? '#' : Url::current([$this->parameter => $i]),
+                'url' => $this->getUrl($i, $disabled),
                 'visible' => 0 < $i,
                 'active' => $current == $i,
             ]);
@@ -114,7 +114,7 @@ class PaginationWidget extends Nav
 
         return $this->getItem([
             'label' => '&laquo;',
-            'url' => $disabled ? '#' : Url::current([$this->parameter => $page]),
+            'url' => $this->getUrl($page, $disabled),
             'active' => false,
             'htmlAttributes' => ['class' => $disabled ? $this->disabledClass : false],
         ]);
@@ -131,9 +131,22 @@ class PaginationWidget extends Nav
 
         return $this->getItem([
             'label' => '&raquo;',
-            'url' => $disabled ? '#' : Url::current([$this->parameter => $page]),
+            'url' => $this->getUrl($page, $disabled),
             'active' => false,
             'htmlAttributes' => ['class' => $disabled ? $this->disabledClass : false],
         ]);
+    }
+
+    /**
+     * Сгенерировать адрес страницы.
+     * @param int $page - номер страницы
+     * @param bool $disabled - сделать ссылку неактивной
+     * @return string
+     */
+    private function getUrl(int $page, bool $disabled = false): string
+    {
+        if ($disabled) return '#';
+        $page = $page == 1 ? null : $page;
+        return Url::current([$this->parameter => $page]);
     }
 }
