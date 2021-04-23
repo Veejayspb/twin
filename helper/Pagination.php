@@ -39,11 +39,14 @@ class Pagination
      * @param int $page
      * @param int $limit
      */
-    public function __construct(int $total, int $page = 1, int $limit = 10)
+    public function __construct(int $total, int $page, int $limit = 0)
     {
         $this->setTotal($total);
         $this->setPage($page);
-        $this->setSize($limit);
+        
+        if ($limit != 0) {
+            $this->setSize($limit);
+        }
     }
 
     /**
