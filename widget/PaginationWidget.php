@@ -57,8 +57,8 @@ class PaginationWidget extends Nav
      */
     public function run(): string
     {
-        // Если страница всего одна, то не выводить пагинатор.
-        if ($this->pagination->amount == 1) {
+        // Если страница одна/ноль, то не выводить пагинатор.
+        if ($this->pagination->amount <= 1) {
             return '';
         }
 
