@@ -118,6 +118,7 @@ class SqlQuery extends Query
         $this->select($select); // Вернуть прежние поля для выборки
         $items = $this->component->query($sql, $this->params);
         if (empty($items)) return 0;
+        if ($this->group) return count($items); // При группировке происходит подсчет по группам (вернет несколько строк)
         return $items[0]['amount'];
     }
 
