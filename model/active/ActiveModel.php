@@ -110,6 +110,7 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
     public function getOriginalAttributes(array $attributes = []): array
     {
         if (empty($attributes)) return $this->_original;
+
         return array_filter($this->_original, function ($name) use ($attributes) {
             return in_array($name, $attributes);
         }, ARRAY_FILTER_USE_KEY);
@@ -122,6 +123,7 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
     public function changedAttributes(): array
     {
         if ($this->isNewRecord()) return [];
+
         $names = $this->attributeNames();
         $result = [];
         foreach ($names as $name) {
@@ -139,6 +141,7 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
     public function isChangedAttributes(array $attributes): bool
     {
         $changed = $this->changedAttributes();
+
         foreach ($attributes as $attribute) {
             if (in_array($attribute, $changed)) return true;
         }
@@ -183,7 +186,7 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
      */
     public function getRelation(string $name)
     {
-        return array_key_exists($name, $this->_relations) ? $this->_relations[$name] : null;
+        return $this->_relations[$name] ?? null;
     }
 
     /**
@@ -245,6 +248,7 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
     protected static function db(): Database
     {
         $component = Twin::app()->{static::$_component}; /* @var Database $component */
+
         if (!is_subclass_of($component, Database::class)) {
             throw new Exception(500, 'Component ' . static::$_component . ' must extends ' . Database::class);
         }
