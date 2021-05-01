@@ -81,6 +81,21 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
     }
 
     /**
+     * Вернуть компонент базы данных.
+     * @return Database
+     * @throws Exception
+     */
+    public static function db(): Database
+    {
+        $component = Twin::app()->{static::$_component}; /* @var Database $component */
+
+        if (!is_subclass_of($component, Database::class)) {
+            throw new Exception(500, 'Component ' . static::$_component . ' must extends ' . Database::class);
+        }
+        return $component;
+    }
+
+    /**
      * Является ли запись новой.
      * @return bool
      */
@@ -239,21 +254,6 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
      * @return void
      */
     protected function afterDelete() {}
-
-    /**
-     * Вернуть компонент базы данных.
-     * @return Database
-     * @throws Exception
-     */
-    protected static function db(): Database
-    {
-        $component = Twin::app()->{static::$_component}; /* @var Database $component */
-
-        if (!is_subclass_of($component, Database::class)) {
-            throw new Exception(500, 'Component ' . static::$_component . ' must extends ' . Database::class);
-        }
-        return $component;
-    }
 
     /**
      * Добавить текущую запись в БД.

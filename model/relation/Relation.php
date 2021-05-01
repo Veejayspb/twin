@@ -36,7 +36,6 @@ abstract class Relation
     {
         if (!is_subclass_of($model, ActiveModel::class)) {
             throw new Exception(500, "$model must extends " . ActiveModel::class);
-            // TODO: проверка на принадлежность обеих моделей одному подключению к БД
         }
         $this->model = $model;
         $this->params = $params;
@@ -46,6 +45,7 @@ abstract class Relation
      * Вернуть готовые данные, относящиеся к текущей связи.
      * @param ActiveModel $parent - родительская модель
      * @return ActiveModel|ActiveModel[]|null
+     * @todo: проверка на принадлежность обеих моделей одному подключению к БД
      */
     public function getData(ActiveModel $parent)
     {
