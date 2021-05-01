@@ -44,7 +44,7 @@ class Pagination
         $this->setTotal($total);
         $this->setPage($page);
         
-        if ($limit != 0) {
+        if (0 < $limit) {
             $this->setSize($limit);
         }
     }
