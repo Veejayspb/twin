@@ -114,6 +114,7 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
         if ($this->_original == null && !$this->isNewRecord()) {
             $this->_original = $this->getAttributes();
         }
+        return $this;
     }
 
     /**

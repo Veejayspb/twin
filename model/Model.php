@@ -193,15 +193,17 @@ abstract class Model
      * Присвоить значения атрибутов.
      * @param array $attributes - значения атрибутов
      * @param bool $safeOnly - только безопасные
-     * @return void
+     * @return static
      */
     public function setAttributes(array $attributes, bool $safeOnly = true)
     {
         $names = $safeOnly ? $this->safe() : $this->attributeNames();
+
         foreach ($attributes as $name => $value) {
             if (!in_array($name, $names)) continue;
             $this->$name = $value;
         }
+        return $this;
     }
 
     /**
