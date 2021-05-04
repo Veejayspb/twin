@@ -228,7 +228,7 @@ class SqlQuery extends Query
      * Сгенерировать SQL-выражение.
      * @return string
      */
-    private function getExpression(): string
+    public function getExpression(): string
     {
         $result[] = "SELECT $this->select";
         $result[] = "FROM `$this->from`";
