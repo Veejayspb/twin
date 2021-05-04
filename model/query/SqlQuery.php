@@ -181,7 +181,7 @@ class SqlQuery extends Query
         if (empty($this->where)) {
             return $this->where($sql, $params);
         }
-        $this->where = "($this->where) AND $sql";
+        $this->where = "($this->where) AND ($sql)";
         $this->params+= $params;
         return $this;
     }
@@ -197,7 +197,7 @@ class SqlQuery extends Query
         if (empty($this->where)) {
             return $this->where($sql, $params);
         }
-        $this->where = "($this->where) OR $sql";
+        $this->where = "($this->where) OR ($sql)";
         $this->params+= $params;
         return $this;
     }
