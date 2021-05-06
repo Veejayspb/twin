@@ -5,6 +5,24 @@ namespace twin\helper;
 class ArrayHelper
 {
     /**
+     * Формирование нового массива на базе исходного.
+     * @param array $array - исходный массив
+     * @param callable $valueCallback - коллбэк для формирования значения: function($value, $key) {...}
+     * @param callable|null $keyCallback - коллбэк для формирования ключа. Если NULL, то будет взят исходный ключ.
+     * @return array
+     */
+    public static function column(array $array, callable $valueCallback, callable $keyCallback = null): array
+    {
+        $result = [];
+        foreach ($array as $key => $value) {
+            $k = $keyCallback === null ? $key : $keyCallback($value, $key);
+            $v = $valueCallback($value, $key);
+            $result[$k] = $v;
+        }
+        return $result;
+    }
+
+    /**
      * Найти в наборе массивов искомые ключ/значение, и вернуть индекс первого подходящего.
      * @param array $items - набор массивов
      * @param array $search - искомые ключи и значения
