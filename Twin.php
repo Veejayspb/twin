@@ -223,6 +223,27 @@ class Twin
     }
 
     /**
+     * Значение указанного параметра.
+     * @param string $name - название параметра в формате: path.to.param
+     * @param null $default - значение, которое вернется, если параметр не найден
+     * @return mixed|null
+     */
+    public static function param(string $name, $default = null)
+    {
+        $param = static::app()->params;
+        $parts = explode('.', $name);
+
+        foreach ($parts as $part) {
+            if (array_key_exists($part, $param)) {
+                $param = $param[$part];
+            } else {
+                return $default;
+            }
+        }
+        return $param;
+    }
+
+    /**
      * Регистрация конфига.
      * @param array $config - данные пользовательского конфига
      * @param string $type - тип конфига web|console
