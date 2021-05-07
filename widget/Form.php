@@ -135,7 +135,7 @@ class Form extends Widget
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public function inputFile(Model $model, string $attribute, array $htmlAttributes = [])
+    public function inputFile(Model $model, string $attribute, array $htmlAttributes = []): string
     {
         $this->htmlAttributes['enctype'] = 'multipart/form-data';
         $name = $this->getAttributeName($model, $attribute);
@@ -271,7 +271,7 @@ class Form extends Widget
      * Открытие формы.
      * @return string
      */
-    protected function start()
+    protected function start(): string
     {
         $attributes = $this->htmlAttributes;
         $attributes['action'] = $this->action;
