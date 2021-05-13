@@ -186,6 +186,9 @@ class SqlQuery extends Query
     public function whereIn(string $attribute, array $values, string $separator = 'AND'): self
     {
         if (empty($values)) {
+            if ($separator == 'AND') {
+                return $this->where('1 = 0');
+            }
             return $this;
         }
 
