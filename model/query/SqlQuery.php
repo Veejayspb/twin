@@ -80,7 +80,7 @@ class SqlQuery extends Query
     public function one()
     {
         $this->limit(1);
-        $sql = $this->getExpression();
+        $sql = $this->getSql();
         $items = $this->component->query($sql, $this->params);
         if (empty($items)) return null;
         $model = new $this->modelName(false); /* @var ActiveSqlModel $model */
@@ -95,7 +95,7 @@ class SqlQuery extends Query
      */
     public function all(): array
     {
-        $sql = $this->getExpression();
+        $sql = $this->getSql();
         $items = $this->component->query($sql, $this->params);
         if (empty($items)) return [];
         foreach ($items as $item) {
@@ -114,7 +114,7 @@ class SqlQuery extends Query
     {
         $select = $this->select;
         $this->select('COUNT(*) as `amount`');
-        $sql = $this->getExpression();
+        $sql = $this->getSql();
         $this->select($select); // Вернуть прежние поля для выборки
         $items = $this->component->query($sql, $this->params);
         if (empty($items)) return 0;
@@ -228,7 +228,7 @@ class SqlQuery extends Query
      * Сгенерировать SQL-выражение.
      * @return string
      */
-    public function getExpression(): string
+    public function getSql(): string
     {
         $result[] = "SELECT $this->select";
         $result[] = "FROM `$this->from`";
