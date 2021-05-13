@@ -161,43 +161,17 @@ class SqlQuery extends Query
      * Where.
      * @param string $sql - выражение
      * @param array $params - параметры
+     * @param string $separator - выражение разделяющее части: AND/OR
      * @return static
      */
-    public function where(string $sql = '', array $params = []): self
-    {
-        $this->where = $sql;
-        $this->params+= $params;
-        return $this;
-    }
-
-    /**
-     * AND Where.
-     * @param string $sql - выражение
-     * @param array $params - параметры
-     * @return static
-     */
-    public function andWhere(string $sql, array $params = []): self
+    public function where(string $sql = '', array $params = [], string $separator = 'AND'): self
     {
         if (empty($this->where)) {
-            return $this->where($sql, $params);
+            $this->where = $sql;
+        } else {
+            $separator = $separator == 'OR' ? 'OR' : 'AND';
+            $this->where = "($this->where) $separator ($sql)";
         }
-        $this->where = "($this->where) AND ($sql)";
-        $this->params+= $params;
-        return $this;
-    }
-
-    /**
-     * OR Where.
-     * @param string $sql - выражение
-     * @param array $params - параметры
-     * @return static
-     */
-    public function orWhere(string $sql, array $params = []): self
-    {
-        if (empty($this->where)) {
-            return $this->where($sql, $params);
-        }
-        $this->where = "($this->where) OR ($sql)";
         $this->params+= $params;
         return $this;
     }
