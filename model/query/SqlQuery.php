@@ -177,6 +177,32 @@ class SqlQuery extends Query
     }
 
     /**
+     * Where in (...)
+     * @param string $attribute - название атрибута
+     * @param array $values - возможные варианты значений
+     * @param string $separator - выражение разделяющее части: AND/OR
+     * @return static
+     */
+    public function whereIn(string $attribute, array $values, string $separator = 'AND'): self
+    {
+        if (empty($values)) {
+            return $this;
+        }
+
+        $placeholders = [];
+        foreach ($values as $value) {
+            $ph = $this->nextPlaceholder();
+            $placeholders[] = ':' . $ph;
+            $this->params[$ph] = $value;
+        }
+
+        $list = implode(',', $placeholders);
+        $sql = "$attribute IN ($list)";
+
+        return $this->where($sql, [], $separator);
+    }
+
+    /**
      * Order.
      * @param string $sql - выражение
      * @return static
@@ -225,5 +251,21 @@ class SqlQuery extends Query
             $result[] = "OFFSET $this->offset";
         }
         return implode(Html::SPACE, $result);
+    }
+
+    /**
+     * Вернуть следующий свободный плейсхолдер (который отсутствует в параметрах).
+     * @return string - ph1, ph2...
+     */
+    protected function nextPlaceholder(): string
+    {
+        $i = 1;
+        // Ограничение - для предотвращения бесконечного цикла.
+        do {
+            $placeholder = "ph{$i}";
+            $i++;
+        } while ($i < 1000 && array_key_exists($placeholder, $this->params));
+
+        return $placeholder;
     }
 }
