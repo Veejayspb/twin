@@ -15,4 +15,27 @@ class StringHelper
         $rest = mb_substr($string, 1, null, 'utf-8');
         return mb_strtoupper($firstChar, 'utf-8') . $rest;
     }
+
+    /**
+     * Указать корректную количественную форму слова.
+     * @param int $num - кол-во
+     * @param array $variants - [# единица, # единицы, # единиц]
+     * @return string
+     */
+    public static function wordEnding(int $num, array $variants): string
+    {
+        $value = abs($num);
+        if (count($variants) < 3) return '';
+        $cases = [2, 0, 1, 1, 1, 2];
+
+        if ($value % 100 > 4 && $value % 100 < 20) {
+            $index = 2;
+        } else {
+            $index = $cases[min($value % 10, 5)];
+        }
+
+        $str = $variants[$index];
+        $str = str_replace('#', '%d', $str);
+        return sprintf($str, $num);
+    }
 }
