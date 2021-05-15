@@ -37,13 +37,12 @@ class CacheSql extends Cache
      */
     public function createTable(): bool
     {
-        $connection = $this->getConnection();
-        return $connection->createTable($this->table, [
+        return $this->getConnection()->createTable($this->table, [
             'hash' => 'varchar(255) NOT NULL',
             'key' => 'text NOT NULL',
             'data' => 'text NOT NULL',
             'expires' => 'int(11) NOT NULL',
-        ], ['hash']);
+        ], ['PRIMARY KEY (`hash`)']);
     }
 
     /**

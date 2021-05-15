@@ -141,22 +141,20 @@ abstract class Sql extends Database
      * Создать таблицу.
      * @param string $name - название таблицы
      * @param array $columns - список столбцов (ключ - название, значение - параметры)
-     * @param array $pk - названия полей, входящих PK
+     * @param array $keys - дополнительные строки с ключами:
+     * PRIMARY KEY (`id`)
+     * FOREIGN KEY (`record_id`) REFERENCES `table` (`id`)
      * @return bool
      */
-    public function createTable(string $name, array $columns, array $pk = []): bool
+    public function createTable(string $name, array $columns, array $keys = []): bool
     {
         $sql = "CREATE TABLE IF NOT EXISTS `$name` (";
         $sql.= ArrayHelper::stringExpression($columns, function ($column, $expression) {
             return "`$column` $expression";
         }, ', ');
-        if (!empty($pk)) {
-            $sql .= ', PRIMARY KEY (';
-            $sql.= ArrayHelper::stringExpression($pk, function ($i, $name) {
-                return "`$name`";
-            }, ', ');
-            $sql.= ')';
-        }
+
+        $sql.= empty($keys) ? '' : ', ';
+        $sql.= implode(', ', $keys);
         $sql.= ");";
         return $this->execute($sql);
     }
