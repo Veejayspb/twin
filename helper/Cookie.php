@@ -25,6 +25,9 @@ class Cookie extends Component
     public static function set(string $name, string $value, int $expire = 0, string $path = '/', string $domain = '', bool $secure = false, bool $httpOnly = false): bool
     {
         $name = static::getName($name);
+        if ($expire != 0) {
+            $expire+= time();
+        }
         return setcookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
     }
 

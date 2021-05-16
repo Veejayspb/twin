@@ -82,7 +82,6 @@ class Identity
     {
         $this->id = $id;
         $token = $this->createToken($id);
-        $expire = 0 < $expire ? $expire + time() : 0;
         Cookie::set(static::IDENTITY, $id, $expire);
         Cookie::set(static::TOKEN, $token, $expire);
     }
