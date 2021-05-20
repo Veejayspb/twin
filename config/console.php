@@ -1,6 +1,6 @@
 <?php
 
-use twin\migration\MigrationManager;
+use twin\migration\MigrationManagerFile;
 
 return [
     'parent' => '@twin/config/common.php',
@@ -17,8 +17,7 @@ return [
             ],
         ],
         'migration' => [
-            'class' => MigrationManager::class,
-            'path' => '@app/migration',
+            'class' => MigrationManagerFile::class,
         ],
     ],
 ];

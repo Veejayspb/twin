@@ -75,18 +75,6 @@ abstract class Migration
     }
 
     /**
-     * Применить текущую миграцию.
-     * @return bool
-     */
-    abstract public function up(): bool;
-
-    /**
-     * Отменить текущую миграцию.
-     * @return bool
-     */
-    abstract public function down(): bool;
-
-    /**
      * Создать название файла по названию миграции.
      * @param string $name - название
      * @return string
@@ -99,4 +87,16 @@ abstract class Migration
         }
         return $result;
     }
+
+    /**
+     * Применить текущую миграцию.
+     * @return bool
+     */
+    abstract public function up(): bool;
+
+    /**
+     * Отменить текущую миграцию.
+     * @return bool
+     */
+    abstract public function down(): bool;
 }

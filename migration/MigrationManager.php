@@ -8,13 +8,8 @@ use m_0_init;
 use twin\common\Component;
 use twin\Twin;
 
-class MigrationManager extends Component implements Iterator
+abstract class MigrationManager extends Component implements Iterator
 {
-    /**
-     * Файл для хранения данных по последней миграции.
-     */
-    const RUNTIME_STORAGE = '@runtime/migration.json';
-
     /**
      * Путь до директории с файлами миграций.
      * @var string
@@ -31,7 +26,7 @@ class MigrationManager extends Component implements Iterator
      * Массив миграций.
      * @var Migration[]
      */
-    public $items = [];
+    protected $migrations = [];
 
     /**
      * {@inheritdoc}
@@ -39,8 +34,7 @@ class MigrationManager extends Component implements Iterator
     public function __construct(array $properties = [])
     {
         parent::__construct($properties);
-        $this->createDir();
-        $this->items = $this->getItems();
+        $this->migrations = $this->getMigrations();
         $this->index = $this->getIndex();
     }
 
@@ -62,7 +56,7 @@ class MigrationManager extends Component implements Iterator
     public function current()
     {
         if (!$this->valid()) return false;
-        return $this->items[$this->index];
+        return $this->migrations[$this->index];
     }
 
     /**
@@ -96,7 +90,7 @@ class MigrationManager extends Component implements Iterator
      */
     public function valid()
     {
-        return array_key_exists($this->index, $this->items);
+        return array_key_exists($this->index, $this->migrations);
     }
 
     /**
@@ -114,11 +108,13 @@ class MigrationManager extends Component implements Iterator
     public function up(): bool
     {
         $this->next();
+
         $migration = $this->current();
         if ($migration === false || !$migration->up()) {
             $this->previous();
             return false;
         }
+
         $this->setTimestamp($migration->timestamp);
         return true;
     }
@@ -130,11 +126,14 @@ class MigrationManager extends Component implements Iterator
     public function down(): bool
     {
         $migration = $this->current();
+
         if ($migration === false || !$migration->down()) {
             return false;
         }
+
         $this->previous();
         $migration = $this->current();
+
         if ($migration) {
             $this->setTimestamp($migration->timestamp);
         }
@@ -148,7 +147,7 @@ class MigrationManager extends Component implements Iterator
      */
     public function getByName(string $name)
     {
-        foreach ($this->items as $item) {
+        foreach ($this->migrations as $item) {
             if ($name == $item->class) {
                 return $item;
             }
@@ -162,51 +161,7 @@ class MigrationManager extends Component implements Iterator
      */
     public function getLast(): Migration
     {
-        return end($this->items);
-    }
-
-    /**
-     * Сохранить дату текущей миграции из кеша.
-     * @param int $timestamp - дата миграции
-     * @return bool
-     */
-    protected function setTimestamp(int $timestamp): bool
-    {
-        $path = Twin::getAlias(static::RUNTIME_STORAGE);
-        $data = ['timestamp' => $timestamp];
-        $content = json_encode($data);
-        return (bool)file_put_contents($path, $content, LOCK_EX);
-    }
-
-    /**
-     * Получить дату текущей миграции из кеша.
-     * @return int
-     */
-    protected function getTimestamp(): int
-    {
-        $path = Twin::getAlias(static::RUNTIME_STORAGE);
-        if (!is_file($path)) return 0;
-        $content = file_get_contents($path);
-        $data = json_decode($content, true);
-        return array_key_exists('timestamp', $data) ? (int)$data['timestamp'] : 0;
-    }
-
-    /**
-     * Вернуть миграции в хронологическом порядке (включая нулевую m_0_init).
-     * @return Migration[]
-     */
-    protected function getItems(): array
-    {
-        $dir = Twin::getAlias($this->path);
-        $directoryIterator = new DirectoryIterator($dir);
-        $result[] = $this->getInitMigration();
-        foreach ($directoryIterator as $file) {
-            if (!$file->isFile()) continue;
-            require_once $dir . DIRECTORY_SEPARATOR . $file->getFilename();
-            $class = str_replace('.php', '', $file->getFilename());
-            $result[] = new $class;
-        }
-        return $result;
+        return end($this->migrations);
     }
 
     /**
@@ -216,7 +171,8 @@ class MigrationManager extends Component implements Iterator
     protected function getIndex(): int
     {
         $timestamp = $this->getTimestamp();
-        foreach ($this->items as $index => $item) {
+
+        foreach ($this->migrations as $index => $item) {
             if ($item->timestamp < $timestamp) continue;
             return $index;
         }
@@ -230,19 +186,38 @@ class MigrationManager extends Component implements Iterator
     protected function getInitMigration(): Migration
     {
         require_once __DIR__ . DIRECTORY_SEPARATOR . 'm_0_init.php';
-        return new m_0_init();
+        return new m_0_init;
     }
 
     /**
-     * Создать директорию, если не сущ-ет.
+     * Вернуть миграции в хронологическом порядке (включая нулевую m_0_init).
+     * @return Migration[]
+     */
+    protected function getMigrations(): array
+    {
+        $dir = Twin::getAlias($this->path);
+        $directoryIterator = new DirectoryIterator($dir);
+        $result[] = $this->getInitMigration();
+
+        foreach ($directoryIterator as $file) {
+            if (!$file->isFile()) continue;
+            require_once $dir . DIRECTORY_SEPARATOR . $file->getFilename();
+            $class = str_replace('.php', '', $file->getFilename());
+            $result[] = new $class;
+        }
+        return $result;
+    }
+
+    /**
+     * Сохранить дату текущей миграции из кеша.
+     * @param int $timestamp - дата миграции
      * @return bool
      */
-    protected function createDir(): bool
-    {
-        $path = Twin::getAlias($this->path);
-        if (!is_dir($path)) {
-            return mkdir($path, 0775, true);
-        }
-        return true;
-    }
+    abstract protected function setTimestamp(int $timestamp): bool;
+
+    /**
+     * Получить дату текущей миграции из кеша.
+     * @return int
+     */
+    abstract protected function getTimestamp(): int;
 }
