@@ -53,4 +53,28 @@ class ArrayHelper
         $items = array_map($callback, array_keys($data), $data);
         return implode($glue, $items);
     }
+
+    /**
+     * Рекурсивное слияние 2х массивов.
+     * Отличие от функции array_merge_recursive() в том, что 1-ый массив приоритетнее 2-го.
+     * Параметры из 2-го просто дополняют 1-ый, но не заменяют в нем ничего.
+     * @param array $array_1 - главный массив
+     * @param array $array_2 - массив с дополнительным данными
+     * @return array
+     * @see array_merge_recursive()
+     */
+    public static function merge(array $array_1, array $array_2): array
+    {
+        foreach ($array_2 as $key => $value) {
+            // Если ключ в 1 массиве отсутствует, то сразу заполняем его
+            if (!array_key_exists($key, $array_1)) {
+                $array_1[$key] = $value;
+            }
+            // Если значения из 1 и 2 массивов, совпадащие по ключам являются массивами, то продолжить рекурсивное слияние.
+            if (is_array($array_1[$key]) && is_array($value)) {
+                $array_1[$key] = static::merge($array_1[$key], $array_2[$key]);
+            }
+        }
+        return $array_1;
+    }
 }

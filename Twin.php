@@ -7,6 +7,7 @@ use twin\common\Component;
 use twin\common\Exception;
 use twin\controller\ConsoleController;
 use twin\controller\WebController;
+use twin\helper\ArrayHelper;
 use twin\helper\Request;
 use twin\route\Route;
 use twin\route\RouteManager;
@@ -36,7 +37,7 @@ class Twin
     /**
      * Версия приложения.
      */
-    const VERSION = '0.0.3';
+    const VERSION = '0.0.4';
 
     /**
      * Паттерн алиаса.
@@ -105,7 +106,7 @@ class Twin
      */
     public function __get($name)
     {
-        return array_key_exists($name, $this->components) ? $this->components[$name] : null;
+        return $this->components[$name] ?? null;
     }
 
     /**
@@ -142,9 +143,11 @@ class Twin
         } catch (Exception $e) {
             @ob_clean(); // Если исключение выбрасывается во view, то на страницу ошибки выводится часть целевого шаблона
             http_response_code($e->getCode());
+
             $route = new Route;
             $route->setRoute(Twin::app()->route->error);
             $route->params = ['code' => $e->getCode(), 'message' => $e->getMessage()];
+
             $namespace = $this->route->getNamespace($route->module);
             WebController::run($namespace, $route, $this->view);
         }
@@ -192,9 +195,11 @@ class Twin
     {
         if (!class_exists($class)) {
             throw new Exception(500, "Component's class not exist: $class");
-        } elseif (!is_subclass_of($class, Component::class)) {
+        }
+        if (!is_subclass_of($class, Component::class)) {
             throw new Exception(500, "Component $class must extends " . Component::class);
-        } elseif (array_key_exists($name, $this->components)) {
+        }
+        if (array_key_exists($name, $this->components)) {
             throw new Exception(500, "Component with name $name already exists");
         }
         if (array_key_exists('class', $properties)) {
@@ -212,9 +217,12 @@ class Twin
      */
     public static function createObject(string $class, array $properties = [])
     {
-        if ($class == self::class) return self::app();
+        if ($class == self::class) {
+            return self::app();
+        }
         $object = new $class;
         $vars = get_object_vars($object);
+
         foreach ($properties as $name => $value) {
             if (!array_key_exists($name, $vars)) continue;
             $object->$name = $value;
@@ -253,17 +261,15 @@ class Twin
     {
         // Склейка пользовательского конфига с конфигом по-умолчанию.
         $default = $this->getDefaultConfig($type);
-        $config = array_replace_recursive(
-            $this->prepareConfig($default),
-            $this->prepareConfig($config)
+        $config = ArrayHelper::merge(
+            $this->prepareConfig($config),
+            $this->prepareConfig($default)
         );
-        $config = $this->reverse($config, 'components.route.rules');
 
         // Присвоение свойств.
-        $properties = ['name', 'language', 'params'];
-        foreach ($properties as $property) {
-            $this->$property = $config[$property];
-        }
+        $this->name = $config['name'];
+        $this->language = $config['language'];
+        $this->params = $config['params'];
 
         // Регистрация компонентов.
         foreach ($config['components'] as $name => $properties) {
@@ -280,14 +286,17 @@ class Twin
      */
     private function prepareConfig(array $config): array
     {
-        $config = $this->reverse($config, 'components.route.rules');
-        if (!array_key_exists('parent', $config)) return $config;
+        if (!array_key_exists('parent', $config)) {
+            return $config;
+        }
         $parentConfig = static::import($config['parent']);
         if ($parentConfig === false) {
             throw new Exception(500, "Can't find config file: " . $config['parent']);
+        } else {
+            unset($config['parent']);
         }
         $parent = $this->prepareConfig($parentConfig);
-        return array_replace_recursive($parent, $config);
+        return ArrayHelper::merge($config, $parent);
     }
 
     /**
@@ -299,27 +308,7 @@ class Twin
     {
         $alias = "@twin/config/$type.php";
         $config = static::import($alias);
-        return $config === false ? [] : $config;
-    }
-
-    /**
-     * Реверс вложенного массива.
-     * @param array $config - данные конфига
-     * @param string $path - путь до вложенной ячейки вида: components.name.property
-     * @return array
-     */
-    private function reverse(array $config, string $path = ''): array
-    {
-        if ($path == '') {
-            return array_reverse($config, true);
-        }
-        $path = explode('.', $path);
-        $key = array_shift($path);
-        if (!array_key_exists($key, $config)) {
-            return $config;
-        }
-        $config[$key] = $this->reverse($config[$key], implode('.', $path));
-        return $config;
+        return $config ?: [];
     }
 
     /**
@@ -347,10 +336,18 @@ class Twin
     {
         $pattern = '/^' . static::ALIAS_PATTERN . '/';
         preg_match($pattern, $alias, $matches);
-        if (!isset($matches[0])) return $alias;
+
+        if (!isset($matches[0])) {
+            return $alias;
+        }
+
         $key = $matches[0];
-        if (!array_key_exists($key, self::$aliases)) return $alias;
+
+        if (!array_key_exists($key, self::$aliases)) {
+            return $alias;
+        }
         $result = str_replace($key, self::$aliases[$key], $alias);
+
         // Если в пути остался алиас, то выполнить повторное преобразование
         if (preg_match($pattern, $result)) {
             return static::getAlias($result);
@@ -368,6 +365,7 @@ class Twin
     {
         $path = static::getAlias($alias);
         if (!is_file($path)) return false;
+
         if ($once) {
             return require_once $path;
         } else {
@@ -383,6 +381,7 @@ class Twin
     public static function autoload(string $className)
     {
         $className = str_replace('\\', '/', $className);
+
         if (substr($className, 0, 4) == 'twin') {
             $alias = "@$className.php";
         } else {
