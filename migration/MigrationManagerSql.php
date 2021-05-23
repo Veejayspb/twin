@@ -3,6 +3,7 @@
 namespace twin\migration;
 
 use twin\common\Exception;
+use twin\db\Database;
 use twin\db\sql\Sql;
 use twin\Twin;
 
@@ -82,11 +83,17 @@ class MigrationManagerSql extends MigrationManager
      */
     private function createTable(): bool
     {
+        if ($this->getDb()->getType() == Database::TYPE_SQLITE) {
+            $primary = 'PRIMARY KEY (`key`)';
+        } else {
+            $primary = 'PRIMARY KEY (`key`(1))';
+        }
+
         return $this->getDb()->createTable($this->table, [
             'key' => 'VARCHAR(255) NOT NULL',
             'value' => 'INT NOT NULL',
         ], [
-            'PRIMARY KEY (`key`)',
+            $primary,
         ]);
     }
 
