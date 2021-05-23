@@ -22,6 +22,11 @@ class Sqlite extends Sql
     /**
      * {@inheritdoc}
      */
+    protected $type = self::TYPE_SQLITE;
+
+    /**
+     * {@inheritdoc}
+     */
     public function __construct(array $properties = [])
     {
         if (!isset($properties['dbname'], $properties['path'])) {

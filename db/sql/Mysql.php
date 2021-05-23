@@ -30,10 +30,9 @@ class Mysql extends Sql
     protected $password;
 
     /**
-     * Путь до директории с файлами БД.
-     * @var string
+     * {@inheritdoc}
      */
-    protected $path;
+    protected $type = self::TYPE_MYSQL;
 
     /**
      * {@inheritdoc}

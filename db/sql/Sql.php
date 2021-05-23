@@ -17,12 +17,7 @@ abstract class Sql extends Database
      * Идентификатор соединения.
      * @var PDO
      */
-    public $connection;
-
-    /**
-     * {@inheritdoc}
-     */
-    protected $type = self::TYPE_SQL;
+    protected $connection;
 
     /**
      * Лог SQL-запросов в рамках текущего HTTP-запроса.

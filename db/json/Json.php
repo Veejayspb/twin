@@ -14,15 +14,15 @@ class Json extends Database
     const FILE_EXT = 'json';
 
     /**
-     * {@inheritdoc}
-     */
-    protected $type = self::TYPE_JSON;
-
-    /**
      * Путь до директории с файлами БД.
      * @var string
      */
     protected $path = '@runtime/db/json';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $type = self::TYPE_JSON;
 
     /**
      * Кешируемые данные таблиц для предотвращения повторных обращений.

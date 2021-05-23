@@ -8,7 +8,8 @@ use twin\common\Exception;
 abstract class Database extends Component
 {
     const TYPE_JSON = 'json';
-    const TYPE_SQL = 'sql';
+    const TYPE_MYSQL = 'mysql';
+    const TYPE_SQLITE = 'sqlite';
 
     /**
      * Тип БД.
