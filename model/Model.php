@@ -195,7 +195,7 @@ abstract class Model
      * @param bool $safeOnly - только безопасные
      * @return static
      */
-    public function setAttributes(array $attributes, bool $safeOnly = true)
+    public function setAttributes(array $attributes, bool $safeOnly = true): self
     {
         $names = $safeOnly ? $this->safe() : $this->attributeNames();
 

@@ -107,7 +107,7 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
     /**
      * {@inheritdoc}
      */
-    public function setAttributes(array $attributes, bool $safeOnly = true)
+    public function setAttributes(array $attributes, bool $safeOnly = true): Model
     {
         parent::setAttributes($attributes, $safeOnly);
 
@@ -193,6 +193,24 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
             $this->afterSave();
         }
         return $result;
+    }
+
+    /**
+     * Обновить атрибуты модели.
+     * @param bool $force - если FALSE, то атрибуты обновятся через кэш original, если TRUE - через БД
+     * @return static
+     */
+    public function refresh(bool $force = false): self
+    {
+        if ($force) {
+            $pk = $this->pk();
+            $pkAttributes = $this->getOriginalAttributes($pk);
+            $model = static::findByAttributes($pkAttributes)->one();
+            $attributes = $model ? $model->getAttributes() : [];
+        } else {
+            $attributes = $this->getOriginalAttributes();
+        }
+        return $this->setAttributes($attributes, false);
     }
 
     /**
