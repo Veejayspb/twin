@@ -13,6 +13,7 @@ class MigrationController extends ConsoleController
      */
     protected $help = [
         'help - reference',
+        'current - current migration name and few before and after',
         'create {name} - create new migration file',
         'up - move to 1 migration up',
         'down - move to 1 migration down',
@@ -32,6 +33,28 @@ class MigrationController extends ConsoleController
     {
         parent::init();
         $this->migration = Twin::app()->migration;
+    }
+
+    /**
+     * Вывести список миграций, в котором указана текущая, а также те, которые идут до и после.
+     * @param int $dispersion - разброс
+     */
+    public function current($dispersion = 1)
+    {
+        $dispersion = (int)($dispersion < 1 ? 1 : $dispersion);
+        $migrations = $this->migration->getMigrations(); // Список всех миграций
+        $key = $this->migration->key(); // Индекс текущей миграции
+
+        $result = [];
+        for ($i = $key - $dispersion; $i <= $key + $dispersion; $i++) {
+            if (!array_key_exists($i, $migrations)) continue;
+            $name = $migrations[$i]->name;
+            if ($i == $key) {
+                $name .= ' <-';
+            }
+            $result[] = $name;
+        }
+        echo implode(PHP_EOL , $result);
     }
 
     /**

@@ -165,6 +165,25 @@ abstract class MigrationManager extends Component implements Iterator
     }
 
     /**
+     * Вернуть миграции в хронологическом порядке (включая нулевую m_0_init).
+     * @return Migration[]
+     */
+    public function getMigrations(): array
+    {
+        $dir = Twin::getAlias($this->path);
+        $directoryIterator = new DirectoryIterator($dir);
+        $result[] = $this->getInitMigration();
+
+        foreach ($directoryIterator as $file) {
+            if (!$file->isFile()) continue;
+            require_once $dir . DIRECTORY_SEPARATOR . $file->getFilename();
+            $class = str_replace('.php', '', $file->getFilename());
+            $result[] = new $class;
+        }
+        return $result;
+    }
+
+    /**
      * Вернуть индекс последней миграции.
      * @return int
      */
@@ -187,25 +206,6 @@ abstract class MigrationManager extends Component implements Iterator
     {
         require_once __DIR__ . DIRECTORY_SEPARATOR . 'm_0_init.php';
         return new m_0_init;
-    }
-
-    /**
-     * Вернуть миграции в хронологическом порядке (включая нулевую m_0_init).
-     * @return Migration[]
-     */
-    protected function getMigrations(): array
-    {
-        $dir = Twin::getAlias($this->path);
-        $directoryIterator = new DirectoryIterator($dir);
-        $result[] = $this->getInitMigration();
-
-        foreach ($directoryIterator as $file) {
-            if (!$file->isFile()) continue;
-            require_once $dir . DIRECTORY_SEPARATOR . $file->getFilename();
-            $class = str_replace('.php', '', $file->getFilename());
-            $result[] = new $class;
-        }
-        return $result;
     }
 
     /**
