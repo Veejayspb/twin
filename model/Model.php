@@ -154,7 +154,7 @@ abstract class Model
     }
 
     /**
-     * Очистить ошибки валидации атрибута.
+     * Сбросить ошибки валидации атрибута.
      * @param string $attribute - название атрибута
      * @return void
      */
@@ -166,12 +166,17 @@ abstract class Model
     }
 
     /**
-     * Очистить все ошибки валидации.
+     * Сбросить ошибки валидации указанных атрибутов.
+     * @param array $attributes - названия атрибутов, для которых требуется сбросить ошибки (если не указано, то сбросятся все)
      * @return void
      */
-    public function clearErrors()
+    public function clearErrors(array $attributes = [])
     {
-        $this->_errors = [];
+        $attributes = $attributes ?: $this->getAttributes();
+
+        foreach ($attributes as $attribute) {
+            $this->clearError($attribute);
+        }
     }
 
     /**
@@ -268,15 +273,28 @@ abstract class Model
 
     /**
      * Валидация.
+     * @param array $attributes - названия атрибутов для валидации (если не указать, то провалидируются все)
      * @return bool
      */
-    public function validate(): bool
+    public function validate(array $attributes = []): bool
     {
-        if (!$this->beforeValidate()) return false;
+        if (!$this->beforeValidate()) {
+            return false;
+        }
         $this->rules();
-        $result = !$this->hasErrors();
+
+        // Сбросить ошибки атрибутов, для которых не требуется валидация
+        if ($attributes) {
+            $clearAttributes = array_diff(
+                array_keys($this->getAttributes()),
+                $attributes
+            );
+            $this->clearErrors($clearAttributes);
+        }
+
         $this->afterValidate();
-        return $result;
+
+        return !$this->hasErrors();
     }
 
     /**
