@@ -118,6 +118,16 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
     }
 
     /**
+     * Вернуть оригинальное значение атрибута.
+     * @param string $attribute - название атрибута
+     * @return mixed|null
+     */
+    public function getOriginalAttribute(string $attribute)
+    {
+        return $this->_original[$attribute] ?? null;
+    }
+
+    /**
      * Вернуть оригинальные значения атрибутов.
      * @param array $attributes - названия атрибутов (если указано, то вернет только указанные атрибуты)
      * @return array
@@ -145,7 +155,8 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
         $names = $this->attributeNames();
         $result = [];
         foreach ($names as $name) {
-            if ($this->$name == $this->_original[$name]) continue;
+            $original = $this->getOriginalAttribute($name);
+            if ($this->$name == $original) continue;
             $result[] = $name;
         }
         return $result;
