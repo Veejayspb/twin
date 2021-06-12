@@ -19,9 +19,9 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
 
     /**
      * Исходное значение атрибутов в БД.
-     * @var array|null
+     * @var array
      */
-    protected $_original;
+    protected $_original = [];
 
     /**
      * Связи с другими моделями.
@@ -111,7 +111,7 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
     {
         parent::setAttributes($attributes, $safeOnly);
 
-        if ($this->_original == null && !$this->isNewRecord()) {
+        if (!$this->_original && !$this->isNewRecord()) {
             $this->_original = $this->getAttributes();
         }
         return $this;
@@ -125,7 +125,9 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
      */
     public function getOriginalAttributes(array $attributes = []): array
     {
-        if (empty($attributes)) return $this->_original;
+        if (empty($attributes)) {
+            return $this->_original;
+        }
 
         return array_filter($this->_original, function ($name) use ($attributes) {
             return in_array($name, $attributes);
