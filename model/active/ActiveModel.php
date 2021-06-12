@@ -178,19 +178,24 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
     /**
      * {@inheritdoc}
      */
-    public function save(bool $validate = true): bool
+    public function save(bool $validate = true, array $attributes = []): bool
     {
-        if ($validate && !$this->validate()) return false;
-        if (!$this->beforeSave()) return false;
+        if ($validate && !$this->validate($attributes)) {
+            return false;
+        }
+        if (!$this->beforeSave()) {
+            return false;
+        }
 
         if ($this->isNewRecord()) {
             $result = $this->insert();
         } else {
-            $result = $this->update();
+            $result = $this->update($attributes);
         }
 
         if ($result) {
             $this->afterSave();
+            $this->_original = $this->getOriginalAttributes() + $this->getAttributes($attributes);
         }
         return $result;
     }
@@ -256,7 +261,6 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
     protected function afterSave()
     {
         $this->_newRecord = false;
-        $this->_original = $this->getAttributes();
     }
 
     /**
@@ -282,7 +286,8 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
 
     /**
      * Обновить текущую запись в БД.
+     * @param array $attributes - названия атрибутов, которые будут обновлены
      * @return bool
      */
-    abstract protected function update(): bool;
+    abstract protected function update(array $attributes = []): bool;
 }

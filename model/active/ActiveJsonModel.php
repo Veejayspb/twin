@@ -81,6 +81,7 @@ abstract class ActiveJsonModel extends ActiveModel
         $pk = $this->pk();
         $index = ArrayHelper::findByParams($data, $this->getOriginalAttributes($pk));
         if ($index === false) return false;
+
         unset($data[$index]);
         $data = array_values($data);
         return static::db()->setData($table, $data);
@@ -102,7 +103,7 @@ abstract class ActiveJsonModel extends ActiveModel
     /**
      * {@inheritdoc}
      */
-    protected function update(): bool
+    protected function update(array $attributes = []): bool
     {
         $table = self::tableName();
 
@@ -110,13 +111,14 @@ abstract class ActiveJsonModel extends ActiveModel
         $pk = $this->pk();
         $index = ArrayHelper::findByParams($data, $this->getOriginalAttributes($pk));
         if ($index === false) return false;
-        $data[$index] = $this->getAttributes();
+
+        $data[$index] = $this->getOriginalAttributes() + $this->getAttributes($attributes);
         return static::db()->setData($table, $data);
     }
 
     /**
      * Следующий ID.
-     * @return int|null - NULL, если отсутствует автоинкрементный атрибут
+     * @return int|null - NULL, если отсутствует атрибут с авто-инкрементном
      */
     private function nextId()
     {

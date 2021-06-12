@@ -34,7 +34,8 @@ interface ActiveModelInterface
     /**
      * Сохранение записи.
      * @param bool $validate - валидировать
+     * @param array $attributes - названия атрибутов для валидации и сохранения (если не указано, то будут задействованы все атрибуты)
      * @return bool
      */
-    public function save(bool $validate = true): bool;
+    public function save(bool $validate = true, array $attributes = []): bool;
 }

@@ -87,10 +87,10 @@ abstract class ActiveSqlModel extends ActiveModel
     /**
      * {@inheritdoc}
      */
-    public function save(bool $validate = true): bool
+    public function save(bool $validate = true, array $attributes = []): bool
     {
         if ($this->transaction->error) return false;
-        $result = parent::save($validate);
+        $result = parent::save($validate, $attributes);
         if (!$result && $this->transaction->running) {
             $this->transaction->error();
         }
@@ -103,9 +103,10 @@ abstract class ActiveSqlModel extends ActiveModel
     protected function insert(): bool
     {
         $table = static::tableName();
-        $attributes = $this->getAttributes();
-        $result = static::db()->insert($table, $attributes);
+        $data = $this->getAttributes();
+        $result = static::db()->insert($table, $data);
         $autoIncrement = static::db()->getAutoIncrement($table);
+
         if ($result && $autoIncrement !== false && $this->$autoIncrement === null) {
             $this->$autoIncrement = $result;
         }
@@ -115,16 +116,19 @@ abstract class ActiveSqlModel extends ActiveModel
     /**
      * {@inheritdoc}
      */
-    protected function update(): bool
+    protected function update(array $attributes = []): bool
     {
         $pk = $this->pk();
         if (empty($pk)) return false;
-        $attributes = $this->getAttributes();
+
+        $data = $this->getAttributes($attributes);
         $pkAttributes = $this->getOriginalAttributes($pk);
+
         $sql = ArrayHelper::stringExpression($pkAttributes, function ($key) {
             return "$key=:$key";
         }, ', ');
-        return static::db()->update(static::tableName(), $attributes, $sql, $pkAttributes);
+
+        return static::db()->update(static::tableName(), $data, $sql, $pkAttributes);
     }
 
     /**
