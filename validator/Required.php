@@ -18,7 +18,7 @@ class Required extends Validator
      */
     public function notEmpty($value, string $label, string $attribute): bool
     {
-        return !$this->isEmpty($attribute);
+        return !in_array($value, [null, ''], true);
     }
 
     /**
