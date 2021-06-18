@@ -19,12 +19,16 @@ abstract class Numeric extends Range
     /**
      * Ниже минимального значения.
      * @param mixed $value
-     * @param string $label
+     * @param string $attribute
      * @return bool
      */
-    public function min($value, string $label): bool
+    public function min($value, string $attribute): bool
     {
-        if ($this->min === null) return true;
+        $label = $this->model->getLabel($attribute);
+
+        if ($this->min === null) {
+            return true;
+        }
         $this->message = "$label должен быть больше или равен $this->min";
         return $this->min <= $value;
     }
@@ -32,12 +36,16 @@ abstract class Numeric extends Range
     /**
      * Выше максимального значения.
      * @param int $value
-     * @param string $label
+     * @param string $attribute
      * @return bool
      */
-    public function max($value, string $label): bool
+    public function max($value, string $attribute): bool
     {
-        if ($this->max === null) return true;
+        $label = $this->model->getLabel($attribute);
+
+        if ($this->max === null) {
+            return true;
+        }
         $this->message = "$label должен быть меньше или равен $this->max";
         return $value <= $this->max;
     }

@@ -75,7 +75,7 @@ abstract class Validator
     {
         $methods = $this->getPublicMethods();
         foreach ($methods as $method) {
-            $result = call_user_func([$this, $method], $this->model->$attribute, $this->model->getLabel($attribute), $attribute);
+            $result = call_user_func([$this, $method], $this->model->$attribute, $attribute);
             if (!$result) {
                 $this->model->setError($attribute, $this->message);
                 return;

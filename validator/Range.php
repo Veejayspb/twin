@@ -13,12 +13,15 @@ abstract class Range extends Validator
     /**
      * Входит ли в диапазон конкретных значений.
      * @param mixed $value
-     * @param string $label
+     * @param string $attribute
      * @return bool
      */
-    public function range($value, string $label): bool
+    public function range($value, string $attribute): bool
     {
-        if (empty($this->range)) return true;
+        if (empty($this->range)) {
+            return true;
+        }
+        $label = $this->model->getLabel($attribute);
         $this->message = "$label не входит в диапазон допустимых значений";
         return in_array($value, $this->range);
     }

@@ -7,11 +7,9 @@ class Boolean extends Validator
     /**
      * Проверка типа.
      * @param mixed $value
-     * @param string $label
-     * @param string $attribute
      * @return bool
      */
-    public function type($value, string $label, string $attribute): bool
+    public function type($value): bool
     {
         $this->message = 'Должно равняться 0 или 1';
         return $value == 1 || $value == 0;

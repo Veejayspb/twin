@@ -12,11 +12,10 @@ class Required extends Validator
     /**
      * Заполнено ли значение атрибута.
      * @param mixed $value
-     * @param string $label
      * @param string $attribute
      * @return bool
      */
-    public function notEmpty($value, string $label, string $attribute): bool
+    public function notEmpty($value, string $attribute): bool
     {
         return !in_array($value, [null, ''], true);
     }

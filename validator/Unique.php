@@ -26,11 +26,9 @@ class Unique extends Validator
 
     /**
      * Проверить запись на уникальность.
-     * @param mixed $value
-     * @param string $label
      * @return bool
      */
-    public function similar($value, string $label): bool
+    public function similar(): bool
     {
         $this->message = 'Неуникальное значение';
 

@@ -19,12 +19,12 @@ class Exists extends Validator
     /**
      * Имеется ли родительская запись.
      * @param mixed $value
-     * @param string $label
      * @return bool
      */
-    public function exists($value, string $label): bool
+    public function exists($value): bool
     {
         $this->message = "Родительская запись не найдена";
+
         return (bool)($this->class)::findByAttributes([
             $this->column => $value,
         ])->one();
