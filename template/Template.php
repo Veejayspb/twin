@@ -2,6 +2,8 @@
 
 namespace twin\template;
 
+use twin\Twin;
+
 class Template
 {
     /**
@@ -11,26 +13,34 @@ class Template
     protected $path;
 
     /**
-     * @param string $path - путь до шаблона
+     * @param string $path - путь или алиас пути до шаблона
      */
     public function __construct(string $path)
     {
-        $this->path = $path;
+        $this->path = Twin::getAlias($path);
     }
 
     /**
      * Сохранение шаблона.
-     * @param string $path - путь для сохранения шаблона
+     * @param string $path - путь или алиас пути для сохранения шаблона
      * @param array $params - параметры для замены
      * @return bool
      */
     public function save(string $path, array $params = []): bool
     {
-        if (!is_file($this->path)) return false;
+        if (!is_file($this->path)) {
+            return false;
+        }
+
         $content = file_get_contents($this->path);
-        if ($content === false) return false;
+        if ($content === false) {
+            return false;
+        }
+
         $content = $this->replacePlaceholders($content, $params);
+        $path = Twin::getAlias($path);
         $dir = dirname($path);
+
         if (!is_dir($dir)) {
             mkdir($dir, 0775);
         }
@@ -50,6 +60,7 @@ class Template
             $params[$placeholder] = $value;
             unset($params[$key]);
         }
+
         return str_replace(
             array_keys($params),
             $params,
