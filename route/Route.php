@@ -6,7 +6,6 @@ final class Route
 {
     /**
      * Паттерн зарезервированных названий параметров.
-     * @see $reserved
      */
     const PATTERN = '/^[a-z]+$/';
 
@@ -45,10 +44,9 @@ final class Route
     public $params = [];
 
     /**
-     * Зарезервированные названия параметров.
-     * @var array
+     * Названия зарезервированных параметров.
      */
-    private $reserved = ['module', 'controller', 'action'];
+    const RESERVED_PARAMS = ['module', 'controller', 'action'];
 
     /**
      * @param string|null $module - модуль
@@ -56,11 +54,15 @@ final class Route
      * @param string $action - действие
      * @param array $params - параметры
      */
-    public function __construct(string $module = null, string $controller = self::CONTROLLER, string $action = self::ACTION, array $params = [])
-    {
-        $this->setModule($module);
-        $this->setController($controller);
-        $this->setAction($action);
+    public function __construct(
+        string $module = null,
+        string $controller = self::CONTROLLER,
+        string $action = self::ACTION,
+        array $params = []
+    ) {
+        foreach (static::RESERVED_PARAMS as $name) {
+            $this->setReservedParam($name, $$name);
+        }
         $this->setParams($params);
     }
 
@@ -74,8 +76,8 @@ final class Route
     public function setProperties(array $properties): self
     {
         foreach ($properties as $name => $value) {
-            if (in_array($name, $this->reserved)) {
-                $this->setProperty($name, $value);
+            if (in_array($name, static::RESERVED_PARAMS)) {
+                $this->setReservedParam($name, $value);
             } else {
                 $this->params[$name] = $value;
             }
@@ -90,7 +92,7 @@ final class Route
     public function getReservedParams(): array
     {
         $result = [];
-        foreach ($this->reserved as $name) {
+        foreach (static::RESERVED_PARAMS as $name) {
             if (empty($this->$name)) continue;
             $result[$name] = $this->$name;
         }
@@ -118,58 +120,33 @@ final class Route
     public function setRoute(string $route)
     {
         $parts = explode('/', $route);
-        $part = array_pop($parts);
-        if ($part !== null) $this->setAction($part);
-        $part = array_pop($parts);
-        if ($part !== null) $this->setController($part);
-        $part = array_pop($parts);
-        if ($part !== null) $this->setModule($part);
-    }
+        $reservedParams = array_reverse(static::RESERVED_PARAMS); // Потому что разбор роута начинаем с действия (action)
 
-    /**
-     * Установка модуля.
-     * @param mixed $value - значение
-     * @return void
-     */
-    private function setModule($value)
-    {
-        if (empty($value)) {
-            $this->module = '';
-        } elseif (is_string($value) && preg_match(self::PATTERN, $value)) {
-            $this->module = $value;
+        foreach ($reservedParams as $name) {
+            $part = array_pop($parts);
+            if ($part !== null) $this->setReservedParam($name, $part);
         }
     }
 
     /**
-     * Установка контроллера.
-     * @param mixed $value - значение
+     * Установка значения зарезервированного параметра.
+     * @param string $type - название параметра: module, controller, action
+     * @param string|null $value - значение
      * @return void
      */
-    private function setController($value)
+    private function setReservedParam(string $type, $value)
     {
+        if (!in_array($type, static::RESERVED_PARAMS)) return;
+
         if (empty($value)) {
-            $this->controller = self::CONTROLLER;
+            $this->$type = self::CONTROLLER;
         } elseif (is_string($value) && preg_match(self::PATTERN, $value)) {
-            $this->controller = $value;
+            $this->$type = $value;
         }
     }
 
     /**
-     * Установка действия.
-     * @param mixed $value - значение
-     * @return void
-     */
-    private function setAction($value)
-    {
-        if (empty($value)) {
-            $this->action = self::ACTION;
-        } elseif (is_string($value) && preg_match(self::PATTERN, $value)) {
-            $this->action = $value;
-        }
-    }
-
-    /**
-     * Установка параметров.
+     * Установка значений незарезервированных параметров.
      * @param mixed $value - параметры
      * @return void
      */
@@ -178,30 +155,6 @@ final class Route
         if (is_array($value)) {
             ksort($value);
             $this->params = $value;
-        }
-    }
-
-    /**
-     * Установка свойства объекта.
-     * @param string $name - module, controller, action
-     * @param mixed $value - значение
-     * @return void
-     */
-    private function setProperty(string $name, $value)
-    {
-        switch ($name) {
-            case 'module':
-                $this->setModule($value);
-                break;
-            case 'controller':
-                $this->setController($value);
-                break;
-            case 'action':
-                $this->setAction($value);
-                break;
-            case 'params':
-                $this->setParams($value);
-                break;
         }
     }
 }
