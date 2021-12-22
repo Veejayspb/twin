@@ -102,14 +102,16 @@ class RouteManager extends Component
      */
     protected function getRuleClass(string $route): string
     {
-        if (class_exists($route)) {
-            if (!is_subclass_of($route, RuleInterface::class)) {
-                throw new Exception(500, 'Rule object: ' . get_class($route) . ' must be implemented ' . RuleInterface::class);
-            }
-            return $route;
-        } else {
+        if (!class_exists($route)) {
             return Rule::class;
         }
+
+        if (!is_subclass_of($route, RuleInterface::class)) {
+            $message = 'Rule object: ' . get_class($route) . ' must be implemented ' . RuleInterface::class;
+            throw new Exception(500, $message);
+        }
+
+        return $route;
     }
 
     /**

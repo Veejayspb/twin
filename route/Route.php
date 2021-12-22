@@ -55,13 +55,13 @@ final class Route
      * @param array $params - параметры
      */
     public function __construct(
-        string $module = null,
+        string $module = '',
         string $controller = self::CONTROLLER,
         string $action = self::ACTION,
         array $params = []
     ) {
         foreach (static::RESERVED_PARAMS as $name) {
-            $this->setReservedParam($name, $$name);
+            $this->$name = $$name;
         }
         $this->setParams($params);
     }
@@ -77,7 +77,7 @@ final class Route
     {
         foreach ($properties as $name => $value) {
             if (in_array($name, static::RESERVED_PARAMS)) {
-                $this->setReservedParam($name, $value);
+                $this->$name = $value;
             } else {
                 $this->params[$name] = $value;
             }
@@ -124,37 +124,30 @@ final class Route
 
         foreach ($reservedParams as $name) {
             $part = array_pop($parts);
-            if ($part !== null) $this->setReservedParam($name, $part);
+            if ($part !== null) {
+                $this->$name = $part;
+            }
         }
     }
 
     /**
-     * Установка значения зарезервированного параметра.
-     * @param string $type - название параметра: module, controller, action
-     * @param string|null $value - значение
-     * @return void
+     * Является ли зарезервированный параметр валидным.
+     * @param string $value
+     * @return bool
      */
-    private function setReservedParam(string $type, $value)
+    public static function validParam(string $value): bool
     {
-        if (!in_array($type, static::RESERVED_PARAMS)) return;
-
-        if (empty($value)) {
-            $this->$type = self::CONTROLLER;
-        } elseif (is_string($value) && preg_match(self::PATTERN, $value)) {
-            $this->$type = $value;
-        }
+        return preg_match(self::PATTERN, $value);
     }
 
     /**
      * Установка значений незарезервированных параметров.
-     * @param mixed $value - параметры
+     * @param array $params - параметры
      * @return void
      */
-    private function setParams($value)
+    private function setParams(array $params)
     {
-        if (is_array($value)) {
-            ksort($value);
-            $this->params = $value;
-        }
+        ksort($params);
+        $this->params = $params;
     }
 }
