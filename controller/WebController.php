@@ -2,10 +2,12 @@
 
 namespace twin\controller;
 
+use ReflectionClass;
+use ReflectionMethod;
 use twin\common\Exception;
 use twin\route\Route;
+use twin\Twin;
 use twin\view\View;
-use ReflectionMethod;
 
 abstract class WebController extends Controller
 {
@@ -44,6 +46,40 @@ abstract class WebController extends Controller
 
         $controller->beforeAction($route->action);
         $controller->callAction($route->action, $route->params);
+    }
+
+    /**
+     * Создать адрес.
+     * @param string $action - название действия
+     * @param array $params - параметры
+     * @return string
+     * @throws Exception
+     */
+    public static function createUrl(string $action, array $params = []): string
+    {
+        if (__CLASS__ == static::class) {
+            throw new Exception(500, "Can't call method from " . __CLASS__);
+        }
+
+        $reflection = new ReflectionClass(static::class);
+        $namespace = $reflection->getNamespaceName();
+        $module = Twin::app()->route->getModule($namespace);
+        if ($module === false) {
+            throw new Exception(500, "Can't create url to " . static::class . ' controller');
+        }
+
+        $controller = preg_replace('/Controller$/', '', $reflection->getShortName());
+        $controller = strtolower($controller);
+        if (!Route::validParam($controller)) {
+            throw new Exception(500, "Wrong controller name: $controller");
+        }
+
+        if (!Route::validParam($action)) {
+            throw new Exception(500, "Wrong action name: $action");
+        }
+
+        $route = new Route($module, $controller, $action, $params);
+        return Twin::app()->route->createUrl($route);
     }
 
     /**

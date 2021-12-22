@@ -59,6 +59,16 @@ class RouteManager extends Component
     }
 
     /**
+     * Вернуть название модуля по неймспейсу контроллера.
+     * @param string $namespace
+     * @return string|bool - FALSE, если модуль не найден
+     */
+    public function getModule(string $namespace)
+    {
+        return array_search($namespace, $this->namespaces);
+    }
+
+    /**
      * Разобрать адрес.
      * @param string $url - адрес
      * @return Route|bool - FALSE в случае ошибки
