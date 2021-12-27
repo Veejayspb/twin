@@ -45,12 +45,6 @@ class SqlQuery extends Query
     private $where = '';
 
     /**
-     * Order.
-     * @var string
-     */
-    private $order = '';
-
-    /**
      * Group.
      * @var string
      */
@@ -206,17 +200,6 @@ class SqlQuery extends Query
     }
 
     /**
-     * Order.
-     * @param string $sql - выражение
-     * @return static
-     */
-    public function order(string $sql = ''): self
-    {
-        $this->order = $sql;
-        return $this;
-    }
-
-    /**
      * Group.
      * @param string $sql - выражение
      * @return static
@@ -245,7 +228,9 @@ class SqlQuery extends Query
             $result[] = "GROUP BY $this->group";
         }
         if (!empty($this->order)) {
-            $result[] = "ORDER BY $this->order";
+            $result[] = 'ORDER BY ' . implode(', ', array_map(function ($name, $type) {
+                return $name . ' ' . $type;
+            }, array_keys($this->order), $this->order));
         }
         if (!empty($this->limit)) {
             $result[] = "LIMIT $this->limit";

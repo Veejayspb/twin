@@ -7,6 +7,9 @@ use twin\model\active\ActiveModel;
 
 abstract class Query
 {
+    const ASC = 'ASC';
+    const DESC = 'DESC';
+
     /**
      * Название модели.
      * @var string
@@ -30,6 +33,12 @@ abstract class Query
      * @var int|null
      */
     protected $limit;
+
+    /**
+     * Order.
+     * @var array
+     */
+    protected $order = [];
 
     /**
      * @param string $modelName - название модели
@@ -60,6 +69,19 @@ abstract class Query
     public function limit(int $value = 0): self
     {
         $this->limit = $value === 0 ? null : $value;
+        return $this;
+    }
+
+    /**
+     * Order.
+     * @param array $value - значение
+     * ключ - название поля
+     * значение - порядок
+     * @return static
+     */
+    public function order(array $value = []): self
+    {
+        $this->order = $value;
         return $this;
     }
 

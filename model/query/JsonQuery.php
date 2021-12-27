@@ -14,12 +14,6 @@ use twin\model\active\ActiveJsonModel;
 class JsonQuery extends Query
 {
     /**
-     * Сортировка.
-     * @var array
-     */
-    private $sort = [];
-
-    /**
      * Фильтр.
      * @var callback|null
      */
@@ -106,7 +100,7 @@ class JsonQuery extends Query
     private function applySort(array $models): array
     {
         usort($models, function (ActiveJsonModel $a, ActiveJsonModel $b) {
-            foreach ($this->sort as $name => $value) {
+            foreach ($this->order as $name => $value) {
 
                 $aType = gettype($a->$name);
                 $bType = gettype($b->$name);
@@ -115,11 +109,7 @@ class JsonQuery extends Query
                 if ($bType != 'integer' && $bType != 'string') continue;
 
                 $compare = strcmp($a->$name, $b->$name);
-                if ($compare == -1) {
-                    return $value == 'ASC' ? -1 : 1;
-                } elseif ($compare == 1) {
-                    return $value == 'ASC' ? 1 : -1;
-                }
+                return $compare * ($value === static::ASC ? 1 : -1);
             }
             return 0;
         });
