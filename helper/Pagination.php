@@ -13,6 +13,8 @@ use twin\widget\PaginationWidget;
  * @property-read int $limit
  * @property-read int $offset - отступ
  * @property-read int $amount - кол-во страниц
+ * @property-read int $from - порядковый номер первого отображаемого элемента
+ * @property-read int $to - порядковый номер последнего отображаемого элемента
  */
 class Pagination
 {
@@ -52,10 +54,16 @@ class Pagination
      */
     public function __get($name)
     {
-        if ($name == 'offset') {
-            return $this->getOffset();
-        } elseif ($name == 'amount') {
-            return $this->getAmount();
+        $parameters = [
+            'offset',
+            'amount',
+            'from',
+            'to',
+        ];
+
+        if (in_array($name, $parameters)) {
+            $method = 'get' . ucfirst($name);
+            return $this->$method();
         } else {
             return $this->$name;
         }
@@ -140,5 +148,24 @@ class Pagination
     protected function getAmount(): int
     {
         return ceil($this->total / $this->limit);
+    }
+
+    /**
+     * Отображение порядкового номера первого отображаемого элемента.
+     * @return int
+     */
+    protected function getFrom(): int
+    {
+        return ($this->page - 1) * $this->limit + 1;
+    }
+
+    /**
+     * Отображение порядкового номера последнего отображаемого элемента.
+     * @return int
+     */
+    protected function getTo(): int
+    {
+        $result = $this->page * $this->limit;
+        return min($this->total, $result);
     }
 }
