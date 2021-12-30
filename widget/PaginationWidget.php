@@ -10,16 +10,21 @@ use twin\helper\Url;
 class PaginationWidget extends Nav
 {
     /**
+     * Название GET-параметра с номером страницы по-умолчанию.
+     */
+    const DEFAULT_PARAMETER = 'page';
+
+    /**
      * CSS-класс неактивного пункта меню.
      * @var string
      */
     public $disabledClass = 'disabled';
 
     /**
-     * Название GET-параметра со страницей.
+     * Название GET-параметра с номером страницы.
      * @var string
      */
-    public $parameter = 'page';
+    public $parameter = self::DEFAULT_PARAMETER;
 
     /**
      * Отображать кнопки предыдущая/следующая страница.

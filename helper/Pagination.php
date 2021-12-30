@@ -43,10 +43,7 @@ class Pagination
     {
         $this->setTotal($total);
         $this->setPage($page);
-        
-        if (0 < $limit) {
-            $this->setSize($limit);
-        }
+        $this->setSize($limit);
     }
 
     /**
