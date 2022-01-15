@@ -176,7 +176,7 @@ abstract class MigrationManager extends Component implements Iterator
 
         foreach ($directoryIterator as $file) {
             if (!$file->isFile()) continue;
-            require_once $dir . DIRECTORY_SEPARATOR . $file->getFilename();
+            require_once $file->getPathname();
             $class = str_replace('.php', '', $file->getFilename());
             $result[] = new $class;
         }
