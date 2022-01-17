@@ -70,6 +70,12 @@ class ArrayHelper
             if (!array_key_exists($key, $array_1)) {
                 $array_1[$key] = $value;
             }
+
+            // Замена значения
+            if (!is_array($array_1[$key]) && !is_array($value)) {
+                $array_1[$key] = $value;
+            }
+
             // Если значения из 1 и 2 массивов, совпадащие по ключам являются массивами, то продолжить рекурсивное слияние.
             if (is_array($array_1[$key]) && is_array($value)) {
                 $array_1[$key] = static::merge($array_1[$key], $array_2[$key]);

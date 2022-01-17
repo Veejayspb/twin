@@ -296,7 +296,7 @@ class Twin
             unset($config['parent']);
         }
         $parent = $this->prepareConfig($parentConfig);
-        return ArrayHelper::merge($config, $parent);
+        return ArrayHelper::merge($parent, $config);
     }
 
     /**
