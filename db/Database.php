@@ -4,6 +4,7 @@ namespace twin\db;
 
 use twin\common\Component;
 use twin\common\Exception;
+use twin\migration\Migration;
 
 abstract class Database extends Component
 {
@@ -51,6 +52,34 @@ abstract class Database extends Component
     {
         return $this->dbname;
     }
+
+    /**
+     * Создать таблицу для миграций.
+     * @param string $table - название таблицы с миграциями
+     * @return bool
+     */
+    abstract public function createMigrationTable(string $table): bool;
+
+    /**
+     * Применена ли указанная миграция.
+     * @param Migration $migration - экземпляр миграции
+     * @return bool
+     */
+    abstract public function isMigrationApplied(Migration $migration): bool;
+
+    /**
+     * Добавить миграцию в БД.
+     * @param Migration $migration - экземпляр миграции
+     * @return bool
+     */
+    abstract public function addMigration(Migration $migration): bool;
+
+    /**
+     * Удалить миграцию из БД.
+     * @param Migration $migration - экземпляр миграции
+     * @return bool
+     */
+    abstract public function deleteMigration(Migration $migration): bool;
 
     /**
      * Подключиться к БД.

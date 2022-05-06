@@ -9,6 +9,7 @@ use twin\controller\ConsoleController;
 use twin\controller\WebController;
 use twin\helper\ArrayHelper;
 use twin\helper\Request;
+use twin\migration\MigrationManager;
 use twin\route\Route;
 use twin\route\RouteManager;
 use twin\session\Session;
@@ -16,7 +17,7 @@ use twin\view\View;
 
 Twin::setAlias('@root', dirname(__DIR__, 3));
 Twin::setAlias('@twin', __DIR__);
-Twin::setAlias('@app', '@root/app');
+Twin::setAlias('@app', '@root');
 Twin::setAlias('@runtime', '@app/runtime');
 Twin::setAlias('@web', '@app/web');
 Twin::setAlias('@vendor', '@root/vendor');
@@ -31,13 +32,14 @@ spl_autoload_register([Twin::class, 'autoload'], true, true);
  * @property Session $session
  * @property View $view
  * @property AssetManager $asset
+ * @property MigrationManager $migration
  */
 class Twin
 {
     /**
      * Версия приложения.
      */
-    const VERSION = '0.0.4';
+    const VERSION = '0.0.5';
 
     /**
      * Паттерн алиаса.
@@ -69,14 +71,20 @@ class Twin
      * Индикатор запуска приложения.
      * @var bool
      */
-    private $running = false;
+    protected $running = false;
 
     /**
      * Компоненты.
      * @var Component[]
      */
-    private $components = [];
+    protected $components = [];
 
+    /**
+     * Экземпляр приложения.
+     * @var static
+     */
+    protected static $instance;
+    
     /**
      * Список алиасов путей.
      * @var array
@@ -84,12 +92,6 @@ class Twin
      * @see getAlias()
      */
     private static $aliases = [];
-
-    /**
-     * Экземпляр приложения.
-     * @var static
-     */
-    protected static $instance;
 
     private function __construct()
     {
@@ -188,25 +190,28 @@ class Twin
      * @param string $name - название компонента
      * @param string $class - название класса
      * @param array $properties - свойства
-     * @return bool
+     * @return void
      * @throws Exception
      */
-    public function registerComponent(string $name, string $class, array $properties = []): bool
+    public function registerComponent(string $name, string $class, array $properties = [])
     {
         if (!class_exists($class)) {
             throw new Exception(500, "Component's class not exist: $class");
         }
+
         if (!is_subclass_of($class, Component::class)) {
             throw new Exception(500, "Component $class must extends " . Component::class);
         }
+
         if (array_key_exists($name, $this->components)) {
             throw new Exception(500, "Component with name $name already exists");
         }
+
         if (array_key_exists('class', $properties)) {
             unset($properties['class']);
         }
+
         $this->components[$name] = new $class($properties);
-        return true;
     }
 
     /**
@@ -220,6 +225,7 @@ class Twin
         if ($class == self::class) {
             return self::app();
         }
+
         $object = new $class;
         $vars = get_object_vars($object);
 
@@ -227,13 +233,14 @@ class Twin
             if (!array_key_exists($name, $vars)) continue;
             $object->$name = $value;
         }
+
         return $object;
     }
 
     /**
      * Значение указанного параметра.
      * @param string $name - название параметра в формате: path.to.param
-     * @param null $default - значение, которое вернется, если параметр не найден
+     * @param mixed|null $default - значение, которое вернется, если параметр не найден
      * @return mixed|null
      */
     public static function param(string $name, $default = null)
@@ -289,12 +296,15 @@ class Twin
         if (!array_key_exists('parent', $config)) {
             return $config;
         }
+
         $parentConfig = static::import($config['parent']);
+
         if ($parentConfig === false) {
             throw new Exception(500, "Can't find config file: " . $config['parent']);
         } else {
             unset($config['parent']);
         }
+
         $parent = $this->prepareConfig($parentConfig);
         return ArrayHelper::merge($parent, $config);
     }
@@ -315,15 +325,19 @@ class Twin
      * Установить алиас пути.
      * @param string $alias - "@alias"
      * @param string $path - path/to/alias
-     * @return void
+     * @return bool
      * @see $aliases
      */
-    public static function setAlias(string $alias, string $path)
+    public static function setAlias(string $alias, string $path): bool
     {
         $pattern = '/^' . static::ALIAS_PATTERN . '$/';
+
         if (preg_match($pattern, $alias)) {
             self::$aliases[$alias] = $path;
+            return true;
         }
+
+        return false;
     }
 
     /**
@@ -387,6 +401,7 @@ class Twin
         } else {
             $alias = "@root/$className.php";
         }
+
         static::import($alias, true);
     }
 }

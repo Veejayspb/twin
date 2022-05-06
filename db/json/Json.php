@@ -4,6 +4,7 @@ namespace twin\db\json;
 
 use twin\common\Exception;
 use twin\db\Database;
+use twin\migration\Migration;
 use twin\Twin;
 
 class Json extends Database
@@ -76,6 +77,73 @@ class Json extends Database
             static::$data[$this->dbname][$table] = $data;
         }
         return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createMigrationTable(string $table): bool
+    {
+        $data = $this->getData($table);
+        return $this->setData($table, $data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isMigrationApplied(Migration $migration): bool
+    {
+        $table = $migration->manager->table;
+
+        if (!$this->createMigrationTable($table)) {
+            return false;
+        }
+
+        $items = $this->getData($table);
+        $column = array_column($items, 'hash');
+
+        return in_array($migration->getHash(), $column);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addMigration(Migration $migration): bool
+    {
+        $isApplied = $this->isMigrationApplied($migration);
+
+        if ($isApplied) {
+            return true;
+        }
+
+        $items = $this->getData($migration->manager->table);
+        $items[] = [
+            'hash' => $migration->getHash(),
+            'name' => $migration->class,
+            'timestamp' => time(),
+        ];
+
+        return $this->setData($migration->manager->table, $items);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteMigration(Migration $migration): bool
+    {
+        $table = $migration->manager->table;
+        $items = $this->getData($table);
+
+        foreach ($items as $i => $item) {
+            $hash = $item['hash'] ?? null;
+
+            if ($hash == $migration->getHash()) {
+                unset($items[$i]);
+                break;
+            }
+        }
+
+        return $this->setData($table, $items);
     }
 
     /**

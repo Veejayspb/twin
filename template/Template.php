@@ -42,7 +42,7 @@ class Template
         $dir = dirname($path);
 
         if (!is_dir($dir)) {
-            mkdir($dir, 0775);
+            mkdir($dir, 0775, true);
         }
         return (bool)file_put_contents($path, $content);
     }

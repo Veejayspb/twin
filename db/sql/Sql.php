@@ -5,6 +5,7 @@ namespace twin\db\sql;
 use twin\db\Database;
 use twin\helper\ArrayHelper;
 use PDO;
+use twin\migration\Migration;
 
 abstract class Sql extends Database
 {
@@ -180,6 +181,73 @@ abstract class Sql extends Database
     public function transactionRollback(): bool
     {
         return $this->execute('ROLLBACK');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createMigrationTable(string $table): bool
+    {
+        return $this->createTable($table, [
+            'hash' => 'VARCHAR(32) NOT NULL',
+            'name' => 'TEXT NOT NULL',
+            'timestamp' => 'INT NOT NULL',
+        ], [
+            'PRIMARY KEY (`hash`)',
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isMigrationApplied(Migration $migration): bool
+    {
+        $table = $migration->manager->table;
+
+        if (!$this->createMigrationTable($table)) {
+            return false;
+        }
+
+        $sql = "SELECT * FROM {$table} WHERE hash = :hash LIMIT 1";
+        $items = $this->query($sql, ['hash' => $migration->getHash()], true);
+
+        return !empty($items);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addMigration(Migration $migration): bool
+    {
+        $isApplied = $this->isMigrationApplied($migration);
+
+        if ($isApplied) {
+            return true;
+        }
+
+        return false !== $this->insert($migration->manager->table, [
+            'hash' => $migration->getHash(),
+            'name' => $migration->class,
+            'timestamp' => time(),
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteMigration(Migration $migration): bool
+    {
+        $isApplied = $this->isMigrationApplied($migration);
+
+        if (!$isApplied) {
+            return true;
+        }
+
+        return $this->delete(
+            $migration->manager->table,
+            'hash = :hash',
+            ['hash' => $migration->getHash()]
+        );
     }
 
     /**
