@@ -2,7 +2,7 @@
 
 namespace twin\helper;
 
-use twin\helper\file\UploadedFile;
+use twin\helper\file\FileUploaded;
 
 Request::$scheme = $_SERVER['REQUEST_SCHEME'];
 Request::$host = $_SERVER['HTTP_HOST'];
@@ -45,7 +45,7 @@ class Request
      */
     public static function get(string $name, $default = null)
     {
-        return array_key_exists($name, $_GET) ? $_GET[$name] : $default;
+        return $_GET[$name] ?? $default;
     }
 
     /**
@@ -56,18 +56,7 @@ class Request
      */
     public static function post(string $name, $default = null)
     {
-        return array_key_exists($name, $_POST) ? $_POST[$name] : $default;
-    }
-
-    /**
-     * Вернуть данные массива $_FILES в виде набора объектов.
-     * @param string $name - название параметра
-     * @return array
-     */
-    public static function files(string $name): array
-    {
-        if (!array_key_exists($name, $_FILES)) return [];
-        return UploadedFile::parse($_FILES[$name]);
+        return $_POST[$name] ?? $default;
     }
 
     /**
@@ -78,6 +67,19 @@ class Request
      */
     public static function request(string $name, $default = null)
     {
-        return array_key_exists($name, $_REQUEST) ? $_REQUEST[$name] : $default;
+        return $_REQUEST[$name] ?? $default;
+    }
+
+    /**
+     * Вернуть данные массива $_FILES в виде набора объектов.
+     * @param string $name - название параметра
+     * @return array
+     */
+    public static function files(string $name): array
+    {
+        if (!array_key_exists($name, $_FILES)) {
+            return [];
+        }
+        return FileUploaded::parse($_FILES[$name]);
     }
 }

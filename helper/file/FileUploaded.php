@@ -2,7 +2,12 @@
 
 namespace twin\helper\file;
 
-class UploadedFile extends File
+/**
+ * Хелпер для работы с загруженными файлами из массива $_FILES.
+ *
+ * Class FileUploaded
+ */
+class FileUploaded extends File
 {
     /**
      * Название файла.
@@ -31,7 +36,7 @@ class UploadedFile extends File
     /**
      * Разобрать массив $_FILES и скомпоновать его в виде объектов.
      * @param array $data
-     * @return self[]
+     * @return static[]
      */
     public static function parse(array $data): array
     {
@@ -48,7 +53,7 @@ class UploadedFile extends File
         foreach ($rearranged as $field => $items) {
             foreach ($items as $i => $item) {
                 if ($item['error']) continue;
-                $result[$field][$i] = self::instance($item);
+                $result[$field][$i] = static::instance($item);
             }
         }
         return $result;
@@ -57,12 +62,13 @@ class UploadedFile extends File
     /**
      * Инстанцировать объект и заполнить свойства.
      * @param array $properties - свойства объекта
-     * @return self
+     * @return static
      */
     private static function instance(array $properties = []): self
     {
         $path = array_key_exists('tmp_name', $properties) ? $properties['tmp_name'] : '';
-        $file = new self($path);
+        $file = new static($path);
+
         foreach ($file as $name => $value) {
             if (!array_key_exists($name, $properties)) continue;
             $file->$name = $properties[$name];

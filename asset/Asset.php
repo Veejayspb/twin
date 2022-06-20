@@ -3,7 +3,7 @@
 namespace twin\asset;
 
 use twin\common\Exception;
-use twin\helper\File;
+use twin\helper\file\File;
 use twin\helper\Tag;
 use twin\Twin;
 
@@ -179,15 +179,23 @@ abstract class Asset
         foreach ($this->publish as $name => $path) {
             $from = Twin::getAlias($path);
             $hash = $this->hash($from);
+
             if (!$hash) {
                 throw new Exception(500, "Asset path not exists: $from");
             }
+
             $alias = $this->assetManager->publicationPath . DIRECTORY_SEPARATOR . $hash;
             $to = Twin::getAlias($alias);
             $placeholder = '{' . $name . '}';
             $this->placeholders[$placeholder] = $this->assetManager->webPath . '/' . $hash;
-            if (!$this->assetManager->force && is_dir($to)) continue; // Если asset уже опубликован
-            if (!File::copy($from, $to)) {
+
+            // Если asset уже опубликован
+            if (!$this->assetManager->force && is_dir($to)) {
+                continue;
+            }
+
+            $file = new File($from);
+            if (!$file->copy($to)) {
                 throw new Exception(500, "Can't publish asset: $from");
             }
         }

@@ -2,109 +2,99 @@
 
 namespace twin\helper\file;
 
-use finfo;
-use twin\Twin;
+use twin\common\Exception;
 
-class File
+/**
+ * Хелпер для манипуляции с файлами.
+ *
+ * Class File
+ *
+ * @todo: remove exif and other meta-info
+ */
+class File extends FileCommon
 {
-    const JPG = 'jpg';
-    const PNG = 'png';
-    const GIF = 'gif';
-    const SVG = 'svg';
-    const TIFF = 'tiff';
-    const ICO = 'ico';
-    const BMP = 'bmp';
-    const WBMP = 'wbmp';
-    const WEBP = 'webp';
-
     /**
-     * Путь до файла.
-     * @var string
-     */
-    public $path;
-
-    /**
-     * Расширения и MIME.
-     * @var array
-     */
-    protected static $extensions = [
-        'image/jpeg' => self::JPG,
-        'image/pjpeg' => self::JPG,
-        'image/png' => self::PNG,
-        'image/gif' => self::GIF,
-        'image/svg+xml' => self::SVG,
-        'image/tiff' => self::TIFF,
-        'image/vnd.microsoft.icon' => self::ICO,
-        'image/bmp' => self::BMP,
-        'image/vnd.wap.wbmp' => self::WBMP,
-        'image/webp' => self::WEBP,
-    ];
-
-    /**
-     * @param string $path - путь до файла
+     * {@inheritdoc}
      */
     public function __construct(string $path)
     {
-        $this->path = Twin::getAlias($path);
-    }
+        parent::__construct($path);
 
-    /**
-     * Скопировать файл.
-     * @param string $path - путь для копирования: path/to/file.txt
-     * @return static|bool - FALSE в случае ошибки
-     */
-    public function copy(string $path)
-    {
-        if (!$this->exists()) return false;
-        if (@copy($this->path, $path)) {
-            return new self($path);
+        if (!is_file($path)) {
+            throw new Exception(500, "Is not a file: $path");
         }
-        return false;
     }
 
     /**
-     * Переместить файл.
-     * @param string $path - путь для перемещения: path/to/file.txt
-     * @return bool
+     * {@inheritdoc}
      */
-    public function move(string $path): bool
+    public function copy(string $path, bool $force = false)
     {
-        if ($path == $this->path) return true;
-        if (@copy($this->path, $path)) {
-            @unlink($this->path);
-            $this->path = $path;
+        if (
+            !file_exists($this->path) ||
+            !is_dir($path)
+        ) {
+            return false;
+        }
+
+        $newPath = $this->normalizePath($path . DIRECTORY_SEPARATOR . basename($this->path));
+        $exists = file_exists($newPath);
+
+        // Если копирование в ту же директорию, где находится файл
+        if ($newPath == $this->path) {
+            return new static($newPath);
+        }
+
+        if ($exists && !$force) {
+            return false;
+        }
+
+        $result = @copy($this->path, $newPath);
+
+        if (!$result) {
+            return false;
+        }
+
+        return new static($newPath);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function move(string $path, bool $force = false): bool
+    {
+        $path = $this->normalizePath($path);
+
+        // Если перемещение в ту же директорию, где находится файл
+        if ($path == dirname($this->path)) {
             return true;
         }
+
+        $result = $this->copy($path, $force);
+
+        if ($result && $this->delete()) {
+            $this->path = $path . DIRECTORY_SEPARATOR . $this->getName();
+            return true;
+        }
+
         return false;
     }
 
     /**
-     * Переименовать файл.
-     * @param string $name - новое имя файла
-     * @return bool
-     */
-    public function rename(string $name): bool
-    {
-        if (!$this->exists()) return false;
-        $newPath = dirname($this->path) . DIRECTORY_SEPARATOR . basename($name);
-        $result = @rename($this->path, $name);
-        $this->path = $newPath;
-        return $result;
-    }
-
-    /**
-     * Удалить файл.
-     * @return bool
+     * {@inheritdoc}
      */
     public function delete(): bool
     {
-        if (!$this->exists()) return true;
-        return @unlink($this->path);
+        if (is_file($this->path)) {
+            return unlink($this->path);
+        }
+
+        return true;
     }
 
     /**
      * Вернуть содержимое файла.
-     * @return string|bool - FALSE в случае ошибки
+     * @return string|bool
      */
     public function getContent()
     {
@@ -113,55 +103,42 @@ class File
 
     /**
      * Вернуть MIME-тип файла.
-     * @return string|bool - FALSE в случае ошибки
+     * @return string|bool
      */
     public function getMimeType()
     {
-        $content = $this->getContent();
-        if ($content === false) return false;
-        $info = new finfo(FILEINFO_MIME_TYPE);
-        return $info->buffer($content);
+        return @mime_content_type($this->path);
     }
 
     /**
-     * Расширение файла.
-     * @return string|bool - FALSE в случае ошибки
+     * Определить расширение файла.
+     * @return string|bool
      */
-    public function getExt()
+    public function getExtension()
     {
-        $mime = $this->getMimeType();
-        if ($mime === false) return false;
-        return array_key_exists($mime, static::$extensions) ? static::$extensions[$mime] : false;
-    }
-
-    /**
-     * Удалить расширенную информацию о файле.
-     * Работает с jpg, png, gif.
-     * @return bool
-     */
-    public function removeExif(): bool
-    {
-        $ext = $this->getExt();
-        switch ($ext) {
-            case self::JPG:
-                $img = imagecreatefromjpeg($this->path);
-                return imagejpeg($img, $this->path, 100);
-            case self::PNG:
-                $img = imagecreatefrompng($this->path);
-                return imagepng($img, $this->path, 0);
-            case self::GIF:
-                $img = imagecreatefromgif($this->path);
-                return imagegif($img, $this->path);
+        // Извлечь из названия
+        $ext = $this->getExtensionFromName();
+        if ($ext) {
+            return $ext;
         }
-        return false;
+
+        // Иначе определить по mime-type
+        $mime = $this->getMimeType();
+        if (!$mime) {
+            return false;
+        }
+
+        $ext = FileType::getExtension($mime);
+        return $ext ?: false;
     }
 
     /**
-     * Существует ли файл.
-     * @return bool
+     * Извлечь расширение файла из названия.
+     * @return string|bool
      */
-    protected function exists(): bool
+    protected function getExtensionFromName()
     {
-        return is_file($this->path);
+        preg_match('/\.(.+)$/', $this->getName(), $matches);
+        return $matches ? $matches[1] : false;
     }
 }
