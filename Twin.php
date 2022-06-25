@@ -196,7 +196,7 @@ class Twin
     public function registerComponent(string $name, string $class, array $properties = [])
     {
         if (!class_exists($class)) {
-            throw new Exception(500, "Component's class not exist: $class");
+            throw new Exception(500, "Component's class doesn't exists: $class");
         }
 
         if (!is_subclass_of($class, Component::class)) {
@@ -212,6 +212,15 @@ class Twin
         }
 
         $this->components[$name] = new $class($properties);
+    }
+
+    /**
+     * Список компонентов.
+     * @return Component[]
+     */
+    public function getComponents(): array
+    {
+        return $this->components;
     }
 
     /**
@@ -269,8 +278,8 @@ class Twin
         // Склейка пользовательского конфига с конфигом по-умолчанию.
         $default = $this->getDefaultConfig($type);
         $config = ArrayHelper::merge(
-            $this->prepareConfig($config),
-            $this->prepareConfig($default)
+            $this->prepareConfig($default),
+            $this->prepareConfig($config)
         );
 
         // Присвоение свойств.
