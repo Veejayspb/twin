@@ -5,7 +5,7 @@ namespace twin\migration;
 use DateTime;
 use twin\common\Exception;
 use twin\db\Database;
-use twin\template\Template;
+use twin\helper\template\Template;
 use twin\Twin;
 
 /**
@@ -146,8 +146,7 @@ abstract class Migration
         if (false === preg_match($pattern, $name)) return false;
 
         $class = static::createName($name);
-        $templatePath = Twin::getAlias('@twin/template/tpl/migration.tpl');
-        $template = new Template($templatePath);
+        $template = new Template('@twin/helper/template/tpl/migration.tpl');
         $path = $path . DIRECTORY_SEPARATOR . $class . '.php';
 
         return $template->save($path, [

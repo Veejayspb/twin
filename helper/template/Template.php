@@ -1,6 +1,6 @@
 <?php
 
-namespace twin\template;
+namespace twin\helper\template;
 
 use twin\Twin;
 
