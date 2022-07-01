@@ -113,6 +113,11 @@ class MigrationController extends ConsoleController
 
         foreach ($migrations as $migration) {
             if (!$migration->date->diff($target->date)->invert) {
+
+                if ($migration->isApplied()) {
+                    continue;
+                }
+
                 if ($migration->up()) {
                     $count++;
                     echo "Migration up: $migration->class " . PHP_EOL;
@@ -137,6 +142,11 @@ class MigrationController extends ConsoleController
         $count = 0;
 
         foreach ($migrations as $migration) {
+
+            if (!$migration->isApplied()) {
+                continue;
+            }
+
             if ($migration->date->diff($target->date)->invert) {
                 if ($migration->down()) {
                     $count++;
