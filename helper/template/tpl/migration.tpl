@@ -9,7 +9,7 @@ class {{class}} extends Migration
     /**
      * {@inheritdoc}
      */
-    public function up(): bool
+    protected function up(): bool
     {
         return true; // TODO: Implement up() method.
     }
@@ -17,7 +17,7 @@ class {{class}} extends Migration
     /**
      * {@inheritdoc}
      */
-    public function down(): bool
+    protected function down(): bool
     {
         return true; // TODO: Implement down() method.
     }
