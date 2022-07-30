@@ -3,7 +3,7 @@
 namespace twin\asset;
 
 use twin\common\Exception;
-use twin\helper\file\File;
+use twin\helper\file\Dir;
 use twin\helper\Tag;
 use twin\Twin;
 
@@ -194,8 +194,9 @@ abstract class Asset
                 continue;
             }
 
-            $file = new File($from);
-            if (!$file->copy($to)) {
+            $dir = new Dir($from);
+
+            if (!$dir->copy($to)) {
                 throw new Exception(500, "Can't publish asset: $from");
             }
         }
