@@ -55,7 +55,7 @@ class Dir extends FileCommon
         }
 
         $to = new static($path);
-        $dir = $to->addDirectory($this->getName());
+        $dir = $to->createDirectory($this->getName());
 
         if (!$dir) {
             return false;
@@ -142,7 +142,7 @@ class Dir extends FileCommon
      * @return static|false
      * @throws Exception
      */
-    protected function addDirectory(string $name)
+    protected function createDirectory(string $name)
     {
         $path = $this->path . DIRECTORY_SEPARATOR . $name;
 
@@ -179,7 +179,7 @@ class Dir extends FileCommon
                 $child->copy($dir->getPath(), $force);
             } else {
                 $name = $child->getName();
-                $innerDir = $dir->addDirectory($name);
+                $innerDir = $dir->createDirectory($name);
 
                 if ($innerDir) {
                     $child->copyInner($innerDir, $force);
