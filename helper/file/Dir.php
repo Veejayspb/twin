@@ -140,11 +140,10 @@ class Dir extends FileCommon
     /**
      * Создать вложенную директорию.
      * @param string $name - название директории
-     * @param bool $force - удалить одноименный файл (если он имеется)
-     * @return static|false
-     * @throws Exception
+     * @param bool $force - удалить одноименный файл (если сущ-ет)
+     * @return self|false
      */
-    protected function createDirectory(string $name, bool $force)
+    public function createDirectory(string $name, bool $force = false)
     {
         $path = $this->path . DIRECTORY_SEPARATOR . $name;
 
@@ -170,6 +169,41 @@ class Dir extends FileCommon
         }
 
         return new static($path);
+    }
+
+    /**
+     * Создать вложенный файл.
+     * @param string $name - название файла
+     * @param bool $force - перезаписать одноименную директорию/файл (если сущ-ет)
+     * @return File|false
+     */
+    public function createFile(string $name, string $content, bool $force = false)
+    {
+        $path = $this->path . DIRECTORY_SEPARATOR . $name;
+
+        if (is_file($path) && !$force) {
+            return false;
+        }
+
+        // Если существует одноименная директория
+        if (is_dir($path)) {
+            if (!$force) {
+                return false;
+            }
+
+            // FORCE-режим: если директория мешает созданию одноименного файла, то удаляем ее
+            if (!rmdir($path)) {
+                return false;
+            }
+        }
+
+        $result = file_put_contents($path, $content);
+
+        if ($result === false) {
+            return false;
+        }
+
+        return new File($path);
     }
 
     /**
