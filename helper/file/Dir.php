@@ -61,7 +61,7 @@ class Dir extends FileCommon
             return false;
         }
 
-        $this->copyInnerFiles($dir, $force);
+        $this->copyInner($dir, $force);
         return $to;
     }
 
@@ -170,7 +170,7 @@ class Dir extends FileCommon
      * @param bool $force - перезапись существующих файлов
      * @return void
      */
-    private function copyInnerFiles(self $dir, bool $force)
+    private function copyInner(self $dir, bool $force)
     {
         $children = $this->getChildren();
 
@@ -182,7 +182,7 @@ class Dir extends FileCommon
                 $innerDir = $dir->addDirectory($name);
 
                 if ($innerDir) {
-                    $child->copyInnerFiles($innerDir, $force);
+                    $child->copyInner($innerDir, $force);
                 }
             }
         }
