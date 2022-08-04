@@ -28,6 +28,14 @@ class File extends FileCommon
     /**
      * {@inheritdoc}
      */
+    public function isFile(): bool
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function copy(string $path, bool $force = false)
     {
         if (

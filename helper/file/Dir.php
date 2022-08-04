@@ -27,6 +27,14 @@ class Dir extends FileCommon
     /**
      * {@inheritdoc}
      */
+    public function isFile(): bool
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function copy(string $path, bool $force = false)
     {
         $path = $this->normalizePath($path);

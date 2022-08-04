@@ -50,15 +50,6 @@ abstract class FileCommon
     }
 
     /**
-     * Является файлом.
-     * @return bool
-     */
-    public function isFile(): bool
-    {
-        return is_file($this->path);
-    }
-
-    /**
      * Переименовать.
      * @param string $name - новое название
      * @return bool
@@ -99,6 +90,12 @@ abstract class FileCommon
         $path = dirname($this->path);
         return new Dir($path);
     }
+
+    /**
+     * Является ли файлом.
+     * @return bool
+     */
+    abstract public function isFile(): bool;
 
     /**
      * Скопировать.
