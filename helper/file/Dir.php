@@ -55,7 +55,7 @@ class Dir extends FileCommon
         }
 
         $to = new static($path);
-        $dir = $to->createDirectory($this->getName());
+        $dir = $to->createDirectory($this->getName(), $force);
 
         if (!$dir) {
             return false;
@@ -138,11 +138,13 @@ class Dir extends FileCommon
 
     /**
      * Добавить вложенную директорию.
+     * Создать вложенную директорию.
      * @param string $name - название директории
+     * @param bool $force - удалить одноименный файл (если он имеется)
      * @return static|false
      * @throws Exception
      */
-    protected function createDirectory(string $name)
+    protected function createDirectory(string $name, bool $force)
     {
         $path = $this->path . DIRECTORY_SEPARATOR . $name;
 
@@ -152,8 +154,15 @@ class Dir extends FileCommon
         }
 
         // Если существует одноименный файл, то директорию создать не получится
-        if (file_exists($path)) {
-            return false;
+        if (is_file($path)) {
+            if (!$force) {
+                return false;
+            }
+
+            // FORCE-режим: если файл мешает созданию одноименной директории, то удаляем его
+            if (!unlink($path)) {
+                return false;
+            }
         }
 
         // Попытка создания директории
@@ -179,7 +188,7 @@ class Dir extends FileCommon
                 $child->copy($dir->getPath(), $force);
             } else {
                 $name = $child->getName();
-                $innerDir = $dir->createDirectory($name);
+                $innerDir = $dir->createDirectory($name, $force);
 
                 if ($innerDir) {
                     $child->copyInner($innerDir, $force);
