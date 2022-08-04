@@ -37,20 +37,21 @@ class Dir extends FileCommon
      */
     public function copy(string $path, bool $force = false)
     {
-        $path = $this->normalizePath($path);
-
         if (!file_exists($this->path)) {
             return false;
         }
+
+        $path = $this->normalizePath($path);
 
         // Если целевая директория не сущ-ет или в ней уже сущ-ет одноименный файл, то раздел скопировать не получится
         if (!is_dir($path)) {
             return false;
         }
 
-        $exists = is_dir($path . DIRECTORY_SEPARATOR . $this->getName());
+        $newPath = $path . DIRECTORY_SEPARATOR . $this->getName();
 
-        if (!$force && $exists) {
+        // Если целевая директория уже сущ-ет, но вызов без FORCE, то не заменяем ее
+        if (!$force && is_dir($newPath)) {
             return false;
         }
 
@@ -104,7 +105,7 @@ class Dir extends FileCommon
             $child->delete();
         }
 
-        return @rmdir($this->path);
+        return rmdir($this->path);
     }
 
     /**
@@ -137,7 +138,6 @@ class Dir extends FileCommon
     }
 
     /**
-     * Добавить вложенную директорию.
      * Создать вложенную директорию.
      * @param string $name - название директории
      * @param bool $force - удалить одноименный файл (если он имеется)
@@ -153,7 +153,7 @@ class Dir extends FileCommon
             return new static($path);
         }
 
-        // Если существует одноименный файл, то директорию создать не получится
+        // Если существует одноименный файл
         if (is_file($path)) {
             if (!$force) {
                 return false;
@@ -165,8 +165,7 @@ class Dir extends FileCommon
             }
         }
 
-        // Попытка создания директории
-        if (!@mkdir($path)) {
+        if (!mkdir($path)) {
             return false;
         }
 
