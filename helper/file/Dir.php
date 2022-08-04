@@ -62,8 +62,50 @@ class Dir extends FileCommon
             return false;
         }
 
-        $this->copyInner($dir, $force);
+        $this->copyInner($dir->getPath(), $force);
         return $to;
+    }
+
+    /**
+     * Скопировать внутренние файлы в текущей директории.
+     * @param string $path - путь до директории
+     * @param bool $force - перезапись существующих файлов
+     * @return bool
+     */
+    public function copyInner(string $path, bool $force = false): bool
+    {
+        $path = $this->normalizePath($path);
+
+        // Если целевая директория не сущ-ет (или вместо директории - одноименный файл), то раздел скопировать не получится
+        if (!is_dir($path)) {
+            return false;
+        }
+
+        // Если копирование происходит в ту же директорию
+        if ($path == $this->path) {
+            return true;
+        }
+
+        $children = $this->getChildren();
+        $result = true;
+
+        foreach ($children as $child) {
+            if ($child->isFile()) {
+                $result = $child->copy($path, $force) ? $result : false;
+            } else {
+                $name = $child->getName();
+                $dir = new static($path);
+                $innerDir = $dir->createDirectory($name, $force);
+
+                if ($innerDir) {
+                    $result = $child->copyInner($innerDir->getPath(), $force) ? $result : false;
+                }
+            }
+        }
+
+        // Без FORCE-режима всегда вернется TRUE.
+        // В FORCE-режиме вернется TRUE только в том случае, если всё скопировано успешно.
+        return !$force || $result;
     }
 
     /**
@@ -158,10 +200,8 @@ class Dir extends FileCommon
                 return false;
             }
 
-            // FORCE-режим: если файл мешает созданию одноименной директории, то удаляем его
-            if (!unlink($path)) {
-                return false;
-            }
+            // FORCE-режим: удаление всего, что мешает создать директорию
+            $this->deleteIfExists($path);
         }
 
         if (!mkdir($path)) {
@@ -192,7 +232,8 @@ class Dir extends FileCommon
             }
 
             // FORCE-режим: если директория мешает созданию одноименного файла, то удаляем ее
-            if (!rmdir($path)) {
+            $dir = new static($path);
+            if (!$dir->delete()) {
                 return false;
             }
         }
@@ -204,29 +245,5 @@ class Dir extends FileCommon
         }
 
         return new File($path);
-    }
-
-    /**
-     * Скопировать внутренние файлы в текущей директории.
-     * @param self $dir - объект с целевой директорией
-     * @param bool $force - перезапись существующих файлов
-     * @return void
-     */
-    private function copyInner(self $dir, bool $force)
-    {
-        $children = $this->getChildren();
-
-        foreach ($children as $child) {
-            if ($child->isFile()) {
-                $child->copy($dir->getPath(), $force);
-            } else {
-                $name = $child->getName();
-                $innerDir = $dir->createDirectory($name, $force);
-
-                if ($innerDir) {
-                    $child->copyInner($innerDir, $force);
-                }
-            }
-        }
     }
 }

@@ -46,18 +46,22 @@ class File extends FileCommon
         }
 
         $newPath = $this->normalizePath($path . DIRECTORY_SEPARATOR . basename($this->path));
-        $exists = file_exists($newPath);
 
         // Если копирование в ту же директорию, где находится файл
         if ($newPath == $this->path) {
             return new static($newPath);
         }
 
-        if ($exists && !$force) {
-            return false;
+        if (file_exists($newPath)) {
+            if (!$force) {
+                return false;
+            }
+
+            // FORCE-режим: удаление всего, что мешает скопировать файл
+            $this->deleteIfExists($newPath);
         }
 
-        $result = @copy($this->path, $newPath);
+        $result = copy($this->path, $newPath);
 
         if (!$result) {
             return false;

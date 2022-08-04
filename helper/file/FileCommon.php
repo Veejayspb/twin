@@ -121,6 +121,26 @@ abstract class FileCommon
     abstract public function delete(): bool;
 
     /**
+     * Рекурсивно удалить директорию/файл, если существуют.
+     * @param string $path
+     * @return bool
+     */
+    protected function deleteIfExists(string $path): bool
+    {
+        if (is_file($path)) {
+            $file = new File($path);
+            return $file->delete();
+        }
+
+        if (is_dir($path)) {
+            $dir = new Dir($path);
+            return $dir->delete();
+        }
+
+        return true; // Ни файла, ни директории не сущ-ет
+    }
+
+    /**
      * Нормализация пути.
      * @param string $path
      * @return string
