@@ -196,7 +196,11 @@ abstract class Asset
 
             $dir = new Dir($from);
 
-            if (!$dir->copy($to)) {
+            if (!is_dir($to) && !mkdir($to, 0775, true)) {
+                throw new Exception(500, "Can't create dir to publish asset: $to");
+            }
+
+            if (!$dir->copyInner($to, $this->assetManager->force)) {
                 throw new Exception(500, "Can't publish asset: $from");
             }
         }
