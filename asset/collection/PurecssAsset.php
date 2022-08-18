@@ -12,6 +12,7 @@ class PurecssAsset extends Asset
      */
     public $css = [
         'main' => 'https://cdn.jsdelivr.net/npm/purecss@2.1.0/build/pure-min.css',
+        'responsive' => 'https://cdn.jsdelivr.net/npm/purecss@2.1.0/build/grids-responsive-min.css',
     ];
 
     /**
