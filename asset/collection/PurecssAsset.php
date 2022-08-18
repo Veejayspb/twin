@@ -11,7 +11,7 @@ class PurecssAsset extends Asset
      * {@inheritdoc}
      */
     public $css = [
-        'main' => 'https://unpkg.com/purecss@2.0.3/build/pure-min.css',
+        'main' => 'https://cdn.jsdelivr.net/npm/purecss@2.1.0/build/pure-min.css',
     ];
 
     /**
@@ -20,7 +20,7 @@ class PurecssAsset extends Asset
     protected function prepareCss(Tag $tag, $key): Tag
     {
         if ($key == 'main') {
-            $tag->integrity = 'sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ';
+            $tag->integrity = 'sha384-yHIFVG6ClnONEA5yB5DJXfW2/KC173DIQrYoZMEtBvGzmf0PKiGyNEqe9N6BNDBH';
             $tag->crossorigin = 'anonymous';
         }
         return $tag;
