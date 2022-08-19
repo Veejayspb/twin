@@ -7,7 +7,7 @@ use twin\helper\Html;
 use twin\helper\Pagination;
 use twin\helper\Url;
 
-class PaginationWidget extends Nav
+class PaginationWidget extends NavWidget
 {
     /**
      * Название GET-параметра с номером страницы по-умолчанию.

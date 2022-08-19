@@ -8,7 +8,7 @@ use twin\helper\Html;
 use twin\helper\Tag;
 use twin\Twin;
 
-class Nav extends Widget
+class NavWidget extends Widget
 {
     /**
      * Пункты меню.
@@ -42,7 +42,7 @@ class Nav extends Widget
     }
 
     /**
-     * Создать пункт меню с указанными настроками.
+     * Создать пункт меню с указанными настройками.
      * @param array $options - настройки
      * @return NavItem
      */
