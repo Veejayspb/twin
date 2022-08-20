@@ -3,7 +3,6 @@
 namespace twin\widget;
 
 use twin\common\Exception;
-use twin\helper\Html;
 use twin\helper\Pagination;
 use twin\helper\Url;
 
@@ -67,6 +66,17 @@ class PaginationWidget extends NavWidget
             return '';
         }
 
+        $this->items = $this->getItems();
+
+        return parent::run();
+    }
+
+    /**
+     * Сформировать список пунктов.
+     * @return NavItem[]
+     */
+    protected function getItems(): array
+    {
         $items = [];
 
         if ($this->prevNext) {
@@ -79,12 +89,12 @@ class PaginationWidget extends NavWidget
             $items[] = $this->next();
         }
 
-        return Html::tag('ul', $this->htmlAttributes, implode(PHP_EOL, $items));
+        return $items;
     }
 
     /**
      * Номера страниц.
-     * @return array
+     * @return NavItem[]
      */
     protected function getNumbers(): array
     {
@@ -95,14 +105,13 @@ class PaginationWidget extends NavWidget
 
         $result = [];
         for ($i = $from; $i <= $to && $i <= $total; $i++) {
-
             $disabled = $i == $current;
 
-            $result[] = $this->getItem([
+            $result[] = new NavItem([
                 'label' => $i,
-                'url' => $this->getUrl($i, $disabled),
+                'url' => $disabled ? '#' : $this->getUrl($i),
                 'visible' => 0 < $i,
-                'active' => $current == $i,
+                'active' => $disabled,
             ]);
         }
         return $result;
@@ -117,9 +126,9 @@ class PaginationWidget extends NavWidget
         $page = $this->pagination->page - 1;
         $disabled = $page <= 0;
 
-        return $this->getItem([
+        return new NavItem([
             'label' => '&laquo;',
-            'url' => $this->getUrl($page, $disabled),
+            'url' => $disabled ? '#' : $this->getUrl($page),
             'active' => false,
             'htmlAttributes' => ['class' => $disabled ? $this->disabledClass : false],
         ]);
@@ -134,9 +143,9 @@ class PaginationWidget extends NavWidget
         $page = $this->pagination->page + 1;
         $disabled = $this->pagination->amount < $page;
 
-        return $this->getItem([
+        return new NavItem([
             'label' => '&raquo;',
-            'url' => $this->getUrl($page, $disabled),
+            'url' => $disabled ? '#' : $this->getUrl($page),
             'active' => false,
             'htmlAttributes' => ['class' => $disabled ? $this->disabledClass : false],
         ]);
@@ -145,13 +154,14 @@ class PaginationWidget extends NavWidget
     /**
      * Сгенерировать адрес страницы.
      * @param int $page - номер страницы
-     * @param bool $disabled - сделать ссылку неактивной
      * @return string
      */
-    private function getUrl(int $page, bool $disabled = false): string
+    private function getUrl(int $page): string
     {
-        if ($disabled) return '#';
-        $page = $page == 1 ? null : $page;
+        if ($page == 1) {
+            $page = null;
+        }
+
         return Url::current([$this->parameter => $page]);
     }
 }
