@@ -36,14 +36,14 @@ abstract class Validator
 
     /**
      * @param Model $model - валидируемая модель
-     * @param array|string $attributes - валидируемый атрибут или атрибуты
+     * @param array $attributes - валидируемые атрибуты
      * @param array $params - значения свойств
      */
-    public function __construct(Model $model, $attributes, array $params = [])
+    public function __construct(Model $model, array $attributes, array $params = [])
     {
         $this->setProperties($params);
         $this->model = $model;
-        $this->attributes = (array)$attributes;
+        $this->attributes = $attributes;
         $this->run();
     }
 
