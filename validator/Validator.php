@@ -59,9 +59,11 @@ abstract class Validator
             if ($value === '') {
                 continue;
             }
+
             if ($this->null && $value === null) {
                 continue;
             }
+
             $this->validateAttribute($attribute);
         }
     }
@@ -74,8 +76,10 @@ abstract class Validator
     protected function validateAttribute(string $attribute)
     {
         $methods = $this->getPublicMethods();
+
         foreach ($methods as $method) {
             $result = call_user_func([$this, $method], $this->model->$attribute, $attribute);
+
             if (!$result) {
                 $this->model->setError($attribute, $this->message);
                 return;
@@ -92,11 +96,13 @@ abstract class Validator
         $reflection = new ReflectionClass($this);
         $methods = $reflection->getMethods();
         $result = [];
+
         foreach ($methods as $method) {
             if ($method->isPublic() && !$method->isStatic() && !$method->isConstructor()) {
                 $result[] = $method->name;
             }
         }
+
         return $result;
     }
 }

@@ -23,7 +23,7 @@ class Exists extends Validator
      */
     public function exists($value): bool
     {
-        $this->message = "Родительская запись не найдена";
+        $this->message = 'Родительская запись не найдена';
 
         return (bool)($this->class)::findByAttributes([
             $this->column => $value,

@@ -48,6 +48,7 @@ class Str extends Range
         if ($this->min === null) {
             return true;
         }
+
         $this->message = "Длина поля \"$label\" должна быть больше или равна $this->min";
         return $this->min <= mb_strlen($value);
     }
@@ -65,6 +66,7 @@ class Str extends Range
         if ($this->max === null) {
             return true;
         }
+
         $this->message = "Длина $label должна быть меньше или равна $this->max";
         return mb_strlen($value) <= $this->max;
     }
@@ -82,6 +84,7 @@ class Str extends Range
         if ($this->pattern === null) {
             return true;
         }
+
         $this->message = "$label не соответствует шаблону";
         return preg_match($this->pattern, $value);
     }

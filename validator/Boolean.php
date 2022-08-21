@@ -12,6 +12,6 @@ class Boolean extends Validator
     public function type($value): bool
     {
         $this->message = 'Должно равняться 0 или 1';
-        return $value == 1 || $value == 0;
+        return in_array($value, [0, 1]);
     }
 }

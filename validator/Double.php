@@ -19,10 +19,12 @@ class Double extends Numeric
         if ($type == 'integer' || $type == 'double') {
             return true;
         }
+
         if ($type == 'string' && preg_match('/^-?[0-9]+(\.[0-9]+)?$/', $value)) {
             $this->model->$attribute = (double)$value;
             return true;
         }
+
         return false;
     }
 }

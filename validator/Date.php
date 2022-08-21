@@ -32,6 +32,7 @@ class Date extends Validator
         if (!preg_match($pattern, $value, $matches)) {
             return false;
         }
+
         return checkdate($matches[2], $matches[3], $matches[1]);
     }
 }

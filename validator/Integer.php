@@ -19,10 +19,12 @@ class Integer extends Numeric
         if ($type == 'integer') {
             return true;
         }
+
         if ($type == 'string' && preg_match('/^-?[0-9]+$/', $value)) {
             $this->model->$attribute = (int)$value;
             return true;
         }
+
         return false;
     }
 }

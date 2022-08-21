@@ -29,6 +29,7 @@ abstract class Numeric extends Range
         if ($this->min === null) {
             return true;
         }
+
         $this->message = "$label должен быть больше или равен $this->min";
         return $this->min <= $value;
     }
@@ -46,6 +47,7 @@ abstract class Numeric extends Range
         if ($this->max === null) {
             return true;
         }
+
         $this->message = "$label должен быть меньше или равен $this->max";
         return $value <= $this->max;
     }
