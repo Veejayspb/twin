@@ -53,12 +53,6 @@ class View extends Component
     public $title = 'Page title';
 
     /**
-     * Заголовок H1.
-     * @var string
-     */
-    public $h1 = 'Header';
-
-    /**
      * Хлебные крошки.
      * @var array
      */
