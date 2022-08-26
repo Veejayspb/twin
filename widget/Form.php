@@ -101,6 +101,20 @@ class Form extends Widget
     }
 
     /**
+     * Поле для электронной почты.
+     * @param Model $model - модель
+     * @param string $attribute - название атрибута
+     * @param array $htmlAttributes - HTML-атрибуты
+     * @return string
+     */
+    public function inputEmail(Model $model, string $attribute, array $htmlAttributes = []): string
+    {
+        $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
+        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
+        return Html::inputEmail($model->$attribute, $htmlAttributes);
+    }
+
+    /**
      * Поле для пароля.
      * @param Model $model - модель
      * @param string $attribute - название атрибута

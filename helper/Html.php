@@ -127,6 +127,19 @@ class Html
     }
 
     /**
+     * Поле для электронной почты.
+     * @param string $value - значение
+     * @param array $htmlAttributes - HTML-атрибуты
+     * @return string
+     */
+    public static function inputEmail($value, array $htmlAttributes = []): string
+    {
+        $htmlAttributes['type'] = $htmlAttributes['type'] ?? 'email';
+        $htmlAttributes['value'] = $value;
+        return static::tagOpen('input', $htmlAttributes);
+    }
+
+    /**
      * Поле для пароля.
      * @param string $value - значение
      * @param array $htmlAttributes - HTML-атрибуты
