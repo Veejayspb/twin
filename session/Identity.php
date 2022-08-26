@@ -24,11 +24,11 @@ class Identity
     private $id;
 
     /**
-     * Случайная строка для генерации токена.
+     * Произвольная строка для генерации токена.
      * @var string
      * @see createToken()
      */
-    protected $randomString = 'you should change this string';
+    protected $secretString = 'you should change this string';
 
     /**
      * Инстанс текущего класса.
@@ -105,7 +105,7 @@ class Identity
      */
     protected function createToken(int $id): string
     {
-        $str = md5($id) . $this->randomString;
+        $str = md5($id) . $this->secretString;
         return md5($str);
     }
 
