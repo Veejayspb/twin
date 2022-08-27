@@ -36,7 +36,7 @@ class Identity
      */
     protected static $instance;
 
-    private function __construct()
+    protected function __construct()
     {
         $this->restoreId();
     }

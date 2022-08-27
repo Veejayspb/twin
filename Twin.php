@@ -93,7 +93,7 @@ class Twin
      */
     private static $aliases = [];
 
-    private function __construct()
+    protected function __construct()
     {
         mb_internal_encoding('UTF-8');
     }

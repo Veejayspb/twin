@@ -26,7 +26,7 @@ abstract class Controller
      */
     public static $instance;
 
-    private function __construct() {}
+    protected function __construct() {}
 
     private function __clone() {}
 
