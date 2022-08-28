@@ -7,6 +7,7 @@ use twin\helper\file\FileUploaded;
 Request::$scheme = $_SERVER['REQUEST_SCHEME'];
 Request::$host = $_SERVER['HTTP_HOST'];
 Request::$url = $_SERVER['REQUEST_URI'];
+Request::$ip = $_SERVER['REMOTE_ADDR'];
 
 class Request
 {
@@ -27,6 +28,12 @@ class Request
      * @var string - /index.php?id=1
      */
     public static $url;
+
+    /**
+     * IP адрес.
+     * @var string
+     */
+    public static $ip;
 
     /**
      * Проверка на AJAX-запрос.
