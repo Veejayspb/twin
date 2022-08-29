@@ -4,10 +4,10 @@ namespace twin\helper;
 
 use twin\helper\file\FileUploaded;
 
-Request::$scheme = $_SERVER['REQUEST_SCHEME'];
-Request::$host = $_SERVER['HTTP_HOST'];
-Request::$url = $_SERVER['REQUEST_URI'];
-Request::$ip = $_SERVER['REMOTE_ADDR'];
+Request::$scheme = $_SERVER['REQUEST_SCHEME'] ?? null;
+Request::$host = $_SERVER['HTTP_HOST'] ?? null;
+Request::$url = $_SERVER['REQUEST_URI'] ?? null;
+Request::$ip = $_SERVER['REMOTE_ADDR'] ?? null;
 
 class Request
 {
