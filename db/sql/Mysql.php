@@ -42,6 +42,7 @@ class Mysql extends Sql
         if (!isset($properties['dbname'], $properties['username'], $properties['password'])) {
             throw new Exception(500, self::class . ' - required properties not specified: dbname, username, password');
         }
+
         parent::__construct($properties);
     }
 
@@ -52,11 +53,16 @@ class Mysql extends Sql
     {
         $sql = 'SHOW TABLES';
         $items = $this->query($sql, [], true);
-        if ($items === false) return false;
+
+        if ($items === false) {
+            return false;
+        }
+
         $result = [];
         foreach ($items as $item) {
             $result[] = array_pop($item);
         }
+
         return $result;
     }
 
@@ -75,12 +81,17 @@ class Mysql extends Sql
     public function getAutoIncrement(string $table)
     {
         $items = $this->query("SHOW FULL COLUMNS FROM `$table`", [], true);
-        if ($items === false) return false;
+
+        if ($items === false) {
+            return false;
+        }
+
         foreach ($items as $item) {
             if (array_key_exists('Extra', $item) && $item['Extra'] == 'auto_increment') {
                 return $item['Field'];
             }
         }
+
         return false;
     }
 
@@ -97,7 +108,7 @@ class Mysql extends Sql
      */
     protected function connect(): bool
     {
-        $this->connection = $dbh = new PDO("mysql:host=localhost;dbname=$this->dbname", $this->username, $this->password);
+        $this->connection = new PDO("mysql:host=localhost;dbname=$this->dbname", $this->username, $this->password);
         return true;
     }
 }

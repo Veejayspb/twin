@@ -32,6 +32,7 @@ class Sqlite extends Sql
         if (!isset($properties['dbname'], $properties['path'])) {
             throw new Exception(500, self::class . ' - required properties not specified: dbname, path');
         }
+
         parent::__construct($properties);
     }
 
@@ -52,10 +53,12 @@ class Sqlite extends Sql
     {
         $items = $this->query("PRAGMA table_info ('$table')", [], true);
         $result = [];
+
         foreach ($items as $item) {
             if (empty($item['pk'])) continue;
             $result[] = $item['name'];
         }
+
         return $result;
     }
 
@@ -67,11 +70,13 @@ class Sqlite extends Sql
         $items = $this->query("PRAGMA table_info ('$table')", [], true);
         $result = null;
         $count = 0;
+
         foreach ($items as $item) {
             if (empty($item['pk'])) continue;
             if (mb_strtoupper($item['type']) == 'INTEGER') $count++;
             $result = $item['name'];
         }
+
         return $count == 1 && $result !== null ? $result : false;
     }
 
@@ -88,7 +93,10 @@ class Sqlite extends Sql
      */
     protected function connect(): bool
     {
-        if (!$this->createDir()) return false;
+        if (!$this->createDir()) {
+            return false;
+        }
+
         $path = $this->getFilePath();
         $this->connection = new PDO("sqlite:$path");
         return true;
@@ -101,9 +109,11 @@ class Sqlite extends Sql
     private function createDir(): bool
     {
         $path = Twin::getAlias($this->path);
+        
         if (!file_exists($path)) {
             return mkdir($path, 0775, true);
         }
+
         return true;
     }
 

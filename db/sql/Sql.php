@@ -54,9 +54,11 @@ abstract class Sql extends Database
             return $this->queryLog[$key];
         } else {
             $data = $this->directQuery($sql, $params);
+
             if ($data !== false) {
                 $this->queryLog[$key] = $data;
             }
+
             return $data;
         }
     }
@@ -70,7 +72,11 @@ abstract class Sql extends Database
     public function execute(string $sql, array $params = []): bool
     {
         $statement = $this->connection->prepare($sql);
-        if ($statement === false) return false;
+
+        if ($statement === false) {
+            return false;
+        }
+
         return $statement->execute($params);
     }
 
@@ -93,7 +99,10 @@ abstract class Sql extends Database
         $sql = "INSERT INTO `$table` (`$keysStr`) VALUES ($phStr)";
         $result = $this->execute($sql, array_combine($placeholders, $data));
 
-        if ($result === false) return false;
+        if ($result === false) {
+            return false;
+        }
+
         return $this->connection->lastInsertId();
     }
 
@@ -152,6 +161,7 @@ abstract class Sql extends Database
         $sql.= empty($keys) ? '' : ', ';
         $sql.= implode(', ', $keys);
         $sql.= ");";
+
         return $this->execute($sql);
     }
 
@@ -225,11 +235,13 @@ abstract class Sql extends Database
             return true;
         }
 
-        return false !== $this->insert($migration->manager->table, [
+        $result = $this->insert($migration->manager->table, [
             'hash' => $migration->getHash(),
             'name' => $migration->class,
             'timestamp' => time(),
         ]);
+
+        return $result !== false;
     }
 
     /**
@@ -285,9 +297,17 @@ abstract class Sql extends Database
     protected function directQuery(string $sql, array $params = [])
     {
         $statement = $this->connection->prepare($sql);
-        if ($statement === false) return false;
+
+        if ($statement === false) {
+            return false;
+        }
+
         $result = $statement->execute($params);
-        if ($result === false) return false;
+
+        if ($result === false) {
+            return false;
+        }
+
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 }
