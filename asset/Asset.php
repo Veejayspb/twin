@@ -162,7 +162,7 @@ abstract class Asset
      * @param string $address - исходный адрес
      * @return string
      */
-    private function prepareAddress(string $address): string
+    protected function prepareAddress(string $address): string
     {
         $keys = array_keys($this->placeholders);
         return str_replace($keys, $this->placeholders, $address);
@@ -174,7 +174,7 @@ abstract class Asset
      * @throws Exception
      * @see $placeholders
      */
-    private function publish()
+    protected function publish()
     {
         foreach ($this->publish as $name => $path) {
             $from = Twin::getAlias($path);
