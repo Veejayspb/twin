@@ -148,7 +148,7 @@ class File extends FileCommon
      * Извлечь расширение файла из названия.
      * @return string|bool
      */
-    protected function getExtensionFromName()
+    public function getExtensionFromName()
     {
         preg_match('/\.(.+)$/', $this->getName(), $matches);
         return $matches ? $matches[1] : false;
