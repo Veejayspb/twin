@@ -153,4 +153,19 @@ class File extends FileCommon
         preg_match('/\.(.+)$/', $this->getName(), $matches);
         return $matches ? $matches[1] : false;
     }
+
+    /**
+     * {@inheritdoc}
+     * @param bool $withoutExt - исключить расширение в названии
+     */
+    public function getName(bool $withoutExt = false): string
+    {
+        $name = parent::getName();
+
+        if ($withoutExt) {
+            return preg_replace('/\.[^.]+$/', '', $name);
+        }
+
+        return $name;
+    }
 }
