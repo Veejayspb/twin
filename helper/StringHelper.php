@@ -38,4 +38,15 @@ class StringHelper
         $str = str_replace('#', '%d', $str);
         return sprintf($str, $num);
     }
+
+    /**
+     * Извлечь расширение из названия файла.
+     * @param string $name - название или путь до файла
+     * @return string|null
+     */
+    public static function getFileExt(string $name)
+    {
+        preg_match('/\.([a-z0-9]+)$/', $name, $matches);
+        return $matches ? $matches[1] : null;
+    }
 }
