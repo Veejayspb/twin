@@ -44,7 +44,7 @@ class StringHelper
      * @param string $name - название или путь до файла
      * @return string|null
      */
-    public static function getFileExt(string $name)
+    public static function getExtFromName(string $name)
     {
         preg_match('/\.([a-z0-9]+)$/', $name, $matches);
         return $matches ? $matches[1] : null;

@@ -3,6 +3,7 @@
 namespace twin\helper\file;
 
 use twin\common\Exception;
+use twin\helper\StringHelper;
 
 /**
  * Хелпер для манипуляции с файлами.
@@ -129,7 +130,7 @@ class File extends FileCommon
     public function getExtension()
     {
         // Извлечь из названия
-        $ext = $this->getExtensionFromName();
+        $ext = $this->getExtFromName();
         if ($ext) {
             return $ext;
         }
@@ -148,10 +149,10 @@ class File extends FileCommon
      * Извлечь расширение файла из названия.
      * @return string|bool
      */
-    public function getExtensionFromName()
+    public function getExtFromName()
     {
-        preg_match('/\.(.+)$/', $this->getName(), $matches);
-        return $matches ? $matches[1] : false;
+        $name = $this->getName();
+        return StringHelper::getExtFromName($name);
     }
 
     /**
