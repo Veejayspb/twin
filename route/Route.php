@@ -2,7 +2,7 @@
 
 namespace twin\route;
 
-final class Route
+class Route
 {
     /**
      * Паттерн зарезервированных названий параметров.
@@ -18,6 +18,11 @@ final class Route
      * Действие по-умолчанию.
      */
     const ACTION = 'index';
+
+    /**
+     * Названия зарезервированных названий параметров.
+     */
+    const RESERVED_PARAMS = ['module', 'controller', 'action'];
 
     /**
      * Модуль.
@@ -44,11 +49,6 @@ final class Route
     public $params = [];
 
     /**
-     * Названия зарезервированных параметров.
-     */
-    const RESERVED_PARAMS = ['module', 'controller', 'action'];
-
-    /**
      * @param string|null $module - модуль
      * @param string $controller - контроллер
      * @param string $action - действие
@@ -60,10 +60,12 @@ final class Route
         string $action = self::ACTION,
         array $params = []
     ) {
-        foreach (static::RESERVED_PARAMS as $name) {
-            $this->$name = $$name;
-        }
-        $this->setParams($params);
+        $this->module = $module;
+        $this->controller = $controller;
+        $this->action = $action;
+
+        ksort($params);
+        $this->params = $params;
     }
 
     /**
@@ -120,7 +122,7 @@ final class Route
     public function setRoute(string $route)
     {
         $parts = explode('/', $route);
-        $reservedParams = array_reverse(static::RESERVED_PARAMS); // Потому что разбор роута начинаем с действия (action)
+        $reservedParams = array_reverse(static::RESERVED_PARAMS); // Потому что разбор роута начинаем с конца (action)
 
         foreach ($reservedParams as $name) {
             $part = array_pop($parts);
@@ -138,16 +140,5 @@ final class Route
     public static function validParam(string $value): bool
     {
         return preg_match(self::PATTERN, $value);
-    }
-
-    /**
-     * Установка значений незарезервированных параметров.
-     * @param array $params - параметры
-     * @return void
-     */
-    private function setParams(array $params)
-    {
-        ksort($params);
-        $this->params = $params;
     }
 }
