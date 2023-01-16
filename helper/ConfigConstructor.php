@@ -39,6 +39,7 @@ class ConfigConstructor
      * Подключить системный конфиг.
      * @param string $type - тип конфига web|console
      * @return static
+     * @todo: Избавиться от данного метода. Вместо него использовать parent со ссылкой на системный конфиг.
      */
     public function registerDefault(string $type): self
     {
@@ -59,6 +60,28 @@ class ConfigConstructor
     public function data(): array
     {
         return $this->data;
+    }
+
+    /**
+     * Вернуть объект с указанным компонентом.
+     * @param string $name - название компонента
+     * @return Component|null
+     */
+    public function getComponent(string $name)
+    {
+        $data = $this->data['components'] ?? [];
+
+        if (!array_key_exists($name, $data)) {
+            return null;
+        }
+
+        $component = $this->createComponent($data[$name]);
+
+        if (!$component) {
+            return null;
+        }
+
+        return $component;
     }
 
     /**

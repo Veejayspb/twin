@@ -4,6 +4,7 @@ namespace twin\helper;
 
 use twin\controller\Controller;
 use twin\route\Route;
+use twin\route\RouteManager;
 use twin\Twin;
 
 class Url
@@ -30,7 +31,7 @@ class Url
         $r = new Route($r->module, $r->controller, $r->action);
         $r->setRoute($route);
         $r->params = $params;
-        $url = Twin::app()->route->createUrl($r);
+        $url = static::getRouter()->createUrl($r);
 
         if ($absolute) {
             $host = static::host();
@@ -49,7 +50,7 @@ class Url
     {
         $r = clone Controller::$instance->route;
         $r->params = $params + $r->params;
-        $url = Twin::app()->route->createUrl($r);
+        $url = static::getRouter()->createUrl($r);
 
         if ($absolute) {
             $host = static::host();
@@ -66,7 +67,7 @@ class Url
      */
     public static function home(array $params = [], bool $absolute = false): string
     {
-        return static::to(Twin::app()->route->home, $params, $absolute);
+        return static::to(static::getRouter()->home, $params, $absolute);
     }
 
     /**
@@ -77,7 +78,7 @@ class Url
      */
     public static function login(array $params = [], bool $absolute = false): string
     {
-        return static::to(Twin::app()->route->login, $params, $absolute);
+        return static::to(static::getRouter()->login, $params, $absolute);
     }
 
     /**
@@ -88,6 +89,15 @@ class Url
      */
     public static function logout(array $params = [], bool $absolute = false): string
     {
-        return static::to(Twin::app()->route->logout, $params, $absolute);
+        return static::to(static::getRouter()->logout, $params, $absolute);
+    }
+
+    /**
+     * Вернуть роутер для генерации адреса.
+     * @return RouteManager
+     */
+    protected static function getRouter(): RouteManager
+    {
+        return Twin::app()->route;
     }
 }
