@@ -7,7 +7,7 @@ use twin\common\Component;
 use twin\common\Exception;
 use twin\controller\ConsoleController;
 use twin\controller\WebController;
-use twin\helper\ArrayHelper;
+use twin\helper\ConfigConstructor;
 use twin\helper\Request;
 use twin\migration\MigrationManager;
 use twin\route\Route;
@@ -45,9 +45,6 @@ class Twin
      * Паттерн алиаса.
      */
     const ALIAS_PATTERN = '@[a-z]+';
-
-    const TYPE_WEB = 'web';
-    const TYPE_CONSOLE = 'console';
 
     /**
      * Название приложения.
@@ -132,7 +129,7 @@ class Twin
             if ($this->running) die;
             $this->running = true;
 
-            $this->registerConfig($config, static::TYPE_WEB);
+            $this->registerConfig($config, ConfigConstructor::WEB);
 
             $route = $this->route->parseUrl(Request::$url);
             if ($route === false) {
@@ -166,7 +163,7 @@ class Twin
             if ($this->running) die;
             $this->running = true;
 
-            $this->registerConfig($config, static::TYPE_CONSOLE);
+            $this->registerConfig($config, ConfigConstructor::CONSOLE);
 
             global $argv;
 
@@ -268,69 +265,6 @@ class Twin
     }
 
     /**
-     * Регистрация конфига.
-     * @param array $config - данные пользовательского конфига
-     * @param string $type - тип конфига web|console
-     * @return void
-     */
-    private function registerConfig(array $config, string $type)
-    {
-        // Склейка пользовательского конфига с конфигом по-умолчанию.
-        $default = $this->getDefaultConfig($type);
-        $config = ArrayHelper::merge(
-            $this->prepareConfig($default),
-            $this->prepareConfig($config)
-        );
-
-        // Присвоение свойств.
-        $this->name = $config['name'];
-        $this->language = $config['language'];
-        $this->params = $config['params'];
-
-        // Регистрация компонентов.
-        foreach ($config['components'] as $name => $properties) {
-            $class = array_key_exists('class', $properties) ? $properties['class'] : '';
-            $this->registerComponent($name, $class, $properties);
-        }
-    }
-
-    /**
-     * Подготовить конфиг, добавив родительские элементы.
-     * @param array $config - данные конфига
-     * @return array
-     * @throws Exception
-     */
-    private function prepareConfig(array $config): array
-    {
-        if (!array_key_exists('parent', $config)) {
-            return $config;
-        }
-
-        $parentConfig = static::import($config['parent']);
-
-        if ($parentConfig === false) {
-            throw new Exception(500, "Can't find config file: " . $config['parent']);
-        } else {
-            unset($config['parent']);
-        }
-
-        $parent = $this->prepareConfig($parentConfig);
-        return ArrayHelper::merge($parent, $config);
-    }
-
-    /**
-     * Конфиг по-умолчанию.
-     * @param string $type - тип конфига web|console
-     * @return array
-     */
-    private function getDefaultConfig(string $type): array
-    {
-        $alias = "@twin/config/$type.php";
-        $config = static::import($alias);
-        return $config ?: [];
-    }
-
-    /**
      * Установить алиас пути.
      * @param string $alias - "@alias"
      * @param string $path - path/to/alias
@@ -412,5 +346,30 @@ class Twin
         }
 
         static::import($alias, true);
+    }
+
+    /**
+     * Регистрация конфига.
+     * @param array $config - данные пользовательского конфига
+     * @param string $type - тип конфига web|console
+     * @return void
+     */
+    private function registerConfig(array $config, string $type)
+    {
+        // Генерация конфига
+        $config = (new ConfigConstructor($config))
+            ->registerDefault($type)
+            ->data();
+
+        // Присвоение свойств
+        $this->name = $config['name'];
+        $this->language = $config['language'];
+        $this->params = $config['params'];
+
+        // Регистрация компонентов
+        foreach ($config['components'] as $name => $properties) {
+            $class = array_key_exists('class', $properties) ? $properties['class'] : '';
+            $this->registerComponent($name, $class, $properties);
+        }
     }
 }
