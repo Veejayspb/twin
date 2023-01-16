@@ -2,6 +2,7 @@
 
 namespace twin\helper;
 
+use twin\common\Component;
 use twin\Twin;
 
 /**
@@ -58,6 +59,44 @@ class ConfigConstructor
     public function data(): array
     {
         return $this->data;
+    }
+
+    /**
+     * Вернуть объекты с компонентами.
+     * @return Component[]
+     */
+    public function getComponents(): array
+    {
+        $data = $this->data['components'] ?? [];
+        $result = [];
+
+        foreach ((array)$data as $name => $properties) {
+            $component = $this->createComponent($properties);
+            if (!$component) continue;
+            $result[$name] = $component;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Создать объект с компонентом на основе переданных свойств.
+     * @param array $properties - свойства компонента
+     * @return Component|bool - FALSE в случае невозможности создать компонент
+     */
+    protected function createComponent(array $properties)
+    {
+        $class = $properties['class'] ?? null;
+
+        if (
+            $class === null ||
+            !class_exists($class) ||
+            !is_subclass_of($class, Component::class)
+        ) {
+            return false;
+        }
+
+        return new $class($properties);
     }
 
     /**

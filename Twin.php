@@ -185,30 +185,17 @@ class Twin
     /**
      * Регистрация компонента.
      * @param string $name - название компонента
-     * @param string $class - название класса
-     * @param array $properties - свойства
+     * @param Component $component - объект с компонентом
      * @return void
      * @throws Exception
      */
-    public function registerComponent(string $name, string $class, array $properties = [])
+    public function registerComponent(string $name, Component $component)
     {
-        if (!class_exists($class)) {
-            throw new Exception(500, "Component's class doesn't exists: $class");
-        }
-
-        if (!is_subclass_of($class, Component::class)) {
-            throw new Exception(500, "Component $class must extends " . Component::class);
-        }
-
         if (array_key_exists($name, $this->components)) {
             throw new Exception(500, "Component with name $name already exists");
         }
 
-        if (array_key_exists('class', $properties)) {
-            unset($properties['class']);
-        }
-
-        $this->components[$name] = new $class($properties);
+        $this->components[$name] = $component;
     }
 
     /**
@@ -357,19 +344,17 @@ class Twin
     private function registerConfig(array $config, string $type)
     {
         // Генерация конфига
-        $config = (new ConfigConstructor($config))
-            ->registerDefault($type)
-            ->data();
+        $config = new ConfigConstructor($config);
+        $data = $config->registerDefault($type)->data();
 
         // Присвоение свойств
-        $this->name = $config['name'];
-        $this->language = $config['language'];
-        $this->params = $config['params'];
+        $this->name = $data['name'];
+        $this->language = $data['language'];
+        $this->params = $data['params'];
 
         // Регистрация компонентов
-        foreach ($config['components'] as $name => $properties) {
-            $class = array_key_exists('class', $properties) ? $properties['class'] : '';
-            $this->registerComponent($name, $class, $properties);
+        foreach ($config->getComponents() as $name => $component) {
+            $this->registerComponent($name, $component);
         }
     }
 }
