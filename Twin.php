@@ -18,8 +18,8 @@ use twin\view\View;
 Twin::setAlias('@root', dirname(__DIR__, 3));
 Twin::setAlias('@twin', __DIR__);
 Twin::setAlias('@web', $_SERVER['DOCUMENT_ROOT']);
-Twin::setAlias('@app', dirname($_SERVER['DOCUMENT_ROOT']));
-Twin::setAlias('@runtime', '@app/runtime');
+Twin::setAlias('@self', dirname($_SERVER['DOCUMENT_ROOT']));
+Twin::setAlias('@runtime', '@self/runtime');
 Twin::setAlias('@vendor', '@root/vendor');
 
 spl_autoload_register([Twin::class, 'autoload'], true, true);
@@ -38,7 +38,7 @@ class Twin
     /**
      * Версия приложения.
      */
-    const VERSION = '0.0.8';
+    const VERSION = '0.1.0';
 
     /**
      * Паттерн алиаса.

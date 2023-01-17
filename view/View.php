@@ -37,7 +37,7 @@ class View extends Component
      * Путь/алиас к директории с видами.
      * @var string
      */
-    public $path = '@app/view';
+    public $path = '@self/view';
 
     /**
      * Расположение скриптов - в BODY.
