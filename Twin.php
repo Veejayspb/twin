@@ -26,7 +26,6 @@ spl_autoload_register([Twin::class, 'autoload'], true, true);
 
 /**
  * Class Twin
- * @package core
  *
  * @property RouteManager $route
  * @property Session $session

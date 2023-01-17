@@ -10,7 +10,6 @@ use twin\model\query\Query;
 
 /**
  * Class ActiveJsonModel
- * @package core\model\active
  *
  * @method static Json db()
  */

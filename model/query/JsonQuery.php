@@ -7,7 +7,6 @@ use twin\model\active\ActiveJsonModel;
 
 /**
  * Class JsonQuery
- * @package core\model\query
  *
  * @property Json $component
  */

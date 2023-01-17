@@ -12,7 +12,6 @@ namespace twin\helper;
  * В кач-ве значения атрибута может выступать массив. Результатом будет склейка всех значений через пробел.
  *
  * Class Tag
- * @package twin\helper
  */
 class Tag
 {

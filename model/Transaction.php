@@ -7,7 +7,6 @@ use twin\db\sql\Sql;
 
 /**
  * Class Transaction
- * @package twin\model
  *
  * @property bool $running
  * @property bool $error

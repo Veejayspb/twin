@@ -9,7 +9,6 @@ use twin\model\active\ActiveSqlModel;
 
 /**
  * Class SqlQuery
- * @package core\model\query
  *
  * @property Sql $component
  */

@@ -10,7 +10,6 @@ use twin\model\Transaction;
 
 /**
  * Class ActiveJsonModel
- * @package core\model\active
  *
  * @property Transaction $transaction
  * @method static Sql db()

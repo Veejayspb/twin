@@ -10,7 +10,6 @@ use twin\Twin;
 
 /**
  * Class Migration
- * @package twin\migration
  *
  * @property-read string $name
  * @property-read DateTime $date
