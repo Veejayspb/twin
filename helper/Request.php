@@ -8,6 +8,7 @@ Request::$scheme = $_SERVER['REQUEST_SCHEME'] ?? null;
 Request::$host = $_SERVER['HTTP_HOST'] ?? null;
 Request::$url = $_SERVER['REQUEST_URI'] ?? null;
 Request::$ip = $_SERVER['REMOTE_ADDR'] ?? null;
+Request::$method = $_SERVER['REQUEST_METHOD'] ?? null;
 
 class Request
 {
@@ -34,6 +35,12 @@ class Request
      * @var string
      */
     public static $ip;
+
+    /**
+     * Метод.
+     * @var string - GET, POST, PUT, DELETE
+     */
+    public static $method;
 
     /**
      * Проверка на AJAX-запрос.
