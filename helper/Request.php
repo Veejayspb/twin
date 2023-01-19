@@ -9,6 +9,7 @@ Request::$host = $_SERVER['HTTP_HOST'] ?? null;
 Request::$url = $_SERVER['REQUEST_URI'] ?? null;
 Request::$ip = $_SERVER['REMOTE_ADDR'] ?? null;
 Request::$method = $_SERVER['REQUEST_METHOD'] ?? null;
+Request::$headers = getallheaders() ?: [];
 
 class Request
 {
@@ -41,6 +42,12 @@ class Request
      * @var string - GET, POST, PUT, DELETE
      */
     public static $method;
+
+    /**
+     * Заголовки.
+     * @var array
+     */
+    public static $headers = [];
 
     /**
      * Проверка на AJAX-запрос.
