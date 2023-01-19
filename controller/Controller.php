@@ -47,7 +47,7 @@ abstract class Controller
      */
     protected static function getController(string $namespace, string $controller): self
     {
-        $controller.= static::POSTFIX;
+        $controller = static::getControllerName($controller);
         $controllerName = "$namespace\\$controller";
 
         if (!class_exists($controllerName)) {
@@ -59,6 +59,39 @@ abstract class Controller
         }
 
         return new $controllerName;
+    }
+
+    /**
+     * Преобразовать название контроллера в роуте в название класса.
+     * @param string $name - some-name
+     * @return string - SomeNameController
+     */
+    protected static function getControllerName(string $name): string
+    {
+        $parts = explode('-', $name);
+
+        $parts = array_map(function ($part) {
+            return ucfirst($part);
+        }, $parts);
+
+        return implode('', $parts) . static::POSTFIX;
+    }
+
+    /**
+     * Преобразовать название действия в роуте в название метода.
+     * @param string $name - some-name
+     * @return string - someName
+     */
+    protected static function getActionName(string $name): string
+    {
+        $parts = explode('-', $name);
+
+        $parts = array_map(function ($part) {
+            return ucfirst($part);
+        }, $parts);
+
+        $name = implode('', $parts);
+        return lcfirst($name);
     }
 
     /**
@@ -84,7 +117,7 @@ abstract class Controller
 
         foreach ($methods as $method) {
             if ($method->isStatic()) continue;
-            $result[] = mb_strtolower($method->name);
+            $result[] = $method->name;
         }
 
         return $result;

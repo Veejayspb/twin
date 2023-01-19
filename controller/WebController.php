@@ -35,17 +35,19 @@ abstract class WebController extends Controller
         $controller->route = $route;
         $controller->init();
 
-        if (!$controller->actionExists($route->action)) {
+        $action = static::getActionName($route->action);
+
+        if (!$controller->actionExists($action)) {
             throw new Exception(404);
         }
 
         // Права доступа.
-        if (!$controller->access($route->action)) {
+        if (!$controller->access($action)) {
             throw new Exception(403);
         }
 
-        $controller->beforeAction($route->action);
-        $controller->callAction($route->action, $route->params);
+        $controller->beforeAction($action);
+        $controller->callAction($action, $route->params);
     }
 
     /**

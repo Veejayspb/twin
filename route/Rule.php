@@ -34,7 +34,7 @@ class Rule implements RuleInterface
 
         $strRoute = $this->fillRoute($placeholders); // Строковый роут вида: module/controller/action или controller/action
 
-        if (!preg_match('/^([a-z]+\/)?[a-z]+\/[a-z]+$/', $strRoute)) {
+        if (!preg_match(Route::ROUTE_PATTERN, $strRoute)) {
             return false;
         }
 

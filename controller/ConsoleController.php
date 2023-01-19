@@ -48,12 +48,14 @@ abstract class ConsoleController extends Controller
         $controller->route = $route;
         $controller->init();
 
-        if (!$controller->actionExists($route->action)) {
+        $action = static::getActionName($route->action);
+
+        if (!$controller->actionExists($action)) {
             throw new Exception(404);
         }
 
-        $controller->beforeAction($route->action);
-        $controller->callAction($route->action, $route->params);
+        $controller->beforeAction($action);
+        $controller->callAction($action, $route->params);
     }
 
     /**

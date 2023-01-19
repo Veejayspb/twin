@@ -7,7 +7,12 @@ class Route
     /**
      * Паттерн зарезервированных названий параметров.
      */
-    const PATTERN = '/^[a-z]+$/';
+    const PATTERN = '[a-z\-]+';
+
+    /**
+     * Паттерн текстового роута.
+     */
+    const ROUTE_PATTERN = '/^(' . self::PATTERN . '\/)?' . self::PATTERN . '\/' . self::PATTERN . '$/';
 
     /**
      * Контроллер по-умолчанию.
@@ -139,6 +144,7 @@ class Route
      */
     public static function validParam(string $value): bool
     {
-        return preg_match(self::PATTERN, $value);
+        $pattern = '/^' . self::PATTERN . '$/';
+        return preg_match($pattern, $value);
     }
 }
