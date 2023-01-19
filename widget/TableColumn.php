@@ -2,10 +2,12 @@
 
 namespace twin\widget;
 
-use twin\common\Component;
+use twin\common\SetPropertiesTrait;
 
-class TableColumn extends Component
+class TableColumn
 {
+    use SetPropertiesTrait;
+
     /**
      * Название столбца.
      * @var string
@@ -29,4 +31,12 @@ class TableColumn extends Component
      * @var bool
      */
     public $sort = true;
+
+    /**
+     * @param array $properties
+     */
+    public function __construct(array $properties = [])
+    {
+        $this->setProperties($properties);
+    }
 }
