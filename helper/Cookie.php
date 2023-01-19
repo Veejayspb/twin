@@ -2,9 +2,7 @@
 
 namespace twin\helper;
 
-use twin\common\Component;
-
-class Cookie extends Component
+class Cookie
 {
     /**
      * Префикс параметров.
@@ -25,9 +23,11 @@ class Cookie extends Component
     public static function set(string $name, string $value, int $expire = 0, string $path = '/', string $domain = '', bool $secure = false, bool $httpOnly = false): bool
     {
         $name = static::getName($name);
+
         if ($expire != 0) {
             $expire+= time();
         }
+
         return setcookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
     }
 
@@ -40,7 +40,7 @@ class Cookie extends Component
     public static function get(string $name, $default = null)
     {
         $name = static::getName($name);
-        return array_key_exists($name, $_COOKIE) ? $_COOKIE[$name] : $default;
+        return $_COOKIE[$name] ?? $default;
     }
 
     /**
@@ -51,10 +51,12 @@ class Cookie extends Component
     public static function delete(string $name): bool
     {
         $name = static::getName($name);
+
         if (array_key_exists($name, $_COOKIE)) {
             unset($_COOKIE[$name]);
             return setcookie($name, null, -1, '/');
         }
+
         return true;
     }
 
