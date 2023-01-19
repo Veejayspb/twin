@@ -49,12 +49,15 @@ abstract class Controller
     {
         $controller.= static::POSTFIX;
         $controllerName = "$namespace\\$controller";
+
         if (!class_exists($controllerName)) {
             throw new Exception(404);
         }
+
         if (!is_subclass_of($controllerName, static::class)) {
             throw new Exception(500, "$controllerName must extends " . static::class);
         }
+
         return new $controllerName;
     }
 
@@ -78,10 +81,12 @@ abstract class Controller
         $class = new ReflectionClass($this);
         $methods = $class->getMethods(ReflectionMethod::IS_PUBLIC);
         $result = [];
+
         foreach ($methods as $method) {
             if ($method->isStatic()) continue;
             $result[] = mb_strtolower($method->name);
         }
+
         return $result;
     }
 
