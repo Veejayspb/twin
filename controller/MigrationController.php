@@ -44,9 +44,7 @@ class MigrationController extends ConsoleController
         $result = [];
 
         foreach ($migrations as $migration) {
-            if ($migration->isApplied()) {
-                continue;
-            }
+            if ($migration->isApplied()) continue;
             $result[] = $migration->class;
         }
 

@@ -30,6 +30,7 @@ abstract class WebController extends Controller
         if (self::class != get_called_class()) {
             throw new Exception(500, 'Denied to run controller not from class: ' . self::class);
         }
+
         $controller = self::$instance = static::getController($namespace, $route->controller);
         $controller->view = $view;
         $controller->route = $route;
@@ -66,12 +67,14 @@ abstract class WebController extends Controller
         $reflection = new ReflectionClass(static::class);
         $namespace = $reflection->getNamespaceName();
         $module = Twin::app()->route->getModule($namespace);
+
         if ($module === false) {
             throw new Exception(500, "Can't create url to " . static::class . ' controller');
         }
 
         $controller = preg_replace('/Controller$/', '', $reflection->getShortName());
         $controller = strtolower($controller);
+
         if (!Route::validParam($controller)) {
             throw new Exception(500, "Wrong controller name: $controller");
         }
@@ -92,6 +95,7 @@ abstract class WebController extends Controller
         $reflection = new ReflectionMethod($this, $action);
         $parameters = $reflection->getParameters();
         $result = [];
+
         foreach ($parameters as $parameter) {
             if (array_key_exists($parameter->name, $params)) {
                 $result[$parameter->name] = $params[$parameter->name];
@@ -99,6 +103,7 @@ abstract class WebController extends Controller
                 $result[$parameter->name] = null;
             }
         }
+
         call_user_func_array([$this, $action], $result);
     }
 

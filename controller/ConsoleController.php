@@ -44,6 +44,7 @@ abstract class ConsoleController extends Controller
         if (self::class != get_called_class()) {
             throw new Exception(500, 'Denied to run controller not from class: ' . self::class);
         }
+
         $controller = static::$instance = static::getController($namespace, $route->controller);
         $controller->route = $route;
         $controller->init();
@@ -67,6 +68,7 @@ abstract class ConsoleController extends Controller
         $reflection = new ReflectionMethod($this, $action);
         $parameters = $reflection->getParameters();
         $result = [];
+
         foreach ($parameters as $i => $parameter) {
             if (array_key_exists($i, $params)) {
                 $result[] = $params[$i];
@@ -74,6 +76,7 @@ abstract class ConsoleController extends Controller
                 throw new Exception(400, 'Required property is not specified: ' . $parameter->name);
             }
         }
+
         call_user_func_array([$this, $action], $result);
     }
 }
