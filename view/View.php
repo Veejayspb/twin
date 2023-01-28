@@ -81,9 +81,11 @@ class View extends Component
     {
         $alias = $this->path . DIRECTORY_SEPARATOR . $route . '.php';
         $path = Twin::getAlias($alias);
+
         if (!is_file($path)) {
             throw new Exception(500, "View file not found: $path");
         }
+
         return $this->renderPath($path, $data);
     }
 
@@ -98,11 +100,13 @@ class View extends Component
         $content = $this->render($route, $data);
         $layout = $this->layoutDir . '/' . $this->layout;
         $content = $this->render($layout, ['content' => $content]);
+
         $content = str_replace(
             [static::HEAD, static::BODY],
             [$this->head(), $this->body()],
             $content
         );
+
         return $content;
     }
 
