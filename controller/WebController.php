@@ -49,7 +49,9 @@ abstract class WebController extends Controller
         }
 
         $controller->beforeAction($action);
-        $controller->callAction($action, $route->params);
+        $data = $controller->callAction($action, $route->params);
+
+        echo Twin::app()->response->run($data);
     }
 
     /**
@@ -105,7 +107,7 @@ abstract class WebController extends Controller
             }
         }
 
-        call_user_func_array([$this, $action], $result);
+        return call_user_func_array([$this, $action], $result);
     }
 
     /**
@@ -122,11 +124,11 @@ abstract class WebController extends Controller
      * Рендер вида с шаблоном.
      * @param string $route - строковой роут
      * @param array $data - данные
-     * @return void
+     * @return string
      */
-    protected function render(string $route, array $data = [])
+    protected function render(string $route, array $data = []): string
     {
-        echo $this->view->renderLayout($route, $data);
+        return $this->view->renderLayout($route, $data);
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 
 use twin\migration\MigrationManager;
+use twin\response\ResponseConsole;
 
 return [
     'parent' => '@twin/config/common.php',
@@ -18,6 +19,9 @@ return [
         ],
         'migration' => [
             'class' => MigrationManager::class,
+        ],
+        'response' => [
+            'class' => ResponseConsole::class,
         ],
     ],
 ];

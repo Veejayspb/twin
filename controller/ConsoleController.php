@@ -5,6 +5,7 @@ namespace twin\controller;
 use twin\common\Exception;
 use twin\route\Route;
 use ReflectionMethod;
+use twin\Twin;
 
 abstract class ConsoleController extends Controller
 {
@@ -56,7 +57,9 @@ abstract class ConsoleController extends Controller
         }
 
         $controller->beforeAction($action);
-        $controller->callAction($action, $route->params);
+        $data = $controller->callAction($action, $route->params);
+
+        echo Twin::app()->response->run($data);
     }
 
     /**
@@ -77,6 +80,6 @@ abstract class ConsoleController extends Controller
             }
         }
 
-        call_user_func_array([$this, $action], $result);
+        return call_user_func_array([$this, $action], $result);
     }
 }

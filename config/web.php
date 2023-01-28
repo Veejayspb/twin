@@ -1,6 +1,7 @@
 <?php
 
 use twin\asset\AssetManager;
+use twin\response\ResponseHtml;
 use twin\session\Session;
 use twin\view\View;
 
@@ -29,6 +30,9 @@ return [
         ],
         'session' => [
             'class' => Session::class,
+        ],
+        'response' => [
+            'class' => ResponseHtml::class,
         ],
     ],
 ];

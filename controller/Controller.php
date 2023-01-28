@@ -134,7 +134,7 @@ abstract class Controller
      * Вызов действия.
      * @param string $action - название действия
      * @param array $params - параметры
-     * @return void
+     * @return mixed
      */
     abstract protected function callAction(string $action, array $params);
 }

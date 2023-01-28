@@ -1,5 +1,6 @@
 <?php
 
+use twin\response\Response;
 use twin\route\RouteManager;
 
 return [
@@ -9,6 +10,9 @@ return [
     'components' => [
         'route' => [
             'class' => RouteManager::class,
+        ],
+        'response' => [
+            'class' => Response::class,
         ],
     ],
 ];

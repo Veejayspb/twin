@@ -10,6 +10,7 @@ use twin\controller\WebController;
 use twin\helper\ConfigConstructor;
 use twin\helper\Request;
 use twin\migration\MigrationManager;
+use twin\response\Response;
 use twin\route\Route;
 use twin\route\RouteManager;
 use twin\session\Session;
@@ -32,13 +33,14 @@ spl_autoload_register([Twin::class, 'autoload'], true, true);
  * @property View $view
  * @property AssetManager $asset
  * @property MigrationManager $migration
+ * @property Response $response
  */
 class Twin
 {
     /**
      * Версия приложения.
      */
-    const VERSION = '0.1.0';
+    const VERSION = '0.2.0';
 
     /**
      * Паттерн алиаса.
