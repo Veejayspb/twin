@@ -5,6 +5,7 @@ namespace twin\controller;
 use ReflectionClass;
 use ReflectionMethod;
 use twin\common\Exception;
+use twin\helper\Header;
 use twin\route\Route;
 use twin\Twin;
 use twin\view\View;
@@ -135,17 +136,18 @@ abstract class WebController extends Controller
      */
     protected function redirect(string $url)
     {
-        header("Location: $url");
+        Header::instance()->add('Location', $url);
         exit;
     }
 
     /**
      * Обновление.
+     * @param int $delay - задержка перед перезагрузкой
      * @return void
      */
-    protected function refresh()
+    protected function refresh(int $delay = 0)
     {
-        header('Refresh:0');
+        Header::instance()->add('Refresh', $delay);
         exit;
     }
 }
