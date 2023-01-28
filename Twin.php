@@ -186,14 +186,9 @@ class Twin
      * @param string $name - название компонента
      * @param Component $component - объект с компонентом
      * @return void
-     * @throws Exception
      */
     public function registerComponent(string $name, Component $component)
     {
-        if (array_key_exists($name, $this->components)) {
-            throw new Exception(500, "Component with name $name already exists");
-        }
-
         $this->components[$name] = $component;
     }
 
