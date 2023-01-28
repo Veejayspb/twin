@@ -40,13 +40,18 @@ class AssetManager extends Component
      */
     public function register(string $name): Asset
     {
-        if ($this->has($name)) return $this->assets[$name];
+        if ($this->has($name)) {
+            return $this->assets[$name];
+        }
+
         if (!class_exists($name)) {
             throw new Exception(500, "Can't found asset class: $name");
         }
+
         if (!is_subclass_of($name, Asset::class)) {
             throw new Exception(500, "$name must extends " . Asset::class);
         }
+
         $asset = new $name($this); /* @var Asset $asset */
 
         // Регистрация asset, от которых зависит текущий
@@ -93,9 +98,11 @@ class AssetManager extends Component
     {
         $result = [];
         $assets = $this->getAssets();
+
         foreach ($assets as $asset) {
             $result = array_merge($result, $asset->css());
         }
+
         return $result;
     }
 
@@ -107,9 +114,11 @@ class AssetManager extends Component
     {
         $result = [];
         $assets = $this->getAssets();
+
         foreach ($assets as $asset) {
             $result = array_merge($result, $asset->js());
         }
+
         return $result;
     }
 }

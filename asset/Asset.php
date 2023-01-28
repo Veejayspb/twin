@@ -94,13 +94,16 @@ abstract class Asset
     public function css(): array
     {
         $result = [];
+
         foreach ($this->css as $key => $address) {
             $tag = new Tag('link', [
                 'href' => $this->prepareAddress($address),
                 'rel' => 'stylesheet',
             ]);
+
             $result[] = $this->prepareCss($tag, $key);
         }
+
         return $result;
     }
 
@@ -111,12 +114,15 @@ abstract class Asset
     public function js(): array
     {
         $result = [];
+
         foreach ($this->js as $key => $address) {
             $tag = new Tag('script', [
                 'src' => $this->prepareAddress($address),
             ]);
+
             $result[] = $this->prepareJs($tag, $key);
         }
+
         return $result;
     }
 
@@ -152,7 +158,10 @@ abstract class Asset
      */
     protected function hash(string $path)
     {
-        if (!is_dir($path)) return false;
+        if (!is_dir($path)) {
+            return false;
+        }
+
         $str = $path . filemtime($path);
         return sprintf('%x', crc32($str . Twin::VERSION));
     }
