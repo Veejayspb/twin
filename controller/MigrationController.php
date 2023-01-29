@@ -23,12 +23,13 @@ class MigrationController extends ConsoleController
      * Создать новую миграцию.
      * @param string $component - название компонента с БД
      * @param string $name - название миграции
+     * @return array
      * @throws Exception
      */
     public function create($component, $name)
     {
         if ($this->getManager()->create($component, $name)) {
-            echo 'Migration file was created';
+            return ['Migration file was created'];
         } else {
             throw new Exception(400, 'Error while creating new migration file');
         }
@@ -37,11 +38,12 @@ class MigrationController extends ConsoleController
     /**
      * Вывести список новых миграций.
      * @param string $component - название компонента с БД
+     * @return array
      */
     public function status($component)
     {
         $migrations = $this->getManager()->getMigrations($component);
-        $result = [];
+        $result = ['New migrations:'];
 
         foreach ($migrations as $migration) {
             if ($migration->isApplied()) continue;
@@ -49,10 +51,9 @@ class MigrationController extends ConsoleController
         }
 
         if (empty($result)) {
-            echo 'No new migrations';
+            return ['No new migrations'];
         } else {
-            echo 'New migrations:' . PHP_EOL;
-            echo implode(PHP_EOL, $result);
+            return $result;
         }
     }
 
@@ -62,6 +63,7 @@ class MigrationController extends ConsoleController
      * Если ничего не указано, то применятся все доступные миграции.
      * @param string $component - название компонента с БД
      * @param string|null $name - полное название
+     * @return array
      * @throws Exception
      */
     public function apply($component, $name = null)
@@ -85,29 +87,33 @@ class MigrationController extends ConsoleController
 
         // Накат миграций
         $migrations = $manager->getMigrations($component);
-        $count = $this->applyUp($target, $migrations);
+        $up = $this->applyUp($target, $migrations);
 
         // Откат миграций
         $migrationsReverse = array_reverse($migrations);
-        $count+= $this->applyDown($target, $migrationsReverse);
+        $down = $this->applyDown($target, $migrationsReverse);
 
-        if ($count) {
-            echo 'Successfully migrated to: ' . $target->class;
+        $result = array_merge($up, $down);
+
+        if ($result) {
+            $result[] = 'Successfully migrated to: ' . $target->class;
         } else {
-            echo 'No migrations to apply';
+            $result[] = 'No migrations to apply';
         }
+
+        return $result;
     }
 
     /**
      * Накат всех миграций до указанной.
      * @param Migration $target - целевая миграция, до которой накатываем
      * @param Migration[] $migrations - полный список миграций
-     * @return int - кол-во примененных миграций
+     * @return array
      * @throws Exception
      */
-    protected function applyUp(Migration $target, array $migrations): int
+    protected function applyUp(Migration $target, array $migrations): array
     {
-        $count = 0;
+        $result = [];
 
         foreach ($migrations as $migration) {
             if (!$migration->date->diff($target->date)->invert) {
@@ -117,27 +123,26 @@ class MigrationController extends ConsoleController
                 }
 
                 if ($migration->up()) {
-                    $count++;
-                    echo "Migration up: $migration->class " . PHP_EOL;
+                    $result[] = "Migration up: $migration->class ";
                 } else {
                     throw new Exception(500, "Error while migrating up: $migration->class");
                 }
             }
         }
 
-        return $count;
+        return $result;
     }
 
     /**
      * Откат всех миграций до указанной.
      * @param Migration $target - целевая миграция, до которой откатываем
      * @param Migration[] $migrations - полный список миграций
-     * @return int
+     * @return array
      * @throws Exception
      */
-    protected function applyDown(Migration $target, array $migrations): int
+    protected function applyDown(Migration $target, array $migrations): array
     {
-        $count = 0;
+        $result = [];
 
         foreach ($migrations as $migration) {
 
@@ -147,15 +152,14 @@ class MigrationController extends ConsoleController
 
             if ($migration->date->diff($target->date)->invert) {
                 if ($migration->down()) {
-                    $count++;
-                    echo "Migration down: $migration->class" . PHP_EOL;
+                    $result[] = "Migration down: $migration->class";
                 } else {
                     throw new Exception(500, "Error while migrating down: $migration->class");
                 }
             }
         }
 
-        return $count;
+        return $result;
     }
 
     /**

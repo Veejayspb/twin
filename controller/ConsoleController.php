@@ -3,6 +3,7 @@
 namespace twin\controller;
 
 use twin\common\Exception;
+use twin\response\ResponseConsole;
 use twin\route\Route;
 use ReflectionMethod;
 use twin\Twin;
@@ -18,19 +19,30 @@ abstract class ConsoleController extends Controller
     ];
 
     /**
+     * {@inheritdoc}
+     */
+    protected function init()
+    {
+        parent::init();
+        Twin::app()->registerComponent('response', new ResponseConsole);
+    }
+
+    /**
      * Ссылка на список команд.
+     * @return array
      */
     public function index()
     {
-        $this->help();
+        return $this->help();
     }
 
     /**
      * Список команд.
+     * @return array
      */
     public function help()
     {
-        echo implode(PHP_EOL, $this->help);
+        return $this->help;
     }
 
     /**

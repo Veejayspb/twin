@@ -6,6 +6,7 @@ use ReflectionClass;
 use ReflectionMethod;
 use twin\common\Exception;
 use twin\helper\Header;
+use twin\response\ResponseHtml;
 use twin\route\Route;
 use twin\Twin;
 use twin\view\View;
@@ -17,6 +18,15 @@ abstract class WebController extends Controller
      * @var View
      */
     protected $view;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function init()
+    {
+        parent::init();
+        Twin::app()->registerComponent('response', new ResponseHtml);
+    }
 
     /**
      * Вызвать указанные контроллер/действие.
