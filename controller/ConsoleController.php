@@ -24,7 +24,7 @@ abstract class ConsoleController extends Controller
     protected function init()
     {
         parent::init();
-        Twin::app()->registerComponent('response', new ResponseConsole);
+        Twin::app()->setComponent('response', new ResponseConsole);
     }
 
     /**

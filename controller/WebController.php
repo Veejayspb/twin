@@ -25,7 +25,7 @@ abstract class WebController extends Controller
     protected function init()
     {
         parent::init();
-        Twin::app()->registerComponent('response', new ResponseHtml);
+        Twin::app()->setComponent('response', new ResponseHtml);
     }
 
     /**

@@ -189,7 +189,7 @@ class Twin
      * @param Component $component - объект с компонентом
      * @return void
      */
-    public function registerComponent(string $name, Component $component)
+    public function setComponent(string $name, Component $component)
     {
         $this->components[$name] = $component;
     }
@@ -350,7 +350,7 @@ class Twin
 
         // Регистрация компонентов
         foreach ($config->getComponents() as $name => $component) {
-            $this->registerComponent($name, $component);
+            $this->setComponent($name, $component);
         }
     }
 }
