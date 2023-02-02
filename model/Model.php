@@ -17,12 +17,14 @@ abstract class Model
     /**
      * @param string $name
      * @return mixed
+     * @throws Exception
      */
     public function __get($name)
     {
         if ($this->isServiceAttribute($name)) {
             throw new Exception(500, "Undefined attribute $name");
         }
+
         return $this->$name;
     }
 
@@ -30,12 +32,14 @@ abstract class Model
      * @param string $name
      * @param mixed $value
      * @return void
+     * @throws Exception
      */
     public function __set($name, $value)
     {
         if ($this->isServiceAttribute($name)) {
             throw new Exception(500, "Attribute $name doesn't exists");
         }
+
         $this->$name = $value;
     }
 
@@ -126,11 +130,16 @@ abstract class Model
         }
 
         $result = [];
+
         foreach ($attributes as $attribute) {
             $message = $this->getError($attribute);
-            if ($message === null) continue;
+
+            if ($message === null) {
+                continue;
+            }
             $result[$attribute] = $message;
         }
+
         return $result;
     }
 
@@ -187,10 +196,12 @@ abstract class Model
     {
         $properties = (new ReflectionClass($this))->getProperties(ReflectionProperty::IS_PUBLIC);
         $result = [];
+
         foreach ($properties as $property) {
             if ($property->isStatic()) continue;
             $result[] = $property->getName();
         }
+
         return $result;
     }
 
@@ -208,6 +219,7 @@ abstract class Model
             if (!in_array($name, $names)) continue;
             $this->$name = $value;
         }
+
         return $this;
     }
 
@@ -221,10 +233,12 @@ abstract class Model
         $names = $this->attributeNames();
         $skip = !empty($attributes);
         $result = [];
+
         foreach ($names as $name) {
             if ($skip && !in_array($name, $attributes)) continue;
             $result[$name] = $this->$name;
         }
+
         return $result;
     }
 
@@ -281,6 +295,7 @@ abstract class Model
         if (!$this->beforeValidate()) {
             return false;
         }
+
         $this->rules();
 
         // Сбросить ошибки атрибутов, для которых не требуется валидация
@@ -289,6 +304,7 @@ abstract class Model
                 array_keys($this->getAttributes()),
                 $attributes
             );
+            
             $this->clearErrors($clearAttributes);
         }
 
