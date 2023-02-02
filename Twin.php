@@ -204,18 +204,26 @@ class Twin
     }
 
     /**
-     * Инстанцировать объект.
-     * @param string $class - название класса
-     * @param array $properties - свойства класса
+     * Задать свойства для объекта.
+     * @param string|object $class - если передано название класса, то объект будет инстанцирован
+     * @param array $properties - публичные свойства класса
      * @return object
+     * @throws Exception
      */
-    public static function createObject(string $class, array $properties = [])
+    public static function createObject($class, array $properties = [])
     {
-        if ($class == self::class) {
+        if (is_a($class, self::class, true)) {
             return self::app();
         }
 
-        $object = new $class;
+        if (is_object($class)) {
+            $object = $class;
+        } elseif (is_string($class)) {
+            $object = new $class;
+        } else {
+            throw new Exception(500, 'Wrong parameter type, class has type: ' . gettype($class));
+        }
+
         $vars = get_object_vars($object);
 
         foreach ($properties as $name => $value) {
