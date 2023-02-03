@@ -49,4 +49,16 @@ class StringHelper
         preg_match('/\.([a-z0-9]+)$/', $name, $matches);
         return $matches ? $matches[1] : null;
     }
+
+    /**
+     * Определить является ли атрибут объекта сервисным.
+     * _attribute - сервисный
+     *  attribute - обычный
+     * @param string $name - название атрибута
+     * @return bool
+     */
+    public static function isServiceAttribute(string $name): bool
+    {
+        return substr($name, 0, 1) == '_';
+    }
 }

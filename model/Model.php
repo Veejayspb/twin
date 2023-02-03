@@ -7,6 +7,7 @@ use ReflectionProperty;
 use twin\behavior\Behavior;
 use twin\behavior\BehaviorOwnerInterface;
 use twin\common\Exception;
+use twin\helper\StringHelper;
 
 abstract class Model implements BehaviorOwnerInterface
 {
@@ -35,7 +36,7 @@ abstract class Model implements BehaviorOwnerInterface
     public function __get($name)
     {
         // Запрещено возвращать значение сервисных атрибутов.
-        if ($this->isServiceAttribute($name)) {
+        if (StringHelper::isServiceAttribute($name)) {
             throw new Exception(500, "Undefined attribute $name");
         }
 
@@ -62,7 +63,7 @@ abstract class Model implements BehaviorOwnerInterface
      */
     public function __set($name, $value)
     {
-        if ($this->isServiceAttribute($name)) {
+        if (StringHelper::isServiceAttribute($name)) {
             throw new Exception(500, "Attribute $name doesn't exists");
         }
 
@@ -381,14 +382,4 @@ abstract class Model implements BehaviorOwnerInterface
      * @return void
      */
     protected function afterValidate() {}
-
-    /**
-     * Является ли атрибут сервисным.
-     * @param string $name - название атрибута
-     * @return bool
-     */
-    private function isServiceAttribute(string $name): bool
-    {
-        return substr($name, 0, 1) == '_';
-    }
 }
