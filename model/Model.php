@@ -4,9 +4,11 @@ namespace twin\model;
 
 use ReflectionClass;
 use ReflectionProperty;
+use twin\behavior\Behavior;
+use twin\behavior\BehaviorOwnerInterface;
 use twin\common\Exception;
 
-abstract class Model
+abstract class Model implements BehaviorOwnerInterface
 {
     /**
      * Ошибки валидации.
@@ -15,17 +17,41 @@ abstract class Model
     protected $_errors = [];
 
     /**
+     * Подключенные поведения.
+     * @var Behavior[]
+     */
+    protected $_behaviors = [];
+
+    public function __construct()
+    {
+        $this->behaviors();
+    }
+
+    /**
      * @param string $name
      * @return mixed
      * @throws Exception
      */
     public function __get($name)
     {
+        // Запрещено возвращать значение сервисных атрибутов.
         if ($this->isServiceAttribute($name)) {
             throw new Exception(500, "Undefined attribute $name");
         }
 
-        return $this->$name;
+        // В первую очередь выводится значение реального атрибута, если он сущ-ет.
+        if ($this->hasAttribute($name)) {
+            return $this->$name;
+        }
+
+        // Попытка найти поведение с указанным названием.
+        $behavior = $this->getBehavior($name);
+
+        if ($behavior) {
+            return $behavior;
+        }
+
+        throw new Exception(500, "Undefined attribute $name");
     }
 
     /**
@@ -312,6 +338,28 @@ abstract class Model
 
         return !$this->hasErrors();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBehavior(string $name)
+    {
+        return $this->_behaviors[$name] ?? null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBehavior(string $name, Behavior $behavior)
+    {
+        $this->_behaviors[$name] = $behavior;
+    }
+
+    /**
+     * Регистрация поведений.
+     * @return void
+     */
+    protected function behaviors() {}
 
     /**
      * Вызов набора пользовательских валидаторов.

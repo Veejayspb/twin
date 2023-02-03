@@ -40,6 +40,8 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
      */
     public function __construct(bool $newRecord = true)
     {
+        parent::__construct();
+        
         $this->_newRecord = $newRecord;
         $this->_relations = $this->relations();
     }
