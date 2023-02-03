@@ -50,9 +50,11 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
     public function __get($name)
     {
         $relation = $this->getRelation($name);
+
         if ($relation) {
             return $relation->getData($this);
         }
+
         return parent::__get($name);
     }
 
@@ -62,9 +64,11 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
     public function __set($name, $value)
     {
         $relation = $this->getRelation($name);
+
         if ($relation) {
             $relation->setData($value);
         }
+
         parent::__set($name, $value);
     }
 
@@ -74,9 +78,12 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
      */
     public static function tableName(): string
     {
-        $result = (new ReflectionClass(static::class))->getShortName();
+        $reflection = new ReflectionClass(static::class);
+
+        $result = $reflection->getShortName();
         $result = preg_replace('/([A-Z])/', '_$1', $result);
         $result = mb_strtolower($result);
+
         return trim($result, '_');
     }
 
@@ -92,6 +99,7 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
         if (!is_subclass_of($component, Database::class)) {
             throw new Exception(500, 'Component ' . static::$_component . ' must extends ' . Database::class);
         }
+
         return $component;
     }
 
@@ -114,6 +122,7 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
         if (!$this->_original && !$this->isNewRecord()) {
             $this->_original = $this->getAttributes();
         }
+
         return $this;
     }
 
@@ -154,11 +163,13 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
 
         $names = $this->attributeNames();
         $result = [];
+
         foreach ($names as $name) {
             $original = $this->getOriginalAttribute($name);
             if ($this->$name == $original) continue;
             $result[] = $name;
         }
+
         return $result;
     }
 
@@ -174,6 +185,7 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
         foreach ($attributes as $attribute) {
             if (in_array($attribute, $changed)) return true;
         }
+
         return false;
     }
 
@@ -196,6 +208,7 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
         if ($validate && !$this->validate($attributes)) {
             return false;
         }
+
         if (!$this->beforeSave()) {
             return false;
         }
@@ -210,6 +223,7 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
             $this->afterSave();
             $this->_original = $this->getOriginalAttributes() + $this->getAttributes($attributes);
         }
+
         return $result;
     }
 
@@ -228,6 +242,7 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
         } else {
             $attributes = $this->getOriginalAttributes();
         }
+
         return $this->setAttributes($attributes, false);
     }
 
