@@ -65,42 +65,6 @@ abstract class WebController extends Controller
     }
 
     /**
-     * Создать адрес.
-     * @param string $action - название действия
-     * @param array $params - параметры
-     * @return string
-     * @throws Exception
-     */
-    public static function createUrl(string $action, array $params = []): string
-    {
-        if (__CLASS__ == static::class) {
-            throw new Exception(500, "Can't call method from " . __CLASS__);
-        }
-
-        $reflection = new ReflectionClass(static::class);
-        $namespace = $reflection->getNamespaceName();
-        $module = Twin::app()->route->getModule($namespace);
-
-        if ($module === false) {
-            throw new Exception(500, "Can't create url to " . static::class . ' controller');
-        }
-
-        $controller = preg_replace('/Controller$/', '', $reflection->getShortName());
-        $controller = strtolower($controller);
-
-        if (!Route::validParam($controller)) {
-            throw new Exception(500, "Wrong controller name: $controller");
-        }
-
-        if (!Route::validParam($action)) {
-            throw new Exception(500, "Wrong action name: $action");
-        }
-
-        $route = new Route($module, $controller, $action, $params);
-        return Twin::app()->route->createUrl($route);
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function callAction(string $action, array $params)
