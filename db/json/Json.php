@@ -4,8 +4,8 @@ namespace twin\db\json;
 
 use twin\common\Exception;
 use twin\db\Database;
+use twin\helper\Alias;
 use twin\migration\Migration;
-use twin\Twin;
 
 class Json extends Database
 {
@@ -178,7 +178,7 @@ class Json extends Database
     private function getDatabasePath(): string
     {
         $alias = $this->path . DIRECTORY_SEPARATOR . $this->dbname;
-        return Twin::getAlias($alias);
+        return Alias::get($alias);
     }
 
     /**

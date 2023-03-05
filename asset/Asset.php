@@ -3,6 +3,7 @@
 namespace twin\asset;
 
 use twin\common\Exception;
+use twin\helper\Alias;
 use twin\helper\file\Dir;
 use twin\helper\Tag;
 use twin\Twin;
@@ -186,7 +187,7 @@ abstract class Asset
     protected function publish()
     {
         foreach ($this->publish as $name => $path) {
-            $from = Twin::getAlias($path);
+            $from = Alias::get($path);
             $hash = $this->hash($from);
 
             if (!$hash) {
@@ -194,7 +195,7 @@ abstract class Asset
             }
 
             $alias = $this->assetManager->publicationPath . DIRECTORY_SEPARATOR . $hash;
-            $to = Twin::getAlias($alias);
+            $to = Alias::get($alias);
             $placeholder = '{' . $name . '}';
             $this->placeholders[$placeholder] = $this->assetManager->webPath . '/' . $hash;
 

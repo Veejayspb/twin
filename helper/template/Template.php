@@ -2,7 +2,7 @@
 
 namespace twin\helper\template;
 
-use twin\Twin;
+use twin\helper\Alias;
 
 class Template
 {
@@ -17,7 +17,7 @@ class Template
      */
     public function __construct(string $path)
     {
-        $this->path = Twin::getAlias($path);
+        $this->path = Alias::get($path);
     }
 
     /**
@@ -38,7 +38,7 @@ class Template
         }
 
         $content = $this->replacePlaceholders($content, $params);
-        $path = Twin::getAlias($path);
+        $path = Alias::get($path);
         $dir = dirname($path);
 
         if (!is_dir($dir)) {

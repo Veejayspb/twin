@@ -2,7 +2,7 @@
 
 namespace twin\helper\file;
 
-use twin\Twin;
+use twin\helper\Alias;
 
 /**
  * Хелпер для сопоставления mime-type и расширения файла.
@@ -58,7 +58,7 @@ final class FileType
     protected static function getData(): array
     {
         if (self::$data === null) {
-            $path = Twin::getAlias('@twin/config/mime-types.php');
+            $path = Alias::get('@twin/config/mime-types.php');
             self::$data = is_file($path) ? require $path : [];
         }
 

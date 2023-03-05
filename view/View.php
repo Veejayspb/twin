@@ -4,6 +4,7 @@ namespace twin\view;
 
 use twin\common\Component;
 use twin\common\Exception;
+use twin\helper\Alias;
 use twin\helper\Html;
 use twin\Twin;
 
@@ -80,7 +81,7 @@ class View extends Component
     public function render(string $route, array $data = []): string
     {
         $alias = $this->path . DIRECTORY_SEPARATOR . $route . '.php';
-        $path = Twin::getAlias($alias);
+        $path = Alias::get($alias);
 
         if (!is_file($path)) {
             throw new Exception(500, "View file not found: $path");
@@ -101,13 +102,11 @@ class View extends Component
         $layout = $this->layoutDir . '/' . $this->layout;
         $content = $this->render($layout, ['content' => $content]);
 
-        $content = str_replace(
+        return str_replace(
             [static::HEAD, static::BODY],
             [$this->head(), $this->body()],
             $content
         );
-
-        return $content;
     }
 
     /**

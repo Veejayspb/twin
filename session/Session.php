@@ -3,7 +3,7 @@
 namespace twin\session;
 
 use twin\common\Component;
-use twin\Twin;
+use twin\helper\Alias;
 
 class Session extends Component
 {
@@ -59,7 +59,7 @@ class Session extends Component
     protected function getSavePath()
     {
         if ($this->savePath === null) return false;
-        return Twin::getAlias($this->savePath);
+        return Alias::get($this->savePath);
     }
 
     /**

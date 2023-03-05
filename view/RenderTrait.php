@@ -2,7 +2,7 @@
 
 namespace twin\view;
 
-use twin\Twin;
+use twin\helper\Alias;
 
 trait RenderTrait
 {
@@ -14,7 +14,7 @@ trait RenderTrait
      */
     public function renderPath(string $alias, array $data = []): string
     {
-        $path = Twin::getAlias($alias);
+        $path = Alias::get($alias);
 
         if (file_exists($path)) {
             extract($data);

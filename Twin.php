@@ -7,6 +7,7 @@ use twin\common\Component;
 use twin\common\Exception;
 use twin\controller\ConsoleController;
 use twin\controller\WebController;
+use twin\helper\Alias;
 use twin\helper\ConfigConstructor;
 use twin\helper\Request;
 use twin\migration\MigrationManager;
@@ -16,14 +17,15 @@ use twin\route\RouteManager;
 use twin\session\Session;
 use twin\view\View;
 
-Twin::setAlias('@root', dirname(__DIR__, 3));
-Twin::setAlias('@twin', __DIR__);
-Twin::setAlias('@web', $_SERVER['DOCUMENT_ROOT']);
-Twin::setAlias('@self', dirname($_SERVER['DOCUMENT_ROOT']));
-Twin::setAlias('@runtime', '@self/runtime');
-Twin::setAlias('@vendor', '@root/vendor');
-
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'helper' . DIRECTORY_SEPARATOR . 'Alias.php';
 spl_autoload_register([Twin::class, 'autoload'], true, true);
+
+Alias::set('@root', dirname(__DIR__, 3));
+Alias::set('@twin', __DIR__);
+Alias::set('@web', $_SERVER['DOCUMENT_ROOT']);
+Alias::set('@self', dirname($_SERVER['DOCUMENT_ROOT']));
+Alias::set('@runtime', '@self/runtime');
+Alias::set('@vendor', '@root/vendor');
 
 /**
  * Class Twin
@@ -40,12 +42,7 @@ class Twin
     /**
      * Версия приложения.
      */
-    const VERSION = '0.2.1';
-
-    /**
-     * Паттерн алиаса.
-     */
-    const ALIAS_PATTERN = '@[a-z]+';
+    const VERSION = '0.2.2';
 
     /**
      * Название приложения.
@@ -83,14 +80,6 @@ class Twin
      */
     protected static $instance;
     
-    /**
-     * Список алиасов путей.
-     * @var array
-     * @see setAlias()
-     * @see getAlias()
-     */
-    private static $aliases = [];
-
     protected function __construct()
     {
         mb_internal_encoding('UTF-8');
@@ -256,54 +245,6 @@ class Twin
     }
 
     /**
-     * Установить алиас пути.
-     * @param string $alias - "@alias"
-     * @param string $path - path/to/alias
-     * @return bool
-     * @see $aliases
-     */
-    public static function setAlias(string $alias, string $path): bool
-    {
-        $pattern = '/^' . static::ALIAS_PATTERN . '$/';
-
-        if (preg_match($pattern, $alias)) {
-            self::$aliases[$alias] = $path;
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Вернуть путь до алиаса.
-     * @param string $alias - "@alias"
-     * @return string - path/to/alias
-     * @see $aliases
-     */
-    public static function getAlias(string $alias): string
-    {
-        $pattern = '/^' . static::ALIAS_PATTERN . '/';
-        preg_match($pattern, $alias, $matches);
-
-        if (!isset($matches[0])) {
-            return $alias;
-        }
-
-        $key = $matches[0];
-
-        if (!array_key_exists($key, self::$aliases)) {
-            return $alias;
-        }
-        $result = str_replace($key, self::$aliases[$key], $alias);
-
-        // Если в пути остался алиас, то выполнить повторное преобразование
-        if (preg_match($pattern, $result)) {
-            return static::getAlias($result);
-        }
-        return $result;
-    }
-
-    /**
      * Импорт файла.
      * @param string $alias - алиас пути до файла
      * @param bool $once - использовать require_once
@@ -311,7 +252,7 @@ class Twin
      */
     public static function import(string $alias, bool $once = false)
     {
-        $path = static::getAlias($alias);
+        $path = Alias::get($alias);
         if (!is_file($path)) return false;
 
         if ($once) {

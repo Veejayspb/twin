@@ -2,7 +2,7 @@
 
 namespace twin\cache;
 
-use twin\Twin;
+use twin\helper\Alias;
 
 class CacheFile extends Cache
 {
@@ -50,10 +50,10 @@ class CacheFile extends Cache
     private function getFilePath(CacheItem $item): string
     {
         $alias = $this->path . '/' . $item->getHash() . '.' . static::FILE_EXT;
-        $dir = Twin::getAlias($this->path);
+        $dir = Alias::get($this->path);
         if (!is_dir($dir)) {
             mkdir($dir, 0775, true);
         }
-        return Twin::getAlias($alias);
+        return Alias::get($alias);
     }
 }

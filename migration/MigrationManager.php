@@ -6,6 +6,7 @@ use DirectoryIterator;
 use m_000000_000000_init;
 use twin\common\Component;
 use twin\db\Database;
+use twin\helper\Alias;
 use twin\Twin;
 
 class MigrationManager extends Component
@@ -38,7 +39,7 @@ class MigrationManager extends Component
             return false;
         }
 
-        $path = Twin::getAlias($alias);
+        $path = Alias::get($alias);
         return Migration::create($path, $component, $name);
     }
 
@@ -55,7 +56,7 @@ class MigrationManager extends Component
             return $result;
         }
 
-        $path = Twin::getAlias($this->paths[$component]);
+        $path = Alias::get($this->paths[$component]);
         $migrations = $this->getMigrationsFromDir($path);
 
         // Исключить миграции, которые не относятся к указанному компоненту

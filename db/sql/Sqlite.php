@@ -3,7 +3,7 @@
 namespace twin\db\sql;
 
 use twin\common\Exception;
-use twin\Twin;
+use twin\helper\Alias;
 use PDO;
 
 class Sqlite extends Sql
@@ -108,7 +108,7 @@ class Sqlite extends Sql
      */
     private function createDir(): bool
     {
-        $path = Twin::getAlias($this->path);
+        $path = Alias::get($this->path);
         
         if (!file_exists($path)) {
             return mkdir($path, 0775, true);
@@ -124,7 +124,7 @@ class Sqlite extends Sql
     private function getFilePath(): string
     {
         $fileName = $this->getFileName();
-        return Twin::getAlias($this->path) . DIRECTORY_SEPARATOR . $fileName;
+        return Alias::get($this->path) . DIRECTORY_SEPARATOR . $fileName;
     }
 
     /**
