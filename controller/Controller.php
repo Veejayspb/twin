@@ -12,7 +12,7 @@ abstract class Controller
     /**
      * Постфикс названия контроллера.
      */
-    const POSTFIX = 'Controller';
+    const CONTROLLER_POSTFIX = 'Controller';
 
     /**
      * Текущий роут.
@@ -74,7 +74,7 @@ abstract class Controller
             return ucfirst($part);
         }, $parts);
 
-        return implode('', $parts) . static::POSTFIX;
+        return implode('', $parts) . static::CONTROLLER_POSTFIX;
     }
 
     /**
