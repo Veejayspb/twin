@@ -23,7 +23,7 @@ final class Alias
      */
     public static function set(string $alias, string $path): bool
     {
-        $pattern = '/^' . static::PATTERN . '$/';
+        $pattern = '/^' . self::PATTERN . '$/';
 
         if (!preg_match($pattern, $alias)) {
             return false;
@@ -40,7 +40,7 @@ final class Alias
      */
     public static function get(string $alias): string
     {
-        $pattern = '/^' . static::PATTERN . '/';
+        $pattern = '/^' . self::PATTERN . '/';
         preg_match($pattern, $alias, $matches);
 
         if (!isset($matches[0])) {
@@ -57,7 +57,7 @@ final class Alias
 
         // Если в пути остался алиас, то выполнить повторное преобразование
         if (preg_match($pattern, $result)) {
-            return static::get($result);
+            return self::get($result);
         }
 
         return $result;
