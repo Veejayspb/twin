@@ -7,9 +7,12 @@ use ReflectionProperty;
 use twin\behavior\Behavior;
 use twin\behavior\BehaviorOwnerInterface;
 use twin\common\Exception;
+use twin\event\Event;
+use twin\event\EventModel;
+use twin\event\EventOwnerInterface;
 use twin\helper\StringHelper;
 
-abstract class Model implements BehaviorOwnerInterface
+abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
 {
     /**
      * Ошибки валидации.
@@ -22,6 +25,12 @@ abstract class Model implements BehaviorOwnerInterface
      * @var Behavior[]
      */
     protected $_behaviors = [];
+
+    /**
+     * Объект для управления событиями.
+     * @var EventModel
+     */
+    protected $_event;
 
     public function __construct()
     {
@@ -323,6 +332,7 @@ abstract class Model implements BehaviorOwnerInterface
             return false;
         }
 
+        $this->event()->beforeValidate();
         $this->rules();
 
         // Сбросить ошибки атрибутов, для которых не требуется валидация
@@ -336,6 +346,7 @@ abstract class Model implements BehaviorOwnerInterface
         }
 
         $this->afterValidate();
+        $this->event()->afterValidate();
 
         return !$this->hasErrors();
     }
@@ -354,6 +365,15 @@ abstract class Model implements BehaviorOwnerInterface
     public function setBehavior(string $name, Behavior $behavior)
     {
         $this->_behaviors[$name] = $behavior;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @return EventModel
+     */
+    public function event(): Event
+    {
+        return $this->_event = $this->_event ?: new EventModel($this);
     }
 
     /**

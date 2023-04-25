@@ -2,7 +2,6 @@
 
 namespace twin\controller;
 
-use ReflectionClass;
 use ReflectionMethod;
 use twin\common\Exception;
 use twin\helper\Header;

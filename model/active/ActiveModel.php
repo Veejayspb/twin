@@ -4,6 +4,8 @@ namespace twin\model\active;
 
 use twin\common\Exception;
 use twin\db\Database;
+use twin\event\Event;
+use twin\event\EventActiveModel;
 use twin\model\Model;
 use twin\model\relation\Relation;
 use twin\Twin;
@@ -259,6 +261,15 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
     }
 
     /**
+     * {@inheritdoc}
+     * @return EventActiveModel
+     */
+    public function event(): Event
+    {
+        return $this->_event = $this->_event ?: new EventActiveModel($this);
+    }
+
+    /**
      * Связи с другими моделями.
      * key - название связи
      * value - объект связи
@@ -281,6 +292,7 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
      */
     protected function beforeSave(): bool
     {
+        $this->event()->beforeSave();
         return true;
     }
 
@@ -291,6 +303,7 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
     protected function afterSave()
     {
         $this->_newRecord = false;
+        $this->event()->afterSave();
     }
 
     /**
@@ -299,6 +312,7 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
      */
     protected function beforeDelete(): bool
     {
+        $this->event()->beforeDelete();
         return true;
     }
 
@@ -306,7 +320,10 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
      * Вызов события после удаления.
      * @return void
      */
-    protected function afterDelete() {}
+    protected function afterDelete()
+    {
+        $this->event()->afterDelete();
+    }
 
     /**
      * Добавить текущую запись в БД.

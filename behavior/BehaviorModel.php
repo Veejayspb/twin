@@ -18,5 +18,6 @@ abstract class BehaviorModel extends Behavior
     public function __construct(Model $owner, array $properties = [])
     {
         parent::__construct($owner, $properties);
+        $owner->event()->attach($this);
     }
 }

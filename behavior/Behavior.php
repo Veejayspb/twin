@@ -21,4 +21,11 @@ abstract class Behavior
         $this->owner = $owner;
         Twin::createObject($this, $properties);
     }
+
+    /**
+     * Выполнение сценария при срабатывании события.
+     * @param string $event - название события
+     * @return void
+     */
+    public function touch(string $event) {}
 }
