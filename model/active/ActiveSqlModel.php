@@ -45,6 +45,7 @@ abstract class ActiveSqlModel extends ActiveModel
         $sql = ArrayHelper::stringExpression($attributes, function ($key) {
             return "`$key`=:$key";
         }, ' AND ');
+
         return static::find()->where($sql, $attributes);
     }
 
@@ -53,24 +54,33 @@ abstract class ActiveSqlModel extends ActiveModel
      */
     public function delete(): bool
     {
-        if ($this->transaction->error) return false;
-        if ($this->isNewRecord()) return false;
-        if (!$this->beforeDelete()) return false;
+        if (
+            $this->transaction->error ||
+            $this->isNewRecord() ||
+            !$this->beforeDelete()
+        ) {
+            return false;
+        }
+
         $pk = $this->pk();
         if (empty($pk)) return false;
 
         $pkAttributes = $this->getAttributes($pk);
+
         $sql = ArrayHelper::stringExpression($pkAttributes, function ($key) {
             return "$key=:$key";
         }, ' AND ');
 
         $result = static::db()->delete(static::tableName(), $sql, $pkAttributes);
+
         if ($result) {
             $this->afterDelete();
         }
+
         if (!$result && $this->transaction->running) {
             $this->transaction->error();
         }
+
         return $result;
     }
 
@@ -88,11 +98,16 @@ abstract class ActiveSqlModel extends ActiveModel
      */
     public function save(bool $validate = true, array $attributes = []): bool
     {
-        if ($this->transaction->error) return false;
+        if ($this->transaction->error) {
+            return false;
+        }
+
         $result = parent::save($validate, $attributes);
+
         if (!$result && $this->transaction->running) {
             $this->transaction->error();
         }
+
         return $result;
     }
 
@@ -109,6 +124,7 @@ abstract class ActiveSqlModel extends ActiveModel
         if ($result && $autoIncrement !== false && $this->$autoIncrement === null) {
             $this->$autoIncrement = $result;
         }
+        
         return $result !== false;
     }
 
