@@ -2,12 +2,11 @@
 
 namespace twin\widget;
 
-use twin\common\SetPropertiesTrait;
+use twin\helper\ObjectHelper;
 use twin\view\RenderTrait;
 
 abstract class Widget
 {
-    use SetPropertiesTrait;
     use RenderTrait;
 
     /**
@@ -15,7 +14,7 @@ abstract class Widget
      */
     public function __construct(array $properties = [])
     {
-        $this->setProperties($properties);
+        ObjectHelper::fill($this, $properties);
     }
 
     public function __toString()

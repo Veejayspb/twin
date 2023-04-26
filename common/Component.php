@@ -2,15 +2,15 @@
 
 namespace twin\common;
 
+use twin\helper\ObjectHelper;
+
 abstract class Component
 {
-    use SetPropertiesTrait;
-
     /**
      * @param array $properties - свойства объекта
      */
     public function __construct(array $properties = [])
     {
-        $this->setProperties($properties);
+        ObjectHelper::fill($this, $properties);
     }
 }

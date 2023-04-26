@@ -2,12 +2,10 @@
 
 namespace twin\widget;
 
-use twin\common\SetPropertiesTrait;
+use twin\helper\ObjectHelper;
 
 class TableColumn
 {
-    use SetPropertiesTrait;
-
     /**
      * Название столбца.
      * @var string
@@ -37,6 +35,6 @@ class TableColumn
      */
     public function __construct(array $properties = [])
     {
-        $this->setProperties($properties);
+        ObjectHelper::fill($this, $properties);
     }
 }

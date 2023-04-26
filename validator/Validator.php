@@ -2,14 +2,12 @@
 
 namespace twin\validator;
 
-use twin\common\SetPropertiesTrait;
+use twin\helper\ObjectHelper;
 use twin\model\Model;
 use ReflectionClass;
 
 abstract class Validator
 {
-    use SetPropertiesTrait;
-
     /**
      * Валидируемая модель.
      * @var Model
@@ -37,11 +35,11 @@ abstract class Validator
     /**
      * @param Model $model - валидируемая модель
      * @param array $attributes - валидируемые атрибуты
-     * @param array $params - значения свойств
+     * @param array $properties - значения свойств
      */
-    public function __construct(Model $model, array $attributes, array $params = [])
+    public function __construct(Model $model, array $attributes, array $properties = [])
     {
-        $this->setProperties($params);
+        ObjectHelper::fill($this, $properties);
         $this->model = $model;
         $this->attributes = $attributes;
         $this->run();
