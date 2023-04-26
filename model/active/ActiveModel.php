@@ -7,7 +7,6 @@ use twin\db\Database;
 use twin\event\Event;
 use twin\event\EventActiveModel;
 use twin\model\Model;
-use twin\model\relation\Relation;
 use twin\Twin;
 use ReflectionClass;
 
@@ -26,12 +25,6 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
     protected $_original = [];
 
     /**
-     * Связи с другими моделями.
-     * @var Relation[]
-     */
-    protected $_relations = [];
-
-    /**
      * Название компонента соединения с БД.
      * @var string
      */
@@ -45,35 +38,6 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
         parent::__construct();
         
         $this->_newRecord = $newRecord;
-        $this->_relations = $this->relations();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __get($name)
-    {
-        $relation = $this->getRelation($name);
-
-        if ($relation) {
-            return $relation->getData($this);
-        }
-
-        return parent::__get($name);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __set($name, $value)
-    {
-        $relation = $this->getRelation($name);
-
-        if ($relation) {
-            $relation->setData($value);
-        }
-
-        parent::__set($name, $value);
     }
 
     /**
@@ -251,33 +215,12 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
     }
 
     /**
-     * Вернуть объект со связью.
-     * @param string $name - название связи
-     * @return Relation|null
-     */
-    public function getRelation(string $name)
-    {
-        return $this->_relations[$name] ?? null;
-    }
-
-    /**
      * {@inheritdoc}
      * @return EventActiveModel
      */
     public function event(): Event
     {
         return $this->_event = $this->_event ?: new EventActiveModel($this);
-    }
-
-    /**
-     * Связи с другими моделями.
-     * key - название связи
-     * value - объект связи
-     * @return Relation[]
-     */
-    protected function relations(): array
-    {
-        return [];
     }
 
     /**
