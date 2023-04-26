@@ -2,7 +2,7 @@
 
 namespace twin\behavior;
 
-use twin\Twin;
+use twin\helper\ObjectHelper;
 
 abstract class Behavior
 {
@@ -19,7 +19,7 @@ abstract class Behavior
     public function __construct(BehaviorOwnerInterface $owner, array $properties = [])
     {
         $this->owner = $owner;
-        Twin::createObject($this, $properties);
+        ObjectHelper::fill($this, $properties);
     }
 
     /**

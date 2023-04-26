@@ -4,7 +4,7 @@ namespace twin\route;
 
 use twin\common\Component;
 use twin\common\Exception;
-use twin\Twin;
+use twin\helper\ObjectHelper;
 
 class RouteManager extends Component
 {
@@ -123,9 +123,12 @@ class RouteManager extends Component
     {
         foreach ($this->rules as $pattern => $route) {
             $class = $this->getRuleClass($route);
-            $rule = Twin::createObject($class, compact('pattern', 'route')); /* @var RuleInterface $rule */
+            $rule = ObjectHelper::fill(new $class, compact('pattern', 'route')); /* @var RuleInterface $rule */
             $result = $func($rule);
-            if ($result !== false) return $result;
+
+            if ($result !== false) {
+                return $result;
+            }
         }
         return false;
     }
