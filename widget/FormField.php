@@ -22,5 +22,5 @@ abstract class FormField extends Widget
      * Родительский виджет с формой.
      * @var Form
      */
-    protected $parent;
+    public $parent;
 }
