@@ -123,7 +123,7 @@ class RouteManager extends Component
     {
         foreach ($this->rules as $pattern => $route) {
             $class = $this->getRuleClass($route);
-            $rule = ObjectHelper::fill(new $class, compact('pattern', 'route')); /* @var RuleInterface $rule */
+            $rule = ObjectHelper::setProperties(new $class, compact('pattern', 'route')); /* @var RuleInterface $rule */
             $result = $func($rule);
 
             if ($result !== false) {

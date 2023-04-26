@@ -39,7 +39,7 @@ abstract class Validator
      */
     public function __construct(Model $model, array $attributes, array $properties = [])
     {
-        ObjectHelper::fill($this, $properties);
+        ObjectHelper::setProperties($this, $properties);
         $this->model = $model;
         $this->attributes = $attributes;
         $this->run();

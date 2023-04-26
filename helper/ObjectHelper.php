@@ -13,7 +13,7 @@ class ObjectHelper
      * @return mixed
      * @throws Exception
      */
-    public static function fill($object, array $properties)
+    public static function setProperties($object, array $properties)
     {
         if (!is_object($object)) {
             throw new Exception(500, 'Wrong param type: ' . gettype($object));
