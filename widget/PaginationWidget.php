@@ -41,7 +41,7 @@ class PaginationWidget extends NavWidget
     /**
      * @var Pagination
      */
-    protected $pagination;
+    public $pagination;
 
     /**
      * {@inheritdoc}

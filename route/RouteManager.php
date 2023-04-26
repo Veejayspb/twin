@@ -36,13 +36,13 @@ class RouteManager extends Component
      * Неймспейсы контроллеров.
      * @var array
      */
-    protected $namespaces = [];
+    public $namespaces = [];
 
     /**
      * Правила роутинга.
      * @var array
      */
-    protected $rules = [];
+    public $rules = [];
 
     /**
      * Вернуть неймспейс контроллеров указанного модуля.

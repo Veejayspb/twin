@@ -38,7 +38,7 @@ class Breadcrumbs extends Widget
      * Ключ - название пункта
      * Значение - url страницы
      */
-    protected $items = [
+    public $items = [
         #'Главная' => '/',
     ];
 

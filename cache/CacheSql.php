@@ -12,13 +12,13 @@ class CacheSql extends Cache
      * Название компонента с БД SQL.
      * @var string
      */
-    protected $db;
+    public $db;
 
     /**
      * Название таблицы БД.
      * @var string
      */
-    protected $table = 'cache';
+    public $table = 'cache';
 
     /**
      * {@inheritdoc}

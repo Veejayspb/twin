@@ -13,16 +13,16 @@ abstract class Database extends Component
     const TYPE_SQLITE = 'sqlite';
 
     /**
+     * Название БД.
+     * @var string
+     */
+    public $dbname;
+
+    /**
      * Тип БД.
      * @var string
      */
     protected $type;
-
-    /**
-     * Название БД.
-     * @var string
-     */
-    protected $dbname;
 
     /**
      * {@inheritdoc}

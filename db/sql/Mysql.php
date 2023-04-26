@@ -21,13 +21,13 @@ class Mysql extends Sql
      * Имя пользователя.
      * @var string
      */
-    protected $username;
+    public $username;
 
     /**
      * Пароль.
      * @var string
      */
-    protected $password;
+    public $password;
 
     /**
      * {@inheritdoc}

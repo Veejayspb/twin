@@ -18,7 +18,7 @@ class Json extends Database
      * Путь до директории с файлами БД.
      * @var string
      */
-    protected $path = '@runtime/db/json';
+    public $path = '@runtime/db/json';
 
     /**
      * {@inheritdoc}

@@ -16,19 +16,19 @@ class Session extends Component
      * Автоматический старт сессии при запуске приложения.
      * @var bool
      */
-    protected $autoStart = true;
+    public $autoStart = true;
 
     /**
      * Время жизни куки сессии.
      * @var int
      */
-    protected $lifeTime = 0;
+    public $lifeTime = 0;
 
     /**
      * Путь/алиас директории для сохранения файлов с данными сессии.
      * @var string|null
      */
-    protected $savePath;
+    public $savePath;
 
     /**
      * {@inheritdoc}
