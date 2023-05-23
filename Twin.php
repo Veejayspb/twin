@@ -193,6 +193,24 @@ class Twin
     }
 
     /**
+     * Вернуть компонент указанного класса.
+     * @param string $class - name\space\Component
+     * @return Component|null
+     */
+    public function getComponent(string $class)
+    {
+        $components = $this->getComponents();
+
+        foreach ($components as $component) {
+            if (is_a($component, $class)) {
+                return $component;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Значение указанного параметра.
      * @param string $name - название параметра в формате: path.to.param
      * @param mixed|null $default - значение, которое вернется, если параметр не найден

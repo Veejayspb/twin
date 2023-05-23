@@ -125,6 +125,6 @@ abstract class WebController extends Controller
      */
     protected function getView(): View
     {
-        return Twin::app()->view;
+        return Twin::app()->getComponent(View::class);
     }
 }
