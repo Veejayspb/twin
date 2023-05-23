@@ -49,11 +49,6 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
             throw new Exception(500, "Undefined attribute $name");
         }
 
-        // В первую очередь выводится значение реального атрибута, если он сущ-ет.
-        if ($this->hasAttribute($name)) {
-            return $this->$name;
-        }
-
         // Попытка найти поведение с указанным названием.
         $behavior = $this->getBehavior($name);
 
