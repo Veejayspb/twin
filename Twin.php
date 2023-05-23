@@ -128,7 +128,7 @@ class Twin
 
             $_GET = $route->params;
             $namespace = $this->route->getNamespace($route->module);
-            WebController::run($namespace, $route, $this->view);
+            WebController::run($namespace, $route);
         } catch (Exception $e) {
             @ob_clean(); // Если исключение выбрасывается во view, то на страницу ошибки выводится часть целевого шаблона
             http_response_code($e->getCode());
@@ -138,7 +138,7 @@ class Twin
             $route->params = ['code' => $e->getCode(), 'message' => $e->getMessage()];
 
             $namespace = $this->route->getNamespace($route->module);
-            WebController::run($namespace, $route, $this->view);
+            WebController::run($namespace, $route);
         }
     }
 

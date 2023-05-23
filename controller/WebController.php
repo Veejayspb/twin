@@ -13,12 +13,6 @@ use twin\view\View;
 abstract class WebController extends Controller
 {
     /**
-     * Объект для работы с видами.
-     * @var View
-     */
-    protected $view;
-
-    /**
      * {@inheritdoc}
      */
     protected function init()
@@ -31,18 +25,16 @@ abstract class WebController extends Controller
      * Вызвать указанные контроллер/действие.
      * @param string $namespace - неймспейс контроллера
      * @param Route $route - роут
-     * @param View $view - объект для работы с видами
      * @return void
      * @throws Exception
      */
-    public static function run(string $namespace, Route $route, View $view)
+    public static function run(string $namespace, Route $route)
     {
         if (self::class != get_called_class()) {
             throw new Exception(500, 'Denied to run controller not from class: ' . self::class);
         }
 
         $controller = self::$instance = static::getController($namespace, $route->controller);
-        $controller->view = $view;
         $controller->route = $route;
         $controller->init();
 
@@ -101,7 +93,8 @@ abstract class WebController extends Controller
      */
     protected function render(string $route, array $data = []): string
     {
-        return $this->view->renderLayout($route, $data);
+        $view = $this->getView();
+        return $view->renderLayout($route, $data);
     }
 
     /**
@@ -124,5 +117,14 @@ abstract class WebController extends Controller
     {
         Header::instance()->add('Refresh', $delay);
         exit;
+    }
+
+    /**
+     * View компонент.
+     * @return View
+     */
+    protected function getView(): View
+    {
+        return Twin::app()->view;
     }
 }
