@@ -2,7 +2,6 @@
 
 use twin\asset\AssetManager;
 use twin\helper\Request;
-use twin\session\Session;
 use twin\view\View;
 
 return [
@@ -28,9 +27,6 @@ return [
             'class' => AssetManager::class,
             'publicationPath' => '@web/asset',
             'webPath' => '/asset',
-        ],
-        'session' => [
-            'class' => Session::class,
         ],
     ],
 ];

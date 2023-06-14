@@ -82,6 +82,7 @@ class Identity
     {
         $this->id = $id;
         $token = $this->createToken($id);
+
         Cookie::set(static::IDENTITY, $id, $expire);
         Cookie::set(static::TOKEN, $token, $expire);
     }
@@ -93,6 +94,11 @@ class Identity
     public function logout()
     {
         $session = $this->getSession();
+
+        if (!$session) {
+            return;
+        }
+
         $session->destroy();
         Cookie::delete(static::TOKEN);
         Cookie::delete(static::IDENTITY);
@@ -127,13 +133,21 @@ class Identity
     private function restoreId()
     {
         $session = $this->getSession();
+
+        if (!$session) {
+            return;
+        }
+
         $id = $session->get(static::IDENTITY);
+
         if ($id !== null) {
             $this->id = $id;
             return;
         }
+
         $id = Cookie::get(static::IDENTITY);
         $token = Cookie::get(static::TOKEN);
+
         if ($id !== null && $this->checkToken($token, $id)) {
             $this->id = $id;
             return;
@@ -142,10 +156,10 @@ class Identity
 
     /**
      * Компонент SESSION.
-     * @return Session
+     * @return Session|null
      */
-    private function getSession(): Session
+    private function getSession()
     {
-        return Twin::app()->session;
+        return Twin::app()->getComponent(Session::class);
     }
 }

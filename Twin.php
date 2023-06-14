@@ -14,7 +14,6 @@ use twin\migration\MigrationManager;
 use twin\response\Response;
 use twin\route\Route;
 use twin\route\RouteManager;
-use twin\session\Session;
 use twin\view\View;
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'helper' . DIRECTORY_SEPARATOR . 'Alias.php';
@@ -31,7 +30,6 @@ Alias::set('@vendor', '@root/vendor');
  * Class Twin
  *
  * @property RouteManager $route
- * @property Session $session
  * @property View $view
  * @property AssetManager $asset
  * @property MigrationManager $migration
