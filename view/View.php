@@ -21,19 +21,13 @@ class View extends Component
     const BODY = '<![CDATA[TWIN-BODY]]>';
 
     /**
-     * Название шаблона.
+     * Алиас пути до шаблона.
      * @var string
      */
-    public $layout = 'main';
+    public $layoutPath = '@self/view/layout/main.php';
 
     /**
-     * Название директории с шаблонами.
-     * @var string
-     */
-    public $layoutDir = 'layout';
-
-    /**
-     * Путь/алиас к директории с видами.
+     * Алиас пути до директории с видами.
      * @var string
      */
     public $path = '@self/view';
@@ -90,8 +84,9 @@ class View extends Component
     public function renderLayout(string $route, array $data = []): string
     {
         $content = $this->render($route, $data);
-        $layout = $this->layoutDir . '/' . $this->layout;
-        $content = $this->render($layout, ['content' => $content]);
+        $content = $this->renderPath($this->layoutPath, [
+            'content' => $content,
+        ]);
 
         return str_replace(
             [static::HEAD, static::BODY],
@@ -111,14 +106,16 @@ class View extends Component
 
     /**
      * Конец родительского шаблона.
-     * @param string $layout - название родительского шаблона
+     * @param string $path - алиас пути до родительского шаблона
      * @return void
      */
-    public function end(string $layout)
+    public function end(string $path)
     {
         $content = ob_get_clean();
-        $route = $this->layoutDir . '/' . $layout;
-        echo $this->render($route, ['content' => $content]);
+
+        echo $this->renderPath($path, [
+            'content' => $content,
+        ]);
     }
 
     /**
