@@ -19,12 +19,6 @@ final class Flash
     private $messages = [];
 
     /**
-     * Экземпляр сессии.
-     * @var Session
-     */
-    private $session;
-
-    /**
      * Экземпляр текущего класса.
      * @var self
      */
@@ -32,16 +26,27 @@ final class Flash
 
     private function __construct()
     {
-        $this->session = $this->getSession();
-        $this->messages = (array)$this->session->get(self::STORAGE_NAME);
+        $session = $this->getSession();
+
+        if (!$session) {
+            return;
+        }
+
+        $this->messages = (array)$session->get(self::STORAGE_NAME);
     }
 
     public function __destruct()
     {
+        $session = $this->getSession();
+
+        if (!$session) {
+            return;
+        }
+
         if (empty($this->messages)) {
-            $this->session->delete(self::STORAGE_NAME);
+            $session->delete(self::STORAGE_NAME);
         } else {
-            $this->session->set(self::STORAGE_NAME, $this->messages);
+            $session->set(self::STORAGE_NAME, $this->messages);
         }
     }
 
@@ -79,7 +84,9 @@ final class Flash
      */
     public static function get(string $name, bool $clear = true)
     {
-        if (!self::has($name)) return false;
+        if (!self::has($name)) {
+            return null;
+        }
 
         $result = (string)self::instance()->messages[$name];
 
@@ -115,10 +122,10 @@ final class Flash
 
     /**
      * Вернуть экземпляр сессии.
-     * @return Session
+     * @return Session|null
      */
     private function getSession()
     {
-        return Twin::app()->session;
+        return Twin::app()->getComponent(Session::class);
     }
 }
