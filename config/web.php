@@ -1,6 +1,7 @@
 <?php
 
 use twin\asset\AssetManager;
+use twin\helper\Request;
 use twin\session\Session;
 use twin\view\View;
 
@@ -18,6 +19,7 @@ return [
                 '/<controller:[a-z\-]+>/<action:[a-z\-]+>' => '<controller>/<action>',
                 '/<module:[a-z\-]+>/<controller:[a-z\-]+>/<action:[a-z\-]+>' => '<module>/<controller>/<action>',
             ],
+            'domain' => Request::$scheme . '://' . Request::$host,
         ],
         'view' => [
             'class' => View::class,

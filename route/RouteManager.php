@@ -45,6 +45,12 @@ class RouteManager extends Component
     public $rules = [];
 
     /**
+     * Адрес домена.
+     * @var string - https://domain.ru
+     */
+    public $domain;
+
+    /**
      * Вернуть неймспейс контроллеров указанного модуля.
      * @param string $module - название модуля
      * @return string
@@ -83,13 +89,24 @@ class RouteManager extends Component
     /**
      * Создать адрес.
      * @param Route $route - роут
+     * @param bool $absolute - абсолютный адрес
      * @return string|bool
      */
-    public function createUrl(Route $route)
+    public function createUrl(Route $route, bool $absolute = false)
     {
-        return $this->compareRoutes(function (RuleInterface $rule) use ($route) {
+        $url = $this->compareRoutes(function (RuleInterface $rule) use ($route) {
             return $rule->createUrl($route);
         });
+
+        if (!$absolute) {
+            return $url;
+        }
+
+        if ($url) {
+            return $this->domain . $url;
+        }
+
+        return false;
     }
 
     /**

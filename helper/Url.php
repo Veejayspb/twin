@@ -10,15 +10,6 @@ use twin\Twin;
 class Url
 {
     /**
-     * Адрес домена.
-     * @return string
-     */
-    public static function host(): string
-    {
-        return Request::$scheme . '://' . Request::$host;
-    }
-
-    /**
      * Создать адрес.
      * @param string $route - текстовый роут
      * @param array $params - параметры
@@ -31,13 +22,7 @@ class Url
         $r = new Route($r->module, $r->controller, $r->action);
         $r->setRoute($route);
         $r->params = $params;
-        $url = static::getRouter()->createUrl($r);
-
-        if ($absolute) {
-            $host = static::host();
-            $url = $host . $url;
-        }
-        return $url;
+        return static::getRouter()->createUrl($r, $absolute);
     }
 
     /**
@@ -50,13 +35,7 @@ class Url
     {
         $r = clone Controller::$instance->route;
         $r->params = $params + $r->params;
-        $url = static::getRouter()->createUrl($r);
-
-        if ($absolute) {
-            $host = static::host();
-            $url = $host . $url;
-        }
-        return $url;
+        return static::getRouter()->createUrl($r, $absolute);
     }
 
     /**
@@ -98,6 +77,6 @@ class Url
      */
     protected static function getRouter(): RouteManager
     {
-        return Twin::app()->route;
+        return Twin::app()->getComponent(RouteManager::class);
     }
 }
