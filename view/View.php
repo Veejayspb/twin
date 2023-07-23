@@ -64,6 +64,11 @@ class View extends Component
     protected $body = [];
 
     /**
+     * {@inheritdoc}
+     */
+    protected $_requiredProperties = ['layoutPath', 'path'];
+
+    /**
      * Рендер вида без шаблона.
      * @param string $route - роут
      * @param array $data - данные

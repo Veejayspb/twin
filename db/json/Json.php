@@ -2,7 +2,6 @@
 
 namespace twin\db\json;
 
-use twin\common\Exception;
 use twin\db\Database;
 use twin\helper\Alias;
 use twin\migration\Migration;
@@ -26,21 +25,15 @@ class Json extends Database
     protected $type = self::TYPE_JSON;
 
     /**
+     * {@inheritdoc}
+     */
+    protected $_requiredProperties = ['dbname', 'path'];
+
+    /**
      * Кешируемые данные таблиц для предотвращения повторных обращений.
      * @var array
      */
     private static $data = [];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct(array $properties = [])
-    {
-        if (!isset($properties['dbname'], $properties['path'])) {
-            throw new Exception(500, self::class . ' - required properties not specified: dbname, path');
-        }
-        parent::__construct($properties);
-    }
 
     /**
      * Извлечь данные из таблицы.

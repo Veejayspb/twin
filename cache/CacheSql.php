@@ -23,13 +23,7 @@ class CacheSql extends Cache
     /**
      * {@inheritdoc}
      */
-    /*public function __construct(array $properties = [])
-    {
-        if (!isset($properties['db'])) {
-            throw new Exception(500, self::class . ' - required properties not specified: db');
-        }
-        parent::__construct($properties);
-    }*/
+    protected $_requiredProperties = ['db', 'table'];
 
     /**
      * Создать таблицу для кеша в БД.

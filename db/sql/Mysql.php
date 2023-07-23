@@ -2,7 +2,6 @@
 
 namespace twin\db\sql;
 
-use twin\common\Exception;
 use PDO;
 
 class Mysql extends Sql
@@ -37,14 +36,7 @@ class Mysql extends Sql
     /**
      * {@inheritdoc}
      */
-    public function __construct(array $properties = [])
-    {
-        if (!isset($properties['dbname'], $properties['username'], $properties['password'])) {
-            throw new Exception(500, self::class . ' - required properties not specified: dbname, username, password');
-        }
-
-        parent::__construct($properties);
-    }
+    protected $_requiredProperties = ['dbname', 'username', 'password'];
 
     /**
      * {@inheritdoc}

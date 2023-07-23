@@ -51,6 +51,11 @@ class RouteManager extends Component
     public $domain;
 
     /**
+     * {@inheritdoc}
+     */
+    protected $_requiredProperties = ['home', 'login', 'logout', 'error', 'namespaces', 'rules'];
+
+    /**
      * Вернуть неймспейс контроллеров указанного модуля.
      * @param string $module - название модуля
      * @return string

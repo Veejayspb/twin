@@ -33,6 +33,11 @@ class AssetManager extends Component
     protected $assets = [];
 
     /**
+     * {@inheritdoc}
+     */
+    protected $_requiredProperties = ['publicationPath', 'webPath'];
+
+    /**
      * Зарегистрировать asset.
      * @param string $name - название подключаемого класса asset
      * @return Asset

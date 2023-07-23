@@ -27,6 +27,11 @@ class Sqlite extends Sql
     /**
      * {@inheritdoc}
      */
+    protected $_requiredProperties = ['dbname', 'path'];
+
+    /**
+     * {@inheritdoc}
+     */
     public function __construct(array $properties = [])
     {
         if (!isset($properties['dbname'], $properties['path'])) {

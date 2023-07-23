@@ -20,6 +20,11 @@ class CacheFile extends Cache
     /**
      * {@inheritdoc}
      */
+    protected $_requiredProperties = ['path'];
+
+    /**
+     * {@inheritdoc}
+     */
     protected function saveItem(CacheItem $item): bool
     {
         $path = $this->getFilePath($item);
