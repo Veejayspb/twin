@@ -61,4 +61,15 @@ class StringHelper
     {
         return substr($name, 0, 1) == '_';
     }
+
+    /**
+     * Извлечь название класса без неймспейса.
+     * @param string $class - name\space\ClassName
+     * @return string - ClassName
+     */
+    public static function getClassName(string $class): string
+    {
+        $parts = explode('\\', $class);
+        return end($parts) ?: '';
+    }
 }
