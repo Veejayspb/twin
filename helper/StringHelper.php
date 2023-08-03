@@ -11,9 +11,10 @@ class StringHelper
      */
     public static function ucfirst(string $string): string
     {
-        $firstChar = mb_substr($string, 0, 1, 'utf-8');
-        $rest = mb_substr($string, 1, null, 'utf-8');
-        return mb_strtoupper($firstChar, 'utf-8') . $rest;
+        $encoding = 'utf-8';
+        $firstChar = mb_substr($string, 0, 1, $encoding);
+        $rest = mb_substr($string, 1, null, $encoding);
+        return mb_strtoupper($firstChar, $encoding) . $rest;
     }
 
     /**
@@ -25,18 +26,19 @@ class StringHelper
     public static function wordEnding(int $num, array $variants): string
     {
         $value = abs($num);
-        if (count($variants) < 3) return '';
-        $cases = [2, 0, 1, 1, 1, 2];
+
+        if (count($variants) != 3) {
+            return '';
+        }
 
         if ($value % 100 > 4 && $value % 100 < 20) {
             $index = 2;
         } else {
+            $cases = [2, 0, 1, 1, 1, 2];
             $index = $cases[min($value % 10, 5)];
         }
 
-        $str = $variants[$index];
-        $str = str_replace('#', '%d', $str);
-        return sprintf($str, $num);
+        return str_replace('#', $num, $variants[$index]);
     }
 
     /**
@@ -44,7 +46,7 @@ class StringHelper
      * @param string $name - название или путь до файла
      * @return string|null
      */
-    public static function getExtFromName(string $name)
+    public static function getExtFromName(string $name): ?string
     {
         preg_match('/\.([a-z0-9]+)$/', $name, $matches);
         return $matches ? $matches[1] : null;
