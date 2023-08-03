@@ -20,5 +20,8 @@
         "ext-pdo": "*",
         "ext-gd": "*",
         "ext-fileinfo": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.6"
     }
 }
