@@ -1,5 +1,9 @@
 <?php
 
+namespace twin\test\helper;
+
+use ReflectionClass;
+
 class ObjectProxy
 {
     /**

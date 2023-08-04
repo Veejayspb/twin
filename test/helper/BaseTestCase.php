@@ -1,6 +1,9 @@
 <?php
 
+namespace twin\test\helper;
+
 use PHPUnit\Framework\TestCase;
+use Throwable;
 
 abstract class BaseTestCase extends TestCase
 {

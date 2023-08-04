@@ -1,6 +1,7 @@
 <?php
 
 use twin\helper\Password;
+use twin\test\helper\BaseTestCase;
 
 final class PasswordTest extends BaseTestCase
 {

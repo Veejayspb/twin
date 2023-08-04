@@ -1,6 +1,8 @@
 <?php
 
 use twin\helper\Tag;
+use twin\test\helper\BaseTestCase;
+use twin\test\helper\ObjectProxy;
 
 final class TagTest extends BaseTestCase
 {
