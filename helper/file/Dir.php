@@ -10,7 +10,7 @@ use twin\common\Exception;
  *
  * Class Dir
  */
-class Dir extends FileCommon
+class Dir extends AbstractFile
 {
     /**
      * {@inheritdoc}

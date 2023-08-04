@@ -7,9 +7,9 @@ use twin\common\Exception;
 /**
  * Хелпер для манипуляции с файловой системой.
  *
- * Class FileCommon
+ * Class AbstractFile
  */
-abstract class FileCommon
+abstract class AbstractFile
 {
     /**
      * Путь до файла/директории.

@@ -12,7 +12,7 @@ use twin\helper\StringHelper;
  *
  * @todo: remove exif and other meta-info
  */
-class File extends FileCommon
+class File extends AbstractFile
 {
     /**
      * {@inheritdoc}
