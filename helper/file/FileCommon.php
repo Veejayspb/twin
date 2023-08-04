@@ -85,7 +85,7 @@ abstract class FileCommon
      * Родительская директория.
      * @return Dir
      */
-    public function getParent(): self
+    public function getParent(): Dir
     {
         $path = dirname($this->path);
         return new Dir($path);
@@ -153,7 +153,7 @@ abstract class FileCommon
         // Удаление дублирующихся разделителей и приведение их к стандарту
         $dir = preg_replace('/[\\/]+/', DIRECTORY_SEPARATOR, $dir);
 
-        // Удаление завершащего слеша
+        // Удаление завершающего слэша
         if (substr($path, -1) == DIRECTORY_SEPARATOR) {
             $dir = substr($path, 0, -1);
         }
