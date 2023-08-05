@@ -5,7 +5,7 @@ namespace twin\helper;
 use twin\session\Session;
 use twin\Twin;
 
-final class Flash
+class Flash
 {
     /**
      * Название контейнера в сессии для хранения флеш-сообщений.
@@ -16,11 +16,11 @@ final class Flash
      * Имеющиеся флеш-сообщения.
      * @var array
      */
-    private $messages = [];
+    protected $messages = [];
 
     /**
      * Экземпляр текущего класса.
-     * @var self
+     * @var static
      */
     private static $instance;
 
@@ -32,7 +32,7 @@ final class Flash
             return;
         }
 
-        $this->messages = (array)$session->get(self::STORAGE_NAME);
+        $this->messages = (array)$session->get(static::STORAGE_NAME);
     }
 
     public function __destruct()
@@ -44,9 +44,9 @@ final class Flash
         }
 
         if (empty($this->messages)) {
-            $session->delete(self::STORAGE_NAME);
+            $session->delete(static::STORAGE_NAME);
         } else {
-            $session->set(self::STORAGE_NAME, $this->messages);
+            $session->set(static::STORAGE_NAME, $this->messages);
         }
     }
 
@@ -56,11 +56,11 @@ final class Flash
 
     /**
      * Вернуть экземпляр текущего класса.
-     * @return self
+     * @return static
      */
-    private static function instance(): self
+    protected static function instance(): self
     {
-        return self::$instance = self::$instance ?: new self;
+        return self::$instance = self::$instance ?: new static;
     }
 
     /**
@@ -72,7 +72,7 @@ final class Flash
     {
         return array_key_exists(
             $name,
-            self::instance()->messages
+            static::instance()->messages
         );
     }
 
@@ -82,16 +82,16 @@ final class Flash
      * @param bool $clear - очистить сообщение
      * @return string|null - NULL, если флеш-сообщение отсутствует
      */
-    public static function get(string $name, bool $clear = true)
+    public static function get(string $name, bool $clear = true): ?string
     {
-        if (!self::has($name)) {
+        if (!static::has($name)) {
             return null;
         }
 
-        $result = (string)self::instance()->messages[$name];
+        $result = (string)static::instance()->messages[$name];
 
         if ($clear) {
-            self::delete($name);
+            static::delete($name);
         }
 
         return $result;
@@ -103,9 +103,9 @@ final class Flash
      * @param string $value - сообщение
      * @return void
      */
-    public static function set(string $name, string $value)
+    public static function set(string $name, string $value): void
     {
-        self::instance()->messages[$name] = $value;
+        static::instance()->messages[$name] = $value;
     }
 
     /**
@@ -113,10 +113,10 @@ final class Flash
      * @param string $name - название
      * @return void
      */
-    public static function delete(string $name)
+    public static function delete(string $name): void
     {
-        if (self::has($name)) {
-            unset(self::instance()->messages[$name]);
+        if (static::has($name)) {
+            unset(static::instance()->messages[$name]);
         }
     }
 
@@ -124,7 +124,7 @@ final class Flash
      * Вернуть экземпляр сессии.
      * @return Session|null
      */
-    private function getSession()
+    private function getSession(): ?Session
     {
         return Twin::app()->getComponent(Session::class);
     }

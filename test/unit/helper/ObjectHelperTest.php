@@ -5,7 +5,7 @@ namespace twin\test\unit\helper;
 use twin\helper\ObjectHelper;
 use twin\test\helper\BaseTestCase;
 
-class ObjectHelperTest extends BaseTestCase
+final class ObjectHelperTest extends BaseTestCase
 {
     public function testSetProperties()
     {
