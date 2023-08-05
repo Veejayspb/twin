@@ -39,7 +39,8 @@ class Html
      */
     public static function tagOpen(string $name, array $htmlAttributes = []): string
     {
-        return (new Tag($name, $htmlAttributes))->open();
+        $tag = new Tag($name, $htmlAttributes);
+        return $tag->open();
     }
 
     /**
@@ -49,7 +50,8 @@ class Html
      */
     public static function tagClose(string $name): string
     {
-        return (new Tag($name))->close();
+        $tag = new Tag($name);
+        return $tag->close();
     }
 
     /**
@@ -198,12 +200,14 @@ class Html
     {
         $value = (array)$value;
         $result = static::tagOpen('select', $htmlAttributes);
+
         foreach ($options as $key => $val) {
             $result.= static::tag('option', [
                 'value' => $key,
                 'selected' => in_array($key, $value),
             ], $val);
         }
+
         $result.= static::tagClose('select');
         return $result;
     }
@@ -220,16 +224,21 @@ class Html
     {
         $result = [];
         $htmlAttributes['type'] = 'radio';
+
         if (!array_key_exists('name', $htmlAttributes)) {
             $htmlAttributes['name'] = static::uniqueStr('name-' . static::UNIQUE_PLACEHOLDER);
         }
+
         foreach ($options as $key => $val) {
             $htmlAttributes['value'] = $key;
-            $htmlAttributes['checked'] = $value == $key ? true : false;
+            $htmlAttributes['checked'] = $value == $key;
+
             $content = static::tagOpen('input', $htmlAttributes);
             $content.= static::SPACE . $val;
+
             $result[] = static::label($content);
         }
+
         return implode($separator, $result);
     }
 
@@ -256,6 +265,7 @@ class Html
         if (!strstr($pattern, static::UNIQUE_PLACEHOLDER)) {
             $pattern.= '-' . static::UNIQUE_PLACEHOLDER;
         }
+
         return str_replace(static::UNIQUE_PLACEHOLDER, ++static::$uniqueNumber, $pattern);
     }
 
@@ -272,6 +282,7 @@ class Html
         } else {
             $items = [];
         }
+
         if (!in_array($class, $items)) {
             $items[] = $class;
             $htmlAttributes['class'] = implode(static::SPACE, $items);
