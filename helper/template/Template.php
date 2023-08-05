@@ -13,37 +13,39 @@ class Template
     protected $path;
 
     /**
-     * @param string $path - путь или алиас пути до шаблона
+     * @param string $alias - алиас пути до шаблона
      */
-    public function __construct(string $path)
+    public function __construct(string $alias)
     {
-        $this->path = Alias::get($path);
+        $this->path = Alias::get($alias);
     }
 
     /**
      * Сохранение шаблона.
-     * @param string $path - путь или алиас пути для сохранения шаблона
+     * @param string $alias - алиас пути для сохранения шаблона
      * @param array $params - параметры для замены
      * @return bool
      */
-    public function save(string $path, array $params = []): bool
+    public function save(string $alias, array $params = []): bool
     {
         if (!is_file($this->path)) {
             return false;
         }
 
         $content = file_get_contents($this->path);
+
         if ($content === false) {
             return false;
         }
 
         $content = $this->replacePlaceholders($content, $params);
-        $path = Alias::get($path);
+        $path = Alias::get($alias);
         $dir = dirname($path);
 
-        if (!is_dir($dir)) {
-            mkdir($dir, 0775, true);
+        if (!is_dir($dir) && !mkdir($dir, 0775, true)) {
+            return false;
         }
+
         return (bool)file_put_contents($path, $content);
     }
 
