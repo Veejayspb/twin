@@ -59,7 +59,7 @@ final class DirTest extends BaseTestCase
         // Копирование раздела в ту же директорию, где она находится (force)
         $pathFrom = $temp->getFilePath('from');
         mkdir($pathFrom);
-        $result = $dir->copy(__DIR__, true);
+        $result = $dir->copy(dirname($pathFrom), true);
 
         $this->assertNotFalse($result);
 
