@@ -6,8 +6,9 @@ use twin\helper\file\AbstractFile;
 use twin\helper\file\Dir;
 use twin\test\helper\BaseTestCase;
 use twin\test\helper\ObjectProxy;
+use twin\test\helper\Temp;
 
-class AbstractFileTest extends BaseTestCase
+final class AbstractFileTest extends BaseTestCase
 {
     public function testConstruct()
     {
@@ -76,5 +77,15 @@ class AbstractFileTest extends BaseTestCase
 
         $this->assertTrue(get_class($parent) == Dir::class);
         $this->assertSame(dirname(__DIR__) , $proxy->path);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        (new Temp)->clear();
     }
 }

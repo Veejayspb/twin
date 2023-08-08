@@ -7,7 +7,7 @@ use twin\helper\file\File;
 use twin\test\helper\BaseTestCase;
 use twin\test\helper\Temp;
 
-class DirTest extends BaseTestCase
+final class DirTest extends BaseTestCase
 {
     public function testConstruct()
     {
