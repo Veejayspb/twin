@@ -34,6 +34,7 @@ class Dir extends AbstractFile
 
     /**
      * {@inheritdoc}
+     * @return static|bool
      */
     public function copy(string $path, bool $force = false)
     {
@@ -163,7 +164,7 @@ class Dir extends AbstractFile
         $result = [];
         $items = new DirectoryIterator($this->path);
 
-        foreach ($items as $item) { /* @var DirectoryIterator $item */
+        foreach ($items as $item) {
 
             if ($item->isDot()) continue;
 
@@ -183,7 +184,7 @@ class Dir extends AbstractFile
      * Создать вложенную директорию.
      * @param string $name - название директории
      * @param bool $force - удалить одноименный файл (если сущ-ет)
-     * @return self|false
+     * @return static|false
      */
     public function createDirectory(string $name, bool $force = false)
     {
@@ -233,6 +234,7 @@ class Dir extends AbstractFile
 
             // FORCE-режим: если директория мешает созданию одноименного файла, то удаляем ее
             $dir = new static($path);
+
             if (!$dir->delete()) {
                 return false;
             }
