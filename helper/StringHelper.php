@@ -48,8 +48,7 @@ class StringHelper
      */
     public static function getExtFromName(string $name): ?string
     {
-        preg_match('/\.([a-z0-9]+)$/', $name, $matches);
-        return $matches ? $matches[1] : null;
+        return pathinfo($name, PATHINFO_EXTENSION) ?: null;
     }
 
     /**
