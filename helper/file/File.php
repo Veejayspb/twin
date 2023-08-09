@@ -116,18 +116,19 @@ class File extends AbstractFile
 
     /**
      * Вернуть MIME-тип файла.
-     * @return string|bool
+     * @return string|null
      */
-    public function getMimeType()
+    public function getMimeType(): ?string
     {
-        return @mime_content_type($this->path);
+        $mime = @mime_content_type($this->path);
+        return $mime ?: null;
     }
 
     /**
      * Определить расширение файла.
-     * @return string|bool
+     * @return string|null
      */
-    public function getExtension()
+    public function getExtension(): ?string
     {
         // Извлечь из названия
         $ext = $this->getExtFromName();
@@ -138,35 +139,20 @@ class File extends AbstractFile
         // Иначе определить по mime-type
         $mime = $this->getMimeType();
         if (!$mime) {
-            return false;
+            return null;
         }
 
         $ext = FileType::getExtension($mime);
-        return $ext ?: false;
+        return $ext ?: null;
     }
 
     /**
      * Извлечь расширение файла из названия.
-     * @return string|bool
+     * @return string|null
      */
-    public function getExtFromName()
+    public function getExtFromName(): ?string
     {
         $name = $this->getName();
         return StringHelper::getExtFromName($name);
-    }
-
-    /**
-     * {@inheritdoc}
-     * @param bool $withoutExt - исключить расширение в названии
-     */
-    public function getName(bool $withoutExt = false): string
-    {
-        $name = parent::getName();
-
-        if ($withoutExt) {
-            return preg_replace('/\.[^.]+$/', '', $name);
-        }
-
-        return $name;
     }
 }
