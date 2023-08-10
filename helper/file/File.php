@@ -142,7 +142,7 @@ class File extends AbstractFile
             return null;
         }
 
-        $ext = FileType::getExtension($mime);
+        $ext = (new FileType)->getExtension($mime);
         return $ext ?: null;
     }
 

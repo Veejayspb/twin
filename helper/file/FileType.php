@@ -2,7 +2,7 @@
 
 namespace twin\helper\file;
 
-use twin\helper\Alias;
+use twin\Twin;
 
 /**
  * Хелпер для сопоставления mime-type и расширения файла.
@@ -11,7 +11,7 @@ use twin\helper\Alias;
  *
  * @link http://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types
  */
-final class FileType
+class FileType
 {
     /**
      * Данные по расширениям и mime-типам.
@@ -20,46 +20,57 @@ final class FileType
     protected static $data;
 
     /**
-     * Определеить расширение по mime-типу.
+     * Вернуть все расширения, соответствующие указанному mime-типу.
      * @param string $mimeType
-     * @return string|null
+     * @return array
      */
-    public static function getExtension(string $mimeType)
+    public function getExtensions(string $mimeType): array
     {
-        $data = self::getData();
-
-        if (isset($data['extension'][$mimeType])) {
-            return $data['extension'][$mimeType][0];
-        }
-
-        return null;
+        $data = $this->getData();
+        return empty($data['extension'][$mimeType]) ? [] : $data['extension'][$mimeType];
     }
 
     /**
-     * Определить mime-тип по расширению.
+     * Вернуть первое расширение, соответствующее указанному mime-типу.
+     * @param string $mimeType
+     * @return string|null
+     */
+    public function getExtension(string $mimeType): ?string
+    {
+        $extensions = $this->getExtensions($mimeType);
+        return empty($extensions) ? null : current($extensions);
+    }
+
+    /**
+     * Вернуть все mime-типы, соответствующие указанному расширению.
+     * @param string $extension
+     * @return array
+     */
+    public function getMimeTypes(string $extension): array
+    {
+        $data = $this->getData();
+        return empty($data['mime'][$extension]) ? [] : $data['mime'][$extension];
+    }
+
+    /**
+     * Вернуть первый mime-тип, соответствующий указанному расширению.
      * @param string $extension
      * @return string|null
      */
-    public static function getMimeType(string $extension)
+    public function getMimeType(string $extension): ?string
     {
-        $data = self::getData();
-
-        if (isset($data['mime'][$extension])) {
-            return $data['mime'][$extension][0];
-        }
-
-        return null;
+        $mimeTypes = $this->getMimeTypes($extension);
+        return empty($mimeTypes) ? null : current($mimeTypes);
     }
 
     /**
      * Массив с данными по расширениям и mime-типам.
      * @return array
      */
-    protected static function getData(): array
+    protected function getData(): array
     {
         if (self::$data === null) {
-            $path = Alias::get('@twin/config/mime-types.php');
-            self::$data = is_file($path) ? require $path : [];
+            self::$data = Twin::import('@twin/config/mime-types.php') ?: [];
         }
 
         return self::$data;
