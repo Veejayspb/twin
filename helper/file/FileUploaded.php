@@ -2,6 +2,8 @@
 
 namespace twin\helper\file;
 
+use twin\helper\ObjectHelper;
+
 /**
  * Хелпер для работы с загруженными файлами из массива $_FILES.
  *
@@ -38,45 +40,52 @@ class FileUploaded extends File
      * @param array $properties - свойства объекта
      * @return static
      */
-    public static function instance(array $properties = []): self
+    public static function instance(array $properties): self
     {
-        $path = array_key_exists('tmp_name', $properties) ? $properties['tmp_name'] : '';
+        $path = $properties['tmp_name'] ?? '';
         $file = new static($path);
-
-        foreach ($file as $name => $value) {
-            if (!array_key_exists($name, $properties)) {
-                continue;
-            }
-            $file->$name = $properties[$name];
-        }
-
-        return $file;
+        return ObjectHelper::setProperties($file, $properties);
     }
 
     /**
      * Разобрать массив $_FILES и скомпоновать его в виде объектов.
-     * @param array $data
-     * @return static[]
+     * @param array $data - $_FILES
+     * @return array
      */
     public static function parse(array $data): array
     {
+        $result = [];
+
+        foreach ($data as $name => $attributes) {
+            $result[$name] = self::parseField($attributes);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Разобрать данные конкретного поля массива $_FILES.
+     * @param array $attributes - $_FILES['field_name']
+     * @return array
+     */
+    private static function parseField(array $attributes): array
+    {
         $rearranged = [];
 
-        foreach ($data as $attr => $fields) {
-            foreach ($fields as $field => $items) {
-                foreach ((array)$items as $i => $item) {
-                    $rearranged[$field][$i][$attr] = $item;
-                }
+        foreach ($attributes as $name => $values) {
+            foreach ((array)$values as $i => $value) {
+                $rearranged[$i][$name] = $value;
             }
         }
 
         $result = [];
 
-        foreach ($rearranged as $field => $items) {
-            foreach ($items as $i => $item) {
-                if ($item['error']) continue;
-                $result[$field][$i] = static::instance($item);
+        foreach ($rearranged as $i => $attributes) {
+            if ($attributes['error'] !== UPLOAD_ERR_OK) {
+                continue;
             }
+
+            $result[$i] = static::instance($attributes);
         }
 
         return $result;
