@@ -2,14 +2,12 @@
 
 namespace twin\helper;
 
-use twin\helper\file\FileUploaded;
-
 Request::$scheme = $_SERVER['REQUEST_SCHEME'] ?? null;
 Request::$host = $_SERVER['HTTP_HOST'] ?? null;
 Request::$url = $_SERVER['REQUEST_URI'] ?? null;
 Request::$ip = $_SERVER['REMOTE_ADDR'] ?? null;
 Request::$method = $_SERVER['REQUEST_METHOD'] ?? null;
-Request::$headers = getallheaders() ?: [];
+Request::$headers = function_exists('getallheaders') && getallheaders() ?: [];
 
 class Request
 {
@@ -92,15 +90,12 @@ class Request
     }
 
     /**
-     * Вернуть данные массива $_FILES в виде набора объектов.
-     * @param string $name - название параметра
+     * Вернуть данные массива $_FILES.
+     * @param string $name - название параметра $_FILES[$name]
      * @return array
      */
     public static function files(string $name): array
     {
-        if (!array_key_exists($name, $_FILES)) {
-            return [];
-        }
-        return FileUploaded::parse($_FILES[$name]);
+        return $_FILES[$name] ?? [];
     }
 }
