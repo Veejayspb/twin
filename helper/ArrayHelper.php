@@ -27,7 +27,7 @@ class ArrayHelper
 
     /**
      * Найти в наборе массивов искомые ключ/значение, и вернуть индекс первого подходящего.
-     * @param array $items - набор массивов
+     * @param array $items - набор массивов или объектов
      * @param array $search - искомые ключи и значения
      * @return int|string|bool - FALSE, если индекс не найден
      */
@@ -37,19 +37,24 @@ class ArrayHelper
             $item = (array)$item;
 
             foreach ($search as $key => $value) {
-                if (!isset($item[$key])) continue 2;
-                if ($value !== $item[$key]) continue 2;
+                if (
+                    !isset($item[$key]) ||
+                    $value !== $item[$key]
+                ) {
+                    continue 2;
+                }
             }
 
             return $i;
         }
+
         return false;
     }
 
     /**
      * Представить массив данных в виде строки.
      * @param array $data - массив данных
-     * @param callable $callback - коллбэк-функция с параметрами $key, $value, которая обрабатывает данные
+     * @param callable $callback - коллбэк-функция, которая обрабатывает данные: function($key, $value) {...}
      * @param string $glue - соединительная строка
      * @return string
      */
@@ -64,23 +69,24 @@ class ArrayHelper
      * Отличие от функции array_merge_recursive() в том, что 1-ый массив приоритетнее 2-го.
      * Параметры из 2-го просто дополняют 1-ый, но не заменяют в нем ничего.
      * @param array $array_1 - главный массив
-     * @param array $array_2 - массив с дополнительным данными
+     * @param array $array_2 - массив с дополнительными данными
      * @return array
      * @see array_merge_recursive()
      */
     public static function merge(array $array_1, array $array_2): array
     {
         foreach ($array_2 as $key => $value) {
-            if (
-                !array_key_exists($key, $array_1) ||
-                !is_array($array_1[$key]) ||
-                !is_array($value)
-            ) {
+
+            if (!array_key_exists($key, $array_1)) {
                 $array_1[$key] = $value;
-            } else {
-                $array_1[$key] = static::merge($array_1[$key], $array_2[$key]);
+                continue;
+            }
+
+            if (is_array($array_1[$key]) && is_array($value)) {
+                $array_1[$key] = static::merge($array_1[$key], $value);
             }
         }
+
         return $array_1;
     }
 
