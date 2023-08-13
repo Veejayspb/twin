@@ -83,4 +83,33 @@ class ArrayHelper
         }
         return $array_1;
     }
+
+    /**
+     * Проверка на существование указанных ключей в массиве.
+     * @param array $keys - список ключей (строгое сравнение)
+     * @param array $array - исходный массив
+     * @param bool $only - массив должен состоять только из указанных ключей (иных быть не должно)
+     * @return bool
+     */
+    public static function keysExist(array $keys, array $array, bool $only = false): bool
+    {
+        $keys = array_unique($keys);
+
+        if ($only && count($keys) != count($array)) {
+            return false;
+        }
+
+        foreach ($keys as $key) {
+            $type = gettype($key);
+
+            if (
+                !in_array($type, ['integer', 'string']) ||
+                !array_key_exists($key, $array)
+            ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
