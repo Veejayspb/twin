@@ -46,8 +46,8 @@ class ConfigConstructor
         $data = $this->getDefaultConfig($type);
 
         $this->data = ArrayHelper::merge(
-            $this->prepare($data),
-            $this->data
+            $this->data,
+            $this->prepare($data)
         );
 
         return $this;
@@ -137,7 +137,7 @@ class ConfigConstructor
         unset($data['parent']);
 
         $parentData = $this->prepare($parentData);
-        return ArrayHelper::merge($parentData, $data);
+        return ArrayHelper::merge($data, $parentData);
     }
 
     /**
