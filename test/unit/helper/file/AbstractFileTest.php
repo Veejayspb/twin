@@ -1,7 +1,5 @@
 <?php
 
-namespace twin\test\unit\helper\file;
-
 use twin\helper\file\AbstractFile;
 use twin\helper\file\Dir;
 use twin\test\helper\BaseTestCase;

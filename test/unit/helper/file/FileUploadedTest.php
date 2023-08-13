@@ -1,7 +1,5 @@
 <?php
 
-namespace unit\helper\file;
-
 use twin\helper\file\FileUploaded;
 use twin\test\helper\BaseTestCase;
 use twin\test\helper\Temp;

@@ -1,7 +1,5 @@
 <?php
 
-namespace twin\test\unit\helper;
-
 use twin\helper\Html;
 use twin\test\helper\BaseTestCase;
 use twin\test\helper\ObjectProxy;

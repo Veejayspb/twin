@@ -1,7 +1,5 @@
 <?php
 
-namespace twin\test\unit\helper;
-
 use twin\helper\ObjectHelper;
 use twin\test\helper\BaseTestCase;
 
