@@ -2,166 +2,94 @@
 
 namespace twin\helper;
 
-use twin\common\Component;
 use twin\Twin;
 
 /**
  * Сборщик конфига приложения.
- * Подключает данные из родительского конфига, указанного в секции parent, а также данные из системных конфигов.
+ * Подключает данные из родительского конфига, указанного в секции parent.
  *
- * $data = Twin::import('path/to/config/file.php');
- * $config = (new ConfigConstructor($data))
- *     ->registerDefault(ConfigConstructor::WEB)
- *     ->run();
+ * $config = new ConfigConstructor([ config file data ]);
+ * $data = $config->getData(true);
  *
  * Class ConfigConstructor
  */
 class ConfigConstructor
 {
-    const WEB = 'web';
-    const CONSOLE = 'console';
-
     /**
      * Данные конфига.
      * @var array
      */
-    protected $data = [];
+    protected $data;
 
     /**
      * @param array $data
      */
     public function __construct(array $data)
     {
-        $this->data = $this->prepare($data);
+        $this->data = $data;
     }
 
     /**
-     * Подключить системный конфиг.
-     * @param string $type - тип конфига web|console
-     * @return static
-     * @todo: Избавиться от данного метода. Вместо него использовать parent со ссылкой на системный конфиг.
-     */
-    public function registerDefault(string $type): self
-    {
-        $data = $this->getDefaultConfig($type);
-
-        $this->data = ArrayHelper::merge(
-            $this->data,
-            $this->prepare($data)
-        );
-
-        return $this;
-    }
-
-    /**
-     * Вернуть результирующий массив данных.
+     * Данные конфига.
+     * @param bool $parent - включить родительский конфиг
      * @return array
      */
-    public function data(): array
+    public function getData(bool $parent = false): array
     {
-        return $this->data;
+        if ($parent && $parentConfig = $this->getParent()) {
+            return ArrayHelper::merge(
+                $this->getData(),
+                $parentConfig->getData(true)
+            );
+        }
+
+        $data = $this->data;
+
+        if (array_key_exists('parent', $data)) {
+            unset($data['parent']);
+        }
+
+        return $data;
     }
 
     /**
-     * Вернуть объект с указанным компонентом.
-     * @param string $name - название компонента
-     * @return Component|null
+     * Вернуть объект с родительским конфигом.
+     * @return static|null
      */
-    public function getComponent(string $name)
+    public function getParent(): ?self
     {
-        $data = $this->data['components'] ?? [];
-
-        if (!array_key_exists($name, $data)) {
+        if (!array_key_exists('parent', $this->data) || !is_string($this->data['parent'])) {
             return null;
         }
 
-        $component = $this->createComponent($data[$name]);
+        $data = $this->getDataFromFile($this->data['parent']);
 
-        if (!$component) {
+        if ($data === null) {
             return null;
         }
 
-        return $component;
+        return new static($data);
     }
 
     /**
-     * Вернуть объекты с компонентами.
-     * @return Component[]
+     * Вернуть массив данных из файла.
+     * @param string $alias
+     * @return array|null
      */
-    public function getComponents(): array
+    protected function getDataFromFile(string $alias): ?array
     {
-        $data = $this->data['components'] ?? [];
-        $result = [];
+        $path = Alias::get($alias);
 
-        foreach ((array)$data as $name => $properties) {
-            $component = $this->createComponent($properties);
-            if (!$component) continue;
-            $result[$name] = $component;
+        if (!is_file($path)) {
+            return null;
         }
 
-        return $result;
-    }
+        $data = Twin::import($path);
 
-    /**
-     * Создать объект с компонентом на основе переданных свойств.
-     * @param array $properties - свойства компонента
-     * @return Component|bool - FALSE в случае невозможности создать компонент
-     */
-    protected function createComponent(array $properties)
-    {
-        $class = $properties['class'] ?? null;
-
-        if (
-            $class === null ||
-            !class_exists($class) ||
-            !is_subclass_of($class, Component::class)
-        ) {
-            return false;
+        if (!is_array($data)) {
+            return null;
         }
 
-        return new $class($properties);
-    }
-
-    /**
-     * Подключение родительского конфига из секции parent.
-     * @param array $data
-     * @return array
-     */
-    protected function prepare(array $data): array
-    {
-        if (!array_key_exists('parent', $data)) {
-            return $data;
-        }
-
-        $parentData = $this->getConfigByAlias($data['parent']);
-        unset($data['parent']);
-
-        $parentData = $this->prepare($parentData);
-        return ArrayHelper::merge($data, $parentData);
-    }
-
-    /**
-     * Вернуть системный конфиг.
-     * @param string $type - тип конфига web|console
-     * @return array
-     */
-    protected function getDefaultConfig(string $type): array
-    {
-        if (!in_array($type, [self::WEB, self::CONSOLE])) {
-            return [];
-        }
-
-        $alias = "@twin/config/$type.php";
-        return $this->getConfigByAlias($alias);
-    }
-
-    /**
-     * Вернуть конфиг по алиасу пути до файла конфига.
-     * @param string $alias - алиас пути
-     * @return array
-     */
-    protected function getConfigByAlias(string $alias): array
-    {
-        return Twin::import($alias) ?: [];
+        return $data;
     }
 }

@@ -117,7 +117,7 @@ class Twin
             if ($this->running) die;
             $this->running = true;
 
-            $this->registerConfig($config, ConfigConstructor::WEB);
+            $this->registerConfig($config);
 
             $route = $this->route->parseUrl(Request::$url);
             if ($route === false) {
@@ -151,7 +151,7 @@ class Twin
             if ($this->running) die;
             $this->running = true;
 
-            $this->registerConfig($config, ConfigConstructor::CONSOLE);
+            $this->registerConfig($config);
 
             global $argv;
 
@@ -268,23 +268,30 @@ class Twin
     /**
      * Регистрация конфига.
      * @param array $config - данные пользовательского конфига
-     * @param string $type - тип конфига web|console
      * @return void
      */
-    private function registerConfig(array $config, string $type)
+    protected function registerConfig(array $config)
     {
         // Генерация конфига
         $config = new ConfigConstructor($config);
-        $data = $config->registerDefault($type)->data();
+        $data = $config->getData(true);
 
         // Присвоение свойств
-        $this->name = $data['name'];
-        $this->language = $data['language'];
-        $this->params = $data['params'];
+        $this->name = $data['name'] ?? $this->name;
+        $this->language = $data['language'] ?? $this->language;
+        $this->params = $data['params'] ?? $this->params;
 
         // Регистрация компонентов
-        foreach ($config->getComponents() as $name => $component) {
-            $this->setComponent($name, $component);
+        $components = $data['components'] ?? [];
+
+        foreach ((array)$components as $name => $properties) {
+            if (!array_key_exists('class', $properties)) {
+                continue;
+            }
+
+            $className = $properties['class'];
+            $object = new $className($properties);
+            $this->setComponent($name, $object);
         }
     }
 }
