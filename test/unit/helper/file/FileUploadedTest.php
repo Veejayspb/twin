@@ -2,7 +2,6 @@
 
 use twin\helper\file\FileUploaded;
 use twin\test\helper\BaseTestCase;
-use twin\test\helper\Temp;
 
 final class FileUploadedTest extends BaseTestCase
 {
@@ -65,31 +64,38 @@ final class FileUploadedTest extends BaseTestCase
         $this->assertSame(500, $code);
     }
 
-    public function testParse()
+    public function testParseModel()
     {
-        $temp = new Temp;
-        $data = $this->getFilesData();
-        $files = FileUploaded::parse($data);
+        $_FILES = $this->getFilesData();
 
-        $expected = new FileUploaded($data['single']['tmp_name']);
-        $expected->name = 'image.jpg';
-        $expected->type = 'image/jpeg';
-        $expected->error = UPLOAD_ERR_OK;
-        $expected->size = 5029932;
+        $file1 = new FileUploaded(__FILE__);
+        $file1->name = 'image.jpg';
+        $file1->type = 'image/jpeg';
+        $file1->error = UPLOAD_ERR_OK;
+        $file1->size = 2222;
 
-        $this->assertEquals($expected, $files['single'][0]);
+        $file2 = new FileUploaded(__FILE__);
+        $file2->name = 'text1.txt';
+        $file2->type = 'text/plain';
+        $file2->error = UPLOAD_ERR_OK;
+        $file2->size = 1111;
 
-        $expected = new FileUploaded($data['multiple']['tmp_name'][0]);
-        $expected->name = 'text1.txt';
-        $expected->type = 'text/plain';
-        $expected->error = UPLOAD_ERR_OK;
-        $expected->size = 2970;
+        $file3 = new FileUploaded(__FILE__);
+        $file3->name = 'text2.txt';
+        $file3->type = 'text/plain';
+        $file3->error = UPLOAD_ERR_INI_SIZE;
+        $file3->size = 99999;
 
-        $this->assertEquals($expected, $files['multiple'][0]);
+        $expected = [
+            'field_1' => [$file1],
+            'field_2' => [$file2, $file3],
+        ];
 
-        $this->assertCount(1, $files['multiple']);
+        $this->assertEquals([], FileUploaded::parseModel('NotExists'));
+        $this->assertEquals($expected, FileUploaded::parseModel('ModelName'));
 
-        $temp->clear();
+        unset($_FILES['ModelName']['name']);
+        $this->assertEquals([], FileUploaded::parseModel('ModelName'));
     }
 
     /**
@@ -98,44 +104,27 @@ final class FileUploadedTest extends BaseTestCase
      */
     protected function getFilesData(): array
     {
-        $temp = new Temp;
-
-        $image = $temp->getFilePath('php8D87.tmp');
-        $text1 = $temp->getFilePath('php8E43.tmp');
-        $text2 = $temp->getFilePath('php8E54.tmp');
-
-        file_put_contents($image, '', LOCK_EX);
-        file_put_contents($text1, '', LOCK_EX);
-        file_put_contents($text2, '', LOCK_EX);
-
         return [
-            'single' => [
-                'name' => 'image.jpg',
-                'type' => 'image/jpeg',
-                'tmp_name' => $image,
-                'error' => UPLOAD_ERR_OK,
-                'size' => 5029932,
-            ],
-            'multiple' => [
+            'ModelName' => [
                 'name' => [
-                    'text1.txt',
-                    'text2.txt',
+                    'field_1' => 'image.jpg',
+                    'field_2' => ['text1.txt', 'text2.txt'],
                 ],
                 'type' => [
-                    'text/plain',
-                    'text/plain',
+                    'field_1' => 'image/jpeg',
+                    'field_2' => ['text/plain', 'text/plain'],
                 ],
                 'tmp_name' => [
-                    $text1,
-                    $text2,
+                    'field_1' => __FILE__,
+                    'field_2' => [__FILE__, __FILE__],
                 ],
                 'error' => [
-                    UPLOAD_ERR_OK,
-                    UPLOAD_ERR_INI_SIZE,
+                    'field_1' => UPLOAD_ERR_OK,
+                    'field_2' => [UPLOAD_ERR_OK, UPLOAD_ERR_INI_SIZE],
                 ],
                 'size' => [
-                    2970,
-                    43105,
+                    'field_1' => 2222,
+                    'field_2' => [1111, 99999],
                 ],
             ],
         ];

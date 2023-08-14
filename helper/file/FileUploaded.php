@@ -2,7 +2,9 @@
 
 namespace twin\helper\file;
 
+use twin\helper\ArrayHelper;
 use twin\helper\ObjectHelper;
+use twin\helper\Request;
 
 /**
  * Хелпер для работы с загруженными файлами из массива $_FILES.
@@ -48,44 +50,31 @@ class FileUploaded extends File
     }
 
     /**
-     * Разобрать массив $_FILES и скомпоновать его в виде объектов.
-     * @param array $data - $_FILES
+     * Разобрать массив $_FILES, полученный из формы с моделью.
+     * @param string $modelName - название модели: ModelName
      * @return array
      */
-    public static function parse(array $data): array
+    public static function parseModel(string $modelName): array
     {
-        $result = [];
+        $data = Request::files($modelName);
+        $keys = ['name', 'type', 'tmp_name', 'error', 'size'];
 
-        foreach ($data as $name => $attributes) {
-            $result[$name] = self::parseField($attributes);
+        if (!ArrayHelper::keysExist($keys, $data, true)) {
+            return [];
         }
 
-        return $result;
-    }
+        $result = [];
 
-    /**
-     * Разобрать данные конкретного поля массива $_FILES.
-     * @param array $attributes - $_FILES['field_name']
-     * @return array
-     */
-    private static function parseField(array $attributes): array
-    {
-        $rearranged = [];
-
-        foreach ($attributes as $name => $values) {
+        foreach ((array)$data['name'] as $fieldName => $values) {
             foreach ((array)$values as $i => $value) {
-                $rearranged[$i][$name] = $value;
+                $result[$fieldName][$i] = static::instance([
+                    'name' => ((array)$data['name'][$fieldName])[$i] ?? null,
+                    'type' => ((array)$data['type'][$fieldName])[$i] ?? null,
+                    'tmp_name' => ((array)$data['tmp_name'][$fieldName])[$i] ?? null,
+                    'error' => ((array)$data['error'][$fieldName])[$i] ?? null,
+                    'size' => ((array)$data['size'][$fieldName])[$i] ?? null,
+                ]);
             }
-        }
-
-        $result = [];
-
-        foreach ($rearranged as $i => $attributes) {
-            if ($attributes['error'] !== UPLOAD_ERR_OK) {
-                continue;
-            }
-
-            $result[$i] = static::instance($attributes);
         }
 
         return $result;
