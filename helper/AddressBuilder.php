@@ -39,7 +39,12 @@ final class AddressBuilder
         $this->address = $address;
     }
 
-    public function __call($name, $arguments)
+    /**
+     * @param string $name
+     * @param array $arguments
+     * @return $this
+     */
+    public function __call(string $name, array $arguments)
     {
         if (array_key_exists($name, $this->parts)) {
             $value = array_key_exists(0, $arguments) ? (bool)$arguments[0] : true;

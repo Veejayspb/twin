@@ -91,7 +91,7 @@ class Twin
      * @param string $name - название компонента
      * @return Component|null
      */
-    public function __get($name)
+    public function __get(string $name)
     {
         return $this->components[$name] ?? null;
     }

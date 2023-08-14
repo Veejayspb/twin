@@ -80,7 +80,7 @@ abstract class Migration
      * @param string $name
      * @return mixed
      */
-    public function __get($name)
+    public function __get(string $name)
     {
         switch ($name) {
             case 'class':
@@ -99,7 +99,7 @@ abstract class Migration
      * @throws Exception
      * @todo: use transaction or additional check after each step
      */
-    public function __call($name, $arguments)
+    public function __call(string $name, array $arguments)
     {
         switch ($name) {
             case 'up':

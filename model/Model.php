@@ -42,7 +42,7 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
      * @return mixed
      * @throws Exception
      */
-    public function __get($name)
+    public function __get(string $name)
     {
         // Запрещено возвращать значение сервисных атрибутов.
         if (StringHelper::isServiceAttribute($name)) {
@@ -65,7 +65,7 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
      * @return void
      * @throws Exception
      */
-    public function __set($name, $value)
+    public function __set(string $name, $value)
     {
         if (StringHelper::isServiceAttribute($name)) {
             throw new Exception(500, "Attribute $name doesn't exists");

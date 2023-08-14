@@ -63,7 +63,7 @@ abstract class Table extends Widget
      * @param string $name
      * @return mixed
      */
-    public function __get($name)
+    public function __get(string $name)
     {
         if ($name == 'limit') {
             return $this->getPagination()->limit;

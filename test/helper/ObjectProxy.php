@@ -23,7 +23,7 @@ class ObjectProxy
      * @param string $name
      * @return mixed|false
      */
-    public function __get($name)
+    public function __get(string $name)
     {
         $reflection = new ReflectionClass($this->object);
 
@@ -41,7 +41,7 @@ class ObjectProxy
      * @param mixed $value
      * @return void
      */
-    public function __set($name, $value)
+    public function __set(string $name, $value)
     {
         $reflection = new ReflectionClass($this->object);
 
@@ -59,7 +59,7 @@ class ObjectProxy
      * @param array $arguments
      * @return mixed|false
      */
-    public function __call($name, $arguments)
+    public function __call(string $name, array $arguments)
     {
         $className = get_class($this->object);
         $reflection = new ReflectionClass($className);

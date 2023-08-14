@@ -19,7 +19,7 @@ abstract class ActiveSqlModel extends ActiveModel
     /**
      * {@inheritdoc}
      */
-    public function __get($name)
+    public function __get(string $name)
     {
         if ($name == 'transaction') {
             return $this->getTransaction();

@@ -71,7 +71,7 @@ class Address
      * @param string $name
      * @param mixed $value
      */
-    public function __set($name, $value)
+    public function __set(string $name, $value)
     {
         if ($name == 'params' && is_array($value)) {
             if (array_key_exists('#', $value)) {
@@ -92,7 +92,7 @@ class Address
      * @param string $name
      * @return string|bool|null
      */
-    public function __get($name)
+    public function __get(string $name)
     {
         return $this->$name;
     }
