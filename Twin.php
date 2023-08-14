@@ -111,7 +111,7 @@ class Twin
      * @return void
      * @throws Exception
      */
-    public function run(array $config = [])
+    public function run(array $config = []): void
     {
         try {
             if ($this->running) die;
@@ -145,7 +145,7 @@ class Twin
      * @param array $config - конфигурация
      * @return void
      */
-    public function runConsole(array $config = [])
+    public function runConsole(array $config = []): void
     {
         try {
             if ($this->running) die;
@@ -176,7 +176,7 @@ class Twin
      * @param Component $component - объект с компонентом
      * @return void
      */
-    public function setComponent(string $name, Component $component)
+    public function setComponent(string $name, Component $component): void
     {
         $this->components[$name] = $component;
     }
@@ -195,7 +195,7 @@ class Twin
      * @param string $class - name\space\Component
      * @return Component|null
      */
-    public function getComponent(string $class)
+    public function getComponent(string $class): ?Component
     {
         $components = $this->getComponents();
 
@@ -226,6 +226,7 @@ class Twin
                 return $default;
             }
         }
+
         return $param;
     }
 
@@ -252,7 +253,7 @@ class Twin
      * @param string $className - название класса
      * @return void
      */
-    public static function autoload(string $className)
+    public static function autoload(string $className): void
     {
         $className = str_replace('\\', '/', $className);
 
@@ -270,7 +271,7 @@ class Twin
      * @param array $config - данные пользовательского конфига
      * @return void
      */
-    protected function registerConfig(array $config)
+    protected function registerConfig(array $config): void
     {
         // Генерация конфига
         $config = new ConfigConstructor($config);
