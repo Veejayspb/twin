@@ -5,7 +5,7 @@ namespace twin\route;
 /**
  * Class Route
  *
- * @property string $module
+ * @property string|null $module
  * @property string $controller
  * @property string $action
  * @property array $params
@@ -75,7 +75,7 @@ class Route
 
     /**
      * @param string $name
-     * @return string|array
+     * @return string|array|null
      */
     public function __get(string $name)
     {
@@ -157,7 +157,7 @@ class Route
     public function parse(string $route): void
     {
         $parts = explode('/', $route);
-        $reservedParams = array_reverse(array_keys(static::DEFAULT)); // Потому что разбор роута начинаем с конца (action)
+        $reservedParams = array_reverse(array_keys(static::DEFAULT)); // Разбор роута начинаем с конца (с действия)
 
         foreach ($reservedParams as $name) {
             $part = array_pop($parts);

@@ -57,11 +57,11 @@ class RouteManager extends Component
 
     /**
      * Вернуть неймспейс контроллеров указанного модуля.
-     * @param string $module - название модуля
+     * @param string|null $module - название модуля
      * @return string
      * @throws Exception
      */
-    public function getNamespace(string $module = ''): string
+    public function getNamespace(?string $module = null): string
     {
         if (!array_key_exists($module, $this->namespaces)) {
             throw new Exception(500, "Module not found: $module");
