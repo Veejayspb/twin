@@ -132,7 +132,7 @@ class Twin
             http_response_code($e->getCode());
 
             $route = new Route;
-            $route->setRoute(Twin::app()->route->error);
+            $route->parse(Twin::app()->route->error);
             $route->params = ['code' => $e->getCode(), 'message' => $e->getMessage()];
 
             $namespace = $this->route->getNamespace($route->module);

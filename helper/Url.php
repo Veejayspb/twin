@@ -20,7 +20,7 @@ class Url
     {
         $r = Controller::$instance->route;
         $r = new Route($r->module, $r->controller, $r->action);
-        $r->setRoute($route);
+        $r->parse($route);
         $r->params = $params;
         return static::getRouter()->createUrl($r, $absolute);
     }

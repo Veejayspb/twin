@@ -39,7 +39,7 @@ class Rule implements RuleInterface
         }
 
         $route = new Route;
-        $route->setRoute($strRoute);
+        $route->parse($strRoute);
         $route->params = $address->params;
         $route->setProperties($placeholders);
 
@@ -58,7 +58,7 @@ class Rule implements RuleInterface
         $reserved = $route->getReservedParams();
         $strRoute = $this->fillRoute($reserved);
 
-        if ($strRoute != $route->getRoute()) {
+        if ($strRoute != $route->stringify()) {
             return false;
         }
 
