@@ -39,11 +39,26 @@ abstract class Component
                 continue;
             }
 
-            if (!isset($this->$name) || $this->$name === []) {
+            if ($this->isEmpty($this->$name)) {
                 $result[] = $name;
             }
         }
 
         return $result;
+    }
+
+    /**
+     * Является ли значение пустым.
+     * @param mixed $value
+     * @return bool
+     */
+    protected function isEmpty($value): bool
+    {
+        $emptyValues = [
+            null,
+            [],
+        ];
+
+        return in_array($value, $emptyValues, true);
     }
 }
