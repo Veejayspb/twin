@@ -75,7 +75,7 @@ class Exception extends \Exception
      * @param int $code - код ошибки
      * @param string|null $message - сообщение об ошибке
      */
-    public function __construct(int $code, string $message = null)
+    public function __construct(int $code, ?string $message = null)
     {
         $this->code = $code;
         $this->message = $message ?: $this->getDefaultMessage();
@@ -85,8 +85,8 @@ class Exception extends \Exception
      * Вернуть сообщение об ошибке по-умолчанию.
      * @return string|null
      */
-    private function getDefaultMessage()
+    private function getDefaultMessage(): ?string
     {
-        return array_key_exists($this->code, $this->errors) ? $this->errors[$this->code] : null;
+        return $this->errors[$this->code] ?? null;
     }
 }
