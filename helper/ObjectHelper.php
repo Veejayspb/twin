@@ -88,6 +88,22 @@ class ObjectHelper
     }
 
     /**
+     * Является ли свойство статическим.
+     * @param string $property
+     * @return bool
+     */
+    public function isStaticProperty(string $property): bool
+    {
+        $reflectionProperty = $this->getProperty($property);
+
+        if (!$reflectionProperty) {
+            return false;
+        }
+
+        return $reflectionProperty->isStatic();
+    }
+
+    /**
      * Вернуть reflection-свойство объекта.
      * @param string $property
      * @return ReflectionProperty|null

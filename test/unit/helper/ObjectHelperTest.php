@@ -117,6 +117,37 @@ final class ObjectHelperTest extends BaseTestCase
         }
     }
 
+    public function testIsStaticProperty()
+    {
+        $items = [
+            'public_property' => false,
+            'protected_property' => false,
+            'private_property' => false,
+
+            'public_static_property' => true,
+            'protected_static_property' => true,
+            'private_static_property' => true,
+
+            'public_method' => false,
+            'protected_method' => false,
+            'private_method' => false,
+
+            'public_static_method' => false,
+            'protected_static_method' => false,
+            'private_static_method' => false,
+
+            'not_exists' => false,
+            '' => false,
+        ];
+
+        $object = $this->getObject();
+
+        foreach ($items as $name => $expected) {
+            $actual = (new ObjectHelper($object))->isStaticProperty($name);
+            $this->assertSame($expected, $actual);
+        }
+    }
+
     /**
      * @return object
      */
