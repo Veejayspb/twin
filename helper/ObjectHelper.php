@@ -15,7 +15,7 @@ class ObjectHelper
     public static function setProperties(object $object, array $properties): object
     {
         foreach ($properties as $name => $value) {
-            if (!property_exists($object, $name)) {
+            if (!static::isPublicProperty($object, $name)) {
                 continue;
             }
 

@@ -15,6 +15,7 @@ final class ObjectHelperTest extends BaseTestCase
             'public_property' => 1,
             'public_static_property' => 2,
             'not_exists' => 3,
+            'protected_property' => 4,
         ]);
 
         $this->assertSame(1, $proxy->public_property);
