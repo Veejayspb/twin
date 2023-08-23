@@ -18,7 +18,7 @@ abstract class Component
      */
     public function __construct(array $properties = [])
     {
-        ObjectHelper::setProperties($this, $properties);
+        (new ObjectHelper($this))->setProperties($properties);
         $properties = $this->getRequiredEmptyProperties();
 
         if ($properties) {

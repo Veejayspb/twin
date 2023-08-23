@@ -144,8 +144,9 @@ class RouteManager extends Component
     private function compareRoutes(callable $func)
     {
         foreach ($this->rules as $pattern => $route) {
-            $class = $this->getRuleClass($route);
-            $rule = ObjectHelper::setProperties(new $class, compact('pattern', 'route')); /* @var RuleInterface $rule */
+            $className = $this->getRuleClass($route);
+            $rule = new $className; /* @var RuleInterface $rule */
+            (new ObjectHelper($rule))->setProperties(compact('pattern', 'route'));
             $result = $func($rule);
 
             if ($result !== false) {

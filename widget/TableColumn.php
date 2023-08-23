@@ -35,6 +35,6 @@ class TableColumn
      */
     public function __construct(array $properties = [])
     {
-        ObjectHelper::setProperties($this, $properties);
+        (new ObjectHelper($this))->setProperties($properties);
     }
 }

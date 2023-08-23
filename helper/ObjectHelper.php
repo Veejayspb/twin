@@ -8,33 +8,45 @@ use ReflectionProperty;
 class ObjectHelper
 {
     /**
+     * Исходный объект.
+     * @var object
+     */
+    protected $object;
+
+    /**
+     * @param object $object
+     */
+    public function __construct(object $object)
+    {
+        $this->object = $object;
+    }
+
+    /**
      * Заполнить свойства объекта.
-     * @param object $object - исходный объект
      * @param array $properties - публичные нестатические свойства
      * @return object
      */
-    public static function setProperties(object $object, array $properties): object
+    public function setProperties(array $properties): object
     {
         foreach ($properties as $name => $value) {
-            if (!static::isPublicProperty($object, $name)) {
+            if (!$this->isPublicProperty($name)) {
                 continue;
             }
 
-            $object->$name = $value;
+            $this->object->$name = $value;
         }
 
-        return $object;
+        return $this->object;
     }
 
     /**
      * Имеется ли у объекта публичное свойство.
-     * @param object $object
      * @param string $property
      * @return bool
      */
-    public static function isPublicProperty(object $object, string $property): bool
+    public function isPublicProperty(string $property): bool
     {
-        $reflectionProperty = static::getProperty($object, $property);
+        $reflectionProperty = $this->getProperty($property);
 
         if (!$reflectionProperty) {
             return false;
@@ -45,13 +57,12 @@ class ObjectHelper
 
     /**
      * Имеется ли у объекта защищенное свойство.
-     * @param object $object
      * @param string $property
      * @return bool
      */
-    public static function isProtectedProperty(object $object, string $property): bool
+    public function isProtectedProperty(string $property): bool
     {
-        $reflectionProperty = static::getProperty($object, $property);
+        $reflectionProperty = $this->getProperty($property);
 
         if (!$reflectionProperty) {
             return false;
@@ -62,13 +73,12 @@ class ObjectHelper
 
     /**
      * Имеется ли у объекта приватное свойство.
-     * @param object $object
      * @param string $property
      * @return bool
      */
-    public static function isPrivateProperty(object $object, string $property): bool
+    public function isPrivateProperty(string $property): bool
     {
-        $reflectionProperty = static::getProperty($object, $property);
+        $reflectionProperty = $this->getProperty($property);
 
         if (!$reflectionProperty) {
             return false;
@@ -79,17 +89,16 @@ class ObjectHelper
 
     /**
      * Вернуть reflection-свойство объекта.
-     * @param object $object
      * @param string $property
      * @return ReflectionProperty|null
      */
-    protected static function getProperty(object $object, string $property): ?ReflectionProperty
+    protected function getProperty(string $property): ?ReflectionProperty
     {
-        if (!property_exists($object, $property)) {
+        if (!property_exists($this->object, $property)) {
             return null;
         }
 
-        $reflection = new ReflectionClass($object);
+        $reflection = new ReflectionClass($this->object);
         return $reflection->getProperty($property);
     }
 }

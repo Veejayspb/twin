@@ -14,7 +14,7 @@ abstract class Widget
      */
     public function __construct(array $properties = [])
     {
-        ObjectHelper::setProperties($this, $properties);
+        (new ObjectHelper($this))->setProperties($properties);
     }
 
     public function __toString()

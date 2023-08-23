@@ -19,7 +19,7 @@ abstract class Behavior
     public function __construct(BehaviorOwnerInterface $owner, array $properties = [])
     {
         $this->owner = $owner;
-        ObjectHelper::setProperties($this, $properties);
+        (new ObjectHelper($this))->setProperties($properties);
     }
 
     /**

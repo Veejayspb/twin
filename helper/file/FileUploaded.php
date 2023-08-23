@@ -46,7 +46,8 @@ class FileUploaded extends File
     {
         $path = $properties['tmp_name'] ?? '';
         $file = new static($path);
-        return ObjectHelper::setProperties($file, $properties);
+        (new ObjectHelper($file))->setProperties($properties);
+        return $file;
     }
 
     /**

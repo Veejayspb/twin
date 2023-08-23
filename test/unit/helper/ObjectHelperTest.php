@@ -11,7 +11,7 @@ final class ObjectHelperTest extends BaseTestCase
         $object = $this->getObject();
         $proxy = new ObjectProxy($object);
 
-        ObjectHelper::setProperties($object, [
+        (new ObjectHelper($object))->setProperties([
             'public_property' => 1,
             'public_static_property' => 2,
             'not_exists' => 3,
@@ -50,7 +50,7 @@ final class ObjectHelperTest extends BaseTestCase
         $object = $this->getObject();
 
         foreach ($items as $name => $expected) {
-            $actual = ObjectHelper::isPublicProperty($object, $name);
+            $actual = (new ObjectHelper($object))->isPublicProperty($name);
             $this->assertSame($expected, $actual);
         }
     }
@@ -81,7 +81,7 @@ final class ObjectHelperTest extends BaseTestCase
         $object = $this->getObject();
 
         foreach ($items as $name => $expected) {
-            $actual = ObjectHelper::isProtectedProperty($object, $name);
+            $actual = (new ObjectHelper($object))->isProtectedProperty($name);
             $this->assertSame($expected, $actual);
         }
     }
@@ -112,7 +112,7 @@ final class ObjectHelperTest extends BaseTestCase
         $object = $this->getObject();
 
         foreach ($items as $name => $expected) {
-            $actual = ObjectHelper::isPrivateProperty($object, $name);
+            $actual = (new ObjectHelper($object))->isPrivateProperty($name);
             $this->assertSame($expected, $actual);
         }
     }

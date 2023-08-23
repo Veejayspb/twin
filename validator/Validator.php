@@ -39,7 +39,7 @@ abstract class Validator
      */
     public function __construct(Model $model, array $attributes, array $properties = [])
     {
-        ObjectHelper::setProperties($this, $properties);
+        (new ObjectHelper($this))->setProperties($properties);
 
         $this->model = $model;
         $this->attributes = $attributes;
@@ -53,7 +53,9 @@ abstract class Validator
     protected function run()
     {
         foreach ($this->attributes as $attribute) {
-            if (!ObjectHelper::isPublicProperty($this->model, $attribute)) {
+            $objectHelper = new ObjectHelper($this->model);
+
+            if (!$objectHelper->isPublicProperty($attribute)) {
                 continue;
             }
 
