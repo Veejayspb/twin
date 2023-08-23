@@ -3,6 +3,7 @@
 namespace twin\helper;
 
 use ReflectionClass;
+use ReflectionProperty;
 
 class ObjectHelper
 {
@@ -33,13 +34,28 @@ class ObjectHelper
      */
     public static function isPublicProperty(object $object, string $property): bool
     {
-        if (!property_exists($object, $property)) {
+        $reflectionProperty = static::getProperty($object, $property);
+
+        if (!$reflectionProperty) {
             return false;
         }
 
-        $reflection = new ReflectionClass($object);
-        $reflectionProperty = $reflection->getProperty($property);
-
         return $reflectionProperty->isPublic();
+    }
+
+    /**
+     * Вернуть reflection-свойство объекта.
+     * @param object $object
+     * @param string $property
+     * @return ReflectionProperty|null
+     */
+    protected static function getProperty(object $object, string $property): ?ReflectionProperty
+    {
+        if (!property_exists($object, $property)) {
+            return null;
+        }
+
+        $reflection = new ReflectionClass($object);
+        return $reflection->getProperty($property);
     }
 }

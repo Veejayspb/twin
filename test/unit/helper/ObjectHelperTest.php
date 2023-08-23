@@ -26,16 +26,33 @@ final class ObjectHelperTest extends BaseTestCase
 
     public function testIsPublicProperty()
     {
+        $items = [
+            'public_property' => true,
+            'protected_property' => false,
+            'private_property' => false,
+
+            'public_static_property' => true,
+            'protected_static_property' => false,
+            'private_static_property' => false,
+
+            'public_method' => false,
+            'protected_method' => false,
+            'private_method' => false,
+
+            'public_static_method' => false,
+            'protected_static_method' => false,
+            'private_static_method' => false,
+
+            'not_exists' => false,
+            '' => false,
+        ];
+        
         $object = $this->getObject();
 
-        $this->assertTrue(ObjectHelper::isPublicProperty($object, 'public_property'));
-        $this->assertTrue(ObjectHelper::isPublicProperty($object, 'public_static_property'));
-        $this->assertFalse(ObjectHelper::isPublicProperty($object, 'protected_property'));
-        $this->assertFalse(ObjectHelper::isPublicProperty($object, 'private_static_property'));
-        $this->assertFalse(ObjectHelper::isPublicProperty($object, 'public_method'));
-        $this->assertFalse(ObjectHelper::isPublicProperty($object, 'public_static_method'));
-        $this->assertFalse(ObjectHelper::isPublicProperty($object, 'not_exists'));
-        $this->assertFalse(ObjectHelper::isPublicProperty($object, ''));
+        foreach ($items as $name => $expected) {
+            $actual = ObjectHelper::isPublicProperty($object, $name);
+            $this->assertSame($expected, $actual);
+        }
     }
 
     /**
