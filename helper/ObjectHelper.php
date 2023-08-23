@@ -61,6 +61,23 @@ class ObjectHelper
     }
 
     /**
+     * Имеется ли у объекта приватное свойство.
+     * @param object $object
+     * @param string $property
+     * @return bool
+     */
+    public static function isPrivateProperty(object $object, string $property): bool
+    {
+        $reflectionProperty = static::getProperty($object, $property);
+
+        if (!$reflectionProperty) {
+            return false;
+        }
+
+        return $reflectionProperty->isPrivate();
+    }
+
+    /**
      * Вернуть reflection-свойство объекта.
      * @param object $object
      * @param string $property
