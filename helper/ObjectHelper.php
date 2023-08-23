@@ -44,6 +44,23 @@ class ObjectHelper
     }
 
     /**
+     * Имеется ли у объекта защищенное свойство.
+     * @param object $object
+     * @param string $property
+     * @return bool
+     */
+    public static function isProtectedProperty(object $object, string $property): bool
+    {
+        $reflectionProperty = static::getProperty($object, $property);
+
+        if (!$reflectionProperty) {
+            return false;
+        }
+
+        return $reflectionProperty->isProtected();
+    }
+
+    /**
      * Вернуть reflection-свойство объекта.
      * @param object $object
      * @param string $property

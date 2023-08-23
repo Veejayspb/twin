@@ -55,6 +55,37 @@ final class ObjectHelperTest extends BaseTestCase
         }
     }
 
+    public function testIsProtectedProperty()
+    {
+        $items = [
+            'public_property' => false,
+            'protected_property' => true,
+            'private_property' => false,
+
+            'public_static_property' => false,
+            'protected_static_property' => true,
+            'private_static_property' => false,
+
+            'public_method' => false,
+            'protected_method' => false,
+            'private_method' => false,
+
+            'public_static_method' => false,
+            'protected_static_method' => false,
+            'private_static_method' => false,
+
+            'not_exists' => false,
+            '' => false,
+        ];
+
+        $object = $this->getObject();
+
+        foreach ($items as $name => $expected) {
+            $actual = ObjectHelper::isProtectedProperty($object, $name);
+            $this->assertSame($expected, $actual);
+        }
+    }
+
     /**
      * @return object
      */
