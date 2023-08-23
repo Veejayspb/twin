@@ -24,13 +24,13 @@ abstract class Validator
      * Текст ошибки валидации.
      * @var string
      */
-    protected $message = 'Ошибка валидации';
+    public $message = 'Ошибка валидации';
 
     /**
      * Разрешить NULL в качестве значения.
      * @var bool
      */
-    protected $null = false;
+    public $null = false;
 
     /**
      * @param Model $model - валидируемая модель
@@ -40,6 +40,7 @@ abstract class Validator
     public function __construct(Model $model, array $attributes, array $properties = [])
     {
         ObjectHelper::setProperties($this, $properties);
+
         $this->model = $model;
         $this->attributes = $attributes;
         $this->run();
@@ -52,13 +53,17 @@ abstract class Validator
     protected function run()
     {
         foreach ($this->attributes as $attribute) {
+            if (!ObjectHelper::isPublicProperty($this->model, $attribute)) {
+                continue;
+            }
+
             $value = $this->model->$attribute;
 
             if ($value === '') {
                 continue;
             }
 
-            if ($this->null && $value === null) {
+            if ($this->null === true && $value === null) {
                 continue;
             }
 
