@@ -2,6 +2,8 @@
 
 namespace twin\helper;
 
+use ReflectionClass;
+
 class ObjectHelper
 {
     /**
@@ -21,5 +23,23 @@ class ObjectHelper
         }
 
         return $object;
+    }
+
+    /**
+     * Имеется ли у объекта публичное свойство.
+     * @param object $object
+     * @param string $property
+     * @return bool
+     */
+    public static function isPublicProperty(object $object, string $property): bool
+    {
+        if (!property_exists($object, $property)) {
+            return false;
+        }
+
+        $reflection = new ReflectionClass($object);
+        $reflectionProperty = $reflection->getProperty($property);
+
+        return $reflectionProperty->isPublic();
     }
 }
