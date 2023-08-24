@@ -26,7 +26,7 @@ class Date extends Validator
     public function date($value, string $attribute): bool
     {
         $label = $this->model->getLabel($attribute);
-        $pattern = '/^(\d{4})\-(\d{2})\-(\d{2})$/';
+        $pattern = '/^(\d{4})-(\d{2})-(\d{2})$/';
         $this->message = "$label не является датой";
 
         if (!preg_match($pattern, $value, $matches)) {
