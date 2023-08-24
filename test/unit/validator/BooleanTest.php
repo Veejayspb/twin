@@ -47,7 +47,10 @@ final class BooleanTest extends BaseTestCase
         $validator = new Boolean($model, ['a']);
 
         foreach ($items as $item) {
-            $this->assertSame($item['expected'], $validator->type($item['value']));
+            $this->assertSame(
+                $item['expected'],
+                $validator->type($item['value'], 'a')
+            );
         }
     }
 }
