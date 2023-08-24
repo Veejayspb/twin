@@ -1,15 +1,15 @@
 <?php
 
-use twin\model\Model;
 use twin\test\helper\BaseTestCase;
 use twin\test\helper\ObjectProxy;
+use twin\test\helper\TempModel;
 use twin\validator\Validator;
 
 final class ValidatorTest extends BaseTestCase
 {
     public function testConstructor()
     {
-        $model = $this->getModel();
+        $model = new TempModel;
 
         $validator = $this->getMockForAbstractClass(
             Validator::class,
@@ -23,17 +23,5 @@ final class ValidatorTest extends BaseTestCase
         $this->assertSame('test message', $validator->message);
         $this->assertTrue($validator->null);
         $this->assertFalse(property_exists($validator, 'not_exists'));
-    }
-
-    /**
-     * @return Model
-     */
-    private function getModel(): Model
-    {
-        return new class extends Model {
-            public $a;
-            protected $b;
-            public static $c;
-        };
     }
 }
