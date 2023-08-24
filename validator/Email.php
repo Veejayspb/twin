@@ -7,12 +7,13 @@ class Email extends Str
     /**
      * Корректен ли адрес.
      * @param mixed $value
+     * @param string $attribute
      * @return bool
-     * @todo: кириллические адреса
      */
-    public function email($value): bool
+    public function email($value, string $attribute): bool
     {
         $this->message = 'Некорректный email-адрес';
-        return filter_var($value, FILTER_VALIDATE_EMAIL);
+        $pattern = "/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/u";
+        return preg_match($pattern, $value, $matches);
     }
 }
