@@ -55,7 +55,7 @@ abstract class Validator
         foreach ($this->attributes as $attribute) {
             $objectHelper = new ObjectHelper($this->model);
 
-            if (!$objectHelper->isPublicProperty($attribute)) {
+            if (!$objectHelper->isPublicProperty($attribute) || $objectHelper->isStaticProperty($attribute)) {
                 continue;
             }
 
