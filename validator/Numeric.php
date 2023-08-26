@@ -36,7 +36,7 @@ abstract class Numeric extends Range
 
     /**
      * Выше максимального значения.
-     * @param int $value
+     * @param mixed $value
      * @param string $attribute
      * @return bool
      */
