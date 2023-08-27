@@ -39,13 +39,15 @@ final class DoubleTest extends BaseTestCase
             ],
         ];
 
-        $model = new TempModel;
-        $validator = new Double($model, ['a']);
-
         foreach ($items as $item) {
+            $model = new TempModel;
+            $model->a = $item['value'];
+
+            $validator = new Double($model, ['a']);
+
             $this->assertSame(
                 $item['expected'],
-                $validator->type($item['value'], 'a')
+                $validator->type('a')
             );
         }
     }

@@ -7,17 +7,16 @@ class Required extends Validator
     /**
      * {@inheritdoc}
      */
-    protected $message = 'Является обязательным атрибутом';
+    public $message = 'Является обязательным атрибутом';
 
     /**
      * Заполнено ли значение атрибута.
-     * @param mixed $value
      * @param string $attribute
      * @return bool
      */
-    public function notEmpty($value, string $attribute): bool
+    public function notEmpty(string $attribute): bool
     {
-        return !in_array($value, [null, ''], true);
+        return !in_array($this->model->$attribute, [null, ''], true);
     }
 
     /**

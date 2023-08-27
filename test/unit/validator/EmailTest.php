@@ -47,13 +47,15 @@ final class EmailTest extends BaseTestCase
             ],
         ];
 
-        $model = new TempModel;
-        $validator = new Email($model, ['a']);
-
         foreach ($items as $item) {
+            $model = new TempModel;
+            $model->a = $item['value'];
+
+            $validator = new Email($model, ['a']);
+
             $this->assertSame(
                 $item['expected'],
-                $validator->email($item['value'], 'a')
+                $validator->email('a')
             );
         }
     }

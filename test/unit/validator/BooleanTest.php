@@ -43,13 +43,15 @@ final class BooleanTest extends BaseTestCase
             ],
         ];
 
-        $model = new TempModel;
-        $validator = new Boolean($model, ['a']);
-
         foreach ($items as $item) {
+            $model = new TempModel;
+            $model->a = $item['value'];
+
+            $validator = new Boolean($model, ['a']);
+
             $this->assertSame(
                 $item['expected'],
-                $validator->type($item['value'], 'a')
+                $validator->type('a')
             );
         }
     }

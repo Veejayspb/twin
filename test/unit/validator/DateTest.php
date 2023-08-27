@@ -31,13 +31,15 @@ final class DateTest extends BaseTestCase
             ],
         ];
 
-        $model = new TempModel;
-        $validator = new Date($model, ['a']);
-
         foreach ($items as $item) {
+            $model = new TempModel;
+            $model->a = $item['value'];
+
+            $validator = new Date($model, ['a']);
+
             $this->assertSame(
                 $item['expected'],
-                $validator->type($item['value'], 'a')
+                $validator->type('a')
             );
         }
     }
@@ -71,13 +73,15 @@ final class DateTest extends BaseTestCase
             ],
         ];
 
-        $model = new TempModel;
-        $validator = new Date($model, ['a']);
-
         foreach ($items as $item) {
+            $model = new TempModel;
+            $model->a = $item['value'];
+
+            $validator = new Date($model, ['a']);
+
             $this->assertSame(
                 $item['expected'],
-                $validator->date($item['value'], 'a')
+                $validator->date('a')
             );
         }
     }

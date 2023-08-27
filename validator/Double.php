@@ -6,12 +6,12 @@ class Double extends Numeric
 {
     /**
      * Проверка типа.
-     * @param mixed $value
      * @param string $attribute
      * @return bool
      */
-    public function type($value, string $attribute): bool
+    public function type(string $attribute): bool
     {
+        $value = $this->model->$attribute;
         $label = $this->model->getLabel($attribute);
         $this->message = "$label не является числом";
         $type = gettype($value);

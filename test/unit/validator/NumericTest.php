@@ -31,16 +31,18 @@ final class NumericTest extends BaseTestCase
             ],
         ];
 
-        $model = new TempModel;
-        $validator = $this->getMockForAbstractClass(
-            Numeric::class,
-            [$model, ['a'], ['min' => 4]]
-        );
-
         foreach ($items as $item) {
+            $model = new TempModel;
+            $model->a = $item['value'];
+
+            $validator = $this->getMockForAbstractClass(
+                Numeric::class,
+                [$model, ['a'], ['min' => 4]]
+            );
+
             $this->assertSame(
                 $item['expected'],
-                $validator->min($item['value'], 'a')
+                $validator->min('a')
             );
         }
     }
@@ -66,16 +68,18 @@ final class NumericTest extends BaseTestCase
             ],
         ];
 
-        $model = new TempModel;
-        $validator = $this->getMockForAbstractClass(
-            Numeric::class,
-            [$model, ['a'], ['max' => 4]]
-        );
-
         foreach ($items as $item) {
+            $model = new TempModel;
+            $model->a = $item['value'];
+
+            $validator = $this->getMockForAbstractClass(
+                Numeric::class,
+                [$model, ['a'], ['max' => 4]]
+            );
+
             $this->assertSame(
                 $item['expected'],
-                $validator->max($item['value'], 'a')
+                $validator->max('a')
             );
         }
     }

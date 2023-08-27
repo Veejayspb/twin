@@ -24,24 +24,22 @@ class Str extends Range
 
     /**
      * Является ли строкой.
-     * @param mixed $value
      * @param string $attribute
      * @return bool
      */
-    public function type($value, string $attribute): bool
+    public function type(string $attribute): bool
     {
         $label = $this->model->getLabel($attribute);
         $this->message = "$label не является строкой";
-        return 'string' == gettype($value);
+        return 'string' == gettype($this->model->$attribute);
     }
 
     /**
      * Длина меньше минимальной.
-     * @param mixed $value
      * @param string $attribute
      * @return bool
      */
-    public function min($value, string $attribute): bool
+    public function min(string $attribute): bool
     {
         $label = $this->model->getLabel($attribute);
 
@@ -50,16 +48,15 @@ class Str extends Range
         }
 
         $this->message = "Длина поля \"$label\" должна быть больше или равна $this->min";
-        return $this->min <= mb_strlen($value);
+        return $this->min <= mb_strlen($this->model->$attribute);
     }
 
     /**
      * Длина больше максимальной.
-     * @param mixed $value
      * @param string $attribute
      * @return bool
      */
-    public function max($value, string $attribute): bool
+    public function max(string $attribute): bool
     {
         $label = $this->model->getLabel($attribute);
 
@@ -68,16 +65,15 @@ class Str extends Range
         }
 
         $this->message = "Длина $label должна быть меньше или равна $this->max";
-        return mb_strlen($value) <= $this->max;
+        return mb_strlen($this->model->$attribute) <= $this->max;
     }
 
     /**
      * Соответствует ли регулярному выражению.
-     * @param mixed $value
      * @param string $attribute
      * @return bool
      */
-    public function pattern($value, string $attribute): bool
+    public function pattern(string $attribute): bool
     {
         $label = $this->model->getLabel($attribute);
 
@@ -86,6 +82,6 @@ class Str extends Range
         }
 
         $this->message = "$label не соответствует шаблону";
-        return preg_match($this->pattern, $value);
+        return preg_match($this->pattern, $this->model->$attribute);
     }
 }

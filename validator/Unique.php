@@ -2,9 +2,7 @@
 
 namespace twin\validator;
 
-use twin\common\Exception;
 use twin\model\active\ActiveModel;
-use twin\model\Model;
 
 /**
  * Class Unique
@@ -14,21 +12,18 @@ class Unique extends Validator
 {
     /**
      * {@inheritdoc}
-     * @throws Exception
      */
-    public function __construct(Model $model, $attributes, array $params = [])
+    public function __construct(ActiveModel $model, array $attributes, array $params = [])
     {
-        if (!is_subclass_of($model, ActiveModel::class)) {
-            throw new Exception(500, get_class($model) . ' must extends ' . ActiveModel::class);
-        }
         parent::__construct($model, $attributes, $params);
     }
 
     /**
      * Проверить запись на уникальность.
+     * @param string $attribute
      * @return bool
      */
-    public function similar(): bool
+    public function similar(string $attribute): bool
     {
         $this->message = 'Неуникальное значение';
 
@@ -68,6 +63,7 @@ class Unique extends Validator
     {
         // Если не указан PK, то невозможно определить оригинальную запись (не валидируем)
         $pk = $this->model->pk();
+
         if (empty($pk)) {
             return true;
         }

@@ -43,13 +43,15 @@ final class IntegerTest extends BaseTestCase
             ],
         ];
 
-        $model = new TempModel;
-        $validator = new Integer($model, ['a']);
-
         foreach ($items as $item) {
+            $model = new TempModel;
+            $model->a = $item['value'];
+
+            $validator = new Integer($model, ['a']);
+
             $this->assertSame(
                 $item['expected'],
-                $validator->type($item['value'], 'a')
+                $validator->type('a')
             );
         }
     }
