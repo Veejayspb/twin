@@ -30,7 +30,7 @@ class Unique extends Validator
         if ($this->model->isNewRecord()) {
             return $this->newRecord();
         } else {
-            return $this->notNewRecord();
+            return $this->oldRecord();
         }
     }
 
@@ -59,7 +59,7 @@ class Unique extends Validator
      * Валидация существующей записи.
      * @return bool
      */
-    private function notNewRecord(): bool
+    private function oldRecord(): bool
     {
         // Если не указан PK, то невозможно определить оригинальную запись (не валидируем)
         $pk = $this->model->pk();
