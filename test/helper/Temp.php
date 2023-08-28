@@ -5,7 +5,7 @@ namespace twin\test\helper;
 use twin\helper\file\Dir;
 use twin\helper\file\File;
 
-class Temp
+final class Temp
 {
     /**
      * Создать файл.
