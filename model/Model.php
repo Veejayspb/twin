@@ -108,7 +108,7 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
      * @param string $attribute - название атрибута
      * @return string|null
      */
-    public function getHint(string $attribute)
+    public function getHint(string $attribute): ?string
     {
         $hints = $this->hints();
         return $hints[$attribute] ?? null;
@@ -120,7 +120,7 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
      * @param string $message - текст ошибки
      * @return void
      */
-    public function setError(string $attribute, string $message)
+    public function setError(string $attribute, string $message): void
     {
         $this->_errors[$attribute] = $message;
     }
@@ -132,7 +132,7 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
      * значение - текст ошибки
      * @return void
      */
-    public function setErrors(array $errors)
+    public function setErrors(array $errors): void
     {
         foreach ($errors as $attribute => $message) {
             $this->setError($attribute, $message);
@@ -144,7 +144,7 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
      * @param string $attribute - название атрибута
      * @return string|null - NULL, если ошибки отсутствуют
      */
-    public function getError(string $attribute)
+    public function getError(string $attribute): ?string
     {
         return $this->_errors[$attribute] ?? null;
     }
@@ -163,11 +163,16 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
         $result = [];
 
         foreach ($attributes as $attribute) {
+            if (!is_string($attribute)) {
+                continue;
+            }
+
             $message = $this->getError($attribute);
 
             if ($message === null) {
                 continue;
             }
+
             $result[$attribute] = $message;
         }
 
@@ -198,7 +203,7 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
      * @param string $attribute - название атрибута
      * @return void
      */
-    public function clearError(string $attribute)
+    public function clearError(string $attribute): void
     {
         if (array_key_exists($attribute, $this->_errors)) {
             unset($this->_errors[$attribute]);
@@ -210,9 +215,9 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
      * @param array $attributes - названия атрибутов, для которых требуется сбросить ошибки (если не указано, то сбросятся все)
      * @return void
      */
-    public function clearErrors(array $attributes = [])
+    public function clearErrors(array $attributes = []): void
     {
-        $attributes = $attributes ?: $this->getAttributes();
+        $attributes = $attributes ?: array_keys($this->_errors);
 
         foreach ($attributes as $attribute) {
             $this->clearError($attribute);
@@ -220,20 +225,16 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
     }
 
     /**
-     * Атрибуты модели.
-     * @return array
+     * Присвоить значение атрибута с проверкой на существование.
+     * @param string $name
+     * @param mixed $value
+     * @return void
      */
-    protected function attributeNames(): array
+    public function setAttribute(string $name, $value): void
     {
-        $properties = (new ReflectionClass($this))->getProperties(ReflectionProperty::IS_PUBLIC);
-        $result = [];
-
-        foreach ($properties as $property) {
-            if ($property->isStatic()) continue;
-            $result[] = $property->getName();
+        if ($this->hasAttribute($name)) {
+            $this->$name = $value;
         }
-
-        return $result;
     }
 
     /**
@@ -247,8 +248,11 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
         $names = $safeOnly ? $this->safe() : $this->attributeNames();
 
         foreach ($attributes as $name => $value) {
-            if (!in_array($name, $names)) continue;
-            $this->$name = $value;
+            if (!in_array($name, $names)) {
+                continue;
+            }
+
+            $this->setAttribute($name, $value);
         }
 
         return $this;
@@ -266,7 +270,10 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
         $result = [];
 
         foreach ($names as $name) {
-            if ($skip && !in_array($name, $attributes)) continue;
+            if ($skip && !in_array($name, $attributes)) {
+                continue;
+            }
+
             $result[$name] = $this->$name;
         }
 
@@ -372,16 +379,36 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
     }
 
     /**
+     * Атрибуты модели.
+     * @return array
+     */
+    protected function attributeNames(): array
+    {
+        $properties = (new ReflectionClass($this))->getProperties(ReflectionProperty::IS_PUBLIC);
+        $result = [];
+
+        foreach ($properties as $property) {
+            if ($property->isStatic()) {
+                continue;
+            }
+
+            $result[] = $property->getName();
+        }
+
+        return $result;
+    }
+
+    /**
      * Регистрация поведений.
      * @return void
      */
-    protected function behaviors() {}
+    protected function behaviors(): void {}
 
     /**
      * Вызов набора пользовательских валидаторов.
      * @return void
      */
-    protected function rules() {}
+    protected function rules(): void {}
 
     /**
      * Вызов события до валидации.
@@ -396,5 +423,5 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
      * Вызов события после валидации.
      * @return void
      */
-    protected function afterValidate() {}
+    protected function afterValidate(): void {}
 }
