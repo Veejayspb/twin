@@ -43,49 +43,44 @@ class Header
      * Добавить заголовок.
      * @param string $name
      * @param string $value
-     * @return static
+     * @return void
      */
-    public function add(string $name, string $value): self
+    public function add(string $name, string $value): void
     {
         header("$name: $value");
-        return $this;
     }
 
     /**
      * Удалить заголовок.
      * @param string $name
-     * @return static
+     * @return void
      */
-    public function remove(string $name): self
+    public function remove(string $name): void
     {
         header_remove($name);
-        return $this;
     }
 
     /**
      * Удалить все заголовки.
-     * @return static
+     * @return void
      */
-    public function clear(): self
+    public function clear(): void
     {
         $items = $this->getList();
 
         foreach ($items as $name => $value) {
             $this->remove($name);
         }
-
-        return $this;
     }
 
     /**
      * Сбросить заголовки по-умолчанию.
-     * @return static
+     * @return void
      */
-    public function reset(): self
+    public function reset(): void
     {
-        return $this
-            ->clear()
-            ->addDefault();
+        $this->clear();
+        $this->addDefault();
     }
 
     /**
@@ -93,7 +88,7 @@ class Header
      * @param string $name
      * @return string|null
      */
-    public function get(string $name)
+    public function get(string $name): ?string
     {
         $items = $this->getList();
         return $items[$name] ?? null;
@@ -123,14 +118,12 @@ class Header
 
     /**
      * Добавить заголовки по-умолчанию.
-     * @return static
+     * @return void
      */
-    protected function addDefault(): self
+    protected function addDefault(): void
     {
         foreach ($this->default as $name => $value) {
             $this->add($name, $value);
         }
-
-        return $this;
     }
 }
