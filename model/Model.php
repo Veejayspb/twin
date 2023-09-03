@@ -44,11 +44,6 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
      */
     public function __get(string $name)
     {
-        // Запрещено возвращать значение сервисных атрибутов.
-        if (StringHelper::isServiceAttribute($name)) {
-            throw new Exception(500, "Undefined attribute $name");
-        }
-
         // Попытка найти поведение с указанным названием.
         $behavior = $this->getBehavior($name);
 
@@ -57,21 +52,6 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
         }
 
         throw new Exception(500, "Undefined attribute $name");
-    }
-
-    /**
-     * @param string $name
-     * @param mixed $value
-     * @return void
-     * @throws Exception
-     */
-    public function __set(string $name, $value)
-    {
-        if (StringHelper::isServiceAttribute($name)) {
-            throw new Exception(500, "Attribute $name doesn't exists");
-        }
-
-        $this->$name = $value;
     }
 
     /**
