@@ -17,7 +17,7 @@ final class HeaderTest extends BaseTestCase
 
     public function testClear()
     {
-        $object = $this->getObject();
+        $object = new \twin\test\helper\Header;
 
         $object->add('one', 'one');
         $object->add('two', 'two');
@@ -76,37 +76,5 @@ final class HeaderTest extends BaseTestCase
             ->willReturn(self::RAW_HEADERS);
 
         return $mock;
-    }
-
-    /**
-     * @return Header
-     */
-    private function getObject(): Header
-    {
-        return new class extends Header {
-            private $_headers = [];
-
-            public function add(string $name, string $value): void
-            {
-                $this->_headers[$name] = $value;
-            }
-
-            public function remove(string $name): void
-            {
-                if (array_key_exists($name, $this->_headers)) {
-                    unset($this->_headers[$name]);
-                }
-            }
-
-            public function get(string $name): ?string
-            {
-                return $this->_headers[$name] ?? null;
-            }
-
-            public function getList(): array
-            {
-                return $this->_headers;
-            }
-        };
     }
 }
