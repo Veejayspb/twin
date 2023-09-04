@@ -104,7 +104,7 @@ abstract class WebController extends Controller
      */
     protected function redirect(string $url)
     {
-        Header::instance()->add('Location', $url);
+        (new Header)->add('Location', $url);
         exit;
     }
 
@@ -115,7 +115,7 @@ abstract class WebController extends Controller
      */
     protected function refresh(int $delay = 0)
     {
-        Header::instance()->add('Refresh', $delay);
+        (new Header)->add('Refresh', $delay);
         exit;
     }
 

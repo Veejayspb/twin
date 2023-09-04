@@ -38,8 +38,8 @@ class Response extends Component
      */
     protected function registerHeaders()
     {
-        $helper = Header::instance();
-        $helper->reset();
+        $helper = new Header;
+        $helper->clear();
 
         foreach ($this->headers as $name => $value) {
             $helper->add($name, $value);

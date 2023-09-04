@@ -9,35 +9,7 @@ namespace twin\helper;
  */
 class Header
 {
-    /**
-     * Экземпляр объекта.
-     * @var static
-     */
-    protected static $instance;
-
-    /**
-     * Список заголовков по-умолчанию.
-     * @var array
-     */
-    protected $default;
-
-    private function __construct()
-    {
-        $this->default = $this->getList();
-    }
-
-    private function __clone() {}
-
-    private function __wakeup() {}
-
-    /**
-     * Вернуть экземпляр объекта.
-     * @return static
-     */
-    public static function instance(): self
-    {
-        return static::$instance = static::$instance ?: new static;
-    }
+    const PATTERN = '/^(.+?): (.+)$/';
 
     /**
      * Добавить заголовок.
@@ -74,16 +46,6 @@ class Header
     }
 
     /**
-     * Сбросить заголовки по-умолчанию.
-     * @return void
-     */
-    public function reset(): void
-    {
-        $this->clear();
-        $this->addDefault();
-    }
-
-    /**
      * Получить значение заголовка.
      * @param string $name
      * @return string|null
@@ -104,7 +66,7 @@ class Header
         $result = [];
 
         foreach ($items as $item) {
-            if (!preg_match('/^(.+?): (.+)$/', $item, $matches)) {
+            if (!preg_match(static::PATTERN, $item, $matches)) {
                 continue;
             }
 
@@ -114,16 +76,5 @@ class Header
         }
 
         return $result;
-    }
-
-    /**
-     * Добавить заголовки по-умолчанию.
-     * @return void
-     */
-    protected function addDefault(): void
-    {
-        foreach ($this->default as $name => $value) {
-            $this->add($name, $value);
-        }
     }
 }
