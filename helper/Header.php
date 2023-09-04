@@ -47,13 +47,23 @@ class Header
 
     /**
      * Получить значение заголовка.
-     * @param string $name
+     * @param string $name - название заголовка в любом регистре
      * @return string|null
      */
     public function get(string $name): ?string
     {
+        $name = strtolower($name);
         $items = $this->getList();
-        return $items[$name] ?? null;
+
+        foreach ($items as $key => $value) {
+            $key = strtolower($key);
+
+            if ($key == $name) {
+                return $value;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -62,7 +72,7 @@ class Header
      */
     public function getList(): array
     {
-        $items = headers_list();
+        $items = $this->getRawList();
         $result = [];
 
         foreach ($items as $item) {
@@ -76,5 +86,14 @@ class Header
         }
 
         return $result;
+    }
+
+    /**
+     * Необработанный список заголовков.
+     * @return array
+     */
+    protected function getRawList(): array
+    {
+        return headers_list();
     }
 }
