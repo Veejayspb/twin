@@ -41,6 +41,21 @@ final class HeaderTest extends BaseTestCase
         ], $object->getList());
     }
 
+    public function testRemoveMultiple()
+    {
+        $object = new \twin\test\helper\Header;
+
+        $object->addMultiple([
+            'one' => 'old',
+            'two' => 'old',
+            'three' => 'old',
+        ]);
+
+        $object->removeMultiple(['zero', 'one', 'two']);
+
+        $this->assertSame(['three' => 'old'], $object->getList());
+    }
+
     public function testClear()
     {
         $object = new \twin\test\helper\Header;

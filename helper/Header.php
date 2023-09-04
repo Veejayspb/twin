@@ -45,6 +45,18 @@ class Header
     }
 
     /**
+     * Удалить несколько заголовков.
+     * @param array $names
+     * @return void
+     */
+    public function removeMultiple(array $names): void
+    {
+        foreach ($names as $name) {
+            $this->remove($name);
+        }
+    }
+
+    /**
      * Удалить все заголовки.
      * @return void
      */
