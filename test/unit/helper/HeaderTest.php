@@ -15,6 +15,32 @@ final class HeaderTest extends BaseTestCase
         '',
     ];
 
+    public function testAddMultiple()
+    {
+        $object = new \twin\test\helper\Header;
+
+        $object->addMultiple([
+            'zero' => 'old',
+            'one' => 'old',
+        ]);
+        $this->assertSame([
+            'zero' => 'old',
+            'one' => 'old',
+        ], $object->getList());
+
+        $object->addMultiple([
+            'one' => 'new',
+            'two' => 'new',
+            'three' => 123,
+        ]);
+        $this->assertSame([
+            'zero' => 'old',
+            'one' => 'new',
+            'two' => 'new',
+            'three' => '123',
+        ], $object->getList());
+    }
+
     public function testClear()
     {
         $object = new \twin\test\helper\Header;

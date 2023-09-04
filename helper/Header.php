@@ -23,6 +23,18 @@ class Header
     }
 
     /**
+     * Добавить несколько заголовков.
+     * @param array $headers
+     * @return void
+     */
+    public function addMultiple(array $headers): void
+    {
+        foreach ($headers as $name => $value) {
+            $this->add($name, $value);
+        }
+    }
+
+    /**
      * Удалить заголовок.
      * @param string $name
      * @return void
