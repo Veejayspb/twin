@@ -36,13 +36,19 @@ class Response extends Component
      * Зарегистрировать заголовки.
      * @return void
      */
-    protected function registerHeaders()
+    protected function registerHeaders(): void
     {
-        $helper = new Header;
-        $helper->clear();
+        $header = $this->getHeader();
+        $header->clear();
+        $header->addMultiple($this->headers);
+    }
 
-        foreach ($this->headers as $name => $value) {
-            $helper->add($name, $value);
-        }
+    /**
+     * Инстанцировать хелпер для работы с заголовками.
+     * @return Header
+     */
+    protected function getHeader(): Header
+    {
+        return new Header;
     }
 }
