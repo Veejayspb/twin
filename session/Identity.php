@@ -31,7 +31,7 @@ class Identity
     protected $secretString = 'you should change this string';
 
     /**
-     * Инстанс текущего класса.
+     * Объект текущего класса.
      * @var static
      */
     protected static $instance;
@@ -46,10 +46,10 @@ class Identity
     final private function __wakeup() {}
 
     /**
-     * Инстанс текущего класса.
+     * Объект текущего класса.
      * @return static
      */
-    public static function instance()
+    public static function instance(): self
     {
         return static::$instance = static::$instance ?: new static;
     }
@@ -58,7 +58,7 @@ class Identity
      * Вернуть идентификатор пользователя.
      * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -78,7 +78,7 @@ class Identity
      * @param int $expire - запомнить пользователя на указанное время
      * @return void
      */
-    public function login(int $id, int $expire = 0)
+    public function login(int $id, int $expire = 0): void
     {
         $this->id = $id;
         $token = $this->createToken($id);
@@ -91,7 +91,7 @@ class Identity
      * Деавторизация.
      * @return void
      */
-    public function logout()
+    public function logout(): void
     {
         $session = $this->getSession();
 
@@ -130,7 +130,7 @@ class Identity
      * Восстановить идентификатор пользователя из сессии/куки.
      * @return void
      */
-    private function restoreId()
+    protected function restoreId(): void
     {
         $session = $this->getSession();
 
@@ -150,7 +150,6 @@ class Identity
 
         if ($id !== null && $this->checkToken($token, $id)) {
             $this->id = $id;
-            return;
         }
     }
 
@@ -158,7 +157,7 @@ class Identity
      * Компонент SESSION.
      * @return Session|null
      */
-    private function getSession()
+    protected function getSession(): ?Session
     {
         return Twin::app()->getComponent(Session::class);
     }
