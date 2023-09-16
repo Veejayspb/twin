@@ -43,8 +43,9 @@ class Session extends Component
         parent::__construct($properties);
 
         $savePath = $this->getSavePath();
-        if ($savePath !== false && $this->createPath()) {
-            session_save_path($savePath);
+
+        if ($savePath !== null && $this->createPath()) {
+            ini_set('session.save_path', $savePath);
         }
 
         ini_set('session.cookie_lifetime', $this->lifeTime);
@@ -58,20 +59,10 @@ class Session extends Component
     }
 
     /**
-     * Вернуть путь до директории для сохранения файлов с данными сессии.
-     * @return string|bool - FALSE, если путь не указан
-     */
-    protected function getSavePath()
-    {
-        if ($this->savePath === null) return false;
-        return Alias::get($this->savePath);
-    }
-
-    /**
      * Начать сессию.
      * @return bool
      */
-    public function open()
+    public function open(): bool
     {
         return @session_start();
     }
@@ -80,7 +71,7 @@ class Session extends Component
      * Завершить сессию.
      * @return void
      */
-    public function close()
+    public function close(): void
     {
         @session_write_close();
     }
@@ -89,9 +80,9 @@ class Session extends Component
      * Очистить сессию.
      * @return void
      */
-    public function destroy()
+    public function destroy(): void
     {
-        if(session_id() !== '') {
+        if (session_id() !== '') {
             @session_unset();
             @session_destroy();
         }
@@ -99,11 +90,11 @@ class Session extends Component
 
     /**
      * Вернуть ID текущей сессии.
-     * @return string
+     * @return string|null
      */
-    public function getId(): string
+    public function getId(): ?string
     {
-        return @session_id();
+        return @session_id() ?: null;
     }
 
     /**
@@ -111,7 +102,7 @@ class Session extends Component
      * @param string $value - значение
      * @return void
      */
-    public function setId(string $value)
+    public function setId(string $value): void
     {
         @session_id($value);
     }
@@ -132,7 +123,7 @@ class Session extends Component
      * @param mixed $value - значение
      * @return void
      */
-    public function set(string $name, $value)
+    public function set(string $name, $value): void
     {
         $name = $this->getName($name);
         $_SESSION[$name] = $value;
@@ -147,7 +138,7 @@ class Session extends Component
     public function get(string $name, $default = null)
     {
         $name = $this->getName($name);
-        return array_key_exists($name, $_SESSION) ? $_SESSION[$name] : $default;
+        return $_SESSION[$name] ?? $default;
     }
 
     /**
@@ -155,12 +146,26 @@ class Session extends Component
      * @param string $name - название параметра
      * @return void
      */
-    public function delete(string $name)
+    public function delete(string $name): void
     {
         $name = $this->getName($name);
+
         if (array_key_exists($name, $_SESSION)) {
             unset($_SESSION[$name]);
         }
+    }
+
+    /**
+     * Вернуть путь до директории для сохранения файлов с данными сессии.
+     * @return string|null - NULL, если путь не указан
+     */
+    protected function getSavePath(): ?string
+    {
+        if ($this->savePath === null) {
+            return null;
+        }
+
+        return Alias::get($this->savePath);
     }
 
     /**
@@ -170,10 +175,12 @@ class Session extends Component
     private function createPath(): bool
     {
         $savePath = $this->getSavePath();
-        if (!is_dir($savePath)) {
-            return mkdir($savePath, 0775, true);
+
+        if (is_dir($savePath)) {
+            return true;
         }
-        return true;
+
+        return mkdir($savePath, 0775, true);
     }
 
     /**
