@@ -66,7 +66,7 @@ class MigrationManager extends Component
 
         // Исключить миграции, которые не относятся к указанному компоненту
         foreach ($migrations as $i => $migration) {
-            if ($migration->component != $component) {
+            if ($component != $migration->getComponent()) {
                 unset($migrations[$i]);
             }
         }

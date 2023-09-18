@@ -12,7 +12,6 @@ use twin\Twin;
  * Class Migration
  *
  * @property-read MigrationManager $manager
- * @property-read string $component
  */
 abstract class Migration
 {
@@ -124,6 +123,15 @@ abstract class Migration
     }
 
     /**
+     * Название компонента для работы с БД.
+     * @return string
+     */
+    public function getComponent(): string
+    {
+        return $this->component;
+    }
+
+    /**
      * Применена ли миграция.
      * @return bool
      */
@@ -149,7 +157,8 @@ abstract class Migration
      */
     public function getDb(): ?Database
     {
-        $component = Twin::app()->{$this->component}; /* @var Database $component */
+        $name = $this->getComponent();
+        $component = Twin::app()->{$name}; /* @var Database $component */
         return $component ?: null;
     }
 
