@@ -13,7 +13,6 @@ use twin\Twin;
  *
  * @property-read string $name
  * @property-read DateTime $date
- * @property-read Database|null $db
  * @property-read MigrationManager $manager
  * @property-read string $component
  */
@@ -81,12 +80,7 @@ abstract class Migration
      */
     public function __get(string $name)
     {
-        switch ($name) {
-            case 'db':
-                return $this->getDb();
-            default:
-                return $this->$name;
-        }
+        return $this->$name;
     }
 
     /**
@@ -125,7 +119,7 @@ abstract class Migration
      */
     public function isApplied(): bool
     {
-        return $this->db->isMigrationApplied($this);
+        return $this->getDb()->isMigrationApplied($this);
     }
 
     /**
@@ -136,6 +130,16 @@ abstract class Migration
     {
         $timestamp = $this->date->getTimestamp();
         return md5($this->name . $timestamp);
+    }
+
+    /**
+     * Вернуть компонент БД для хранения миграций.
+     * @return Database|null
+     */
+    public function getDb(): ?Database
+    {
+        $component = Twin::app()->{$this->component}; /* @var Database $component */
+        return $component ?: null;
     }
 
     /**
@@ -169,7 +173,7 @@ abstract class Migration
      */
     protected function save(): bool
     {
-        return $this->db->addMigration($this);
+        return $this->getDb()->addMigration($this);
     }
 
     /**
@@ -178,7 +182,7 @@ abstract class Migration
      */
     protected function delete(): bool
     {
-        return $this->db->deleteMigration($this);
+        return $this->getDb()->deleteMigration($this);
     }
 
     /**
@@ -190,16 +194,6 @@ abstract class Migration
     {
         $date_time = date(self::DATE_FORMAT);
         return "m_{$date_time}_{$name}";
-    }
-
-    /**
-     * Вернуть компонент БД для хранения миграций.
-     * @return Database|null
-     */
-    protected function getDb(): ?Database
-    {
-        $component = Twin::app()->{$this->component}; /* @var Database $component */
-        return $component ?: null;
     }
 
     /**
