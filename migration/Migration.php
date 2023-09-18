@@ -8,11 +8,6 @@ use twin\db\Database;
 use twin\helper\template\Template;
 use twin\Twin;
 
-/**
- * Class Migration
- *
- * @property-read MigrationManager $manager
- */
 abstract class Migration
 {
     /**
@@ -54,15 +49,6 @@ abstract class Migration
         if (!preg_match(self::PATTERN_CLASS, $class, $matches)) {
             throw new Exception(500, "Wrong migration name: $class");
         }
-    }
-
-    /**
-     * @param string $name
-     * @return mixed
-     */
-    public function __get(string $name)
-    {
-        return $this->$name;
     }
 
     /**
@@ -129,6 +115,15 @@ abstract class Migration
     public function getComponent(): string
     {
         return $this->component;
+    }
+
+    /**
+     * Компонент с менеджером миграций.
+     * @return MigrationManager
+     */
+    public function getManager(): MigrationManager
+    {
+        return $this->manager;
     }
 
     /**

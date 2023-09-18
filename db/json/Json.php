@@ -86,7 +86,7 @@ class Json extends Database
      */
     public function isMigrationApplied(Migration $migration): bool
     {
-        $table = $migration->manager->table;
+        $table = $migration->getManager()->table;
 
         if (!$this->createMigrationTable($table)) {
             return false;
@@ -109,14 +109,14 @@ class Json extends Database
             return true;
         }
 
-        $items = $this->getData($migration->manager->table);
+        $items = $this->getData($migration->getManager()->table);
         $items[] = [
             'hash' => $migration->getHash(),
             'name' => $migration->getClass(),
             'timestamp' => time(),
         ];
 
-        return $this->setData($migration->manager->table, $items);
+        return $this->setData($migration->getManager()->table, $items);
     }
 
     /**
@@ -124,7 +124,7 @@ class Json extends Database
      */
     public function deleteMigration(Migration $migration): bool
     {
-        $table = $migration->manager->table;
+        $table = $migration->getManager()->table;
         $items = $this->getData($table);
 
         foreach ($items as $i => $item) {

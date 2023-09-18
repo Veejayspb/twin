@@ -212,7 +212,7 @@ abstract class Sql extends Database
      */
     public function isMigrationApplied(Migration $migration): bool
     {
-        $table = $migration->manager->table;
+        $table = $migration->getManager()->table;
 
         if (!$this->createMigrationTable($table)) {
             return false;
@@ -235,7 +235,7 @@ abstract class Sql extends Database
             return true;
         }
 
-        $result = $this->insert($migration->manager->table, [
+        $result = $this->insert($migration->getManager()->table, [
             'hash' => $migration->getHash(),
             'name' => $migration->getClass(),
             'timestamp' => time(),
@@ -256,7 +256,7 @@ abstract class Sql extends Database
         }
 
         return $this->delete(
-            $migration->manager->table,
+            $migration->getManager()->table,
             'hash = :hash',
             ['hash' => $migration->getHash()]
         );
