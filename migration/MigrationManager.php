@@ -98,7 +98,7 @@ class MigrationManager extends Component
             }
 
             // Поиск по названию, если оно уникальное: migration_name
-            if ($name == $migration->name) {
+            if ($name == $migration->getName()) {
                 $byName[] = $migration;
             }
         }

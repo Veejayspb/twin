@@ -11,7 +11,6 @@ use twin\Twin;
 /**
  * Class Migration
  *
- * @property-read string $name
  * @property-read DateTime $date
  * @property-read MigrationManager $manager
  * @property-read string $component
@@ -32,12 +31,6 @@ abstract class Migration
      * Паттерн названия класса миграции.
      */
     const PATTERN_CLASS = '/^m_([0-9]{6}_[0-9]{6})_(' . self::PATTERN_NAME . ')$/';
-
-    /**
-     * Название миграции.
-     * @var string
-     */
-    protected $name;
 
     /**
      * Дата создания миграции.
@@ -71,7 +64,6 @@ abstract class Migration
         }
 
         $this->date = DateTime::createFromFormat(self::DATE_FORMAT, $matches[1]);
-        $this->name = $matches[2];
     }
 
     /**
@@ -114,6 +106,17 @@ abstract class Migration
     }
 
     /**
+     * Название миграции.
+     * m_000000_000000_{NAME}
+     * @return string
+     */
+    public function getName(): string
+    {
+        preg_match(self::PATTERN_CLASS, $this->getClass(), $matches);
+        return $matches[2] ?: '';
+    }
+
+    /**
      * Применена ли миграция.
      * @return bool
      */
@@ -129,7 +132,8 @@ abstract class Migration
     public function getHash(): string
     {
         $timestamp = $this->date->getTimestamp();
-        return md5($this->name . $timestamp);
+        $name = $this->getName();
+        return md5($name . $timestamp);
     }
 
     /**
