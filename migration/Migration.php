@@ -142,11 +142,14 @@ abstract class Migration
     public static function create(string $path, string $component, string $name): bool
     {
         $pattern = '/^' . static::PATTERN_NAME . '$/';
-        if (false === preg_match($pattern, $name)) return false;
+
+        if (false === preg_match($pattern, $name)) {
+            return false;
+        }
 
         $class = static::createName($name);
         $template = new Template('@twin/helper/template/tpl/migration.tpl');
-        $path = $path . DIRECTORY_SEPARATOR . $class . '.php';
+        $path.= DIRECTORY_SEPARATOR . $class . '.php';
 
         return $template->save($path, [
             'class' => $class,
@@ -187,7 +190,7 @@ abstract class Migration
      * Вернуть компонент БД для хранения миграций.
      * @return Database|null
      */
-    private function getDb()
+    protected function getDb(): ?Database
     {
         $component = Twin::app()->{$this->component}; /* @var Database $component */
         return $component ?: null;
