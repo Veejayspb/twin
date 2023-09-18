@@ -237,7 +237,7 @@ abstract class Sql extends Database
 
         $result = $this->insert($migration->manager->table, [
             'hash' => $migration->getHash(),
-            'name' => $migration->class,
+            'name' => $migration->getClass(),
             'timestamp' => time(),
         ]);
 

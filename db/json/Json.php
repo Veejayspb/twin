@@ -112,7 +112,7 @@ class Json extends Database
         $items = $this->getData($migration->manager->table);
         $items[] = [
             'hash' => $migration->getHash(),
-            'name' => $migration->class,
+            'name' => $migration->getClass(),
             'timestamp' => time(),
         ];
 

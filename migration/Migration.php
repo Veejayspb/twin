@@ -13,7 +13,6 @@ use twin\Twin;
  *
  * @property-read string $name
  * @property-read DateTime $date
- * @property-read string $class
  * @property-read Database|null $db
  * @property-read MigrationManager $manager
  * @property-read string $component
@@ -66,7 +65,7 @@ abstract class Migration
     public function __construct(MigrationManager $manager)
     {
         $this->manager = $manager;
-        $class = get_called_class();
+        $class = $this->getClass();
 
         if (!preg_match(self::PATTERN_CLASS, $class, $matches)) {
             throw new Exception(500, "Wrong migration name: $class");
@@ -83,8 +82,6 @@ abstract class Migration
     public function __get(string $name)
     {
         switch ($name) {
-            case 'class':
-                return get_called_class();
             case 'db':
                 return $this->getDb();
             default:
@@ -111,6 +108,15 @@ abstract class Migration
             default:
                 throw new Exception(500, "Call to unknown method: $name");
         }
+    }
+
+    /**
+     * Название вызванного класса-миграции.
+     * @return string
+     */
+    public function getClass(): string
+    {
+        return get_called_class();
     }
 
     /**

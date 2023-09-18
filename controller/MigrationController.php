@@ -47,7 +47,7 @@ class MigrationController extends ConsoleController
 
         foreach ($migrations as $migration) {
             if ($migration->isApplied()) continue;
-            $result[] = $migration->class;
+            $result[] = $migration->getClass();
         }
 
         if (empty($result)) {
@@ -96,7 +96,7 @@ class MigrationController extends ConsoleController
         $result = array_merge($up, $down);
 
         if ($result) {
-            $result[] = 'Successfully migrated to: ' . $target->class;
+            $result[] = 'Successfully migrated to: ' . $target->getClass();
         } else {
             $result[] = 'No migrations to apply';
         }
@@ -123,9 +123,9 @@ class MigrationController extends ConsoleController
                 }
 
                 if ($migration->up()) {
-                    $result[] = "Migration up: $migration->class ";
+                    $result[] = 'Migration up: ' . $migration->getClass();
                 } else {
-                    throw new Exception(500, "Error while migrating up: $migration->class");
+                    throw new Exception(500, 'Error while migrating up: ' . $migration->getClass());
                 }
             }
         }
@@ -152,9 +152,9 @@ class MigrationController extends ConsoleController
 
             if ($migration->date->diff($target->date)->invert) {
                 if ($migration->down()) {
-                    $result[] = "Migration down: $migration->class";
+                    $result[] = 'Migration down: ' . $migration->getClass();
                 } else {
-                    throw new Exception(500, "Error while migrating down: $migration->class");
+                    throw new Exception(500, 'Error while migrating down: ' . $migration->getClass());
                 }
             }
         }

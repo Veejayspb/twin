@@ -88,7 +88,7 @@ class MigrationManager extends Component
         foreach ($migrations as $migration) {
 
             // Поиск по всему названию: m_000000_000000_name
-            if ($name == $migration->class) {
+            if ($name == $migration->getClass()) {
                 return $migration;
             }
 
