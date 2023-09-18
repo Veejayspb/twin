@@ -116,7 +116,7 @@ class MigrationController extends ConsoleController
         $result = [];
 
         foreach ($migrations as $migration) {
-            if (!$migration->date->diff($target->date)->invert) {
+            if (!$migration->getDate()->diff($target->getDate())->invert) {
 
                 if ($migration->isApplied()) {
                     continue;
@@ -150,7 +150,7 @@ class MigrationController extends ConsoleController
                 continue;
             }
 
-            if ($migration->date->diff($target->date)->invert) {
+            if ($migration->getDate()->diff($target->getDate())->invert) {
                 if ($migration->down()) {
                     $result[] = 'Migration down: ' . $migration->getClass();
                 } else {

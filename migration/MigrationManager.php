@@ -93,7 +93,7 @@ class MigrationManager extends Component
             }
 
             // Поиск по дате: 000000_000000
-            if ($name == $migration->date->format(Migration::DATE_FORMAT)) {
+            if ($name == $migration->getDate()->format(Migration::DATE_FORMAT)) {
                 return $migration;
             }
 
