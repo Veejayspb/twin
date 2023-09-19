@@ -11,6 +11,11 @@ use twin\Twin;
 abstract class Migration
 {
     /**
+     * Префикс названия класса-миграции.
+     */
+    const PREFIX = 'm_';
+
+    /**
      * Формат даты/времени.
      */
     const DATE_FORMAT = 'ymd_His';
@@ -23,7 +28,7 @@ abstract class Migration
     /**
      * Паттерн названия класса миграции.
      */
-    const PATTERN_CLASS = '/^m_([0-9]{6}_[0-9]{6})_(' . self::PATTERN_NAME . ')$/';
+    const PATTERN_CLASS = '/^' . self::PREFIX . '([0-9]{6}_[0-9]{6})_(' . self::PATTERN_NAME . ')$/';
 
     /**
      * Название компонента для работы с БД.
@@ -208,7 +213,7 @@ abstract class Migration
     protected static function createName(string $name): string
     {
         $date_time = date(self::DATE_FORMAT);
-        return "m_{$date_time}_{$name}";
+        return self::PREFIX . "{$date_time}_{$name}";
     }
 
     /**
