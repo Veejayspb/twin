@@ -143,17 +143,6 @@ abstract class Migration
     }
 
     /**
-     * Вернуть компонент БД для хранения миграций.
-     * @return Database|null
-     */
-    public function getDb(): ?Database
-    {
-        $name = $this->getComponent();
-        $component = Twin::app()->{$name}; /* @var Database $component */
-        return $component ?: null;
-    }
-
-    /**
      * Создать новую миграцию.
      * @param string $path - путь до директории для сохранения
      * @param string $component - название компонента с БД
@@ -183,6 +172,17 @@ abstract class Migration
      * @return string
      */
     abstract public function getComponent(): string;
+
+    /**
+     * Вернуть компонент БД для хранения миграций.
+     * @return Database|null
+     */
+    protected function getDb(): ?Database
+    {
+        $name = $this->getComponent();
+        $component = Twin::app()->{$name}; /* @var Database $component */
+        return $component ?: null;
+    }
 
     /**
      * Сохранить текущую миграцию в БД.
