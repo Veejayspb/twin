@@ -133,7 +133,13 @@ abstract class Migration
      */
     public function isApplied(): bool
     {
-        return $this->getDb()->isMigrationApplied($this);
+        $db = $this->getDb();
+
+        if ($db === null) {
+            return false;
+        }
+
+        return $db->isMigrationApplied($this);
     }
 
     /**
@@ -195,7 +201,13 @@ abstract class Migration
      */
     protected function save(): bool
     {
-        return $this->getDb()->addMigration($this);
+        $db = $this->getDb();
+
+        if ($db === null) {
+            return false;
+        }
+
+        return $db->addMigration($this);
     }
 
     /**
@@ -204,7 +216,13 @@ abstract class Migration
      */
     protected function delete(): bool
     {
-        return $this->getDb()->deleteMigration($this);
+        $db = $this->getDb();
+
+        if ($db === null) {
+            return false;
+        }
+
+        return $db->deleteMigration($this);
     }
 
     /**
