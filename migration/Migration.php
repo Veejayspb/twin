@@ -16,6 +16,11 @@ abstract class Migration
     const PREFIX = 'm_';
 
     /**
+     * Алиас шаблона для класса с миграцией.
+     */
+    const TEMPLATE_ALIAS = '@twin/helper/template/tpl/migration.tpl';
+
+    /**
      * Формат даты/времени.
      */
     const DATE_FORMAT = 'ymd_His';
@@ -158,7 +163,7 @@ abstract class Migration
         }
 
         $class = static::createName($name);
-        $template = new Template('@twin/helper/template/tpl/migration.tpl');
+        $template = new Template(self::TEMPLATE_ALIAS);
         $path.= DIRECTORY_SEPARATOR . $class . '.php';
 
         return $template->save($path, [
