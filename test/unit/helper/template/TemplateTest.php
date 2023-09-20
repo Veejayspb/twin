@@ -18,6 +18,7 @@ class TemplateTest extends BaseTestCase
 
     public function testSave()
     {
+        // Исходный шаблон не сущ-ет
         $temp = new Temp;
         $temp->createFile('test.tpl', '{{first}} - {{second}}');
 
@@ -29,7 +30,14 @@ class TemplateTest extends BaseTestCase
 
         $this->assertFalse($result);
 
+        // В названии файла присутствуют недопустимые символы
         $template = new Template($fromPath);
+
+        $result = $template->save($temp->getFilePath('te|st.txt'));
+
+        $this->assertFalse($result);
+
+        // Корректное название файла
         $result = $template->save($toPath, [
             'first' => 'one',
             'second' => 'two',

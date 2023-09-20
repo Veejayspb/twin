@@ -46,7 +46,7 @@ class Template
             return false;
         }
 
-        return (bool)file_put_contents($path, $content);
+        return (bool)@file_put_contents($path, $content);
     }
 
     /**
