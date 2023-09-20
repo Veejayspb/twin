@@ -31,12 +31,6 @@ abstract class Migration
     const PATTERN_CLASS = '/^' . self::PREFIX . '([0-9]{6}_[0-9]{6})_(' . self::PATTERN_NAME . ')$/';
 
     /**
-     * Название компонента для работы с БД.
-     * @var string
-     */
-    protected $component;
-
-    /**
      * Компонент с менеджером миграций.
      * @var MigrationManager
      */
@@ -67,10 +61,16 @@ abstract class Migration
     {
         switch ($name) {
             case 'up':
-                if ($this->isApplied()) return true;
+                if ($this->isApplied()) {
+                    return true;
+                }
+
                 return $this->up() && $this->save();
             case 'down':
-                if (!$this->isApplied()) return true;
+                if (!$this->isApplied()) {
+                    return true;
+                }
+
                 return $this->down() && $this->delete();
             default:
                 throw new Exception(500, "Call to unknown method: $name");
@@ -111,15 +111,6 @@ abstract class Migration
         } else {
             return new DateTime;
         }
-    }
-
-    /**
-     * Название компонента для работы с БД.
-     * @return string
-     */
-    public function getComponent(): string
-    {
-        return $this->component;
     }
 
     /**
@@ -186,6 +177,12 @@ abstract class Migration
             'component' => $component,
         ]);
     }
+
+    /**
+     * Название компонента для работы с БД.
+     * @return string
+     */
+    abstract public function getComponent(): string;
 
     /**
      * Сохранить текущую миграцию в БД.
