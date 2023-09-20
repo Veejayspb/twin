@@ -7,7 +7,7 @@ Request::$host = $_SERVER['HTTP_HOST'] ?? null;
 Request::$url = $_SERVER['REQUEST_URI'] ?? null;
 Request::$ip = $_SERVER['REMOTE_ADDR'] ?? null;
 Request::$method = $_SERVER['REQUEST_METHOD'] ?? null;
-Request::$headers = function_exists('getallheaders') && getallheaders() ?: [];
+Request::$headers = function_exists('getallheaders') ? getallheaders() : [];
 
 class Request
 {
