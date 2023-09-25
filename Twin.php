@@ -40,7 +40,7 @@ class Twin
     /**
      * Версия приложения.
      */
-    const VERSION = '0.4.0';
+    const VERSION = '0.4.1';
 
     /**
      * Название приложения.
@@ -107,66 +107,18 @@ class Twin
 
     /**
      * Запуск приложения.
-     * @param array $config - конфигурация
+     * @param array $config
      * @return void
      * @throws Exception
      */
     public function run(array $config = []): void
     {
-        try {
-            if ($this->running) die;
-            $this->running = true;
+        $isConsole = static::isConsole();
 
-            $this->registerConfig($config);
-
-            $route = $this->route->parseUrl(Request::$url);
-            if ($route === false) {
-                throw new Exception(404);
-            }
-
-            $_GET = $route->params;
-            $namespace = $this->route->getNamespace($route->module);
-            WebController::run($namespace, $route);
-        } catch (Exception $e) {
-            @ob_clean(); // Если исключение выбрасывается во view, то на страницу ошибки выводится часть целевого шаблона
-            http_response_code($e->getCode());
-
-            $route = new Route;
-            $route->parse(Twin::app()->route->error);
-            $route->params = ['code' => $e->getCode(), 'message' => $e->getMessage()];
-
-            $namespace = $this->route->getNamespace($route->module);
-            WebController::run($namespace, $route);
-        }
-    }
-
-    /**
-     * Запуск консольного приложения.
-     * @param array $config - конфигурация
-     * @return void
-     */
-    public function runConsole(array $config = []): void
-    {
-        try {
-            if ($this->running) die;
-            $this->running = true;
-
-            $this->registerConfig($config);
-
-            global $argv;
-
-            $route = $this->route->parseUrl((string)$argv[1]);
-            if ($route === false) {
-                throw new Exception(404);
-            }
-
-            unset($argv[0], $argv[1]);
-            $route->params = array_values($argv);
-
-            $namespace = $this->route->getNamespace($route->module);
-            ConsoleController::run($namespace, $route);
-        } catch (Exception $e) {
-            echo "Error {$e->getCode()}: {$e->getMessage()}";
+        if ($isConsole) {
+            $this->runConsole($config);
+        } else {
+            $this->runWeb($config);
         }
     }
 
@@ -264,6 +216,88 @@ class Twin
         }
 
         static::import($alias, true);
+    }
+
+    /**
+     * Приложение запущено из командной строки.
+     * @return bool
+     */
+    public static function isConsole(): bool
+    {
+        if (defined('STDIN')) {
+            return true;
+        }
+
+        if (empty($_SERVER['REMOTE_ADDR']) && !isset($_SERVER['HTTP_USER_AGENT']) && count($_SERVER['argv']) > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Запуск веб приложения.
+     * @param array $config
+     * @return void
+     * @throws Exception
+     */
+    protected function runWeb(array $config = []): void
+    {
+        try {
+            if ($this->running) die;
+            $this->running = true;
+
+            $this->registerConfig($config);
+
+            $route = $this->route->parseUrl(Request::$url);
+            if ($route === false) {
+                throw new Exception(404);
+            }
+
+            $_GET = $route->params;
+            $namespace = $this->route->getNamespace($route->module);
+            WebController::run($namespace, $route);
+        } catch (Exception $e) {
+            @ob_clean(); // Если исключение выбрасывается во view, то на страницу ошибки выводится часть целевого шаблона
+            http_response_code($e->getCode());
+
+            $route = new Route;
+            $route->parse(Twin::app()->route->error);
+            $route->params = ['code' => $e->getCode(), 'message' => $e->getMessage()];
+
+            $namespace = $this->route->getNamespace($route->module);
+            WebController::run($namespace, $route);
+        }
+    }
+
+    /**
+     * Запуск консольного приложения.
+     * @param array $config
+     * @return void
+     */
+    protected function runConsole(array $config = []): void
+    {
+        try {
+            if ($this->running) die;
+            $this->running = true;
+
+            $this->registerConfig($config);
+
+            global $argv;
+
+            $route = $this->route->parseUrl((string)$argv[1]);
+            if ($route === false) {
+                throw new Exception(404);
+            }
+
+            unset($argv[0], $argv[1]);
+            $route->params = array_values($argv);
+
+            $namespace = $this->route->getNamespace($route->module);
+            ConsoleController::run($namespace, $route);
+        } catch (Exception $e) {
+            echo "Error {$e->getCode()}: {$e->getMessage()}";
+        }
     }
 
     /**
