@@ -29,11 +29,11 @@ Alias::set('@vendor', '@root/vendor');
 /**
  * Class Twin
  *
- * @property RouteManager $route
- * @property View $view
- * @property AssetManager $asset
- * @property MigrationManager $migration
- * @property Response $response
+ * @property-read RouteManager $route
+ * @property-read View $view
+ * @property-read AssetManager $asset
+ * @property-read MigrationManager $migration
+ * @property-read Response $response
  */
 class Twin
 {
@@ -113,24 +113,19 @@ class Twin
      */
     public function run(array $config = []): void
     {
+        if ($this->running) {
+            return;
+        }
+
+        $this->running = true;
+        $this->registerConfig($config);
         $isConsole = static::isConsole();
 
         if ($isConsole) {
-            $this->runConsole($config);
+            $this->runConsole();
         } else {
-            $this->runWeb($config);
+            $this->runWeb();
         }
-    }
-
-    /**
-     * Регистрация компонента.
-     * @param string $name - название компонента
-     * @param Component $component - объект с компонентом
-     * @return void
-     */
-    public function setComponent(string $name, Component $component): void
-    {
-        $this->components[$name] = $component;
     }
 
     /**
@@ -161,6 +156,21 @@ class Twin
     }
 
     /**
+     * Регистрация компонента.
+     * @param string $name - название компонента
+     * @param Component|null $component - объект с компонентом
+     * @return void
+     */
+    public function setComponent(string $name, ?Component $component): void
+    {
+        if ($component === null) {
+            $this->unsetComponent($name);
+        } else {
+            $this->components[$name] = $component;
+        }
+    }
+
+    /**
      * Значение указанного параметра.
      * @param string $name - название параметра в формате: path.to.param
      * @param mixed|null $default - значение, которое вернется, если параметр не найден
@@ -186,7 +196,7 @@ class Twin
      * Импорт файла.
      * @param string $alias - алиас пути до файла
      * @param bool $once - использовать require_once
-     * @return mixed|bool - FALSE, если файл не существует, TRUE, если $once=true и файл уже был импортирован
+     * @return mixed|bool - FALSE, если файл не существует; TRUE, если $once=true и файл уже был импортирован
      */
     public static function import(string $alias, bool $once = false)
     {
@@ -236,20 +246,27 @@ class Twin
     }
 
     /**
+     * Удаление компонента.
+     * @param string $name - название компонента
+     * @return void
+     */
+    protected function unsetComponent(string $name): void
+    {
+        if (array_key_exists($name, $this->components)) {
+            unset($this->components[$name]);
+        }
+    }
+
+    /**
      * Запуск веб приложения.
-     * @param array $config
      * @return void
      * @throws Exception
      */
-    protected function runWeb(array $config = []): void
+    protected function runWeb(): void
     {
         try {
-            if ($this->running) die;
-            $this->running = true;
-
-            $this->registerConfig($config);
-
             $route = $this->route->parseUrl(Request::$url);
+
             if ($route === false) {
                 throw new Exception(404);
             }
@@ -263,7 +280,10 @@ class Twin
 
             $route = new Route;
             $route->parse(Twin::app()->route->error);
-            $route->params = ['code' => $e->getCode(), 'message' => $e->getMessage()];
+            $route->params = [
+                'code' => $e->getCode(),
+                'message' => $e->getMessage(),
+            ];
 
             $namespace = $this->route->getNamespace($route->module);
             WebController::run($namespace, $route);
@@ -272,20 +292,14 @@ class Twin
 
     /**
      * Запуск консольного приложения.
-     * @param array $config
      * @return void
      */
-    protected function runConsole(array $config = []): void
+    protected function runConsole(): void
     {
         try {
-            if ($this->running) die;
-            $this->running = true;
-
-            $this->registerConfig($config);
-
             global $argv;
-
             $route = $this->route->parseUrl((string)$argv[1]);
+
             if ($route === false) {
                 throw new Exception(404);
             }
