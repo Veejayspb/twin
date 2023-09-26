@@ -73,10 +73,10 @@ class Url
 
     /**
      * Вернуть роутер для генерации адреса.
-     * @return RouteManager
+     * @return RouteManager|null
      */
-    protected static function getRouter(): RouteManager
+    protected static function getRouter(): ?RouteManager
     {
-        return Twin::app()->getComponent(RouteManager::class);
+        return Twin::app()->findComponent(RouteManager::class);
     }
 }

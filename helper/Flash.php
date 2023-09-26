@@ -126,6 +126,6 @@ class Flash
      */
     private function getSession(): ?Session
     {
-        return Twin::app()->getComponent(Session::class);
+        return Twin::app()->findComponent(Session::class);
     }
 }

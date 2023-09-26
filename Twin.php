@@ -93,7 +93,7 @@ class Twin
      */
     public function __get(string $name)
     {
-        return $this->components[$name] ?? null;
+        return $this->getComponent($name);
     }
 
     /**
@@ -138,11 +138,21 @@ class Twin
     }
 
     /**
-     * Вернуть компонент указанного класса.
+     * Вернуть компонент.
+     * @param string $name - название компонента
+     * @return Component|null
+     */
+    public function getComponent(string $name): ?Component
+    {
+        return $this->components[$name] ?? null;
+    }
+
+    /**
+     * Найти компонент указанного класса.
      * @param string $class - name\space\Component
      * @return Component|null
      */
-    public function getComponent(string $class): ?Component
+    public function findComponent(string $class): ?Component
     {
         $components = $this->getComponents();
 
@@ -201,7 +211,10 @@ class Twin
     public static function import(string $alias, bool $once = false)
     {
         $path = Alias::get($alias);
-        if (!is_file($path)) return false;
+
+        if (!is_file($path)) {
+            return false;
+        }
 
         if ($once) {
             return require_once $path;

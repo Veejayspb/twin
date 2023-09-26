@@ -121,10 +121,10 @@ abstract class WebController extends Controller
 
     /**
      * View компонент.
-     * @return View
+     * @return View|null
      */
-    protected function getView(): View
+    protected function getView(): ?View
     {
-        return Twin::app()->getComponent(View::class);
+        return Twin::app()->findComponent(View::class);
     }
 }
