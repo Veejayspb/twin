@@ -230,15 +230,24 @@ class Twin
      */
     public static function autoload(string $className): void
     {
+        $alias = static::getClassAlias($className);
+        static::import($alias, true);
+    }
+
+    /**
+     * Вернуть алиас пути до файла с классом.
+     * @param string $className
+     * @return string
+     */
+    public static function getClassAlias(string $className): string
+    {
         $className = str_replace('\\', '/', $className);
 
         if (substr($className, 0, 4) == 'twin') {
-            $alias = "@$className.php";
+            return "@$className.php";
         } else {
-            $alias = "@root/$className.php";
+            return "@root/$className.php";
         }
-
-        static::import($alias, true);
     }
 
     /**
