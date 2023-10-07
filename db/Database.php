@@ -64,21 +64,21 @@ abstract class Database extends Component
 
     /**
      * Применена ли указанная миграция.
-     * @param Migration $migration - экземпляр миграции
+     * @param Migration $migration
      * @return bool
      */
     abstract public function isMigrationApplied(Migration $migration): bool;
 
     /**
      * Добавить миграцию в БД.
-     * @param Migration $migration - экземпляр миграции
+     * @param Migration $migration
      * @return bool
      */
     abstract public function addMigration(Migration $migration): bool;
 
     /**
      * Удалить миграцию из БД.
-     * @param Migration $migration - экземпляр миграции
+     * @param Migration $migration
      * @return bool
      */
     abstract public function deleteMigration(Migration $migration): bool;

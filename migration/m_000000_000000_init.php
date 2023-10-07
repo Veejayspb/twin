@@ -1,5 +1,6 @@
 <?php
 
+use twin\db\Database;
 use twin\migration\Migration;
 
 class m_000000_000000_init extends Migration
@@ -7,7 +8,7 @@ class m_000000_000000_init extends Migration
     /**
      * {@inheritdoc}
      */
-    protected function up(): bool
+    public function up(): bool
     {
         return true;
     }
@@ -15,7 +16,7 @@ class m_000000_000000_init extends Migration
     /**
      * {@inheritdoc}
      */
-    protected function down(): bool
+    public function down(): bool
     {
         return false;
     }
@@ -26,5 +27,13 @@ class m_000000_000000_init extends Migration
     public function isApplied(): bool
     {
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getDb(): ?Database
+    {
+        return null;
     }
 }

@@ -218,7 +218,7 @@ abstract class Sql extends Database
             return false;
         }
 
-        $sql = "SELECT * FROM {$table} WHERE hash = :hash LIMIT 1";
+        $sql = "SELECT * FROM `$table` WHERE hash = :hash LIMIT 1";
         $items = $this->query($sql, ['hash' => $migration->getHash()], true);
 
         return !empty($items);
@@ -229,12 +229,6 @@ abstract class Sql extends Database
      */
     public function addMigration(Migration $migration): bool
     {
-        $isApplied = $this->isMigrationApplied($migration);
-
-        if ($isApplied) {
-            return true;
-        }
-
         $result = $this->insert($migration->getManager()->table, [
             'hash' => $migration->getHash(),
             'name' => $migration->getClass(),
@@ -249,12 +243,6 @@ abstract class Sql extends Database
      */
     public function deleteMigration(Migration $migration): bool
     {
-        $isApplied = $this->isMigrationApplied($migration);
-
-        if (!$isApplied) {
-            return true;
-        }
-
         return $this->delete(
             $migration->getManager()->table,
             'hash = :hash',

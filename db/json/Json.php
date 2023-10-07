@@ -103,13 +103,8 @@ class Json extends Database
      */
     public function addMigration(Migration $migration): bool
     {
-        $isApplied = $this->isMigrationApplied($migration);
-
-        if ($isApplied) {
-            return true;
-        }
-
         $items = $this->getData($migration->getManager()->table);
+
         $items[] = [
             'hash' => $migration->getHash(),
             'name' => $migration->getClass(),
