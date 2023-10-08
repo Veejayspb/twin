@@ -22,11 +22,6 @@ class Sqlite extends Sql
     /**
      * {@inheritdoc}
      */
-    protected $type = self::TYPE_SQLITE;
-
-    /**
-     * {@inheritdoc}
-     */
     protected $_requiredProperties = ['dbname', 'path'];
 
     /**

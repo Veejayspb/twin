@@ -31,11 +31,6 @@ class Mysql extends Sql
     /**
      * {@inheritdoc}
      */
-    protected $type = self::TYPE_MYSQL;
-
-    /**
-     * {@inheritdoc}
-     */
     protected $_requiredProperties = ['dbname', 'username', 'password'];
 
     /**

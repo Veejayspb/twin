@@ -22,11 +22,6 @@ class Json extends Database
     /**
      * {@inheritdoc}
      */
-    protected $type = self::TYPE_JSON;
-
-    /**
-     * {@inheritdoc}
-     */
     protected $_requiredProperties = ['dbname', 'path'];
 
     /**

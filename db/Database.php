@@ -8,21 +8,11 @@ use twin\migration\Migration;
 
 abstract class Database extends Component
 {
-    const TYPE_JSON = 'json';
-    const TYPE_MYSQL = 'mysql';
-    const TYPE_SQLITE = 'sqlite';
-
     /**
      * Название БД.
      * @var string
      */
     public $dbname;
-
-    /**
-     * Тип БД.
-     * @var string
-     */
-    protected $type;
 
     /**
      * {@inheritdoc}
@@ -35,24 +25,6 @@ abstract class Database extends Component
         if (!$this->connect()) {
             throw new Exception(500, 'Database connection error: ' . get_called_class());
         }
-    }
-
-    /**
-     * Тип БД.
-     * @return string
-     */
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    /**
-     * Название БД.
-     * @return string
-     */
-    public function getDbName(): string
-    {
-        return $this->dbname;
     }
 
     /**
