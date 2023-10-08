@@ -7,10 +7,11 @@ use twin\db\Database;
 use twin\event\Event;
 use twin\event\EventActiveModel;
 use twin\model\Model;
+use twin\model\query\Query;
 use twin\Twin;
 use ReflectionClass;
 
-abstract class ActiveModel extends Model implements ActiveModelInterface
+abstract class ActiveModel extends Model
 {
     /**
      * Является ли запись новой.
@@ -169,7 +170,10 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Сохранение записи.
+     * @param bool $validate - валидировать
+     * @param array $attributes - названия атрибутов для валидации и сохранения (если не указано, то будут задействованы все атрибуты)
+     * @return bool
      */
     public function save(bool $validate = true, array $attributes = []): bool
     {
@@ -228,6 +232,31 @@ abstract class ActiveModel extends Model implements ActiveModelInterface
      * @return void
      */
     public function afterFind() {}
+
+    /**
+     * Названия атрибутов, формирующих первичный ключ.
+     * @return array
+     */
+    abstract public function pk(): array;
+
+    /**
+     * Удаление записи.
+     * @return bool
+     */
+    abstract public function delete(): bool;
+
+    /**
+     * Поиск.
+     * @return Query
+     */
+    abstract public static function find(): Query;
+
+    /**
+     * Поиск по значениям атрибутов.
+     * @param array $attributes - атрибуты
+     * @return Query
+     */
+    abstract public static function findByAttributes(array $attributes): Query;
 
     /**
      * Вызов события до сохранения.
