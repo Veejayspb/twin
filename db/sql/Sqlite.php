@@ -29,7 +29,7 @@ class Sqlite extends Sql
     public function getTables()
     {
         $sql = "SELECT `name` FROM `sqlite_master` WHERE type='table' ORDER BY 'name'";
-        $result = $this->query($sql, [], true);
+        $result = $this->query($sql);
         return array_column($result, 'name');
     }
 
@@ -38,7 +38,7 @@ class Sqlite extends Sql
      */
     public function getPk(string $table): array
     {
-        $items = $this->query("PRAGMA table_info ('$table')", [], true);
+        $items = $this->query("PRAGMA table_info ('$table')");
         $result = [];
 
         foreach ($items as $item) {
@@ -57,7 +57,7 @@ class Sqlite extends Sql
      */
     public function getAutoIncrement(string $table)
     {
-        $items = $this->query("PRAGMA table_info ('$table')", [], true);
+        $items = $this->query("PRAGMA table_info ('$table')");
         $result = null;
         $count = 0;
 

@@ -25,30 +25,20 @@ class Json extends Database
     protected $_requiredProperties = ['dbname', 'alias'];
 
     /**
-     * Кешируемые данные таблиц для предотвращения повторных обращений.
-     * @var array
-     */
-    private static $data = [];
-
-    /**
      * Извлечь данные из таблицы.
      * @param string $table - название таблицы
      * @return array
      */
     public function getData(string $table): array
     {
-        if (!isset(static::$data[$this->dbname][$table])) {
-            $filePath = $this->getFilePath($table);
+        $filePath = $this->getFilePath($table);
+        $content = file_get_contents($filePath);
 
-            if (file_exists($filePath)) {
-                $content = file_get_contents($filePath);
-                static::$data[$this->dbname][$table] = json_decode($content, true);
-            } else {
-                static::$data[$this->dbname][$table] = [];
-            }
+        if ($content === false) {
+            return [];
+        } else {
+            return (array)json_decode($content, true);
         }
-
-        return static::$data[$this->dbname][$table];
     }
 
     /**
@@ -61,13 +51,7 @@ class Json extends Database
     {
         $filePath = $this->getFilePath($table);
         $content = json_encode($data);
-        $result = false !== file_put_contents($filePath, $content, LOCK_EX);
-
-        if ($result) {
-            static::$data[$this->dbname][$table] = $data;
-        }
-
-        return $result;
+        return false !== file_put_contents($filePath, $content, LOCK_EX);
     }
 
     /**
@@ -167,15 +151,5 @@ class Json extends Database
     {
         $alias = "$this->alias/$this->dbname";
         return Alias::get($alias);
-    }
-
-    /**
-     * Вернуть название файла таблицы с расширением.
-     * @param string $table - название таблицы
-     * @return string
-     */
-    protected function getFileName(string $table): string
-    {
-        return $table . '.' . self::FILE_EXT;
     }
 }

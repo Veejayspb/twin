@@ -21,37 +21,26 @@ abstract class Sql extends Database
     protected $connection;
 
     /**
-     * Лог SQL-запросов в рамках текущего HTTP-запроса.
-     * Предотвращает одинаковые повторные обращения к БД.
-     * Ключ - SQL-выражение.
-     * Значение - результат.
-     * @var array
-     */
-    protected $queryLog = [];
-
-    /**
-     * Осуществить запрос в БД, используя лог запросов, и вернуть ответ.
+     * Осуществить запрос в БД и вернуть ответ.
      * @param string $sql - SQL-выражение
      * @param array $params - параметры
-     * @param bool $useCache - использовать кэш запросов (предотвращает повторные запросы)
      * @return array|bool - FALSE в случае ошибки
      */
-    public function query(string $sql, array $params = [], bool $useCache = false)
+    public function query(string $sql, array $params = [])
     {
-        ksort($params);
-        $key = md5($sql . serialize($params));
+        $statement = $this->connection->prepare($sql);
 
-        if ($useCache && array_key_exists($key, $this->queryLog)) {
-            return $this->queryLog[$key];
-        } else {
-            $data = $this->directQuery($sql, $params);
-
-            if ($data !== false) {
-                $this->queryLog[$key] = $data;
-            }
-
-            return $data;
+        if (!$statement) {
+            return false;
         }
+
+        $result = $statement->execute($params);
+
+        if (!$result) {
+            return false;
+        }
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -210,7 +199,7 @@ abstract class Sql extends Database
         }
 
         $sql = "SELECT * FROM `$table` WHERE hash = :hash LIMIT 1";
-        $items = $this->query($sql, ['hash' => $migration->getHash()], true);
+        $items = $this->query($sql, ['hash' => $migration->getHash()]);
 
         return !empty($items);
     }
@@ -266,27 +255,4 @@ abstract class Sql extends Database
      * @return array
      */
     abstract public function getPk(string $table): array;
-
-    /**
-     * Осуществить запрос в БД и вернуть ответ.
-     * @param string $sql - SQL-выражение
-     * @param array $params - параметры
-     * @return array|bool - FALSE в случае ошибки
-     */
-    protected function directQuery(string $sql, array $params = [])
-    {
-        $statement = $this->connection->prepare($sql);
-
-        if (!$statement) {
-            return false;
-        }
-
-        $result = $statement->execute($params);
-
-        if (!$result) {
-            return false;
-        }
-
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
-    }
 }
