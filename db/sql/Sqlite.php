@@ -2,7 +2,6 @@
 
 namespace twin\db\sql;
 
-use twin\common\Exception;
 use twin\helper\Alias;
 use PDO;
 
@@ -17,24 +16,12 @@ class Sqlite extends Sql
      * Путь до директории с файлами БД.
      * @var string
      */
-    public $path = '@runtime/db/sqlite';
+    public $alias = '@runtime/db/sqlite';
 
     /**
      * {@inheritdoc}
      */
     protected $_requiredProperties = ['dbname', 'path'];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct(array $properties = [])
-    {
-        if (!isset($properties['dbname'], $properties['path'])) {
-            throw new Exception(500, self::class . ' - required properties not specified: dbname, path');
-        }
-
-        parent::__construct($properties);
-    }
 
     /**
      * {@inheritdoc}
@@ -55,7 +42,10 @@ class Sqlite extends Sql
         $result = [];
 
         foreach ($items as $item) {
-            if (empty($item['pk'])) continue;
+            if (empty($item['pk'])) {
+                continue;
+            }
+
             $result[] = $item['name'];
         }
 
@@ -72,12 +62,18 @@ class Sqlite extends Sql
         $count = 0;
 
         foreach ($items as $item) {
-            if (empty($item['pk'])) continue;
-            if (mb_strtoupper($item['type']) == 'INTEGER') $count++;
+            if (empty($item['pk'])) {
+                continue;
+            }
+
+            if (mb_strtoupper($item['type']) == 'INTEGER') {
+                $count++;
+            }
+
             $result = $item['name'];
         }
 
-        return $count == 1 && $result !== null ? $result : false;
+        return ($count == 1 && $result !== null) ? $result : false;
     }
 
     /**
@@ -108,8 +104,8 @@ class Sqlite extends Sql
      */
     private function createDir(): bool
     {
-        $path = Alias::get($this->path);
-        
+        $path = Alias::get($this->alias);
+
         if (!file_exists($path)) {
             return mkdir($path, 0775, true);
         }
@@ -123,16 +119,7 @@ class Sqlite extends Sql
      */
     private function getFilePath(): string
     {
-        $fileName = $this->getFileName();
-        return Alias::get($this->path) . DIRECTORY_SEPARATOR . $fileName;
-    }
-
-    /**
-     * Вернуть название файла БД с расширением.
-     * @return string
-     */
-    private function getFileName(): string
-    {
-        return $this->dbname . '.' . self::FILE_EXT;
+        $alias = "$this->alias/$this->dbname." . self::FILE_EXT;
+        return Alias::get($alias);
     }
 }

@@ -2,9 +2,9 @@
 
 namespace twin\db\sql;
 
+use PDO;
 use twin\db\Database;
 use twin\helper\ArrayHelper;
-use PDO;
 use twin\migration\Migration;
 
 abstract class Sql extends Database
@@ -28,15 +28,6 @@ abstract class Sql extends Database
      * @var array
      */
     protected $queryLog = [];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct(array $properties = [])
-    {
-        parent::__construct($properties);
-        $this->connect();
-    }
 
     /**
      * Осуществить запрос в БД, используя лог запросов, и вернуть ответ.
@@ -73,7 +64,7 @@ abstract class Sql extends Database
     {
         $statement = $this->connection->prepare($sql);
 
-        if ($statement === false) {
+        if (!$statement) {
             return false;
         }
 
@@ -84,7 +75,7 @@ abstract class Sql extends Database
      * Добавить запись.
      * @param string $table - название таблицы
      * @param array $data - данные
-     * @return int|bool - ID новой записи, либо FALSE в случае ошибки
+     * @return string|bool - ID новой записи, либо FALSE в случае ошибки
      */
     public function insert(string $table, array $data)
     {
@@ -99,7 +90,7 @@ abstract class Sql extends Database
         $sql = "INSERT INTO `$table` (`$keysStr`) VALUES ($phStr)";
         $result = $this->execute($sql, array_combine($placeholders, $data));
 
-        if ($result === false) {
+        if (!$result) {
             return false;
         }
 
@@ -286,13 +277,13 @@ abstract class Sql extends Database
     {
         $statement = $this->connection->prepare($sql);
 
-        if ($statement === false) {
+        if (!$statement) {
             return false;
         }
 
         $result = $statement->execute($params);
 
-        if ($result === false) {
+        if (!$result) {
             return false;
         }
 

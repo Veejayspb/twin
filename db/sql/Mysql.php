@@ -46,6 +46,7 @@ class Mysql extends Sql
         }
 
         $result = [];
+
         foreach ($items as $item) {
             $result[] = array_pop($item);
         }
@@ -58,7 +59,8 @@ class Mysql extends Sql
      */
     public function getPk(string $table): array
     {
-        $items = $this->query("SHOW KEYS FROM `$table` WHERE Key_name='PRIMARY'", [], true);
+        $sql = "SHOW KEYS FROM `$table` WHERE Key_name='PRIMARY'";
+        $items = $this->query($sql, [], true);
         return array_column($items, 'Column_name');
     }
 

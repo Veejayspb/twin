@@ -17,12 +17,12 @@ class Json extends Database
      * Путь до директории с файлами БД.
      * @var string
      */
-    public $path = '@runtime/db/json';
+    public $alias = '@runtime/db/json';
 
     /**
      * {@inheritdoc}
      */
-    protected $_requiredProperties = ['dbname', 'path'];
+    protected $_requiredProperties = ['dbname', 'alias'];
 
     /**
      * Кешируемые данные таблиц для предотвращения повторных обращений.
@@ -39,6 +39,7 @@ class Json extends Database
     {
         if (!isset(static::$data[$this->dbname][$table])) {
             $filePath = $this->getFilePath($table);
+
             if (file_exists($filePath)) {
                 $content = file_get_contents($filePath);
                 static::$data[$this->dbname][$table] = json_decode($content, true);
@@ -46,6 +47,7 @@ class Json extends Database
                 static::$data[$this->dbname][$table] = [];
             }
         }
+
         return static::$data[$this->dbname][$table];
     }
 
@@ -59,11 +61,12 @@ class Json extends Database
     {
         $filePath = $this->getFilePath($table);
         $content = json_encode($data);
-        $result = file_put_contents($filePath, $content, LOCK_EX);
-        $result = $result !== false;
+        $result = false !== file_put_contents($filePath, $content, LOCK_EX);
+
         if ($result) {
             static::$data[$this->dbname][$table] = $data;
         }
+
         return $result;
     }
 
@@ -136,9 +139,11 @@ class Json extends Database
     {
         // Создать директорию для хранения файлов БД.
         $databasePath = $this->getDatabasePath();
+
         if (!file_exists($databasePath)) {
             return mkdir($databasePath, 0775, true);
         }
+
         return true;
     }
 
@@ -147,20 +152,20 @@ class Json extends Database
      * @param string $table - название таблицы
      * @return string
      */
-    private function getFilePath(string $table): string
+    protected function getFilePath(string $table): string
     {
-        $fileName = $this->getFileName($table);
-        $databasePath = $this->getDatabasePath();
-        return $databasePath . DIRECTORY_SEPARATOR . $fileName;
+        $fileName = $table . '.' . self::FILE_EXT;
+        $alias = "$this->alias/$this->dbname/$fileName";
+        return Alias::get($alias);
     }
 
     /**
      * Путь до директории с БД.
      * @return string
      */
-    private function getDatabasePath(): string
+    protected function getDatabasePath(): string
     {
-        $alias = $this->path . DIRECTORY_SEPARATOR . $this->dbname;
+        $alias = "$this->alias/$this->dbname";
         return Alias::get($alias);
     }
 
@@ -169,7 +174,7 @@ class Json extends Database
      * @param string $table - название таблицы
      * @return string
      */
-    private function getFileName(string $table): string
+    protected function getFileName(string $table): string
     {
         return $table . '.' . self::FILE_EXT;
     }
