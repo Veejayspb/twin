@@ -108,9 +108,8 @@ abstract class Migration
      */
     public function getHash(): string
     {
-        $timestamp = $this->getDate()->getTimestamp();
-        $name = $this->getName();
-        return md5($name . $timestamp);
+        $class = $this->getClass();
+        return md5($class);
     }
 
     /**
