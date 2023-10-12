@@ -68,6 +68,10 @@ abstract class Sql extends Database
      */
     public function insert(string $table, array $data)
     {
+        if (empty($data)) {
+            return false;
+        }
+
         $keys = array_keys($data);
 
         $placeholders = array_map(function ($key) {
@@ -90,12 +94,16 @@ abstract class Sql extends Database
      * Обновить запись.
      * @param string $table - название таблицы
      * @param array $data - данные
-     * @param string $where - SQL-выражение с условиями (после WHERE)
+     * @param string|null $where - SQL-выражение с условиями (после WHERE)
      * @param array $params - параметры
      * @return bool
      */
-    public function update(string $table, array $data, string $where, array $params = []): bool
+    public function update(string $table, array $data, ?string $where = null, array $params = []): bool
     {
+        if (empty($data)) {
+            return true;
+        }
+
         $set = ArrayHelper::stringExpression($data, function ($key, $value) {
             return "`$key`=:" . self::PREFIX . $key;
         }, ', ');
@@ -104,20 +112,30 @@ abstract class Sql extends Database
             $params[self::PREFIX . $key] = $value;
         }
 
-        $sql = "UPDATE `$table` SET $set WHERE $where";
+        $sql = "UPDATE `$table` SET $set";
+
+        if (!empty($where)) {
+            $sql.= " WHERE $where";
+        }
+
         return $this->execute($sql, $params);
     }
 
     /**
      * Удалить запись.
      * @param string $table - название таблицы
-     * @param string $where - SQL-выражение с условиями (после WHERE)
+     * @param string|null $where - SQL-выражение с условиями (после WHERE)
      * @param array $params - параметры
      * @return bool
      */
-    public function delete(string $table, string $where, array $params = []): bool
+    public function delete(string $table, ?string $where = null, array $params = []): bool
     {
-        $sql = "DELETE FROM `$table` WHERE $where";
+        $sql = "DELETE FROM `$table`";
+
+        if (!empty($where)) {
+            $sql.= " WHERE $where";
+        }
+
         $result = $this->execute($sql, $params);
         return $result !== false;
     }
@@ -140,7 +158,7 @@ abstract class Sql extends Database
 
         $sql.= empty($keys) ? '' : ', ';
         $sql.= implode(', ', $keys);
-        $sql.= ");";
+        $sql.= ")";
 
         return $this->execute($sql);
     }
@@ -153,6 +171,22 @@ abstract class Sql extends Database
     public function deleteTable(string $name): bool
     {
         return $this->execute("DROP TABLE IF EXISTS `$name`");
+    }
+
+    /**
+     * Существует ли таблица.
+     * @param string $name - название таблицы
+     * @return bool
+     */
+    public function hasTable(string $name): bool
+    {
+        $tables = $this->getTables();
+
+        if ($tables === false) {
+            return false;
+        }
+
+        return in_array($name, $tables);
     }
 
     /**
@@ -194,7 +228,7 @@ abstract class Sql extends Database
     {
         $table = $migration->getManager()->table;
 
-        if (!$this->createMigrationTable($table)) {
+        if (!$this->hasTable($table) && !$this->createMigrationTable($table)) {
             return false;
         }
 
