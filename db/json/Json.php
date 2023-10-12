@@ -32,6 +32,11 @@ class Json extends Database
     public function getData(string $table): array
     {
         $filePath = $this->getFilePath($table);
+
+        if (!is_file($filePath)) {
+            return [];
+        }
+
         $content = file_get_contents($filePath);
 
         if ($content === false) {
@@ -69,15 +74,9 @@ class Json extends Database
     public function isMigrationApplied(Migration $migration): bool
     {
         $table = $migration->getManager()->table;
-
-        if (!$this->createMigrationTable($table)) {
-            return false;
-        }
-
         $items = $this->getData($table);
-        $column = array_column($items, 'hash');
-
-        return in_array($migration->getHash(), $column);
+        $hash = $migration->getHash();
+        return array_key_exists($hash, $items);
     }
 
     /**
@@ -85,15 +84,16 @@ class Json extends Database
      */
     public function addMigration(Migration $migration): bool
     {
-        $items = $this->getData($migration->getManager()->table);
+        $table = $migration->getManager()->table;
+        $items = $this->getData($table);
+        $hash = $migration->getHash();
 
-        $items[] = [
-            'hash' => $migration->getHash(),
+        $items[$hash] = [
             'name' => $migration->getClass(),
             'timestamp' => time(),
         ];
 
-        return $this->setData($migration->getManager()->table, $items);
+        return $this->setData($table, $items);
     }
 
     /**
@@ -103,14 +103,10 @@ class Json extends Database
     {
         $table = $migration->getManager()->table;
         $items = $this->getData($table);
+        $hash = $migration->getHash();
 
-        foreach ($items as $i => $item) {
-            $hash = $item['hash'] ?? null;
-
-            if ($hash == $migration->getHash()) {
-                unset($items[$i]);
-                break;
-            }
+        if (array_key_exists($hash, $items)) {
+            unset($items[$hash]);
         }
 
         return $this->setData($table, $items);
@@ -124,7 +120,7 @@ class Json extends Database
         // Создать директорию для хранения файлов БД.
         $databasePath = $this->getDatabasePath();
 
-        if (!file_exists($databasePath)) {
+        if (!is_dir($databasePath)) {
             return mkdir($databasePath, 0775, true);
         }
 
