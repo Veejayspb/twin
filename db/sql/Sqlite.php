@@ -39,6 +39,11 @@ class Sqlite extends Sql
     public function getPk(string $table): array
     {
         $items = $this->query("PRAGMA table_info ('$table')");
+
+        if ($items === false) {
+            return [];
+        }
+
         $result = [];
 
         foreach ($items as $item) {

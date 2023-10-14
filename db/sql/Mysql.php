@@ -61,6 +61,11 @@ class Mysql extends Sql
     {
         $sql = "SHOW KEYS FROM `$table` WHERE Key_name='PRIMARY'";
         $items = $this->query($sql);
+
+        if ($items === false) {
+            return [];
+        }
+
         return array_column($items, 'Column_name');
     }
 
@@ -69,7 +74,7 @@ class Mysql extends Sql
      */
     public function getAutoIncrement(string $table)
     {
-        $items = $this->query("SHOW FULL COLUMNS FROM `$table`", []);
+        $items = $this->query("SHOW FULL COLUMNS FROM `$table`");
 
         if ($items === false) {
             return false;
