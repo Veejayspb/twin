@@ -3,6 +3,7 @@
 namespace twin\test\helper;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Throwable;
 
 abstract class BaseTestCase extends TestCase
@@ -55,5 +56,55 @@ abstract class BaseTestCase extends TestCase
         } catch (Throwable $e) {
             return $e->getCode();
         }
+    }
+
+    /**
+     * Универсальный конструктор MOCK-объекта.
+     * @param string $class
+     * @param string|null $className
+     * @param array|null $construct
+     * @param array $methods
+     * @return object
+     */
+    protected function mock(string $class, ?string $className = null, ?array $construct = [], array $methods = []): object
+    {
+        $reflection = new ReflectionClass($class);
+        $builder = $this->getMockBuilder($class);
+
+        if ($className !== null) {
+            $builder->setMockClassName($className);
+        }
+
+        if ($construct === null) {
+            $builder->disableOriginalConstructor();
+        } else {
+            $builder->setConstructorArgs($construct);
+        }
+
+        if (!empty($methods)) {
+            $builder->onlyMethods(array_keys($methods));
+        }
+
+        if ($reflection->isAbstract()) {
+            $mock = $builder->getMockForAbstractClass();
+        } elseif ($reflection->isTrait()) {
+            $mock = $builder->getMockForTrait();
+        } else {
+            $mock = $builder->getMock();
+        }
+
+        foreach ($methods as $name => $return) {
+            $method = $mock
+                ->expects($this->any())
+                ->method($name);
+
+            if (is_callable($return)) {
+                $method->willReturnCallback($return);
+            } else {
+                $method->willReturn($return);
+            }
+        }
+
+        return $mock;
     }
 }
