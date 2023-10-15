@@ -8,9 +8,9 @@ use twin\helper\Alias;
 trait RenderTrait
 {
     /**
-     * Рендер вида по абсолютному пути.
-     * @param string $alias - алиас
-     * @param array $data - данные
+     * Рендер вида по алиасу пути до файла.
+     * @param string $alias - алиас пути
+     * @param array $data - данные, передаваемые в файл
      * @return string
      * @throws Exception
      */
@@ -25,8 +25,6 @@ trait RenderTrait
         extract($data);
         ob_start();
         include $path;
-        $content = ob_get_clean();
-
-        return $content;
+        return ob_get_clean();
     }
 }
