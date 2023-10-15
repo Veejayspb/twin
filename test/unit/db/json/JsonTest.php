@@ -119,20 +119,8 @@ final class JsonTest extends BaseTestCase
      */
     protected function getMigration(string $class): Migration
     {
-        $manager = $this->getMigrationManager();
-
-        return $this->getMockBuilder(Migration::class)
-            ->setMockClassName($class)
-            ->setConstructorArgs([$manager])
-            ->getMockForAbstractClass();
-    }
-
-    /**
-     * @return MigrationManager
-     */
-    protected function getMigrationManager(): MigrationManager
-    {
-        return new MigrationManager(['alias' => '@twin/test/temp']);
+        $manager = new MigrationManager(['alias' => '@twin/test/temp']);
+        return $this->mock(Migration::class, $class, [$manager]);
     }
 
     /**

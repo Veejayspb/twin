@@ -97,9 +97,7 @@ final class MigrationTest extends BaseTestCase
     public function testIsApplied()
     {
         foreach ([true, false] as $expected) {
-            $db = $this->getDatabase([
-                'isMigrationApplied' => $expected,
-            ]);
+            $db = $this->mock(Database::class, null, null, ['isMigrationApplied' => $expected]);
 
             $migration = $this->getMigration(self::CLASS_NAME, [
                 'getDb' => $db,
@@ -112,9 +110,7 @@ final class MigrationTest extends BaseTestCase
     public function testApply()
     {
         foreach ([true, false] as $expected) {
-            $db = $this->getDatabase([
-                'addMigration' => $expected,
-            ]);
+            $db = $this->mock(Database::class, null, null, ['addMigration' => $expected]);
 
             $migration = $this->getMigration(self::CLASS_NAME, [
                 'getDb' => $db,
@@ -127,9 +123,7 @@ final class MigrationTest extends BaseTestCase
     public function testCancel()
     {
         foreach ([true, false] as $expected) {
-            $db = $this->getDatabase([
-                'deleteMigration' => $expected,
-            ]);
+            $db = $this->mock(Database::class, null, null, ['deleteMigration' => $expected]);
 
             $migration = $this->getMigration(self::CLASS_NAME, [
                 'getDb' => $db,
@@ -172,27 +166,6 @@ final class MigrationTest extends BaseTestCase
     }
 
     /**
-     * @param array $methods
-     * @return Database
-     */
-    protected function getDatabase(array $methods = []): Database
-    {
-        $mock = $this->getMockBuilder(Database::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(array_keys($methods))
-            ->getMockForAbstractClass();
-
-        foreach ($methods as $name => $value) {
-            $mock
-                ->expects($this->any())
-                ->method($name)
-                ->willReturn($value);
-        }
-
-        return $mock;
-    }
-
-    /**
      * @param string $class
      * @param array $methods
      * @return Migration
@@ -200,21 +173,7 @@ final class MigrationTest extends BaseTestCase
     protected function getMigration(string $class, array $methods = []): Migration
     {
         $migrationManager = $this->getMigrationManager();
-
-        $mock = $this->getMockBuilder(Migration::class)
-            ->setMockClassName($class)
-            ->setConstructorArgs([$migrationManager])
-            ->onlyMethods(array_keys($methods))
-            ->getMockForAbstractClass();
-
-        foreach ($methods as $name => $value) {
-            $mock
-                ->expects($this->any())
-                ->method($name)
-                ->willReturn($value);
-        }
-
-        return $mock;
+        return $this->mock(Migration::class, $class, [$migrationManager], $methods);
     }
 
     /**

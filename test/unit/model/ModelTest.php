@@ -8,16 +8,9 @@ final class ModelTest extends BaseTestCase
 {
     public function testGetLabel()
     {
-        $model = $this->getMockBuilder(Model::class)
-            ->onlyMethods(['labels'])
-            ->getMock();
-
-        $model
-            ->expects($this->any())
-            ->method('labels')
-            ->willReturn([
-                'name' => 'value',
-            ]);
+        $model = $this->mock(Model::class, null, [], [
+            'labels' => ['name' => 'value'],
+        ]);
 
         $this->assertSame('value', $model->getLabel('name'));
         $this->assertSame('not_exists', $model->getLabel('not_exists'));
@@ -25,16 +18,9 @@ final class ModelTest extends BaseTestCase
 
     public function testGetHint()
     {
-        $model = $this->getMockBuilder(Model::class)
-            ->onlyMethods(['hints'])
-            ->getMock();
-
-        $model
-            ->expects($this->any())
-            ->method('hints')
-            ->willReturn([
-                'name' => 'value',
-            ]);
+        $model = $this->mock(Model::class, null, [], [
+            'hints' => ['name' => 'value']
+        ]);
 
         $this->assertSame('value', $model->getHint('name'));
         $this->assertNull($model->getHint('not_exists'));

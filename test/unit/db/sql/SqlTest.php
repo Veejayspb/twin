@@ -50,10 +50,7 @@ final class SqlTest extends BaseTestCase
             ],
         ];
 
-        $db = $this->getMockBuilder(Sql::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
+        $db = $this->mock(Sql::class, null, null);
         $proxy = new ObjectProxy($db);
 
         foreach ($items as $item) {
@@ -89,10 +86,7 @@ final class SqlTest extends BaseTestCase
             ],
         ];
 
-        $db = $this->getMockBuilder(Sql::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
+        $db = $this->mock(Sql::class, null, null);
         $proxy = new ObjectProxy($db);
 
         foreach ($items as $item) {
@@ -320,36 +314,22 @@ final class SqlTest extends BaseTestCase
      */
     protected function getSql(bool $execute = true): Sql
     {
-        $mock = $this->getMockBuilder(Sql::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['query', 'execute'])
-            ->getMockForAbstractClass();
-
-        $proxy = new ObjectProxy($mock);
-        $proxy->connection = $this->getPDO(true, true);
-
-        $mock
-            ->expects($this->any())
-            ->method('query')
-            ->willReturnCallback(function ($sql, $params) use ($execute) {
+        $mock = $this->mock(Sql::class, null, null, [
+            'query' => function ($sql, $params) use ($execute) {
                 self::$lastSql = $sql;
                 self::$lastParams = $params;
                 return $execute ? [['id' => 1, 'name' => 'name']] : false;
-            });
-
-        $mock
-            ->expects($this->any())
-            ->method('execute')
-            ->willReturnCallback(function ($sql, $params) use ($execute) {
+            },
+            'execute' => function ($sql, $params) use ($execute) {
                 self::$lastSql = $sql;
                 self::$lastParams = $params;
                 return $execute;
-            });
+            },
+            'getTables' => $execute ? ['tbl'] : false,
+        ]);
 
-        $mock
-            ->expects($this->any())
-            ->method('getTables')
-            ->willReturn($execute ? ['tbl'] : false);
+        $proxy = new ObjectProxy($mock);
+        $proxy->connection = $this->getPDO(true, true);
 
         return $mock;
     }
@@ -361,47 +341,15 @@ final class SqlTest extends BaseTestCase
      */
     protected function getPDO(bool $prepare, bool $execute): PDO
     {
-        $statement = $this->getPDOStatement($execute);
+        $statement = $this->mock(PDOStatement::class, null, [], [
+            'execute' => $execute,
+            'fetchAll' => [],
+        ]);
 
-        $mock = $this->getMockBuilder(PDO::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['prepare', 'lastInsertId'])
-            ->getMock();
-
-        $mock
-            ->expects($this->any())
-            ->method('prepare')
-            ->willReturn($prepare ? $statement : false);
-
-        $mock
-            ->expects($this->any())
-            ->method('lastInsertId')
-            ->willReturn(self::LAST_INSERT_ID);
-
-        return $mock;
-    }
-
-    /**
-     * @param bool $execute
-     * @return PDOStatement
-     */
-    protected function getPDOStatement(bool $execute): PDOStatement
-    {
-        $mock = $this->getMockBuilder(PDOStatement::class)
-            ->onlyMethods(['execute', 'fetchAll'])
-            ->getMock();
-
-        $mock
-            ->expects($this->any())
-            ->method('execute')
-            ->willReturn($execute);
-
-        $mock
-            ->expects($this->any())
-            ->method('fetchAll')
-            ->willReturn([]);
-
-        return $mock;
+        return $this->mock(PDO::class, null, null, [
+            'prepare' => $prepare ? $statement : false,
+            'lastInsertId' => self::LAST_INSERT_ID,
+        ]);
     }
 
     /**
@@ -410,20 +358,8 @@ final class SqlTest extends BaseTestCase
      */
     protected function getMigration(string $class): Migration
     {
-        $manager = $this->getMigrationManager();
-
-        return $this->getMockBuilder(Migration::class)
-            ->setMockClassName($class)
-            ->setConstructorArgs([$manager])
-            ->getMockForAbstractClass();
-    }
-
-    /**
-     * @return MigrationManager
-     */
-    protected function getMigrationManager(): MigrationManager
-    {
-        return new MigrationManager(['alias' => '@twin/test/temp']);
+        $manager = new MigrationManager(['alias' => '@twin/test/temp']);
+        return $this->mock(Migration::class, $class, [$manager]);
     }
 
     /**

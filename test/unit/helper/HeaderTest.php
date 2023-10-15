@@ -1,6 +1,5 @@
 <?php
 
-use PHPUnit\Framework\MockObject\MockObject;
 use twin\helper\Header;
 use twin\test\helper\BaseTestCase;
 
@@ -75,7 +74,7 @@ final class HeaderTest extends BaseTestCase
 
     public function testGet()
     {
-        $mock = $this->getMock();
+        $mock = $this->mock(Header::class, null, [], ['getRawList' => self::RAW_HEADERS]);
 
         $this->assertSame('text/html;charset=UTF-8', $mock->get('Content-type'));
         $this->assertSame('max-age=604800', $mock->get('Cache-Control'));
@@ -85,14 +84,7 @@ final class HeaderTest extends BaseTestCase
 
     public function testGetList()
     {
-        $mock = $this->getMockBuilder(Header::class)
-            ->onlyMethods(['getRawList'])
-            ->getMock();
-
-        $mock
-            ->expects($this->any())
-            ->method('getRawList')
-            ->willReturn(self::RAW_HEADERS);
+        $mock = $this->mock(Header::class, null, [], ['getRawList' => self::RAW_HEADERS]);
 
         $expected = [
             'Content-type' => 'text/html;charset=UTF-8',
@@ -100,22 +92,5 @@ final class HeaderTest extends BaseTestCase
         ];
 
         $this->assertSame($expected, $mock->getList());
-    }
-
-    /**
-     * @return MockObject|Header
-     */
-    private function getMock(): MockObject
-    {
-        $mock = $this->getMockBuilder(Header::class)
-            ->onlyMethods(['getRawList'])
-            ->getMock();
-
-        $mock
-            ->expects($this->any())
-            ->method('getRawList')
-            ->willReturn(self::RAW_HEADERS);
-
-        return $mock;
     }
 }

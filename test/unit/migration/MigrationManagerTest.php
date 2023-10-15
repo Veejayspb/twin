@@ -128,7 +128,7 @@ final class MigrationManagerTest extends BaseTestCase
         $migrations[] = new m_000000_000000_init($manager);
 
         foreach (self::MIGRATIONS as $className => $isApplied) {
-            $migrations[] = $this->getMigration($className, $isApplied);
+            $migrations[] = $this->mock(Migration::class, $className, null, ['isApplied' => $isApplied]);
         }
 
         $manager
@@ -137,27 +137,6 @@ final class MigrationManagerTest extends BaseTestCase
             ->willReturn($migrations);
 
         return $manager;
-    }
-
-    /**
-     * @param string $class
-     * @param bool $isApplied
-     * @return MockObject|Migration
-     */
-    protected function getMigration(string $class, bool $isApplied): Migration
-    {
-        $mock = $this->getMockBuilder(Migration::class)
-            ->disableOriginalConstructor()
-            ->setMockClassName($class)
-            ->onlyMethods(['isApplied'])
-            ->getMockForAbstractClass();
-
-        $mock
-            ->expects($this->any())
-            ->method('isApplied')
-            ->willReturn($isApplied);
-
-        return $mock;
     }
 
     /**

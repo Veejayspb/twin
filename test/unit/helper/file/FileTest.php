@@ -337,20 +337,9 @@ final class FileTest extends BaseTestCase
         foreach ($items as $item) {
             $path = $temp->getFilePath($item['name']);
             file_put_contents($path, '', LOCK_EX);
+            $file = $this->mock(File::class, null, [$path], ['getMimeType' => $item['mime']]);
 
-            $file = $this->getMockBuilder(File::class)
-                ->setConstructorArgs([$path])
-                ->onlyMethods(['getMimeType'])
-                ->getMock();
-
-            $file
-                ->expects($this->any())
-                ->method('getMimeType')
-                ->willReturn($item['mime']);
-
-            $result = $file->getExtension();
-
-            $this->assertSame($item['result'], $result);
+            $this->assertSame($item['result'], $file->getExtension());
         }
 
         $temp->clear();
