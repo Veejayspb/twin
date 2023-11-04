@@ -4,6 +4,7 @@ namespace twin\view;
 
 use twin\common\Component;
 use twin\helper\Html;
+use twin\helper\Tag;
 use twin\Twin;
 
 class View extends Component
@@ -30,7 +31,7 @@ class View extends Component
      * Алиас пути до директории с видами.
      * @var string
      */
-    public $path = '@self/view';
+    public $alias = '@self/view';
 
     /**
      * Расположение скриптов - в BODY.
@@ -66,29 +67,30 @@ class View extends Component
     /**
      * {@inheritdoc}
      */
-    protected $_requiredProperties = ['layoutPath', 'path'];
+    protected $_requiredProperties = ['layoutPath', 'alias'];
 
     /**
      * Рендер вида без шаблона.
-     * @param string $route - роут
+     * @param string $route - текстовый роут
      * @param array $data - данные
      * @return string
      */
     public function render(string $route, array $data = []): string
     {
-        $alias = $this->path . DIRECTORY_SEPARATOR . $route . '.php';
+        $alias = $this->alias . '/' . $route . '.php';
         return $this->renderPath($alias, $data);
     }
 
     /**
      * Рендер вида с шаблоном.
-     * @param string $route - роут
+     * @param string $route - текстовый роут
      * @param array $data - данные
      * @return string
      */
     public function renderLayout(string $route, array $data = []): string
     {
         $content = $this->render($route, $data);
+
         $content = $this->renderPath($this->layoutPath, [
             'content' => $content,
         ]);
@@ -102,23 +104,23 @@ class View extends Component
 
     /**
      * Начало родительского шаблона.
-     * @return void
+     * @return bool
      */
-    public function start()
+    public function begin(): bool
     {
-        ob_start();
+        return ob_start();
     }
 
     /**
      * Конец родительского шаблона.
-     * @param string $path - алиас пути до родительского шаблона
-     * @return void
+     * @param string $alias - алиас пути до родительского шаблона
+     * @return string
      */
-    public function end(string $path)
+    public function end(string $alias): string
     {
         $content = ob_get_clean();
 
-        echo $this->renderPath($path, [
+        return $this->renderPath($alias, [
             'content' => $content,
         ]);
     }
@@ -128,7 +130,7 @@ class View extends Component
      * @param string $str
      * @return void
      */
-    public function addHead(string $str)
+    public function addHead(string $str): void
     {
         $this->head[] = $str;
     }
@@ -138,7 +140,7 @@ class View extends Component
      * @param string $str
      * @return void
      */
-    public function addBody(string $str)
+    public function addBody(string $str): void
     {
         $this->body[] = $str;
     }
@@ -152,11 +154,11 @@ class View extends Component
         $items = [];
 
         // Asset CSS.
-        $items = array_merge($items, Twin::app()->asset->getCss());
+        $items = array_merge($items, $this->getCss());
 
         // Asset JS.
         if (!$this->scriptBody) {
-            $items = array_merge($items, Twin::app()->asset->getJs());
+            $items = array_merge($items, $this->getJs());
         }
 
         // Дополнительный контент.
@@ -175,12 +177,30 @@ class View extends Component
 
         // Asset JS.
         if ($this->scriptBody) {
-            $items = array_merge($items, Twin::app()->asset->getJs());
+            $items = array_merge($items, $this->getJs());
         }
 
         // Дополнительный контент.
         $items = array_merge($items, $this->body);
 
         return implode(PHP_EOL . Html::TAB, $items) . PHP_EOL;
+    }
+
+    /**
+     * Массив CSS-тегов, закрепленных через assets.
+     * @return Tag[]
+     */
+    protected function getCss(): array
+    {
+        return Twin::app()->asset->getCss();
+    }
+
+    /**
+     * Массив JS-тегов, закрепленных через assets.
+     * @return Tag[]
+     */
+    protected function getJs(): array
+    {
+        return Twin::app()->asset->getJs();
     }
 }
