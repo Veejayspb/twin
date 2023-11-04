@@ -18,7 +18,7 @@ class RenderTraitTest extends BaseTestCase
         $content = null;
 
         $code = $this->catchExceptionCode(function () use ($mock, &$content) {
-            $content = $mock->renderPath('@twin/test/helper/view/simple.php', ['text' => 'text']);
+            $content = $mock->renderPath('@twin/test/helper/view/simple.php', ['content' => 'text']);
         });
 
         $this->assertSame(PHP_EOL . 'text', $content);

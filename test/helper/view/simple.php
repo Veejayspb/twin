@@ -1,5 +1,5 @@
 <?php
-/* @var string $text */
+/* @var string $content */
 ?>
 
-<?= $text ?>
+<?= $content ?>
