@@ -43,8 +43,6 @@ class Identity
 
     final private function __clone() {}
 
-    final private function __wakeup() {}
-
     /**
      * Объект текущего класса.
      * @return static

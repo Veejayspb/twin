@@ -30,8 +30,6 @@ abstract class Controller
 
     private function __clone() {}
 
-    private function __wakeup() {}
-
     /**
      * Сценарий, выполняющийся до инициализации контроллера.
      * @return void

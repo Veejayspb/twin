@@ -85,8 +85,6 @@ class Twin
 
     private function __clone() {}
 
-    private function __wakeup() {}
-
     /**
      * @param string $name - название компонента
      * @return Component|null

@@ -52,8 +52,6 @@ final class Transaction
 
     private function __clone() {}
 
-    private function __wakeup() {}
-
     /**
      * @param string $name
      * @return mixed

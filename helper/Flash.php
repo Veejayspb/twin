@@ -52,8 +52,6 @@ class Flash
 
     private function __clone() {}
 
-    private function __wakeup() {}
-
     /**
      * Вернуть экземпляр текущего класса.
      * @return static
