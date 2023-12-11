@@ -115,40 +115,48 @@ class RouteManager extends Component
      * Если передано название класса, то этот класс и обрабатывает правило.
      * Если передан строковый роут, то обработкой занимается стандартный класс Rule.
      * @param string $route - строковый роут или название класса
-     * @return string
+     * @return string|null
      * @throws Exception
      */
-    protected function getRuleClass(string $route): string
+    protected function getRuleClass(string $route): ?string
     {
         if (!class_exists($route)) {
             return Rule::class;
         }
 
-        if (!is_subclass_of($route, RuleInterface::class)) {
-            $message = 'Rule object: ' . get_class($route) . ' must be implemented ' . RuleInterface::class;
-            throw new Exception(500, $message);
+        if (is_subclass_of($route, RuleInterface::class)) {
+            return $route;
         }
 
-        return $route;
+        return null;
     }
 
     /**
      * Выбрать правило, удовлетворяющее коллбэк-функции.
      * @param callable $func - функция, проверяющая соответствие роута
      * @return string|Route|bool - FALSE, если ни одно правило не соответствует
+     * @throws Exception
      */
     private function compareRoutes(callable $func)
     {
         foreach ($this->rules as $pattern => $route) {
             $className = $this->getRuleClass($route);
+
+            if ($className === null) {
+                $message = 'Rule object: ' . get_class($route) . ' must be implemented ' . RuleInterface::class;
+                throw new Exception(500, $message);
+            }
+
             $rule = new $className; /* @var RuleInterface $rule */
-            (new ObjectHelper($rule))->setProperties(compact('pattern', 'route'));
+            $objectHelper = new ObjectHelper($rule);
+            $objectHelper->setProperties(compact('pattern', 'route'));
             $result = $func($rule);
 
             if ($result !== false) {
                 return $result;
             }
         }
+
         return false;
     }
 }
