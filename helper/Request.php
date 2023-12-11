@@ -57,6 +57,23 @@ class Request
     }
 
     /**
+     * Приложение запущено из командной строки.
+     * @return bool
+     */
+    public static function isConsole(): bool
+    {
+        if (defined('STDIN')) {
+            return true;
+        }
+
+        if (empty($_SERVER['REMOTE_ADDR']) && !isset($_SERVER['HTTP_USER_AGENT']) && count($_SERVER['argv']) > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Вернуть значение GET-параметра.
      * @param string $name - название параметра
      * @param mixed $default - значение по-умолчанию

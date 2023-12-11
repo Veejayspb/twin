@@ -12,8 +12,14 @@ class RequestTest extends BaseTestCase
         $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
         $this->assertTrue(Request::isAjax());
 
-        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'InvalidType';
+        $_SERVER['HTTP_X_REQUESTED_WITH'] = 'AnotherHttpRequest';
         $this->assertFalse(Request::isAjax());
+    }
+
+    public function testIsConsole()
+    {
+        $actual = Request::isConsole();
+        $this->assertTrue($actual);
     }
 
     public function testGet()

@@ -117,7 +117,7 @@ class Twin
 
         $this->running = true;
         $this->registerConfig($config);
-        $isConsole = static::isConsole();
+        $isConsole = Request::isConsole();
 
         if ($isConsole) {
             $this->runConsole();
@@ -246,23 +246,6 @@ class Twin
         } else {
             return "@root/$className.php";
         }
-    }
-
-    /**
-     * Приложение запущено из командной строки.
-     * @return bool
-     */
-    public static function isConsole(): bool
-    {
-        if (defined('STDIN')) {
-            return true;
-        }
-
-        if (empty($_SERVER['REMOTE_ADDR']) && !isset($_SERVER['HTTP_USER_AGENT']) && count($_SERVER['argv']) > 0) {
-            return true;
-        }
-
-        return false;
     }
 
     /**

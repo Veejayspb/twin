@@ -36,10 +36,10 @@ final class TwinTest extends BaseTestCase
         $this->assertSame(get_class(TwinChild::app()), TwinChild::class);
     }
 
-    public function testRun()
+    /*public function testRun()
     {
         // TODO...
-    }
+    }*/
 
     public function testGetComponents()
     {
@@ -181,12 +181,6 @@ final class TwinTest extends BaseTestCase
             $actual = Twin::getClassAlias($className);
             $this->assertSame($expected, $actual);
         }
-    }
-
-    public function testIsConsole()
-    {
-        $actual = Twin::isConsole();
-        $this->assertTrue($actual);
     }
 
     /**
