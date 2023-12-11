@@ -37,7 +37,6 @@ abstract class WebController extends Controller
         $controller = self::$instance = static::getController($namespace, $route->controller);
         $controller->route = $route;
         $controller->init();
-
         $action = static::getActionName($route->action);
 
         if (!$controller->actionExists($action)) {

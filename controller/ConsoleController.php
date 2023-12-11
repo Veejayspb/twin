@@ -61,7 +61,6 @@ abstract class ConsoleController extends Controller
         $controller = static::$instance = static::getController($namespace, $route->controller);
         $controller->route = $route;
         $controller->init();
-
         $action = static::getActionName($route->action);
 
         if (!$controller->actionExists($action)) {
