@@ -276,6 +276,11 @@ class Twin
 
             $_GET = $route->params;
             $namespace = $this->route->getNamespace($route->module);
+
+            if ($namespace === null) {
+                throw new Exception(500, "Module not found: $route->module");
+            }
+
             WebController::run($namespace, $route);
         } catch (Exception $e) {
             @ob_clean(); // Если исключение выбрасывается во view, то на страницу ошибки выводится часть целевого шаблона
@@ -289,6 +294,11 @@ class Twin
             ];
 
             $namespace = $this->route->getNamespace($route->module);
+
+            if ($namespace === null) {
+                die('Error route not specified');
+            }
+
             WebController::run($namespace, $route);
         }
     }
@@ -309,8 +319,12 @@ class Twin
 
             unset($argv[0], $argv[1]);
             $route->params = array_values($argv);
-
             $namespace = $this->route->getNamespace($route->module);
+
+            if ($namespace === null) {
+                throw new Exception(500, "Module not found: $route->module");
+            }
+
             ConsoleController::run($namespace, $route);
         } catch (Exception $e) {
             echo "Error {$e->getCode()}: {$e->getMessage()}";
