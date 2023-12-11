@@ -37,6 +37,16 @@ abstract class Controller
     protected function init() {}
 
     /**
+     * Разрешен ли доступ к действию.
+     * @param string $action - название действия
+     * @return bool
+     */
+    protected function access(string $action): bool
+    {
+        return true;
+    }
+
+    /**
      * Инстанцировать контроллер.
      * @param string $namespace - неймспейс контроллера
      * @param string $controller - название контроллера

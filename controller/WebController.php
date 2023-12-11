@@ -76,16 +76,6 @@ abstract class WebController extends Controller
     }
 
     /**
-     * Разрешен ли доступ к действию.
-     * @param string $action - название действия
-     * @return bool
-     */
-    protected function access(string $action): bool
-    {
-        return true;
-    }
-
-    /**
      * Рендер вида с шаблоном.
      * @param string $route - строковой роут
      * @param array $data - данные
