@@ -2,10 +2,9 @@
 
 namespace twin\controller;
 
+use ReflectionMethod;
 use twin\common\Exception;
 use twin\response\ResponseConsole;
-use twin\route\Route;
-use ReflectionMethod;
 use twin\Twin;
 
 abstract class ConsoleController extends Controller
@@ -43,34 +42,6 @@ abstract class ConsoleController extends Controller
     public function help()
     {
         return $this->help;
-    }
-
-    /**
-     * Вызвать указанные контроллер/действие.
-     * @param string $namespace - неймспейс контроллера
-     * @param Route $route - роут
-     * @return void
-     * @throws Exception
-     */
-    public static function run(string $namespace, Route $route)
-    {
-        if (self::class != get_called_class()) {
-            throw new Exception(500, 'Denied to run controller not from class: ' . self::class);
-        }
-
-        $controller = static::$instance = static::getController($namespace, $route->controller);
-        $controller->route = $route;
-        $controller->init();
-        $action = static::getActionName($route->action);
-
-        if (!$controller->actionExists($action)) {
-            throw new Exception(404);
-        }
-
-        $controller->beforeAction($action);
-        $data = $controller->callAction($action, $route->params);
-
-        echo Twin::app()->response->run($data);
     }
 
     /**

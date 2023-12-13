@@ -2,10 +2,11 @@
 
 namespace twin\controller;
 
-use twin\common\Exception;
-use twin\route\Route;
 use ReflectionClass;
 use ReflectionMethod;
+use twin\common\Exception;
+use twin\route\Route;
+use twin\Twin;
 
 abstract class Controller
 {
@@ -35,6 +36,35 @@ abstract class Controller
      * @return void
      */
     protected function init() {}
+
+    /**
+     * Вызвать указанные контроллер/действие.
+     * @param string $namespace - неймспейс контроллера
+     * @param Route $route - роут
+     * @return void
+     * @throws Exception
+     */
+    public static function run(string $namespace, Route $route)
+    {
+        $controller = static::$instance = static::getController($namespace, $route->controller);
+        $controller->route = $route;
+        $controller->init();
+        $action = static::getActionName($route->action);
+
+        if (!$controller->actionExists($action)) {
+            throw new Exception(404);
+        }
+
+        // Права доступа.
+        if (!$controller->access($action)) {
+            throw new Exception(403);
+        }
+
+        $controller->beforeAction($action);
+        $data = $controller->callAction($action, $route->params);
+
+        echo Twin::app()->response->run($data);
+    }
 
     /**
      * Разрешен ли доступ к действию.
