@@ -5,6 +5,7 @@ namespace twin\widget;
 use twin\controller\Controller;
 use twin\helper\Html;
 use twin\helper\Tag;
+use twin\route\RouteManager;
 use twin\Twin;
 
 class NavItem extends Widget
@@ -77,12 +78,24 @@ class NavItem extends Widget
             return false;
         }
 
-        $route = Twin::app()->route->parseUrl($this->url);
+        $routeManager = Twin::app()->findComponent(RouteManager::class); /* @var RouteManager $routeManager */
+
+        if (!$routeManager) {
+            return false;
+        }
+
+        $route = $routeManager->parseUrl($this->url);
+
         if ($route === false) {
             return false;
         }
 
-        $current = Controller::$instance->route;
+        $current = $routeManager->getCurrentRoute();
+
+        if (!$current) {
+            return false;
+        }
+
         return
             $current->module == $route->module &&
             $current->controller == $route->controller &&

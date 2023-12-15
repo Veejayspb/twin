@@ -2,7 +2,6 @@
 
 namespace twin\helper;
 
-use twin\controller\Controller;
 use twin\route\Route;
 use twin\route\RouteManager;
 use twin\Twin;
@@ -11,31 +10,54 @@ class Url
 {
     /**
      * Создать адрес.
-     * @param string $route - текстовый роут
+     * @param string $strRoute - текстовый роут
      * @param array $params - параметры
      * @param bool $absolute - абсолютный адрес
-     * @return string
+     * @return string|null
      */
-    public static function to(string $route, array $params = [], bool $absolute = false): string
+    public static function to(string $strRoute, array $params = [], bool $absolute = false): ?string
     {
-        $r = Controller::$instance->route;
-        $r = new Route($r->module, $r->controller, $r->action);
-        $r->parse($route);
-        $r->params = $params;
-        return static::getRouter()->createUrl($r, $absolute);
+        $routeManager = static::getRouter();
+
+        if (!$routeManager) {
+            return null;
+        }
+
+        $route = $routeManager->getCurrentRoute();
+
+        if (!$route) {
+            return null;
+        }
+
+        $route = new Route($route->module, $route->controller, $route->action);
+        $route->parse($strRoute);
+        $route->params = $params;
+
+        return $routeManager->createUrl($route, $absolute) ?: null;
     }
 
     /**
      * Создать адрес с текущим роутом.
      * @param array $params - параметры
      * @param bool $absolute - абсолютный адрес
-     * @return string
+     * @return string|null
      */
-    public static function current(array $params = [], bool $absolute = false): string
+    public static function current(array $params = [], bool $absolute = false): ?string
     {
-        $r = clone Controller::$instance->route;
-        $r->params = $params + $r->params;
-        return static::getRouter()->createUrl($r, $absolute);
+        $routeManager = static::getRouter();
+
+        if (!$routeManager) {
+            return null;
+        }
+
+        $route = $routeManager->getCurrentRoute();
+
+        if (!$route) {
+            return null;
+        }
+
+        $route->params = $params + $route->params;
+        return $routeManager->createUrl($route, $absolute) ?: null;
     }
 
     /**

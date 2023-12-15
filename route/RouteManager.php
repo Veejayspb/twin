@@ -5,6 +5,7 @@ namespace twin\route;
 use twin\common\Component;
 use twin\common\Exception;
 use twin\helper\ObjectHelper;
+use twin\helper\Request;
 
 class RouteManager extends Component
 {
@@ -76,6 +77,19 @@ class RouteManager extends Component
     }
 
     /**
+     * Вернуть текущий роут.
+     * @return Route|bool
+     */
+    public function getCurrentRoute()
+    {
+        if (!is_string(Request::$url)) {
+            return false;
+        }
+
+        return $this->parseUrl(Request::$url);
+    }
+
+    /**
      * Разобрать адрес.
      * @param string $url - адрес
      * @return Route|bool - FALSE в случае ошибки
@@ -116,7 +130,6 @@ class RouteManager extends Component
      * Если передан строковый роут, то обработкой занимается стандартный класс Rule.
      * @param string $route - строковый роут или название класса
      * @return string|null
-     * @throws Exception
      */
     protected function getRuleClass(string $route): ?string
     {
@@ -134,7 +147,7 @@ class RouteManager extends Component
     /**
      * Выбрать правило, удовлетворяющее коллбэк-функции.
      * @param callable $func - функция, проверяющая соответствие роута
-     * @return string|Route|bool - FALSE, если ни одно правило не соответствует
+     * @return Route|bool - FALSE, если ни одно правило не соответствует
      * @throws Exception
      */
     private function compareRoutes(callable $func)

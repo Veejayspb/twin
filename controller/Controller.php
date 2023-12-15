@@ -16,12 +16,6 @@ abstract class Controller
     const POSTFIX = 'Controller';
 
     /**
-     * Текущий роут.
-     * @var Route
-     */
-    public $route;
-
-    /**
      * Экземпляр запущенного контроллера.
      * @var static
      */
@@ -47,7 +41,6 @@ abstract class Controller
     public static function run(string $namespace, Route $route)
     {
         $controller = static::$instance = static::getController($namespace, $route->controller);
-        $controller->route = $route;
         $controller->init();
         $action = static::getActionName($route->action);
 
