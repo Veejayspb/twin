@@ -15,15 +15,7 @@ abstract class Controller
      */
     const POSTFIX = 'Controller';
 
-    /**
-     * Экземпляр запущенного контроллера.
-     * @var static
-     */
-    public static $instance;
-
     protected function __construct() {}
-
-    private function __clone() {}
 
     /**
      * Сценарий, выполняющийся до инициализации контроллера.
@@ -40,7 +32,7 @@ abstract class Controller
      */
     public static function run(string $namespace, Route $route)
     {
-        $controller = static::$instance = static::getController($namespace, $route->controller);
+        $controller = static::getController($namespace, $route->controller);
         $controller->init();
         $action = static::getActionName($route->action);
 
