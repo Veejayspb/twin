@@ -17,7 +17,7 @@ class Url
      */
     public static function to(string $strRoute, array $params = [], bool $absolute = false): ?string
     {
-        $routeManager = static::getRouter();
+        $routeManager = static::getRouteManager();
 
         if (!$routeManager) {
             return null;
@@ -44,7 +44,7 @@ class Url
      */
     public static function current(array $params = [], bool $absolute = false): ?string
     {
-        $routeManager = static::getRouter();
+        $routeManager = static::getRouteManager();
 
         if (!$routeManager) {
             return null;
@@ -64,40 +64,58 @@ class Url
      * Адрес главной страницы.
      * @param array $params - параметры
      * @param bool $absolute - абсолютный адрес
-     * @return string
+     * @return string|null
      */
-    public static function home(array $params = [], bool $absolute = false): string
+    public static function home(array $params = [], bool $absolute = false): ?string
     {
-        return static::to(static::getRouter()->home, $params, $absolute);
+        $routeManager = static::getRouteManager();
+
+        if (!$routeManager) {
+            return null;
+        }
+
+        return static::to($routeManager->home, $params, $absolute);
     }
 
     /**
      * Адрес страницы login.
      * @param array $params - параметры
      * @param bool $absolute - абсолютный адрес
-     * @return string
+     * @return string|null
      */
-    public static function login(array $params = [], bool $absolute = false): string
+    public static function login(array $params = [], bool $absolute = false): ?string
     {
-        return static::to(static::getRouter()->login, $params, $absolute);
+        $routeManager = static::getRouteManager();
+
+        if (!$routeManager) {
+            return null;
+        }
+
+        return static::to($routeManager->login, $params, $absolute);
     }
 
     /**
      * Адрес страницы logout.
      * @param array $params - параметры
      * @param bool $absolute - абсолютный адрес
-     * @return string
+     * @return string|null
      */
-    public static function logout(array $params = [], bool $absolute = false): string
+    public static function logout(array $params = [], bool $absolute = false): ?string
     {
-        return static::to(static::getRouter()->logout, $params, $absolute);
+        $routeManager = static::getRouteManager();
+
+        if (!$routeManager) {
+            return null;
+        }
+
+        return static::to($routeManager->logout, $params, $absolute);
     }
 
     /**
      * Вернуть роутер для генерации адреса.
      * @return RouteManager|null
      */
-    protected static function getRouter(): ?RouteManager
+    protected static function getRouteManager(): ?RouteManager
     {
         return Twin::app()->findComponent(RouteManager::class);
     }
