@@ -17,12 +17,8 @@ abstract class ConsoleController extends Controller
         'help - reference',
     ];
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function init()
+    public function __construct()
     {
-        parent::init();
         Twin::app()->setComponent('response', new ResponseConsole);
     }
 

@@ -10,12 +10,8 @@ use twin\view\View;
 
 abstract class WebController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function init()
+    public function __construct()
     {
-        parent::init();
         Twin::app()->setComponent('response', new ResponseHtml);
     }
 

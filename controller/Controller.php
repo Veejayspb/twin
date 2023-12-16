@@ -15,14 +15,6 @@ abstract class Controller
      */
     const POSTFIX = 'Controller';
 
-    protected function __construct() {}
-
-    /**
-     * Сценарий, выполняющийся до инициализации контроллера.
-     * @return void
-     */
-    protected function init() {}
-
     /**
      * Вызвать указанные контроллер/действие.
      * @param string $namespace - неймспейс контроллера
@@ -33,7 +25,6 @@ abstract class Controller
     public static function run(string $namespace, Route $route)
     {
         $controller = static::getController($namespace, $route->controller);
-        $controller->init();
         $action = static::getActionName($route->action);
 
         if (!$controller->actionExists($action)) {
