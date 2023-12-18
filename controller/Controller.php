@@ -36,7 +36,6 @@ abstract class Controller
             throw new Exception(403);
         }
 
-        $controller->beforeAction($action);
         $data = $controller->callAction($action, $route->params);
 
         echo Twin::app()->response->run($data);
@@ -136,13 +135,6 @@ abstract class Controller
 
         return $result;
     }
-
-    /**
-     * Сценарий, выполняющийся до вызова действия.
-     * @param string $action - название действия
-     * @return void
-     */
-    protected function beforeAction(string $action) {}
 
     /**
      * Вызов действия.
