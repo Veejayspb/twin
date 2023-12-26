@@ -78,12 +78,12 @@ class RouteManager extends Component
 
     /**
      * Вернуть текущий роут.
-     * @return Route|bool
+     * @return Route|null
      */
-    public function getCurrentRoute()
+    public function getCurrentRoute(): ?Route
     {
         if (!is_string(Request::$url)) {
-            return false;
+            return null;
         }
 
         return $this->parseUrl(Request::$url);
