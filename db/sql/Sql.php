@@ -136,8 +136,7 @@ abstract class Sql extends Database
             $sql.= " WHERE $where";
         }
 
-        $result = $this->execute($sql, $params);
-        return $result !== false;
+        return $this->execute($sql, $params);
     }
 
     /**
