@@ -1,7 +1,7 @@
 <?php
 
 use twin\common\Component;
-use twin\test\helper\BaseTestCase;
+use test\helper\BaseTestCase;
 
 final class ComponentTest extends BaseTestCase
 {

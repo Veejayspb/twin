@@ -1,9 +1,9 @@
 <?php
 
 use twin\helper\template\Template;
-use twin\test\helper\BaseTestCase;
-use twin\test\helper\ObjectProxy;
-use twin\test\helper\Temp;
+use test\helper\BaseTestCase;
+use test\helper\ObjectProxy;
+use test\helper\Temp;
 
 class TemplateTest extends BaseTestCase
 {

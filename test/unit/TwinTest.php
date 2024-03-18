@@ -1,8 +1,8 @@
 <?php
 
-use twin\test\helper\BaseTestCase;
-use twin\test\helper\ObjectProxy;
-use twin\test\helper\Twin as TwinChild;
+use test\helper\BaseTestCase;
+use test\helper\ObjectProxy;
+use test\helper\Twin as TwinChild;
 use twin\Twin;
 use twin\view\View;
 
@@ -152,7 +152,7 @@ final class TwinTest extends BaseTestCase
         $actual = Twin::import(__FILE__, true);
         $this->assertTrue($actual);
 
-        $actual = Twin::import('@twin/test/helper/config/common.php', false);
+        $actual = Twin::import('@test/helper/config/common.php', false);
         $this->assertIsArray($actual);
     }
 

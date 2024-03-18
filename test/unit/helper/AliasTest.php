@@ -1,8 +1,8 @@
 <?php
 
 use twin\helper\Alias;
-use twin\test\helper\BaseTestCase;
-use twin\test\helper\ObjectProxy;
+use test\helper\BaseTestCase;
+use test\helper\ObjectProxy;
 
 final class AliasTest extends BaseTestCase
 {

@@ -1,7 +1,7 @@
 <?php
 
-use twin\test\helper\BaseTestCase;
-use twin\test\helper\ObjectProxy;
+use test\helper\BaseTestCase;
+use test\helper\ObjectProxy;
 use twin\view\View;
 
 final class ViewTest extends BaseTestCase
@@ -87,7 +87,7 @@ final class ViewTest extends BaseTestCase
 
         echo 'inner';
 
-        $result = $view->end('@twin/test/helper/view/simple.php');
+        $result = $view->end('@test/helper/view/simple.php');
         $this->assertSame(PHP_EOL . 'inner', $result);
     }
 
@@ -137,8 +137,8 @@ final class ViewTest extends BaseTestCase
     protected function getView(): View
     {
         $properties = [
-            'alias' => '@twin/test/helper/view',
-            'layoutPath' => '@twin/test/helper/view/template.php',
+            'alias' => '@test/helper/view',
+            'layoutPath' => '@test/helper/view/template.php',
         ];
 
         return $this->mock(View::class, null, [$properties], [

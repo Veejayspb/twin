@@ -1,7 +1,7 @@
 <?php
 
 use twin\db\Database;
-use twin\test\helper\BaseTestCase;
+use test\helper\BaseTestCase;
 
 final class DatabaseTest extends BaseTestCase
 {

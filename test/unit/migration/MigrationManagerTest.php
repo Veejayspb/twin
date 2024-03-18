@@ -3,8 +3,8 @@
 use PHPUnit\Framework\MockObject\MockObject;
 use twin\migration\Migration;
 use twin\migration\MigrationManager;
-use twin\test\helper\BaseTestCase;
-use twin\test\helper\Temp;
+use test\helper\BaseTestCase;
+use test\helper\Temp;
 use twin\Twin;
 
 final class MigrationManagerTest extends BaseTestCase
@@ -31,7 +31,7 @@ final class MigrationManagerTest extends BaseTestCase
         ];
 
         $manager = new MigrationManager([
-            'alias' => '@twin/test/temp',
+            'alias' => '@test/temp',
         ]);
 
         foreach ($items as $name => $expected) {
@@ -43,7 +43,7 @@ final class MigrationManagerTest extends BaseTestCase
     public function testGetMigrations()
     {
         $manager = new MigrationManager([
-            'alias' => '@twin/test/temp',
+            'alias' => '@test/temp',
         ]);
         $count = 3;
 
@@ -116,7 +116,7 @@ final class MigrationManagerTest extends BaseTestCase
     protected function getMigrationManager(): MigrationManager
     {
         $properties = [
-            'alias' => '@twin/test/temp',
+            'alias' => '@test/temp',
         ];
 
         $manager = $this->getMockBuilder(MigrationManager::class)

@@ -3,7 +3,7 @@
 use twin\view\View;
 
 return [
-    'parent' =>'@twin/test/helper/config/web.php',
+    'parent' =>'@test/helper/config/web.php',
     'name' => 'custom',
     'params' => [],
     'components' => [

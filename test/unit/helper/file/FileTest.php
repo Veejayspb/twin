@@ -1,8 +1,8 @@
 <?php
 
 use twin\helper\file\File;
-use twin\test\helper\BaseTestCase;
-use twin\test\helper\Temp;
+use test\helper\BaseTestCase;
+use test\helper\Temp;
 
 final class FileTest extends BaseTestCase
 {

@@ -3,8 +3,8 @@
 use twin\db\sql\Sql;
 use twin\migration\Migration;
 use twin\migration\MigrationManager;
-use twin\test\helper\BaseTestCase;
-use twin\test\helper\ObjectProxy;
+use test\helper\BaseTestCase;
+use test\helper\ObjectProxy;
 
 final class SqlTest extends BaseTestCase
 {
@@ -358,7 +358,7 @@ final class SqlTest extends BaseTestCase
      */
     protected function getMigration(string $class): Migration
     {
-        $manager = new MigrationManager(['alias' => '@twin/test/temp']);
+        $manager = new MigrationManager(['alias' => '@test/temp']);
         return $this->mock(Migration::class, $class, [$manager]);
     }
 

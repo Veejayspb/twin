@@ -1,7 +1,7 @@
 <?php
 
 use twin\common\Exception;
-use twin\test\helper\BaseTestCase;
+use test\helper\BaseTestCase;
 
 final class ExceptionTest extends BaseTestCase
 {

@@ -1,7 +1,7 @@
 <?php
 
 use twin\helper\Request;
-use twin\test\helper\BaseTestCase;
+use test\helper\BaseTestCase;
 
 class RequestTest extends BaseTestCase
 {

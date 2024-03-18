@@ -1,6 +1,6 @@
 <?php
 
-namespace twin\test\helper;
+namespace test\helper;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;

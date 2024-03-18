@@ -1,7 +1,7 @@
 <?php
 
 use twin\helper\file\FileUploaded;
-use twin\test\helper\BaseTestCase;
+use test\helper\BaseTestCase;
 
 final class FileUploadedTest extends BaseTestCase
 {

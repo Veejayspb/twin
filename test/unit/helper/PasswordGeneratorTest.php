@@ -3,8 +3,8 @@
 namespace unit\helper;
 
 use twin\helper\PasswordGenerator;
-use twin\test\helper\BaseTestCase;
-use twin\test\helper\ObjectProxy;
+use test\helper\BaseTestCase;
+use test\helper\ObjectProxy;
 
 final class PasswordGeneratorTest extends BaseTestCase
 {

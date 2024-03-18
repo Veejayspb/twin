@@ -2,8 +2,8 @@
 
 use twin\helper\ConfigConstructor;
 use twin\route\RouteManager;
-use twin\test\helper\BaseTestCase;
-use twin\test\helper\ObjectProxy;
+use test\helper\BaseTestCase;
+use test\helper\ObjectProxy;
 use twin\Twin;
 use twin\view\View;
 
@@ -99,7 +99,7 @@ final class ConfigConstructorTest extends BaseTestCase
      */
     protected function getConfigData(string $name, bool $withoutParent = false)
     {
-        $data = Twin::import("@twin/test/helper/config/{$name}.php");
+        $data = Twin::import("@test/helper/config/{$name}.php");
 
         if ($withoutParent && is_array($data) && array_key_exists('parent', $data)) {
             unset($data['parent']);

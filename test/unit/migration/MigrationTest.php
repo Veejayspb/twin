@@ -4,9 +4,9 @@ use twin\db\Database;
 use twin\helper\Alias;
 use twin\migration\Migration;
 use twin\migration\MigrationManager;
-use twin\test\helper\BaseTestCase;
-use twin\test\helper\ObjectProxy;
-use twin\test\helper\Temp;
+use test\helper\BaseTestCase;
+use test\helper\ObjectProxy;
+use test\helper\Temp;
 
 final class MigrationTest extends BaseTestCase
 {
@@ -142,7 +142,7 @@ final class MigrationTest extends BaseTestCase
         ];
 
         $temp = new Temp;
-        $alias = '@twin/test/temp';
+        $alias = '@test/temp';
         $manager = $this->getMigrationManager();
 
         foreach ($items as $name => $expected) {
@@ -181,7 +181,7 @@ final class MigrationTest extends BaseTestCase
      */
     protected function getMigrationManager(): MigrationManager
     {
-        return new MigrationManager(['alias' => '@twin/test/temp']);
+        return new MigrationManager(['alias' => '@test/temp']);
     }
 
     /**

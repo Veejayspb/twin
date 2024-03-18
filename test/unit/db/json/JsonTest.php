@@ -4,20 +4,20 @@ use twin\db\json\Json;
 use twin\helper\Alias;
 use twin\migration\Migration;
 use twin\migration\MigrationManager;
-use twin\test\helper\BaseTestCase;
-use twin\test\helper\Temp;
+use test\helper\BaseTestCase;
+use test\helper\Temp;
 
 final class JsonTest extends BaseTestCase
 {
     const CONFIG = [
-        'alias' => '@twin/test',
+        'alias' => '@test',
         'dbname' => 'temp',
     ];
 
     public function testGetData()
     {
         $db = new Json(self::CONFIG);
-        $path = Alias::get('@twin/test/temp/table.json');
+        $path = Alias::get('@test/temp/table.json');
         $data = ['key' => 'value'];
 
         $this->assertSame([], $db->getData('table'));
@@ -28,7 +28,7 @@ final class JsonTest extends BaseTestCase
     public function testSetData()
     {
         $db = new Json(self::CONFIG);
-        $path = Alias::get('@twin/test/temp/table.json');
+        $path = Alias::get('@test/temp/table.json');
         $data = ['key' => 'value'];
 
         $this->assertFileDoesNotExist($path);
@@ -41,7 +41,7 @@ final class JsonTest extends BaseTestCase
     public function testCreateMigrationTable()
     {
         $db = new Json(self::CONFIG);
-        $path = Alias::get('@twin/test/temp/migration.json');
+        $path = Alias::get('@test/temp/migration.json');
 
         $this->assertFileDoesNotExist($path);
         $result = $db->createMigrationTable('migration');
@@ -53,7 +53,7 @@ final class JsonTest extends BaseTestCase
     public function testIsMigrationApplied()
     {
         $db = new Json(self::CONFIG);
-        $path = Alias::get('@twin/test/temp/migration.json');
+        $path = Alias::get('@test/temp/migration.json');
 
         $migration = $this->getMigration('m_231010_044000_name1');
         file_put_contents($path, json_encode([
@@ -70,7 +70,7 @@ final class JsonTest extends BaseTestCase
     public function testAddMigration()
     {
         $db = new Json(self::CONFIG);
-        $path = Alias::get('@twin/test/temp/migration.json');
+        $path = Alias::get('@test/temp/migration.json');
         $className = 'm_231010_045000_name';
 
         $migration = $this->getMigration($className);
@@ -91,7 +91,7 @@ final class JsonTest extends BaseTestCase
     public function testDeleteMigration()
     {
         $db = new Json(self::CONFIG);
-        $path = Alias::get('@twin/test/temp/migration.json');
+        $path = Alias::get('@test/temp/migration.json');
         $migration1 = $this->getMigration('m_231010_045000_name1');
         $migration2 = $this->getMigration('m_231010_045000_name2');
 
@@ -119,7 +119,7 @@ final class JsonTest extends BaseTestCase
      */
     protected function getMigration(string $class): Migration
     {
-        $manager = new MigrationManager(['alias' => '@twin/test/temp']);
+        $manager = new MigrationManager(['alias' => '@test/temp']);
         return $this->mock(Migration::class, $class, [$manager]);
     }
 

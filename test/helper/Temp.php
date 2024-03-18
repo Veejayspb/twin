@@ -1,6 +1,6 @@
 <?php
 
-namespace twin\test\helper;
+namespace test\helper;
 
 use twin\helper\file\Dir;
 use twin\helper\file\File;

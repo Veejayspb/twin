@@ -1,7 +1,7 @@
 <?php
 
 use twin\helper\StringHelper;
-use twin\test\helper\BaseTestCase;
+use test\helper\BaseTestCase;
 
 final class StringHelperTest extends BaseTestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-use twin\test\helper\BaseTestCase;
+use test\helper\BaseTestCase;
 use twin\view\RenderTrait;
 
 class RenderTraitTest extends BaseTestCase
@@ -10,7 +10,7 @@ class RenderTraitTest extends BaseTestCase
         $mock = $this->mock(RenderTrait::class); /* @var RenderTrait $mock */
 
         $code = $this->catchExceptionCode(function () use ($mock) {
-            $mock->renderPath('@twin/test/notexists');
+            $mock->renderPath('@test/notexists');
         });
 
         $this->assertSame(500, $code);
@@ -18,7 +18,7 @@ class RenderTraitTest extends BaseTestCase
         $content = null;
 
         $code = $this->catchExceptionCode(function () use ($mock, &$content) {
-            $content = $mock->renderPath('@twin/test/helper/view/simple.php', ['content' => 'text']);
+            $content = $mock->renderPath('@test/helper/view/simple.php', ['content' => 'text']);
         });
 
         $this->assertSame(PHP_EOL . 'text', $content);

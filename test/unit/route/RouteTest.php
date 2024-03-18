@@ -1,8 +1,8 @@
 <?php
 
 use twin\route\Route;
-use twin\test\helper\BaseTestCase;
-use twin\test\helper\ObjectProxy;
+use test\helper\BaseTestCase;
+use test\helper\ObjectProxy;
 
 final class RouteTest extends BaseTestCase
 {

@@ -1,7 +1,7 @@
 <?php
 
 use twin\helper\ArrayHelper;
-use twin\test\helper\BaseTestCase;
+use test\helper\BaseTestCase;
 
 final class ArrayHelperTest extends BaseTestCase
 {

@@ -1,7 +1,7 @@
 <?php
 
 use twin\helper\file\FileType;
-use twin\test\helper\BaseTestCase;
+use test\helper\BaseTestCase;
 
 final class FileTypeTest extends BaseTestCase
 {

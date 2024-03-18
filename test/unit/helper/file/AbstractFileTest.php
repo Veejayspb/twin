@@ -2,9 +2,9 @@
 
 use twin\helper\file\AbstractFile;
 use twin\helper\file\Dir;
-use twin\test\helper\BaseTestCase;
-use twin\test\helper\ObjectProxy;
-use twin\test\helper\Temp;
+use test\helper\BaseTestCase;
+use test\helper\ObjectProxy;
+use test\helper\Temp;
 
 final class AbstractFileTest extends BaseTestCase
 {

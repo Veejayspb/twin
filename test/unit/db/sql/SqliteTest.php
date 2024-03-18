@@ -1,7 +1,7 @@
 <?php
 
 use twin\db\sql\Sqlite;
-use twin\test\helper\BaseTestCase;
+use test\helper\BaseTestCase;
 
 final class SqliteTest extends BaseTestCase
 {

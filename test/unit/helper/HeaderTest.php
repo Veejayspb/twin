@@ -1,7 +1,7 @@
 <?php
 
 use twin\helper\Header;
-use twin\test\helper\BaseTestCase;
+use test\helper\BaseTestCase;
 
 final class HeaderTest extends BaseTestCase
 {
@@ -16,7 +16,7 @@ final class HeaderTest extends BaseTestCase
 
     public function testAddMultiple()
     {
-        $object = new \twin\test\helper\Header;
+        $object = new \test\helper\Header;
 
         $object->addMultiple([
             'zero' => 'old',
@@ -42,7 +42,7 @@ final class HeaderTest extends BaseTestCase
 
     public function testRemoveMultiple()
     {
-        $object = new \twin\test\helper\Header;
+        $object = new \test\helper\Header;
 
         $object->addMultiple([
             'one' => 'old',
@@ -57,7 +57,7 @@ final class HeaderTest extends BaseTestCase
 
     public function testClear()
     {
-        $object = new \twin\test\helper\Header;
+        $object = new \test\helper\Header;
 
         $object->add('one', 'one');
         $object->add('two', 'two');

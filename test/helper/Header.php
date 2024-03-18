@@ -1,6 +1,6 @@
 <?php
 
-namespace twin\test\helper;
+namespace test\helper;
 
 final class Header extends \twin\helper\Header
 {

@@ -3,7 +3,7 @@
 use twin\route\RouteManager;
 
 return [
-    'parent' => '@twin/test/helper/config/common.php',
+    'parent' => '@test/helper/config/common.php',
     'name' => 'web',
     'language' => 'ru',
     'params' => [

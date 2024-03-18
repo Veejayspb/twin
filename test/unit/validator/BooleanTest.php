@@ -1,7 +1,7 @@
 <?php
 
-use twin\test\helper\BaseTestCase;
-use twin\test\helper\TempModel;
+use test\helper\BaseTestCase;
+use test\helper\TempModel;
 use twin\validator\Boolean;
 
 final class BooleanTest extends BaseTestCase
