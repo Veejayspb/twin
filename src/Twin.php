@@ -17,7 +17,6 @@ use twin\route\RouteManager;
 use twin\view\View;
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'helper' . DIRECTORY_SEPARATOR . 'Alias.php';
-spl_autoload_register([Twin::class, 'autoload'], true, true);
 
 Alias::set('@root', dirname(__DIR__, 3));
 Alias::set('@twin', __DIR__);
@@ -219,17 +218,6 @@ class Twin
         } else {
             return require $path;
         }
-    }
-
-    /**
-     * Автозагрузка классов.
-     * @param string $className - название класса
-     * @return void
-     */
-    public static function autoload(string $className): void
-    {
-        $alias = static::getClassAlias($className);
-        static::import($alias, true);
     }
 
     /**

@@ -19,6 +19,15 @@ class MigrationController extends ConsoleController
         'apply {name} - apply all migrations up to specified (if name is empty, all migrations will be applied)',
     ];
 
+    public static function __url($name, $arguments)
+    {
+        echo 'normal: ';
+        echo get_called_class();
+        echo $name;
+        print_r($arguments);
+        die;
+    }
+
     /**
      * Создать новую миграцию.
      * @param string $name - название миграции

@@ -156,19 +156,6 @@ final class TwinTest extends BaseTestCase
         $this->assertIsArray($actual);
     }
 
-    public function testAutoload()
-    {
-        $className = 'Nonamespace';
-
-        $actual = class_exists($className);
-        $this->assertFalse($actual);
-
-        TwinChild::autoload("@twin/test/helper/$className.php");
-
-        $actual = class_exists($className);
-        $this->assertTrue($actual);
-    }
-
     public function testGetClassAlias()
     {
         $items = [
