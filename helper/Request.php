@@ -8,6 +8,7 @@ Request::$url = $_SERVER['REQUEST_URI'] ?? null;
 Request::$ip = $_SERVER['REMOTE_ADDR'] ?? null;
 Request::$method = $_SERVER['REQUEST_METHOD'] ?? null;
 Request::$headers = function_exists('getallheaders') ? getallheaders() : [];
+Request::$timestamp = time();
 
 class Request
 {
@@ -46,6 +47,12 @@ class Request
      * @var array
      */
     public static $headers = [];
+
+    /**
+     * Время запроса.
+     * @var int
+     */
+    public static $timestamp;
 
     /**
      * Проверка на AJAX-запрос.
