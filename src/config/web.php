@@ -9,7 +9,7 @@ return [
     'components' => [
         'route' => [
             'namespaces' => [
-                null => 'app\\controller',
+                '' => 'app\\controller',
             ],
             'rules' => [
                 '/' => 'site/index',
