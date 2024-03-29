@@ -27,7 +27,7 @@ class Address
 
     /**
      * Относительный путь.
-     * @var string|null
+     * @var string
      */
     private $path = '';
 
@@ -49,19 +49,24 @@ class Address
     public function __construct(string $url = '')
     {
         $parts = parse_url($url);
+
         if (isset($parts['scheme'])) {
             $this->ssl = $parts['scheme'] == 'https';
         }
+
         if (isset($parts['host'])) {
             $this->domain = $parts['host'];
         }
+
         if (isset($parts['path'])) {
             $this->path = $parts['path'];
         }
+
         if (isset($parts['query'])) {
             parse_str($parts['query'], $params);
             $this->params = $params;
         }
+
         if (isset($parts['fragment'])) {
             $this->anchor = $parts['fragment'];
         }
@@ -78,6 +83,7 @@ class Address
                 $this->anchor = empty($value['#']) ? '' : $value['#'];
                 unset($value['#']);
             }
+
             $this->params = array_filter($value, function ($value) {
                 return $value !== null;
             });
@@ -107,17 +113,22 @@ class Address
     public function getUrl(bool $params = true, bool $absolute = false, bool $anchor = false): string
     {
         $url = '';
+
         if ($absolute && isset($this->domain)) {
-            $url.= $this->ssl ? 'https://' : 'http://';
-            $url.= $this->domain;
+            $url .= $this->ssl ? 'https://' : 'http://';
+            $url .= $this->domain;
         }
-        $url.= $this->path;
+
+        $url .= $this->path;
+
         if ($params && !empty($this->params)) {
-            $url.= '?' . http_build_query($this->params, '', '&');
+            $url .= '?' . http_build_query($this->params, '', '&');
         }
+
         if ($anchor && !empty($this->anchor)) {
-            $url.= '#' . $this->anchor;
+            $url .= '#' . $this->anchor;
         }
+
         return $url;
     }
 
