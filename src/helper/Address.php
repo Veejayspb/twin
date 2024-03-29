@@ -131,13 +131,4 @@ class Address
 
         return $url;
     }
-
-    /**
-     * Инстанс строителя адреса.
-     * @return AddressBuilder
-     */
-    public function build(): AddressBuilder
-    {
-        return new AddressBuilder($this);
-    }
 }

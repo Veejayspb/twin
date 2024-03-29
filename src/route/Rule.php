@@ -25,8 +25,7 @@ class Rule implements RuleInterface
     {
         // Убрать из адреса GET-параметры.
         $address = new Address($url);
-        $url = $address->build()->path()->get();
-        $placeholders = $this->extractPlaceholders($url);
+        $placeholders = $this->extractPlaceholders($address->path);
 
         if ($placeholders === false) {
             return false;
@@ -83,7 +82,7 @@ class Rule implements RuleInterface
         $address->path = $url;
         $address->params = $params;
 
-        return $address->build()->path()->params()->anchor()->get();
+        return $address->getUrl(true, false, true);
     }
 
     /**
