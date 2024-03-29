@@ -17,31 +17,31 @@ class Address
      * HTTP/HTTPS.
      * @var bool
      */
-    private $ssl = false;
+    protected $ssl = false;
 
     /**
      * Имя домена.
      * @var string|null
      */
-    private $domain = '';
+    protected $domain = '';
 
     /**
      * Относительный путь.
      * @var string
      */
-    private $path = '';
+    protected $path = '';
 
     /**
      * GET-параметры.
      * @var array
      */
-    private $params = [];
+    protected $params = [];
 
     /**
      * Якорь.
      * @var string
      */
-    private $anchor = '';
+    protected $anchor = '';
 
     /**
      * @param string $url - адрес
