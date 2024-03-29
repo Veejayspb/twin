@@ -49,7 +49,7 @@ class RouteManager extends Component
      * Адрес домена.
      * @var string - https://domain.ru
      */
-    public $domain;
+    public $domain = '';
 
     /**
      * {@inheritdoc}
