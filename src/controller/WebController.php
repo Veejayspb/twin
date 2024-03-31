@@ -3,7 +3,6 @@
 namespace twin\controller;
 
 use ReflectionMethod;
-use twin\helper\Header;
 use twin\response\ResponseHtml;
 use twin\Twin;
 use twin\view\View;
@@ -45,28 +44,6 @@ abstract class WebController extends Controller
     {
         $view = $this->getView();
         return $view->renderLayout($route, $data);
-    }
-
-    /**
-     * Перенаправление.
-     * @param string $url - адрес
-     * @return void
-     */
-    protected function redirect(string $url)
-    {
-        (new Header)->add('Location', $url);
-        exit;
-    }
-
-    /**
-     * Обновление.
-     * @param int $delay - задержка перед перезагрузкой
-     * @return void
-     */
-    protected function refresh(int $delay = 0)
-    {
-        (new Header)->add('Refresh', $delay);
-        exit;
     }
 
     /**

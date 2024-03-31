@@ -113,6 +113,28 @@ class Header
     }
 
     /**
+     * Перенаправление.
+     * @param string $url - адрес
+     * @return void
+     */
+    public static function redirect(string $url): void
+    {
+        (new static)->add('Location', $url);
+        exit;
+    }
+
+    /**
+     * Обновление.
+     * @param int $delay - задержка в секундах перед перезагрузкой
+     * @return void
+     */
+    public static function refresh(int $delay = 0): void
+    {
+        (new static)->add('Refresh', $delay);
+        exit;
+    }
+
+    /**
      * Необработанный список заголовков.
      * @return array
      */
