@@ -3,8 +3,6 @@
 namespace twin\controller;
 
 use ReflectionMethod;
-use twin\Twin;
-use twin\view\View;
 
 abstract class WebController extends Controller
 {
@@ -26,26 +24,5 @@ abstract class WebController extends Controller
         }
 
         return call_user_func_array([$this, $action], $result);
-    }
-
-    /**
-     * Рендер вида с шаблоном.
-     * @param string $route - строковой роут
-     * @param array $data - данные
-     * @return string
-     */
-    protected function render(string $route, array $data = []): string
-    {
-        $view = $this->getView();
-        return $view->renderLayout($route, $data);
-    }
-
-    /**
-     * View компонент.
-     * @return View|null
-     */
-    protected function getView(): ?View
-    {
-        return Twin::app()->findComponent(View::class);
     }
 }
