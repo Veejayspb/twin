@@ -156,20 +156,6 @@ final class TwinTest extends BaseTestCase
         $this->assertIsArray($actual);
     }
 
-    public function testGetClassAlias()
-    {
-        $items = [
-            'twin\Twin' => '@twin/Twin.php',
-            'twin\view\View' => '@twin/view/View.php',
-            'app\model\ModelName' => '@root/app/model/ModelName.php',
-        ];
-
-        foreach ($items as $className => $expected) {
-            $actual = Twin::getClassAlias($className);
-            $this->assertSame($expected, $actual);
-        }
-    }
-
     /**
      * {@inheritdoc}
      */

@@ -221,22 +221,6 @@ class Twin
     }
 
     /**
-     * Вернуть алиас пути до файла с классом.
-     * @param string $className
-     * @return string
-     */
-    public static function getClassAlias(string $className): string
-    {
-        $className = str_replace('\\', '/', $className);
-
-        if (substr($className, 0, 4) == 'twin') {
-            return "@$className.php";
-        } else {
-            return "@root/$className.php";
-        }
-    }
-
-    /**
      * Удаление компонента.
      * @param string $name - название компонента
      * @return void
