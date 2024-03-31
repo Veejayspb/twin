@@ -2,6 +2,7 @@
 
 use twin\asset\AssetManager;
 use twin\helper\Request;
+use twin\response\ResponseHtml;
 use twin\view\View;
 
 return [
@@ -19,6 +20,9 @@ return [
                 '/<module:[a-z\-]+>/<controller:[a-z\-]+>/<action:[a-z\-]+>' => '<module>/<controller>/<action>',
             ],
             'domain' => Request::$scheme . '://' . Request::$host,
+        ],
+        'response' => [
+            'class' => ResponseHtml::class,
         ],
         'view' => [
             'class' => View::class,

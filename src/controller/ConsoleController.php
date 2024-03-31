@@ -4,8 +4,6 @@ namespace twin\controller;
 
 use ReflectionMethod;
 use twin\common\Exception;
-use twin\response\ResponseConsole;
-use twin\Twin;
 
 abstract class ConsoleController extends Controller
 {
@@ -16,11 +14,6 @@ abstract class ConsoleController extends Controller
     protected $help = [
         'help - reference',
     ];
-
-    public function __construct()
-    {
-        Twin::app()->setComponent('response', new ResponseConsole);
-    }
 
     /**
      * Ссылка на список команд.

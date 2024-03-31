@@ -3,17 +3,11 @@
 namespace twin\controller;
 
 use ReflectionMethod;
-use twin\response\ResponseHtml;
 use twin\Twin;
 use twin\view\View;
 
 abstract class WebController extends Controller
 {
-    public function __construct()
-    {
-        Twin::app()->setComponent('response', new ResponseHtml);
-    }
-
     /**
      * {@inheritdoc}
      */
