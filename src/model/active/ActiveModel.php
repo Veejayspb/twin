@@ -4,8 +4,6 @@ namespace twin\model\active;
 
 use twin\common\Exception;
 use twin\db\Database;
-use twin\event\Event;
-use twin\event\EventActiveModel;
 use twin\model\Model;
 use twin\model\query\Query;
 use twin\Twin;
@@ -219,15 +217,6 @@ abstract class ActiveModel extends Model
     }
 
     /**
-     * {@inheritdoc}
-     * @return EventActiveModel
-     */
-    public function event(): Event
-    {
-        return $this->_event = $this->_event ?: new EventActiveModel($this);
-    }
-
-    /**
      * Вызов события после поиска записи.
      * @return void
      */
@@ -264,7 +253,6 @@ abstract class ActiveModel extends Model
      */
     protected function beforeSave(): bool
     {
-        $this->event()->beforeSave();
         return true;
     }
 
@@ -275,7 +263,6 @@ abstract class ActiveModel extends Model
     protected function afterSave()
     {
         $this->_newRecord = false;
-        $this->event()->afterSave();
     }
 
     /**
@@ -284,7 +271,6 @@ abstract class ActiveModel extends Model
      */
     protected function beforeDelete(): bool
     {
-        $this->event()->beforeDelete();
         return true;
     }
 
@@ -294,7 +280,7 @@ abstract class ActiveModel extends Model
      */
     protected function afterDelete()
     {
-        $this->event()->afterDelete();
+
     }
 
     /**

@@ -8,6 +8,10 @@ class EventModel extends Event
 {
     const BEFORE_VALIDATE = 'before-validate';
     const AFTER_VALIDATE = 'after-validate';
+    const BEFORE_SAVE = 'before-save';
+    const AFTER_SAVE = 'after-save';
+    const BEFORE_DELETE = 'before-delete';
+    const AFTER_DELETE = 'after-delete';
 
     /**
      * {@inheritdoc}
@@ -33,5 +37,41 @@ class EventModel extends Event
     public function afterValidate()
     {
         $this->notify(self::AFTER_VALIDATE);
+    }
+
+    /**
+     * Событие, вызываемое перед сохранением модели.
+     * @return void
+     */
+    public function beforeSave()
+    {
+        $this->notify(self::BEFORE_SAVE);
+    }
+
+    /**
+     * Событие, вызываемое после сохранения модели.
+     * @return void
+     */
+    public function afterSave()
+    {
+        $this->notify(self::AFTER_SAVE);
+    }
+
+    /**
+     * Событие, вызываемое перед удалением модели.
+     * @return void
+     */
+    public function beforeDelete()
+    {
+        $this->notify(self::BEFORE_DELETE);
+    }
+
+    /**
+     * Событие, вызываемое после удаления модели.
+     * @return void
+     */
+    public function afterDelete()
+    {
+        $this->notify(self::AFTER_DELETE);
     }
 }

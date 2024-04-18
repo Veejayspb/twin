@@ -2,10 +2,10 @@
 
 namespace twin\behavior\collection;
 
-use twin\behavior\BehaviorActiveModel;
-use twin\event\EventActiveModel;
+use twin\behavior\BehaviorModel;
+use twin\event\EventModel;
 
-class BehaviorTimestamp extends BehaviorActiveModel
+class BehaviorTimestamp extends BehaviorModel
 {
     /**
      * Название поля с датой создания.
@@ -24,7 +24,7 @@ class BehaviorTimestamp extends BehaviorActiveModel
      */
     public function touch(string $event)
     {
-        if ($event == EventActiveModel::BEFORE_SAVE) {
+        if ($event == EventModel::BEFORE_SAVE) {
             $this->beforeSave();
         }
     }
