@@ -110,8 +110,6 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
     /**
      * Добавить ошибки валидации атрибутам.
      * @param array $errors
-     * ключ - название атрибута
-     * значение - текст ошибки
      * @return void
      */
     public function setErrors(array $errors): void
@@ -291,18 +289,6 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
     {
         $safeAttributes = $this->safe();
         return in_array($name, $safeAttributes);
-    }
-
-    /**
-     * Присвоить значения атрибутов и провалидировать.
-     * @param array $attributes - значения атрибутов
-     * @return bool - результат валидации
-     * @see validate()
-     */
-    public function load(array $attributes): bool
-    {
-        $this->setAttributes($attributes);
-        return $this->validate();
     }
 
     /**
