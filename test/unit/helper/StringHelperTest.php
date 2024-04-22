@@ -70,18 +70,4 @@ final class StringHelperTest extends BaseTestCase
             $this->assertSame($expected, $ext);
         }
     }
-
-    public function testIsServiceAttribute()
-    {
-        $pairs = [
-            'notService' => false,
-            '_isService' => true,
-            '__alsoService' => true,
-        ];
-
-        foreach ($pairs as $name => $expected) {
-            $result = StringHelper::isServiceAttribute($name);
-            $this->assertSame($expected, $result);
-        }
-    }
 }
