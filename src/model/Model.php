@@ -64,15 +64,6 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
     }
 
     /**
-     * Подсказки для атрибутов.
-     * @return array
-     */
-    public function hints(): array
-    {
-        return [];
-    }
-
-    /**
      * Ярлык атрибута.
      * @param string $attribute - название атрибута
      * @return string
@@ -81,17 +72,6 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
     {
         $labels = $this->labels();
         return $labels[$attribute] ?? $attribute;
-    }
-
-    /**
-     * Комментарий для атрибута.
-     * @param string $attribute - название атрибута
-     * @return string|null
-     */
-    public function getHint(string $attribute): ?string
-    {
-        $hints = $this->hints();
-        return $hints[$attribute] ?? null;
     }
 
     /**
