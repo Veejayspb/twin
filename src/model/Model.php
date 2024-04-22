@@ -102,7 +102,9 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
      */
     public function setError(string $attribute, string $message): void
     {
-        $this->_errors[$attribute] = $message;
+        if ($this->hasAttribute($attribute)) {
+            $this->_errors[$attribute] = $message;
+        }
     }
 
     /**
