@@ -2,18 +2,20 @@
 
 namespace twin\model;
 
-use ReflectionClass;
-use ReflectionProperty;
 use twin\behavior\Behavior;
 use twin\behavior\BehaviorOwnerInterface;
-use twin\common\Exception;
 use twin\event\Event;
 use twin\event\EventModel;
 use twin\event\EventOwnerInterface;
-use twin\helper\StringHelper;
 
 abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
 {
+    /**
+     * Значения атрибутов.
+     * @var array
+     */
+    protected $_attributes = [];
+
     /**
      * Ошибки валидации.
      * @var array
@@ -40,18 +42,20 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
     /**
      * @param string $name
      * @return mixed
-     * @throws Exception
      */
     public function __get(string $name)
     {
-        // Попытка найти поведение с указанным названием.
-        $behavior = $this->getBehavior($name);
+        return $this->getAttribute($name);
+    }
 
-        if ($behavior) {
-            return $behavior;
-        }
-
-        throw new Exception(500, "Undefined attribute $name");
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
+    public function __set(string $name, $value)
+    {
+        $this->setAttribute($name, $value);
     }
 
     /**
@@ -185,6 +189,16 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
     }
 
     /**
+     * Вернуть значение атрибута.
+     * @param string $name
+     * @return mixed
+     */
+    public function getAttribute(string $name)
+    {
+        return $this->_attributes[$name] ?? null;
+    }
+
+    /**
      * Присвоить значение атрибута с проверкой на существование.
      * @param string $name
      * @param mixed $value
@@ -193,7 +207,7 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
     public function setAttribute(string $name, $value): void
     {
         if ($this->hasAttribute($name)) {
-            $this->$name = $value;
+            $this->_attributes[$name] = $value;
         }
     }
 
@@ -234,7 +248,7 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
                 continue;
             }
 
-            $result[$name] = $this->$name;
+            $result[$name] = $this->getAttribute($name);
         }
 
         return $result;
@@ -327,26 +341,6 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
     }
 
     /**
-     * Атрибуты модели.
-     * @return array
-     */
-    protected function attributeNames(): array
-    {
-        $properties = (new ReflectionClass($this))->getProperties(ReflectionProperty::IS_PUBLIC);
-        $result = [];
-
-        foreach ($properties as $property) {
-            if ($property->isStatic()) {
-                continue;
-            }
-
-            $result[] = $property->getName();
-        }
-
-        return $result;
-    }
-
-    /**
      * Регистрация поведений.
      * @return void
      */
@@ -372,4 +366,10 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
      * @return void
      */
     protected function afterValidate(): void {}
+
+    /**
+     * Атрибуты модели.
+     * @return array
+     */
+    abstract protected function attributeNames(): array;
 }
