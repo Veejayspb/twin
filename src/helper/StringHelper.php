@@ -50,4 +50,37 @@ class StringHelper
     {
         return pathinfo($name, PATHINFO_EXTENSION) ?: null;
     }
+
+    /**
+     * Преобразовать стиль названия из CAMEL в KABOB.
+     * Допустимы только символы: A-Z, a-z, 0-9
+     * @param string $str - SomeName
+     * @return string - some-name
+     */
+    public static function camelToKabob(string $str): string
+    {
+        $str = preg_replace('/[^A-Za-z0-9]/', '', $str);
+        $str = preg_replace('/[A-Z]/', '-$0', $str);
+        $str = mb_strtolower($str, 'utf-8');
+        return trim($str, '-');
+    }
+
+    /**
+     * Преобразовать стиль названия из KABOB в CAMEL.
+     * Допустимы только символы: a-z, 0-9, -
+     * @param string $str - some-name
+     * @return string - SomeName
+     */
+    public static function kabobToCamel(string $str): string
+    {
+        $str = mb_strtolower($str, 'utf-8');
+        $str = preg_replace('/[^a-z0-9\-]/', '', $str);
+        $parts = explode('-', $str);
+
+        $parts = array_map(function ($part) {
+            return ucfirst($part);
+        }, $parts);
+
+        return implode('', $parts);
+    }
 }
