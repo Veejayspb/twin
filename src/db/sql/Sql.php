@@ -6,6 +6,7 @@ use PDO;
 use twin\db\Database;
 use twin\helper\ArrayHelper;
 use twin\migration\Migration;
+use twin\model\Model;
 
 abstract class Sql extends Database
 {
@@ -204,6 +205,59 @@ abstract class Sql extends Database
     public function transactionRollback(): bool
     {
         return $this->execute('ROLLBACK');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createModel(Model $model): bool
+    {
+        $table = $model::tableName();
+        $id = $this->insert($table, $model->getAttributes());
+
+        if ($id === false) {
+            return false;
+        }
+
+        $aiAttribute = $this->getAutoIncrement($table);
+
+        if ($aiAttribute !== false) {
+            $model->setAttribute($aiAttribute, $id);
+        }
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateModel(Model $model): bool
+    {
+        $table = $model::tableName();
+        $pk = $this->getPk($table);
+        $pkAttributes = $model->getAttributes($pk);
+
+        $where = ArrayHelper::stringExpression($pkAttributes, function ($key) {
+            return "`$key`=:$key";
+        }, ' AND ');
+
+        return $this->update($table, $model->getAttributes(), $where, $pkAttributes);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteModel(Model $model): bool
+    {
+        $table = $model::tableName();
+        $pk = $model->pkAttributes();
+        $pkAttributes = $model->getAttributes($pk);
+
+        $where = ArrayHelper::stringExpression($pkAttributes, function ($key) {
+            return "`$key`=:$key";
+        }, ' AND ');
+
+        return $this->delete($table, $where, $pkAttributes);
     }
 
     /**
