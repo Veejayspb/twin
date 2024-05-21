@@ -70,4 +70,48 @@ final class StringHelperTest extends BaseTestCase
             $this->assertSame($expected, $ext);
         }
     }
+
+    public function testCamelToKabob()
+    {
+        $pairs = [
+            'AnyName' => 'any-name',
+            'anyName' => 'any-name',
+            '' => '',
+            'any-name' => 'anyname',
+            'Any-Name' => 'any-name',
+            'Any--Name' => 'any-name',
+            'Name' => 'name',
+            ' Any Name ' => 'any-name',
+            ' Any name ' => 'anyname',
+            '!Any_Name+' => 'any-name',
+            '0anyName' => '0any-name',
+            'ANYNAME' => 'a-n-y-n-a-m-e',
+        ];
+
+        foreach ($pairs as $camel => $kabob) {
+            $actual = StringHelper::camelToKabob($camel);
+            $this->assertSame($kabob, $actual);
+        }
+    }
+
+    public function testKabobToCamel()
+    {
+        $pairs = [
+            'any-name' => 'AnyName',
+            'AnyName' => 'Anyname',
+            '-any-name-' => 'AnyName',
+            '!any+name_' => 'Anyname',
+            '0any-name-1' => '0anyName1',
+            '' => '',
+            ' anyname ' => 'Anyname',
+            'a-n-y-n-a-m-e' => 'ANYNAME',
+            '--any--name--' => 'AnyName',
+            '!@#$%^&*()' => '',
+        ];
+
+        foreach ($pairs as $kabob => $camel) {
+            $actual = StringHelper::kabobToCamel($kabob);
+            $this->assertSame($camel, $actual);
+        }
+    }
 }
