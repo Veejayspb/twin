@@ -5,6 +5,7 @@ namespace twin\db\json;
 use twin\db\Database;
 use twin\helper\Alias;
 use twin\migration\Migration;
+use twin\model\Model;
 
 class Json extends Database
 {
@@ -57,6 +58,75 @@ class Json extends Database
         $filePath = $this->getFilePath($table);
         $content = json_encode($data);
         return false !== file_put_contents($filePath, $content, LOCK_EX);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createModel(Model $model): bool
+    {
+        $pk = $model->pkAttributes();
+
+        if (empty($pk)) {
+            return false;
+        }
+
+        $table = $model::tableName();
+        $data = $this->getData($table);
+        $hash = $model->generatePkHash();
+
+        if (array_key_exists($hash, $data)) {
+            return false;
+        }
+
+        $data[$hash] = $model->getAttributes();
+        return $this->setData($table, $data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateModel(Model $model): bool
+    {
+        $pk = $model->pkAttributes();
+
+        if (empty($pk)) {
+            return false;
+        }
+
+        $table = $model::tableName();
+        $data = $this->getData($table);
+        $hash = $model->generatePkHash();
+
+        if (!array_key_exists($hash, $data)) {
+            return false;
+        }
+
+        $data[$hash] = $model->getAttributes();
+        return $this->setData($table, $data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteModel(Model $model): bool
+    {
+        $pk = $model->pkAttributes();
+
+        if (empty($pk)) {
+            return false;
+        }
+
+        $table = $model::tableName();
+        $data = $this->getData($table);
+        $hash = $model->generatePkHash();
+
+        if (!array_key_exists($hash, $data)) {
+            return false;
+        }
+
+        unset($data[$hash]);
+        return $this->setData($table, $data);
     }
 
     /**

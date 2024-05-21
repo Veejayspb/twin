@@ -2,11 +2,13 @@
 
 namespace twin\model;
 
+use ReflectionClass;
 use twin\behavior\Behavior;
 use twin\behavior\BehaviorOwnerInterface;
 use twin\event\Event;
 use twin\event\EventModel;
 use twin\event\EventOwnerInterface;
+use twin\helper\StringHelper;
 
 abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
 {
@@ -305,7 +307,7 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
                 array_keys($this->getAttributes()),
                 $attributes
             );
-            
+
             $this->clearErrors($clearAttributes);
         }
 
@@ -338,6 +340,44 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
     public function event(): Event
     {
         return $this->_event = $this->_event ?: new EventModel($this);
+    }
+
+    /**
+     * Атрибуты, входящие в первичный ключ.
+     * @return array
+     */
+    public function pkAttributes(): array
+    {
+        return [];
+    }
+
+    /**
+     * Сгенерировать хэш, используя значения ПК.
+     * @return string
+     */
+    public function generatePkHash(): string
+    {
+        $pk = $this->pkAttributes();
+        $pkAttributes = $this->getAttributes($pk);
+        $json = json_encode($pkAttributes);
+        return md5($json);
+    }
+
+    /**
+     * Название таблицы в БД.
+     * @return string
+     */
+    public static function tableName(): string
+    {
+        $reflection = new ReflectionClass(static::class);
+
+        if ($reflection->isAnonymous()) {
+            return '';
+        }
+
+        $className = $reflection->getShortName();
+        $name = StringHelper::camelToKabob($className);
+        return str_replace('-', '_', $name);
     }
 
     /**
