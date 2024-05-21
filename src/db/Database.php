@@ -5,6 +5,7 @@ namespace twin\db;
 use twin\common\Component;
 use twin\common\Exception;
 use twin\migration\Migration;
+use twin\model\Model;
 
 abstract class Database extends Component
 {
@@ -26,6 +27,27 @@ abstract class Database extends Component
             throw new Exception(500, 'Database connection error: ' . get_called_class());
         }
     }
+
+    /**
+     * Создать модель.
+     * @param Model $model
+     * @return bool
+     */
+    abstract public function createModel(Model $model): bool;
+
+    /**
+     * Обновить модель.
+     * @param Model $model
+     * @return bool
+     */
+    abstract public function updateModel(Model $model): bool;
+
+    /**
+     * Удалить модель.
+     * @param Model $model
+     * @return bool
+     */
+    abstract public function deleteModel(Model $model): bool;
 
     /**
      * Создать таблицу для миграций.
