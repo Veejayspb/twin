@@ -1,7 +1,7 @@
 <?php
 
 use test\helper\BaseTestCase;
-use test\helper\TempModel;
+use test\helper\TestModel;
 use twin\validator\Date;
 
 final class DateTest extends BaseTestCase
@@ -32,14 +32,14 @@ final class DateTest extends BaseTestCase
         ];
 
         foreach ($items as $item) {
-            $model = new TempModel;
-            $model->a = $item['value'];
+            $model = new TestModel;
+            $model->name = $item['value'];
 
-            $validator = new Date($model, ['a']);
+            $validator = new Date($model, ['name']);
 
             $this->assertSame(
                 $item['expected'],
-                $validator->type('a')
+                $validator->type('name')
             );
         }
     }
@@ -74,14 +74,14 @@ final class DateTest extends BaseTestCase
         ];
 
         foreach ($items as $item) {
-            $model = new TempModel;
-            $model->a = $item['value'];
+            $model = new TestModel;
+            $model->name = $item['value'];
 
-            $validator = new Date($model, ['a']);
+            $validator = new Date($model, ['name']);
 
             $this->assertSame(
                 $item['expected'],
-                $validator->date('a')
+                $validator->date('name')
             );
         }
     }

@@ -1,7 +1,7 @@
 <?php
 
 use test\helper\BaseTestCase;
-use test\helper\TempModel;
+use test\helper\TestModel;
 use twin\validator\Range;
 
 final class RangeTest extends BaseTestCase
@@ -47,17 +47,17 @@ final class RangeTest extends BaseTestCase
         ];
 
         foreach ($items as $item) {
-            $model = new TempModel;
-            $model->a = $item['value'];
+            $model = new TestModel;
+            $model->name = $item['value'];
 
             $validator = $this->getMockForAbstractClass(
                 Range::class,
-                [$model, ['a'], ['range' => $item['range']]]
+                [$model, ['name'], ['range' => $item['range']]]
             );
 
             $this->assertSame(
                 $item['expected'],
-                $validator->range('a')
+                $validator->range('name')
             );
         }
     }

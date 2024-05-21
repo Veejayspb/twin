@@ -1,7 +1,7 @@
 <?php
 
 use test\helper\BaseTestCase;
-use test\helper\TempModel;
+use test\helper\TestModel;
 use twin\validator\Double;
 
 final class DoubleTest extends BaseTestCase
@@ -40,14 +40,14 @@ final class DoubleTest extends BaseTestCase
         ];
 
         foreach ($items as $item) {
-            $model = new TempModel;
-            $model->a = $item['value'];
+            $model = new TestModel;
+            $model->name = $item['value'];
 
-            $validator = new Double($model, ['a']);
+            $validator = new Double($model, ['name']);
 
             $this->assertSame(
                 $item['expected'],
-                $validator->type('a')
+                $validator->type('name')
             );
         }
     }

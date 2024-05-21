@@ -1,7 +1,7 @@
 <?php
 
 use test\helper\BaseTestCase;
-use test\helper\TempModel;
+use test\helper\TestModel;
 use twin\validator\Required;
 
 final class RequiredTest extends BaseTestCase
@@ -40,14 +40,14 @@ final class RequiredTest extends BaseTestCase
         ];
 
         foreach ($items as $item) {
-            $model = new TempModel;
-            $model->a = $item['value'];
+            $model = new TestModel;
+            $model->name = $item['value'];
 
-            $validator = new Required($model, ['a']);
+            $validator = new Required($model, ['name']);
 
             $this->assertSame(
                 $item['expected'],
-                $validator->notEmpty('a')
+                $validator->notEmpty('name')
             );
         }
     }

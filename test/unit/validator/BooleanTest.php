@@ -1,7 +1,7 @@
 <?php
 
 use test\helper\BaseTestCase;
-use test\helper\TempModel;
+use test\helper\TestModel;
 use twin\validator\Boolean;
 
 final class BooleanTest extends BaseTestCase
@@ -44,14 +44,14 @@ final class BooleanTest extends BaseTestCase
         ];
 
         foreach ($items as $item) {
-            $model = new TempModel;
-            $model->a = $item['value'];
+            $model = new TestModel;
+            $model->name = $item['value'];
 
-            $validator = new Boolean($model, ['a']);
+            $validator = new Boolean($model, ['name']);
 
             $this->assertSame(
                 $item['expected'],
-                $validator->type('a')
+                $validator->type('name')
             );
         }
     }

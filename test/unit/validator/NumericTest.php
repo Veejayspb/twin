@@ -1,7 +1,7 @@
 <?php
 
 use test\helper\BaseTestCase;
-use test\helper\TempModel;
+use test\helper\TestModel;
 use twin\validator\Numeric;
 
 final class NumericTest extends BaseTestCase
@@ -32,17 +32,17 @@ final class NumericTest extends BaseTestCase
         ];
 
         foreach ($items as $item) {
-            $model = new TempModel;
-            $model->a = $item['value'];
+            $model = new TestModel;
+            $model->name = $item['value'];
 
             $validator = $this->getMockForAbstractClass(
                 Numeric::class,
-                [$model, ['a'], ['min' => 4]]
+                [$model, ['name'], ['min' => 4]]
             );
 
             $this->assertSame(
                 $item['expected'],
-                $validator->min('a')
+                $validator->min('name')
             );
         }
     }
@@ -69,17 +69,17 @@ final class NumericTest extends BaseTestCase
         ];
 
         foreach ($items as $item) {
-            $model = new TempModel;
-            $model->a = $item['value'];
+            $model = new TestModel;
+            $model->name = $item['value'];
 
             $validator = $this->getMockForAbstractClass(
                 Numeric::class,
-                [$model, ['a'], ['max' => 4]]
+                [$model, ['name'], ['max' => 4]]
             );
 
             $this->assertSame(
                 $item['expected'],
-                $validator->max('a')
+                $validator->max('name')
             );
         }
     }

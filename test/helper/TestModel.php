@@ -9,7 +9,7 @@ use twin\model\Model;
  * @property int $id
  * @property string $name
  */
-class TestModel extends Model
+final class TestModel extends Model
 {
     /**
      * @var array

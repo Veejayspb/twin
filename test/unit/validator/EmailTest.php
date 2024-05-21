@@ -1,7 +1,7 @@
 <?php
 
 use test\helper\BaseTestCase;
-use test\helper\TempModel;
+use test\helper\TestModel;
 use twin\validator\Email;
 
 final class EmailTest extends BaseTestCase
@@ -48,14 +48,14 @@ final class EmailTest extends BaseTestCase
         ];
 
         foreach ($items as $item) {
-            $model = new TempModel;
-            $model->a = $item['value'];
+            $model = new TestModel;
+            $model->name = $item['value'];
 
-            $validator = new Email($model, ['a']);
+            $validator = new Email($model, ['name']);
 
             $this->assertSame(
                 $item['expected'],
-                $validator->email('a')
+                $validator->email('name')
             );
         }
     }
