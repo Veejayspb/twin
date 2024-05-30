@@ -29,6 +29,13 @@ abstract class Database extends Component
     }
 
     /**
+     * Вернуть названия столбцов, входящих в первичный ключ.
+     * @param string $table - название таблицы
+     * @return array
+     */
+    abstract public function getPk(string $table): array;
+
+    /**
      * Создать модель.
      * @param Model $model
      * @return bool

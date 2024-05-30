@@ -15,6 +15,11 @@ class Json extends Database
     const FILE_EXT = 'json';
 
     /**
+     * Название виртуального поля, в которое помещается значение первичного ключа.
+     */
+    const PK_FIELD = '_pk_';
+
+    /**
      * Путь до директории с файлами БД.
      * @var string
      */
@@ -180,6 +185,37 @@ class Json extends Database
         }
 
         return $this->setData($table, $items);
+    }
+
+    /**
+     * Сгенерировать уникальный хэш в рамках таблицы.
+     * @param string $table - название таблицы
+     * @return string|null
+     */
+    public function generateKey(string $table): ?string
+    {
+        $data = $this->getData($table);
+
+        for ($i = 0; $i < 100; $i++) {
+            $microtime = microtime(true);
+            $hash = md5($microtime);
+
+            if (!array_key_exists($hash, $data)) {
+                return $hash;
+            }
+
+            usleep(1);
+        }
+
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPk(string $table): array
+    {
+        return [static::PK_FIELD];
     }
 
     /**
