@@ -66,6 +66,67 @@ class Json extends Database
     }
 
     /**
+     * Добавить запись.
+     * @param string $table - название таблицы
+     * @param array $row - данные
+     * @return string|bool
+     */
+    public function insert(string $table, array $row)
+    {
+        $key = $this->generateKey($table);
+
+        if ($key === null) {
+            return false;
+        }
+
+        $data = $this->getData($table);
+        $data[$key] = $row;
+
+        if ($this->setData($table, $data)) {
+            return $key;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Обновить запись.
+     * @param string $table - название таблицы
+     * @param array $row - данные
+     * @param string $key - ключ
+     * @return bool
+     */
+    public function update(string $table, array $row, string $key): bool
+    {
+        $data = $this->getData($table);
+
+        if (!array_key_exists($key, $data)) {
+            return false;
+        }
+
+        $data[$key] = $row;
+        return $this->setData($table, $data);
+    }
+
+    /**
+     * Удалить запись.
+     * @param string $table - название таблицы
+     * @param string $key - ключ
+     * @return bool
+     */
+    public function delete(string $table, string $key): bool
+    {
+        $data = $this->getData($table);
+
+        if (!array_key_exists($key, $data)) {
+            return true;
+        }
+
+        unset($data[$key]);
+        return $this->setData($table, $data);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function createModel(Model $model): bool
