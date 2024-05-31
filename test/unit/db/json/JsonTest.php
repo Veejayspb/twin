@@ -1,6 +1,5 @@
 <?php
 
-use test\helper\TestModel;
 use twin\db\json\Json;
 use twin\helper\Alias;
 use twin\migration\Migration;
@@ -37,109 +36,6 @@ final class JsonTest extends BaseTestCase
         $this->assertTrue($result);
         $this->assertFileExists($path);
         $this->assertSame($data, json_decode(file_get_contents($path), true));
-    }
-
-    public function testCreateModel()
-    {
-        $model = new TestModel;
-        $tableName = TestModel::tableName();
-        $json = new Json(self::CONFIG);
-
-        // Добавление модели
-        $model->id = 1;
-        $result = $json->createModel($model);
-        $data['d2ce28b9a7fd7e4407e2b0fd499b7fe4'] = ['id' => 1, 'name' => null];
-        $this->assertTrue($result);
-        $this->assertSame(
-            $data,
-            $json->getData($tableName)
-        );
-
-        // Добавление модели с уже существующим ПК
-        $result = $json->createModel($model);
-        $this->assertFalse($result);
-        $this->assertSame(
-            $data,
-            $json->getData($tableName)
-        );
-    }
-
-    public function testUpdateModel()
-    {
-        $model = new TestModel;
-        $tableName = TestModel::tableName();
-        $data = [
-            'd2ce28b9a7fd7e4407e2b0fd499b7fe4' => ['id' => 1, 'name' => 'old-name'],
-        ];
-
-        $json = new Json(self::CONFIG);
-        $json->setData($tableName, $data);
-
-        // Изменение существующей модели
-        $model->id = 1;
-        $model->name = 'new-name';
-        $result = $json->updateModel($model);
-        $data['d2ce28b9a7fd7e4407e2b0fd499b7fe4'] = ['id' => 1, 'name' => 'new-name'];
-        $this->assertTrue($result);
-        $this->assertSame(
-            $data,
-            $json->getData($tableName)
-        );
-
-        // Попытка изменения несуществующей модели
-        $model->id = 123;
-        $result = $json->updateModel($model);
-        $this->assertFalse($result);
-        $this->assertSame(
-            $data,
-            $json->getData($tableName)
-        );
-    }
-
-    public function testDeleteModel()
-    {
-        $model = new TestModel;
-        $tableName = TestModel::tableName();
-        $data = [
-            'd2ce28b9a7fd7e4407e2b0fd499b7fe4' => ['id' => 1, 'name' => 'some-name'],
-            '4f56edcb1558d4df2f77295f86059006' => ['id' => 2, 'name' => null],
-        ];
-
-        $json = new Json(self::CONFIG);
-        $json->setData($tableName, $data);
-
-        // Удаление модели с существующим ПК
-        $model->id = 2;
-        $result = $json->deleteModel($model);
-        unset($data['4f56edcb1558d4df2f77295f86059006']);
-        $this->assertTrue($result);
-        $this->assertSame(
-            $data,
-            $json->getData($tableName)
-        );
-
-        // Удаление модели с несуществующим ПК
-        $model->id = 123;
-        $result = $json->deleteModel($model);
-        $this->assertFalse($result);
-        $this->assertSame(
-            $data,
-            $json->getData($tableName)
-        );
-
-        // Удаление модели с ПК, который совпадает по значению, но не совпадает по типу: 1 и "1"
-        $model->id = '1';
-        $result = $json->deleteModel($model);
-        $this->assertFalse($result);
-        $this->assertSame(
-            $data,
-            $json->getData($tableName)
-        );
-
-        // Попытка удаления при отсутствующем ПК
-        $model->_pk = [];
-        $result = $json->deleteModel($model);
-        $this->assertFalse($result);
     }
 
     public function testCreateMigrationTable()

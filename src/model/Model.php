@@ -343,15 +343,6 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
     }
 
     /**
-     * Атрибуты, входящие в первичный ключ.
-     * @return array
-     */
-    public function pkAttributes(): array
-    {
-        return [];
-    }
-
-    /**
      * Название таблицы в БД.
      * @return string
      */

@@ -12,19 +12,6 @@ use twin\model\Model;
 final class TestModel extends Model
 {
     /**
-     * @var array
-     */
-    public $_pk = ['id'];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function pkAttributes(): array
-    {
-        return $this->_pk;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public static function tableName(): string
