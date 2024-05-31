@@ -131,22 +131,21 @@ class Json extends Database
      */
     public function createModel(Model $model): bool
     {
-        $pk = $model->pkAttributes();
-
-        if (empty($pk)) {
-            return false;
-        }
-
         $table = $model::tableName();
-        $data = $this->getData($table);
-        $hash = $model->generatePkHash();
+        $attributes = $model->getAttributes();
 
-        if (array_key_exists($hash, $data)) {
+        if (array_key_exists(static::PK_FIELD, $attributes)) {
+            unset($attributes[static::PK_FIELD]);
+        }
+
+        $key = $this->insert($table, $attributes);
+
+        if (!$key) {
             return false;
         }
 
-        $data[$hash] = $model->getAttributes();
-        return $this->setData($table, $data);
+        $model->setAttribute(static::PK_FIELD, $key);
+        return true;
     }
 
     /**
@@ -154,22 +153,16 @@ class Json extends Database
      */
     public function updateModel(Model $model): bool
     {
-        $pk = $model->pkAttributes();
-
-        if (empty($pk)) {
+        if (!$model->hasAttribute(static::PK_FIELD)) {
             return false;
         }
 
         $table = $model::tableName();
-        $data = $this->getData($table);
-        $hash = $model->generatePkHash();
+        $attributes = $model->getAttributes();
+        $key = $model->getAttribute(static::PK_FIELD);
+        unset($attributes[static::PK_FIELD]);
 
-        if (!array_key_exists($hash, $data)) {
-            return false;
-        }
-
-        $data[$hash] = $model->getAttributes();
-        return $this->setData($table, $data);
+        return $this->update($table, $attributes, $key);
     }
 
     /**
@@ -177,22 +170,14 @@ class Json extends Database
      */
     public function deleteModel(Model $model): bool
     {
-        $pk = $model->pkAttributes();
-
-        if (empty($pk)) {
+        if (!$model->hasAttribute(static::PK_FIELD)) {
             return false;
         }
 
         $table = $model::tableName();
-        $data = $this->getData($table);
-        $hash = $model->generatePkHash();
+        $key = $model->getAttribute(static::PK_FIELD);
 
-        if (!array_key_exists($hash, $data)) {
-            return false;
-        }
-
-        unset($data[$hash]);
-        return $this->setData($table, $data);
+        return $this->delete($table, $key);
     }
 
     /**
