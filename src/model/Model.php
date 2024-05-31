@@ -352,18 +352,6 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
     }
 
     /**
-     * Сгенерировать хэш, используя значения ПК.
-     * @return string
-     */
-    public function generatePkHash(): string
-    {
-        $pk = $this->pkAttributes();
-        $pkAttributes = $this->getAttributes($pk);
-        $json = json_encode($pkAttributes);
-        return md5($json);
-    }
-
-    /**
      * Название таблицы в БД.
      * @return string
      */

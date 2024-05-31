@@ -250,7 +250,7 @@ abstract class Sql extends Database
     public function deleteModel(Model $model): bool
     {
         $table = $model::tableName();
-        $pk = $model->pkAttributes();
+        $pk = $this->getPk($table);
         $pkAttributes = $model->getAttributes($pk);
 
         $where = ArrayHelper::stringExpression($pkAttributes, function ($key) {
