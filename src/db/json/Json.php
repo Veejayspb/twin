@@ -31,41 +31,6 @@ class Json extends Database
     protected $_requiredProperties = ['dbname', 'alias'];
 
     /**
-     * Извлечь данные из таблицы.
-     * @param string $table - название таблицы
-     * @return array
-     */
-    public function getData(string $table): array
-    {
-        $filePath = $this->getFilePath($table);
-
-        if (!is_file($filePath)) {
-            return [];
-        }
-
-        $content = file_get_contents($filePath);
-
-        if ($content === false) {
-            return [];
-        } else {
-            return (array)json_decode($content, true);
-        }
-    }
-
-    /**
-     * Сохранить данные в таблицу.
-     * @param string $table - название таблицы
-     * @param array $data - данные
-     * @return bool
-     */
-    public function setData(string $table, array $data): bool
-    {
-        $filePath = $this->getFilePath($table);
-        $content = json_encode($data);
-        return false !== file_put_contents($filePath, $content, LOCK_EX);
-    }
-
-    /**
      * Добавить запись.
      * @param string $table - название таблицы
      * @param array $row - данные
@@ -234,11 +199,54 @@ class Json extends Database
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getPk(string $table): array
+    {
+        return [static::PK_FIELD];
+    }
+
+    /**
+     * Извлечь данные из таблицы.
+     * @param string $table - название таблицы
+     * @return array
+     */
+    protected function getData(string $table): array
+    {
+        $filePath = $this->getFilePath($table);
+
+        if (!is_file($filePath)) {
+            return [];
+        }
+
+        $content = file_get_contents($filePath);
+
+        if ($content === false) {
+            return [];
+        } else {
+            return (array)json_decode($content, true);
+        }
+    }
+
+    /**
+     * Сохранить данные в таблицу.
+     * @param string $table - название таблицы
+     * @param array $data - данные
+     * @return bool
+     */
+    protected function setData(string $table, array $data): bool
+    {
+        $filePath = $this->getFilePath($table);
+        $content = json_encode($data);
+        return false !== file_put_contents($filePath, $content, LOCK_EX);
+    }
+
+    /**
      * Сгенерировать уникальный хэш в рамках таблицы.
      * @param string $table - название таблицы
      * @return string|null
      */
-    public function generateKey(string $table): ?string
+    protected function generateKey(string $table): ?string
     {
         $data = $this->getData($table);
 
@@ -254,14 +262,6 @@ class Json extends Database
         }
 
         return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPk(string $table): array
-    {
-        return [static::PK_FIELD];
     }
 
     /**
