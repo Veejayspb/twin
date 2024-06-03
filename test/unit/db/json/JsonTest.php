@@ -6,6 +6,7 @@ use twin\migration\Migration;
 use twin\migration\MigrationManager;
 use test\helper\BaseTestCase;
 use test\helper\Temp;
+use twin\model\Model;
 
 final class JsonTest extends BaseTestCase
 {
@@ -14,28 +15,118 @@ final class JsonTest extends BaseTestCase
         'dbname' => 'temp',
     ];
 
-    public function testGetData()
+    public function testInsert()
     {
-        $db = new Json(self::CONFIG);
         $path = Alias::get('@test/temp/table.json');
-        $data = ['key' => 'value'];
+        $db = new Json(self::CONFIG);
+        $row = ['id' => 1];
+        $result = $db->insert('table', $row);
+        $data = json_decode(file_get_contents($path), true);
 
-        $this->assertSame([], $db->getData('table'));
-        file_put_contents($path, json_encode($data), LOCK_EX);
-        $this->assertSame($data, $db->getData('table'));
+        $this->assertIsString($result);
+        $this->assertFileExists($path);
+        $this->assertArrayNotHasKey(Json::PK_FIELD, current($data));
+        $this->assertSame($row, current($data));
     }
 
-    public function testSetData()
+    public function testUpdate()
     {
-        $db = new Json(self::CONFIG);
         $path = Alias::get('@test/temp/table.json');
-        $data = ['key' => 'value'];
+        $data = ['hash' => ['id' => 1]];
+        file_put_contents($path, json_encode($data));
+        $db = new Json(self::CONFIG);
 
-        $this->assertFileDoesNotExist($path);
-        $result = $db->setData('table', $data);
+        $result = $db->update('table', ['id' => 2], 'not-exists');
+
+        $this->assertFalse($result);
+        $this->assertSame($data, ['hash' => ['id' => 1]]);
+
+        $result = $db->update('table', ['id' => 2], 'hash');
+        $data = json_decode(file_get_contents($path), true);
+
         $this->assertTrue($result);
-        $this->assertFileExists($path);
-        $this->assertSame($data, json_decode(file_get_contents($path), true));
+        $this->assertCount(1, $data);
+        $this->assertSame(['hash' => ['id' => 2]], $data);
+    }
+
+    public function testDelete()
+    {
+        $path = Alias::get('@test/temp/table.json');
+        $data = ['hash' => ['id' => 1]];
+        file_put_contents($path, json_encode($data));
+        $db = new Json(self::CONFIG);
+
+        $result = $db->delete('table', 'no-exists');
+        $data = json_decode(file_get_contents($path), true);
+
+        $this->assertTrue($result);
+        $this->assertSame(['hash' => ['id' => 1]], $data);
+
+        $result = $db->delete('table', 'hash');
+        $data = json_decode(file_get_contents($path), true);
+
+        $this->assertTrue($result);
+        $this->assertSame([], $data);
+    }
+
+    public function testCreateModel()
+    {
+        $model = $this->getModel();
+        $path = Alias::get('@test/temp/table.json');
+        $db = new Json(self::CONFIG);
+
+        $model->{Json::PK_FIELD} = 'hash';
+        $model->id = 1;
+        $result = $db->createModel($model);
+        $data = json_decode(file_get_contents($path), true);
+        $key = $model->{Json::PK_FIELD};
+
+        $this->assertTrue($result);
+        $this->assertArrayNotHasKey('hash', $data);
+        $this->assertSame([$key => ['id' => 1]], $data);
+    }
+
+    public function testUpdateModel()
+    {
+        $path = Alias::get('@test/temp/table.json');
+        $data = ['hash' => ['id' => 1]];
+        file_put_contents($path, json_encode($data));
+        $model = $this->getModel();
+        $db = new Json(self::CONFIG);
+
+        $model->{Json::PK_FIELD} = 'not-exists';
+        $model->id = 2;
+        $result = $db->updateModel($model);
+
+        $this->assertFalse($result);
+
+        $model->{Json::PK_FIELD} = 'hash';
+        $result = $db->updateModel($model);
+        $data = json_decode(file_get_contents($path), true);
+
+        $this->assertTrue($result);
+        $this->assertSame(['hash' => ['id' => 2]], $data);
+    }
+
+    public function testDeleteModel()
+    {
+        $path = Alias::get('@test/temp/table.json');
+        $data = ['hash' => ['id' => 1]];
+        file_put_contents($path, json_encode($data));
+        $model = $this->getModel();
+        $db = new Json(self::CONFIG);
+
+        $model->{Json::PK_FIELD} = 'not-exists';
+        $result = $db->deleteModel($model);
+
+        $this->assertTrue($result);
+
+        $model->{Json::PK_FIELD} = 'hash';
+        $result = $db->deleteModel($model);
+        $data = json_decode(file_get_contents($path), true);
+
+        $this->assertTrue($result);
+        $this->assertSame([], $data);
     }
 
     public function testCreateMigrationTable()
@@ -121,6 +212,25 @@ final class JsonTest extends BaseTestCase
     {
         $manager = new MigrationManager(['alias' => '@test/temp']);
         return $this->mock(Migration::class, $class, [$manager]);
+    }
+
+    /**
+     * @return Model
+     */
+    protected function getModel(): Model
+    {
+        return new class extends Model
+        {
+            public static function tableName(): string
+            {
+                return 'table';
+            }
+
+            protected function attributeNames(): array
+            {
+                return [Json::PK_FIELD, 'id'];
+            }
+        };
     }
 
     /**

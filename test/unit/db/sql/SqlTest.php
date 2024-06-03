@@ -5,6 +5,7 @@ use twin\migration\Migration;
 use twin\migration\MigrationManager;
 use test\helper\BaseTestCase;
 use test\helper\ObjectProxy;
+use twin\model\Model;
 
 final class SqlTest extends BaseTestCase
 {
@@ -246,6 +247,43 @@ final class SqlTest extends BaseTestCase
         $this->assertSame('ROLLBACK', self::$lastSql);
     }
 
+    public function testCreateModel()
+    {
+        $model = $this->getModel();
+        $table = $model::tableName();
+        $db = $this->getSql(true);
+        $result = $db->createModel($model);
+
+        $this->assertTrue($result);
+        $this->assertSame("INSERT INTO `$table` (`id`) VALUES (:id)", self::$lastSql);
+        $this->assertSame([':id' => $model->id], self::$lastParams);
+    }
+
+    public function testUpdateModel()
+    {
+        $model = $this->getModel();
+        $table = $model::tableName();
+        $db = $this->getSql(true);
+        $result = $db->updateModel($model);
+        $prefix = Sql::PREFIX;
+
+        $this->assertTrue($result);
+        $this->assertSame("UPDATE `$table` SET `id`=:{$prefix}id WHERE `id`=:id", self::$lastSql);
+        $this->assertSame(['id' => $model->id, Sql::PREFIX . 'id' => $model->id], self::$lastParams);
+    }
+
+    public function testDeleteModel()
+    {
+        $model = $this->getModel();
+        $table = $model::tableName();
+        $db = $this->getSql(true);
+        $result = $db->deleteModel($model);
+
+        $this->assertTrue($result);
+        $this->assertSame("DELETE FROM `$table` WHERE `id`=:id", self::$lastSql);
+        $this->assertSame(['id' => $model->id], self::$lastParams);
+    }
+
     public function testCreateMigrationTable()
     {
         // Эмуляция ошибки в PDO
@@ -326,6 +364,9 @@ final class SqlTest extends BaseTestCase
                 return $execute;
             },
             'getTables' => $execute ? ['tbl'] : false,
+            'getAutoIncrement' => function () {
+                return 'id';
+            },
         ]);
 
         $proxy = new ObjectProxy($mock);
@@ -360,6 +401,29 @@ final class SqlTest extends BaseTestCase
     {
         $manager = new MigrationManager(['alias' => '@test/temp']);
         return $this->mock(Migration::class, $class, [$manager]);
+    }
+
+    /**
+     * @return Model
+     */
+    protected function getModel(): Model
+    {
+        return new class extends Model
+        {
+            protected $_attributes = [
+                'id' => 1,
+            ];
+
+            public static function tableName(): string
+            {
+                return 'table';
+            }
+
+            protected function attributeNames(): array
+            {
+                return ['id'];
+            }
+        };
     }
 
     /**
