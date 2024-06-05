@@ -110,7 +110,7 @@ abstract class Sql extends Database
         }, ', ');
 
         foreach ($data as $key => $value) {
-            $params[self::PREFIX . $key] = $value;
+            $params[':' . self::PREFIX . $key] = $value;
         }
 
         $sql = "UPDATE `$table` SET $set";
@@ -237,11 +237,17 @@ abstract class Sql extends Database
         $pk = $this->getPk($table);
         $pkAttributes = $model->getAttributes($pk);
 
+        $params = ArrayHelper::column($pkAttributes, function ($k, $v) {
+            return ":$k";
+        }, function ($k, $v) {
+            return $v;
+        });
+
         $where = ArrayHelper::stringExpression($pkAttributes, function ($key) {
             return "`$key`=:$key";
         }, ' AND ');
 
-        return $this->update($table, $model->getAttributes(), $where, $pkAttributes);
+        return $this->update($table, $model->getAttributes(), $where, $params);
     }
 
     /**
@@ -253,11 +259,17 @@ abstract class Sql extends Database
         $pk = $this->getPk($table);
         $pkAttributes = $model->getAttributes($pk);
 
+        $params = ArrayHelper::column($pkAttributes, function ($k, $v) {
+            return ":$k";
+        }, function ($k, $v) {
+            return $v;
+        });
+
         $where = ArrayHelper::stringExpression($pkAttributes, function ($key) {
             return "`$key`=:$key";
         }, ' AND ');
 
-        return $this->delete($table, $where, $pkAttributes);
+        return $this->delete($table, $where, $params);
     }
 
     /**

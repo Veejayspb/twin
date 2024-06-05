@@ -139,14 +139,14 @@ final class SqlTest extends BaseTestCase
         $result = $db->update('tbl', ['name' => 'new']);
         $this->assertTrue($result);
         $this->assertSame("UPDATE `tbl` SET `name`=:{$prefix}name", self::$lastSql);
-        $this->assertSame(["{$prefix}name" => 'new'], self::$lastParams);
+        $this->assertSame([":{$prefix}name" => 'new'], self::$lastParams);
 
         // Успешный запрос
         $db = $this->getSql(true);
         $result = $db->update('tbl', ['name' => 'new'], 'name=:name', [':name' => 'old']);
         $this->assertTrue($result);
         $this->assertSame("UPDATE `tbl` SET `name`=:{$prefix}name WHERE name=:name", self::$lastSql);
-        $this->assertSame([':name' => 'old', "{$prefix}name" => 'new'], self::$lastParams);
+        $this->assertSame([':name' => 'old', ":{$prefix}name" => 'new'], self::$lastParams);
     }
 
     public function testDelete()
@@ -269,7 +269,7 @@ final class SqlTest extends BaseTestCase
 
         $this->assertTrue($result);
         $this->assertSame("UPDATE `$table` SET `id`=:{$prefix}id WHERE `id`=:id", self::$lastSql);
-        $this->assertSame(['id' => $model->id, Sql::PREFIX . 'id' => $model->id], self::$lastParams);
+        $this->assertSame([':id' => $model->id, ':' . Sql::PREFIX . 'id' => $model->id], self::$lastParams);
     }
 
     public function testDeleteModel()
@@ -281,7 +281,7 @@ final class SqlTest extends BaseTestCase
 
         $this->assertTrue($result);
         $this->assertSame("DELETE FROM `$table` WHERE `id`=:id", self::$lastSql);
-        $this->assertSame(['id' => $model->id], self::$lastParams);
+        $this->assertSame([':id' => $model->id], self::$lastParams);
     }
 
     public function testCreateMigrationTable()
