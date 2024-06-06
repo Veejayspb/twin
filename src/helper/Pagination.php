@@ -3,7 +3,7 @@
 namespace twin\helper;
 
 use twin\common\Exception;
-use twin\model\query\Query;
+use twin\criteria\Criteria;
 use twin\widget\PaginationWidget;
 
 /**
@@ -103,15 +103,14 @@ class Pagination
     }
 
     /**
-     * Применить лимит и отступ к выборке на базе ActiveModel.
-     * @param Query $query
-     * @return Query
+     * Применить лимит и отступ к выборке.
+     * @param Criteria $criteria
+     * @return void
      */
-    public function apply(Query $query): Query
+    public function apply(Criteria $criteria): void
     {
-        return $query
-            ->offset($this->offset)
-            ->limit($this->limit);
+        $criteria->offset = $this->offset;
+        $criteria->limit = $this->limit;
     }
 
     /**
