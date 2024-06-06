@@ -360,6 +360,24 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
     }
 
     /**
+     * Преобразовать данные в массив моделей.
+     * @param array $data
+     * @return static[]
+     */
+    public static function propagate(array $data): array
+    {
+        $models = [];
+
+        foreach ($data as $row) {
+            $model = new static;
+            $model->setAttributes($row, false);
+            $models[] = $model;
+        }
+
+        return $models;
+    }
+
+    /**
      * Регистрация поведений.
      * @return void
      */

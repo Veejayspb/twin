@@ -211,7 +211,7 @@ class Json extends Database
      * @param string $table - название таблицы
      * @return array
      */
-    protected function getData(string $table): array
+    public function getData(string $table): array
     {
         $filePath = $this->getFilePath($table);
 
@@ -234,7 +234,7 @@ class Json extends Database
      * @param array $data - данные
      * @return bool
      */
-    protected function setData(string $table, array $data): bool
+    public function setData(string $table, array $data): bool
     {
         $filePath = $this->getFilePath($table);
         $content = json_encode($data);
