@@ -210,7 +210,7 @@ abstract class Sql extends Database
     /**
      * {@inheritdoc}
      */
-    public function createModel(Model $model): bool
+    public function insertModel(Model $model): bool
     {
         $table = $model::tableName();
         $id = $this->insert($table, $model->getAttributes());

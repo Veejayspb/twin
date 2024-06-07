@@ -247,12 +247,12 @@ final class SqlTest extends BaseTestCase
         $this->assertSame('ROLLBACK', self::$lastSql);
     }
 
-    public function testCreateModel()
+    public function testInsertModel()
     {
         $model = $this->getModel();
         $table = $model::tableName();
         $db = $this->getSql(true);
-        $result = $db->createModel($model);
+        $result = $db->insertModel($model);
 
         $this->assertTrue($result);
         $this->assertSame("INSERT INTO `$table` (`id`) VALUES (:id)", self::$lastSql);

@@ -95,7 +95,7 @@ final class DatabaseTest extends BaseTestCase
                 return [];
             }
 
-            public function createModel(Model $model): bool
+            public function insertModel(Model $model): bool
             {
                 return false;
             }

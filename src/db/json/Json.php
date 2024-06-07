@@ -94,7 +94,7 @@ class Json extends Database
     /**
      * {@inheritdoc}
      */
-    public function createModel(Model $model): bool
+    public function insertModel(Model $model): bool
     {
         $table = $model::tableName();
         $attributes = $model->getAttributes();

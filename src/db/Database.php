@@ -82,7 +82,7 @@ abstract class Database extends Component
      * @param Model $model
      * @return bool
      */
-    abstract public function createModel(Model $model): bool;
+    abstract public function insertModel(Model $model): bool;
 
     /**
      * Обновить модель.

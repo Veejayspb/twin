@@ -69,7 +69,7 @@ final class JsonTest extends BaseTestCase
         $this->assertSame([], $data);
     }
 
-    public function testCreateModel()
+    public function testInsertModel()
     {
         $model = $this->getModel();
         $path = Alias::get('@test/temp/table.json');
@@ -77,7 +77,7 @@ final class JsonTest extends BaseTestCase
 
         $model->{Json::PK_FIELD} = 'hash';
         $model->id = 1;
-        $result = $db->createModel($model);
+        $result = $db->insertModel($model);
         $data = json_decode(file_get_contents($path), true);
         $key = $model->{Json::PK_FIELD};
 
