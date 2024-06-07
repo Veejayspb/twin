@@ -3,9 +3,9 @@
 use twin\db\sql\Sql;
 use twin\migration\Migration;
 use twin\migration\MigrationManager;
+use twin\model\Model;
 use test\helper\BaseTestCase;
 use test\helper\ObjectProxy;
-use twin\model\Model;
 
 final class SqlTest extends BaseTestCase
 {

@@ -2,10 +2,10 @@
 
 use twin\db\json\Json;
 use twin\helper\Alias;
-use twin\migration\Migration;
-use twin\migration\MigrationManager;
 use test\helper\BaseTestCase;
 use test\helper\Temp;
+use twin\migration\Migration;
+use twin\migration\MigrationManager;
 use twin\model\Model;
 
 final class JsonTest extends BaseTestCase
@@ -202,6 +202,30 @@ final class JsonTest extends BaseTestCase
         $this->assertTrue($result);
         $data = json_decode(file_get_contents($path), true);
         $this->assertSame(0, count($data));
+    }
+
+    public function testGetData()
+    {
+        $db = new Json(self::CONFIG);
+        $path = Alias::get('@test/temp/table.json');
+        $data = ['key' => 'value'];
+
+        $this->assertSame([], $db->getData('table'));
+        file_put_contents($path, json_encode($data), LOCK_EX);
+        $this->assertSame($data, $db->getData('table'));
+    }
+
+    public function testSetData()
+    {
+        $db = new Json(self::CONFIG);
+        $path = Alias::get('@test/temp/table.json');
+        $data = ['key' => 'value'];
+
+        $this->assertFileDoesNotExist($path);
+        $result = $db->setData('table', $data);
+        $this->assertTrue($result);
+        $this->assertFileExists($path);
+        $this->assertSame($data, json_decode(file_get_contents($path), true));
     }
 
     /**
