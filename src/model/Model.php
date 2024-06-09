@@ -3,14 +3,9 @@
 namespace twin\model;
 
 use ReflectionClass;
-use twin\behavior\Behavior;
-use twin\behavior\BehaviorOwnerInterface;
-use twin\event\Event;
-use twin\event\EventModel;
-use twin\event\EventOwnerInterface;
 use twin\helper\StringHelper;
 
-abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
+abstract class Model
 {
     /**
      * Значения атрибутов.
@@ -23,23 +18,6 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
      * @var array
      */
     protected $_errors = [];
-
-    /**
-     * Подключенные поведения.
-     * @var Behavior[]
-     */
-    protected $_behaviors = [];
-
-    /**
-     * Объект для управления событиями.
-     * @var EventModel
-     */
-    protected $_event;
-
-    public function __construct()
-    {
-        $this->behaviors();
-    }
 
     /**
      * @param string $name
@@ -298,7 +276,6 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
             return false;
         }
 
-        $this->event()->beforeValidate();
         $this->rules();
 
         // Сбросить ошибки атрибутов, для которых не требуется валидация
@@ -312,34 +289,8 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
         }
 
         $this->afterValidate();
-        $this->event()->afterValidate();
 
         return !$this->hasErrors();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBehavior(string $name)
-    {
-        return $this->_behaviors[$name] ?? null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setBehavior(string $name, Behavior $behavior)
-    {
-        $this->_behaviors[$name] = $behavior;
-    }
-
-    /**
-     * {@inheritdoc}
-     * @return EventModel
-     */
-    public function event(): Event
-    {
-        return $this->_event = $this->_event ?: new EventModel($this);
     }
 
     /**
@@ -376,12 +327,6 @@ abstract class Model implements BehaviorOwnerInterface, EventOwnerInterface
 
         return $models;
     }
-
-    /**
-     * Регистрация поведений.
-     * @return void
-     */
-    protected function behaviors(): void {}
 
     /**
      * Вызов набора пользовательских валидаторов.
