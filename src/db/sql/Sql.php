@@ -4,6 +4,7 @@ namespace twin\db\sql;
 
 use PDO;
 use twin\db\Database;
+use twin\event\Event;
 use twin\helper\ArrayHelper;
 use twin\migration\Migration;
 use twin\model\Model;
@@ -212,6 +213,9 @@ abstract class Sql extends Database
      */
     public function insertModel(Model $model): bool
     {
+        $event = $model->event();
+        $event->notify(Event::BEFORE_INSERT);
+
         $table = $model::tableName();
         $id = $this->insert($table, $model->getAttributes());
 
@@ -225,6 +229,8 @@ abstract class Sql extends Database
             $model->setAttribute($aiAttribute, $id);
         }
 
+        $event->notify(Event::AFTER_INSERT);
+
         return true;
     }
 
@@ -233,6 +239,9 @@ abstract class Sql extends Database
      */
     public function updateModel(Model $model): bool
     {
+        $event = $model->event();
+        $event->notify(Event::BEFORE_UPDATE);
+
         $table = $model::tableName();
         $pk = $this->getPk($table);
         $pkAttributes = $model->getAttributes($pk);
@@ -247,7 +256,10 @@ abstract class Sql extends Database
             return "`$key`=:$key";
         }, ' AND ');
 
-        return $this->update($table, $model->getAttributes(), $where, $params);
+        $result = $this->update($table, $model->getAttributes(), $where, $params);
+        $event->notify(Event::AFTER_UPDATE);
+
+        return $result;
     }
 
     /**

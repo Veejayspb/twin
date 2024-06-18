@@ -4,6 +4,14 @@ namespace twin\event;
 
 class Event
 {
+    const AFTER_INIT = 'after-init';
+    const BEFORE_VALIDATE = 'before-validate';
+    const AFTER_VALIDATE = 'after-validate';
+    const BEFORE_INSERT = 'before-insert';
+    const AFTER_INSERT = 'after-insert';
+    const BEFORE_UPDATE = 'before-update';
+    const AFTER_UPDATE = 'after-update';
+
     /**
      * Объект, к которому привязан объект-событие.
      * @var object

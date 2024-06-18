@@ -3,6 +3,7 @@
 namespace twin\db\json;
 
 use twin\db\Database;
+use twin\event\Event;
 use twin\helper\Alias;
 use twin\migration\Migration;
 use twin\model\Model;
@@ -96,6 +97,9 @@ class Json extends Database
      */
     public function insertModel(Model $model): bool
     {
+        $event = $model->event();
+        $event->notify(Event::BEFORE_INSERT);
+
         $table = $model::tableName();
         $attributes = $model->getAttributes();
 
@@ -110,6 +114,7 @@ class Json extends Database
         }
 
         $model->setAttribute(static::PK_FIELD, $key);
+        $event->notify(Event::AFTER_INSERT);
         return true;
     }
 
@@ -118,6 +123,9 @@ class Json extends Database
      */
     public function updateModel(Model $model): bool
     {
+        $event = $model->event();
+        $event->notify(Event::BEFORE_UPDATE);
+
         if (!$model->hasAttribute(static::PK_FIELD)) {
             return false;
         }
@@ -127,7 +135,10 @@ class Json extends Database
         $key = $model->getAttribute(static::PK_FIELD);
         unset($attributes[static::PK_FIELD]);
 
-        return $this->update($table, $attributes, $key);
+        $result = $this->update($table, $attributes, $key);
+        $event->notify(Event::AFTER_UPDATE);
+
+        return $result;
     }
 
     /**

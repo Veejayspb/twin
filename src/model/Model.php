@@ -3,10 +3,14 @@
 namespace twin\model;
 
 use ReflectionClass;
+use twin\event\Event;
+use twin\event\EventOwnerTrait;
 use twin\helper\StringHelper;
 
 abstract class Model
 {
+    use EventOwnerTrait;
+
     /**
      * Значения атрибутов.
      * @var array
@@ -18,6 +22,11 @@ abstract class Model
      * @var array
      */
     protected $_errors = [];
+
+    public function __construct()
+    {
+        $this->event()->notify(Event::AFTER_INIT);
+    }
 
     /**
      * @param string $name
@@ -272,6 +281,8 @@ abstract class Model
      */
     public function validate(array $attributes = []): bool
     {
+        $event = $this->event();
+        $event->notify(Event::BEFORE_VALIDATE);
         $this->rules();
 
         // Сбросить ошибки атрибутов, для которых не требуется валидация
@@ -284,6 +295,7 @@ abstract class Model
             $this->clearErrors($clearAttributes);
         }
 
+        $event->notify(Event::AFTER_VALIDATE);
 
         return !$this->hasErrors();
     }
