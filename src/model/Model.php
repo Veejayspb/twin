@@ -48,6 +48,27 @@ abstract class Model
     }
 
     /**
+     * @param string $name
+     * @return bool
+     */
+    public function __isset(string $name): bool
+    {
+        $value = $this->getAttribute($name);
+        return isset($value);
+    }
+
+    /**
+     * @param string $name
+     * @return void
+     */
+    public function __unset(string $name)
+    {
+        if (array_key_exists($name, $this->_attributes)) {
+            unset($this->_attributes[$name]);
+        }
+    }
+
+    /**
      * Ярлыки атрибутов.
      * @return array
      */
