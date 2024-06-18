@@ -272,10 +272,6 @@ abstract class Model
      */
     public function validate(array $attributes = []): bool
     {
-        if (!$this->beforeValidate()) {
-            return false;
-        }
-
         $this->rules();
 
         // Сбросить ошибки атрибутов, для которых не требуется валидация
@@ -288,7 +284,6 @@ abstract class Model
             $this->clearErrors($clearAttributes);
         }
 
-        $this->afterValidate();
 
         return !$this->hasErrors();
     }
@@ -333,21 +328,6 @@ abstract class Model
      * @return void
      */
     protected function rules(): void {}
-
-    /**
-     * Вызов события до валидации.
-     * @return bool
-     */
-    protected function beforeValidate(): bool
-    {
-        return true;
-    }
-
-    /**
-     * Вызов события после валидации.
-     * @return void
-     */
-    protected function afterValidate(): void {}
 
     /**
      * Атрибуты модели.
