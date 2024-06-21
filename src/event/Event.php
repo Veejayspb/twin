@@ -49,13 +49,17 @@ class Event
 
     /**
      * Прикрепить наблюдателя.
-     * @param string $name
      * @param AbstractObserver $observer
+     * @param string|null $name
      * @return void
      */
-    public function attachObserver(string $name, AbstractObserver $observer): void
+    public function attachObserver(AbstractObserver $observer, ?string $name = null): void
     {
-        $this->observers[$name] = $observer;
+        if ($name === null) {
+            $this->observers[] = $observer;
+        } else {
+            $this->observers[$name] = $observer;
+        }
     }
 
     /**
