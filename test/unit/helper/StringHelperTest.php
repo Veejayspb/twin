@@ -114,4 +114,20 @@ final class StringHelperTest extends BaseTestCase
             $this->assertSame($camel, $actual);
         }
     }
+
+    public function testSlug()
+    {
+        $pairs = [
+            'абвгдеёжзийклмнопрстуфхцчшщъыьэюя' => 'abvgdeyozhzijklmnoprstufhtschshschyeyuya',
+            ' -  - ' => '_-__-_',
+            '0123456789' => '0123456789',
+            'abc-абв' => 'abc-abv',
+            '!@#$%^&*()+' => '',
+        ];
+
+        foreach ($pairs as $original => $translit) {
+            $actual = StringHelper::slug($original);
+            $this->assertSame($translit, $actual);
+        }
+    }
 }

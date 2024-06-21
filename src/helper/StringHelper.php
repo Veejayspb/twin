@@ -83,4 +83,31 @@ class StringHelper
 
         return implode('', $parts);
     }
+
+    /**
+     * Транслитерация строки.
+     * @param string $str
+     * @return string
+     */
+    public static function slug(string $str): string
+    {
+        $converter = [
+            'а' => 'a',  'б' => 'b',  'в' => 'v',
+            'г' => 'g',  'д' => 'd',  'е' => 'e',
+            'ё' => 'yo', 'ж' => 'zh', 'з' => 'z',
+            'и' => 'i',  'й' => 'j',  'к' => 'k',
+            'л' => 'l',  'м' => 'm',  'н' => 'n',
+            'о' => 'o',  'п' => 'p',  'р' => 'r',
+            'с' => 's',  'т' => 't',  'у' => 'u',
+            'ф' => 'f',  'х' => 'h',  'ц' => 'ts',
+            'ч' => 'ch', 'ш' => 'sh', 'щ' => 'sch',
+            'ь' => '',   'ы' => 'y',  'ъ' => '',
+            'э' => 'e',  'ю' => 'yu', 'я' => 'ya',
+            ' ' => '_',
+        ];
+
+        $str = mb_strtolower($str);
+        $str = strtr($str, $converter);
+        return preg_replace('/[^a-z0-9_\-]+/i', '', $str);
+    }
 }
