@@ -30,7 +30,7 @@ final class DatabaseTest extends BaseTestCase
     {
         $criteria = $this->getCriteria();
         $db = $this->getDatabase();
-        $result = $db->find($criteria);
+        $result = $db->findAll($criteria);
 
         $this->assertSame($criteria->queryResult, $result);
     }

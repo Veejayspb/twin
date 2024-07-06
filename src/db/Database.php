@@ -34,7 +34,7 @@ abstract class Database extends Component
      * @param Criteria $criteria
      * @return array
      */
-    public function find(Criteria $criteria): array
+    public function findAll(Criteria $criteria): array
     {
         return $criteria->query($this);
     }
@@ -52,7 +52,7 @@ abstract class Database extends Component
             throw new Exception(500, 'Wrong modelName specified in Database::findModels().');
         }
 
-        $data = $this->find($criteria);
+        $data = $this->findAll($criteria);
         return $modelName::propagate($data);
     }
 
