@@ -64,6 +64,7 @@ abstract class Database extends Component
             throw new Exception(500, 'Wrong modelName specified in Database::findModels().');
         }
 
+        $criteria->from = $modelName::tableName();
         $data = $this->findAll($criteria);
         return $modelName::propagate($data);
     }
