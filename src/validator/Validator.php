@@ -53,20 +53,6 @@ abstract class Validator
     protected function run()
     {
         foreach ($this->attributes as $attribute) {
-            if (!$this->model->hasAttribute($attribute)) {
-                continue;
-            }
-
-            $value = $this->model->getAttribute($attribute);
-
-            if ($value === '') {
-                continue;
-            }
-
-            if ($this->null === true && $value === null) {
-                continue;
-            }
-
             $this->validateAttribute($attribute);
         }
     }
@@ -78,6 +64,20 @@ abstract class Validator
      */
     protected function validateAttribute(string $attribute)
     {
+        if (!$this->model->hasAttribute($attribute)) {
+            return;
+        }
+
+        $value = $this->model->getAttribute($attribute);
+
+        if ($value === '') {
+            return;
+        }
+
+        if ($this->null === true && $value === null) {
+            return;
+        }
+
         $methods = $this->getPublicMethods();
 
         foreach ($methods as $method) {
