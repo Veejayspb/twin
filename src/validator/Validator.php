@@ -53,13 +53,11 @@ abstract class Validator
     protected function run()
     {
         foreach ($this->attributes as $attribute) {
-            $objectHelper = new ObjectHelper($this->model);
-
-            if (!$objectHelper->isPublicProperty($attribute) || $objectHelper->isStaticProperty($attribute)) {
+            if (!$this->model->hasAttribute($attribute)) {
                 continue;
             }
 
-            $value = $this->model->$attribute;
+            $value = $this->model->getAttribute($attribute);
 
             if ($value === '') {
                 continue;
