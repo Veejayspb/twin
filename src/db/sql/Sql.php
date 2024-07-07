@@ -3,6 +3,7 @@
 namespace twin\db\sql;
 
 use PDO;
+use twin\criteria\SqlCriteria;
 use twin\db\Database;
 use twin\event\Event;
 use twin\helper\ArrayHelper;
@@ -60,6 +61,49 @@ abstract class Sql extends Database
         }
 
         return $statement->execute($params);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findAllByAttributes(string $table, array $attributes): array
+    {
+        $criteria = new SqlCriteria;
+        $criteria->from = $table;
+
+        $criteria->where = ArrayHelper::stringExpression($attributes, function ($key, $value) {
+            return "`$key`=:$key";
+        }, ' AND ');
+
+        $criteria->params = ArrayHelper::column($attributes, function ($key, $value) {
+            return ":$key";
+        }, function ($key, $value) {
+            return $value;
+        });
+
+        return $this->findAll($criteria);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByAttributes(string $table, array $attributes): ?array
+    {
+        $criteria = new SqlCriteria;
+        $criteria->from = $table;
+        $criteria->limit = 1;
+
+        $criteria->where = ArrayHelper::stringExpression($attributes, function ($key, $value) {
+            return "`$key`=:$key";
+        }, ' AND ');
+
+        $criteria->params = ArrayHelper::column($attributes, function ($key, $value) {
+            return ":$key";
+        }, function ($key, $value) {
+            return $value;
+        });
+
+        return $this->find($criteria);
     }
 
     /**

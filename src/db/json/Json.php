@@ -2,9 +2,11 @@
 
 namespace twin\db\json;
 
+use twin\criteria\JsonCriteria;
 use twin\db\Database;
 use twin\event\Event;
 use twin\helper\Alias;
+use twin\helper\ArrayHelper;
 use twin\migration\Migration;
 use twin\model\Model;
 
@@ -207,6 +209,36 @@ class Json extends Database
         }
 
         return $this->setData($table, $items);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findAllByAttributes(string $table, array $attributes): array
+    {
+        $criteria = new JsonCriteria;
+        $criteria->from = $table;
+
+        $criteria->filter = function (array $row) use ($attributes) {
+            return ArrayHelper::hasElements($row, $attributes);
+        };
+
+        return $this->findAll($criteria);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByAttributes(string $table, array $attributes): ?array
+    {
+        $criteria = new JsonCriteria;
+        $criteria->from = $table;
+
+        $criteria->filter = function (array $row) use ($attributes) {
+            return ArrayHelper::hasElements($row, $attributes);
+        };
+
+        return $this->find($criteria);
     }
 
     /**

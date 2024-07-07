@@ -30,6 +30,18 @@ abstract class Database extends Component
     }
 
     /**
+     * Поиск записи, используя критерии.
+     * @param Criteria $criteria
+     * @return array|null
+     */
+    public function find(Criteria $criteria): ?array
+    {
+        $criteria->limit = 1;
+        $rows = $criteria->query($this);
+        return $rows ? current($rows) : null;
+    }
+
+    /**
      * Поиск записей, используя критерии.
      * @param Criteria $criteria
      * @return array
@@ -69,6 +81,22 @@ abstract class Database extends Component
         $models = $this->findModels($modelName, $criteria);
         return $models ? current($models) : null;
     }
+
+    /**
+     * Поиск всех записей по значению атрибутов.
+     * @param string $table
+     * @param array $attributes
+     * @return array
+     */
+    abstract public function findAllByAttributes(string $table, array $attributes): array;
+
+    /**
+     * Поиск записи по значению атрибутов.
+     * @param string $table
+     * @param array $attributes
+     * @return array|null
+     */
+    abstract public function findByAttributes(string $table, array $attributes): ?array;
 
     /**
      * Вернуть названия столбцов, входящих в первичный ключ.
