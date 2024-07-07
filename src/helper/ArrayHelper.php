@@ -26,6 +26,24 @@ class ArrayHelper
     }
 
     /**
+     * Проверка массива на существование указанных элементов.
+     * Проверяются как значения, так и ключи. Строгое сравнение типов.
+     * @param array $array - исходный массив
+     * @param array $elements - массив элементов, которые должны содержаться в исходном массиве
+     * @return bool
+     */
+    public static function hasElements(array $array, array $elements): bool
+    {
+        foreach ($elements as $key => $value) {
+            if (!array_key_exists($key, $array) || $array[$key] !== $value) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Найти в наборе массивов искомые ключ/значение, и вернуть индекс первого подходящего.
      * @param array $items - набор массивов или объектов
      * @param array $search - искомые ключи и значения
@@ -35,17 +53,11 @@ class ArrayHelper
     {
         foreach ($items as $i => $item) {
             $item = (array)$item;
+            $hasElements = static::hasElements($item, $search);
 
-            foreach ($search as $key => $value) {
-                if (
-                    !isset($item[$key]) ||
-                    $value !== $item[$key]
-                ) {
-                    continue 2;
-                }
+            if ($hasElements) {
+                return $i;
             }
-
-            return $i;
         }
 
         return false;

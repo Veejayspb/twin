@@ -9,7 +9,7 @@ final class ArrayHelperTest extends BaseTestCase
         1 => 'one',
         null => 'two', // Ключ NULL превратится в пустую строку: ""
         '3' => 'three',
-        'four' => 'four',
+        'four' => 4,
     ];
 
     public function testColumn()
@@ -28,7 +28,7 @@ final class ArrayHelperTest extends BaseTestCase
             1 => '1 - one',
             '' => ' - two',
             '3' => '3 - three',
-            'four' => 'four - four',
+            'four' => 'four - 4',
         ];
 
         $this->assertSame($expected, $actual);
@@ -44,10 +44,41 @@ final class ArrayHelperTest extends BaseTestCase
         );
 
         $expected = [
-            5 => 'four',
+            5 => 4,
         ];
 
         $this->assertSame($expected, $actual);
+    }
+
+    public function testHasElements()
+    {
+        $items = [
+            [
+                'elements' => [1 => 'one'],
+                'expected' => true,
+            ],
+            [
+                'elements' => ['3' => 'three'],
+                'expected' => true,
+            ],
+            [
+                'elements' => [2 => 'two'],
+                'expected' => false,
+            ],
+            [
+                'elements' => [1 => 'one', 2 => 'two'],
+                'expected' => false,
+            ],
+            [
+                'elements' => ['four' => '4'],
+                'expected' => false,
+            ],
+        ];
+
+        foreach ($items as $item) {
+            $actual = ArrayHelper::hasElements(self::ARRAY, $item['elements']);
+            $this->assertSame($item['expected'], $actual);
+        }
     }
 
     public function testFindByParams()
