@@ -26,6 +26,12 @@ class SlugObserver extends AbstractObserver
     public $to;
 
     /**
+     * Заполнить поле для транслита даже если оно непустое.
+     * @var bool
+     */
+    public $force = false;
+
+    /**
      * {@inheritdoc}
      */
     public function update(Event $event, string $name): void
@@ -33,6 +39,10 @@ class SlugObserver extends AbstractObserver
         $owner = $event->getOwner();
 
         if (!is_a($owner, Model::class)) {
+            return;
+        }
+
+        if ($this->force === false && $owner->{$this->to} !== null) {
             return;
         }
 
