@@ -69,7 +69,7 @@ class SqlCriteria extends Criteria
             $result[] = 'SELECT *';
         }
 
-        $result[] = 'FROM' . $this->from;
+        $result[] = "FROM `$this->from`";
 
         if ($this->join) {
             $result[] = implode($this->join, ' ');
