@@ -15,6 +15,12 @@ final class JsonTest extends BaseTestCase
         'dbname' => 'temp',
     ];
 
+    const DB_DATA = [
+        'a' => ['name' => 'vasya', 'type_id' => 1],
+        'b' => ['name' => 'peter', 'type_id' => 1],
+        'c' => ['name' => 'ville', 'type_id' => 2],
+    ];
+
     public function testInsert()
     {
         $path = Alias::get('@test/temp/table.json');
@@ -204,6 +210,40 @@ final class JsonTest extends BaseTestCase
         $this->assertSame(0, count($data));
     }
 
+    public function testFindAllByAttributes()
+    {
+        $db = $this->getDatabase();
+
+        $rows = $db->findAllByAttributes('test', ['name' => 'vasya']);
+        $this->assertSame([['name' => 'vasya', 'type_id' => 1, Json::PK_FIELD => 'a']], $rows);
+
+        $rows = $db->findAllByAttributes('test', ['name' => 'undefined']);
+        $this->assertSame([], $rows);
+
+        $rows = $db->findAllByAttributes('test', ['type_id' => 2]);
+        $this->assertSame([['name' => 'ville', 'type_id' => 2, Json::PK_FIELD => 'c']], $rows);
+
+        $rows = $db->findAllByAttributes('test', ['type_id' => '1']);
+        $this->assertSame([], $rows);
+    }
+
+    public function testFindByAttributes()
+    {
+        $db = $this->getDatabase();
+
+        $row = $db->findByAttributes('test', ['name' => 'vasya']);
+        $this->assertSame(['name' => 'vasya', 'type_id' => 1, Json::PK_FIELD => 'a'], $row);
+
+        $row = $db->findByAttributes('test', ['name' => 'undefined']);
+        $this->assertNull($row);
+
+        $row = $db->findByAttributes('test', ['type_id' => 2]);
+        $this->assertSame(['name' => 'ville', 'type_id' => 2, Json::PK_FIELD => 'c'], $row);
+
+        $row = $db->findByAttributes('test', ['type_id' => '1']);
+        $this->assertSame(null, $row);
+    }
+
     public function testGetData()
     {
         $db = new Json(self::CONFIG);
@@ -253,6 +293,27 @@ final class JsonTest extends BaseTestCase
             protected function attributeNames(): array
             {
                 return [Json::PK_FIELD, 'id'];
+            }
+        };
+    }
+
+    /**
+     * @return Json
+     */
+    protected function getDatabase(): Json
+    {
+        return new class extends Json
+        {
+            public function __construct(array $properties = []) {}
+
+            public function getData(string $table): array
+            {
+                return JsonTest::DB_DATA;
+            }
+
+            public function connect(): bool
+            {
+                return true;
             }
         };
     }

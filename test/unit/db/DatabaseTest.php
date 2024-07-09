@@ -30,6 +30,15 @@ final class DatabaseTest extends BaseTestCase
     {
         $criteria = $this->getCriteria();
         $db = $this->getDatabase();
+        $result = $db->find($criteria);
+
+        $this->assertSame(current($criteria->queryResult), $result);
+    }
+
+    public function testFindAll()
+    {
+        $criteria = $this->getCriteria();
+        $db = $this->getDatabase();
         $result = $db->findAll($criteria);
 
         $this->assertSame($criteria->queryResult, $result);
@@ -90,6 +99,16 @@ final class DatabaseTest extends BaseTestCase
     {
         return new class extends Database
         {
+            public function findAllByAttributes(string $table, array $attributes): array
+            {
+                return [];
+            }
+
+            public function findByAttributes(string $table, array $attributes): ?array
+            {
+                return null;
+            }
+
             public function getPk(string $table): array
             {
                 return [];

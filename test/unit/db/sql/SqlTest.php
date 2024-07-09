@@ -346,6 +346,28 @@ final class SqlTest extends BaseTestCase
         $this->assertTrue($result);
     }
 
+    public function testFindAllByAttributes()
+    {
+        $db = $this->getDatabase();
+        $db->findAllByAttributes('test', ['name' => 'vasya']);
+        $sql = "SELECT * FROM `test` WHERE `name`=:name";
+        $params = [':name' => 'vasya'];
+
+        $this->assertSame($sql, $db->lastSql);
+        $this->assertSame($params, $db->lastParams);
+    }
+
+    public function testFindByAttributes()
+    {
+        $db = $this->getDatabase();
+        $db->findAllByAttributes('test', ['name' => 'vasya', 'type_id' => 1]);
+        $sql = "SELECT * FROM `test` WHERE `name`=:name AND `type_id`=:type_id";
+        $params = [':name' => 'vasya', ':type_id' => 1];
+
+        $this->assertSame($sql, $db->lastSql);
+        $this->assertSame($params, $db->lastParams);
+    }
+
     /**
      * @param bool $execute
      * @return Sql
@@ -422,6 +444,57 @@ final class SqlTest extends BaseTestCase
             protected function attributeNames(): array
             {
                 return ['id'];
+            }
+        };
+    }
+
+    /**
+     * @return Sql
+     */
+    protected function getDatabase(): Sql
+    {
+        return new class extends Sql
+        {
+            /**
+             * @var string
+             */
+            public $lastSql;
+
+            /**
+             * @var array
+             */
+            public $lastParams = [];
+
+            public function getPk(string $table): array
+            {
+                return [];
+            }
+
+            protected function connect(): bool
+            {
+                return true;
+            }
+
+            public function getAutoIncrement(string $table)
+            {
+                return false;
+            }
+
+            public function transactionBegin(): bool
+            {
+                return true;
+            }
+
+            public function getTables()
+            {
+                return [];
+            }
+
+            public function query(string $sql, array $params = [])
+            {
+                $this->lastSql = $sql;
+                $this->lastParams = $params;
+                return [];
             }
         };
     }
