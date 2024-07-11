@@ -39,8 +39,8 @@ class Rule implements RuleInterface
 
         $route = new Route;
         $route->parse($strRoute);
-        $route->params = $address->params;
         $route->setProperties($placeholders);
+        $route->params += $address->params;
 
         return $route;
     }
