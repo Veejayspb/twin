@@ -8,7 +8,7 @@ use twin\view\View;
 return [
     'parent' => '@twin/config/common.php',
     'components' => [
-        'route' => [
+        'router' => [
             'namespaces' => [
                 '' => 'app\\controller',
             ],

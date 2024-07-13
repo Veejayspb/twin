@@ -28,7 +28,7 @@ Alias::set('@vendor', '@root/vendor');
 /**
  * Class Twin
  *
- * @property-read RouteManager $route
+ * @property-read RouteManager $router
  * @property-read View $view
  * @property-read AssetManager $asset
  * @property-read MigrationManager $migration
@@ -240,14 +240,14 @@ class Twin
     protected function runWeb(): void
     {
         try {
-            $route = $this->route->parseUrl(Request::$url);
+            $route = $this->router->parseUrl(Request::$url);
 
             if ($route === false) {
                 throw new Exception(404);
             }
 
             $_GET = $route->params;
-            $namespace = $this->route->getNamespace($route->module);
+            $namespace = $this->router->getNamespace($route->module);
 
             if ($namespace === null) {
                 throw new Exception(500, "Module not found: $route->module");
@@ -259,13 +259,13 @@ class Twin
             http_response_code($e->getCode());
 
             $route = new Route;
-            $route->parse(Twin::app()->route->error);
+            $route->parse(Twin::app()->router->error);
             $route->params = [
                 'code' => $e->getCode(),
                 'message' => $e->getMessage(),
             ];
 
-            $namespace = $this->route->getNamespace($route->module);
+            $namespace = $this->router->getNamespace($route->module);
 
             if ($namespace === null) {
                 die('Error route not specified');
@@ -283,7 +283,7 @@ class Twin
     {
         try {
             global $argv;
-            $route = $this->route->parseUrl((string)$argv[1]);
+            $route = $this->router->parseUrl((string)$argv[1]);
 
             if ($route === false) {
                 throw new Exception(404);
@@ -291,7 +291,7 @@ class Twin
 
             unset($argv[0], $argv[1]);
             $route->params = array_values($argv);
-            $namespace = $this->route->getNamespace($route->module);
+            $namespace = $this->router->getNamespace($route->module);
 
             if ($namespace === null) {
                 throw new Exception(500, "Module not found: $route->module");

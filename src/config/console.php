@@ -6,7 +6,7 @@ use twin\response\ResponseConsole;
 return [
     'parent' => '@twin/config/common.php',
     'components' => [
-        'route' => [
+        'router' => [
             'namespaces' => [
                 '' => 'console\\controller',
                 'service' => 'twin\\controller',

@@ -8,7 +8,7 @@ return [
     'language' => 'en',
     'params' => [],
     'components' => [
-        'route' => [
+        'router' => [
             'class' => RouteManager::class,
         ],
         'response' => [
