@@ -2,14 +2,6 @@
 
 namespace twin\route;
 
-/**
- * Class Route
- *
- * @property string $module
- * @property string $controller
- * @property string $action
- * @property array $params
- */
 class Route
 {
     /**
@@ -35,25 +27,25 @@ class Route
      * Модуль.
      * @var string
      */
-    protected $module = self::DEFAULT['module'];
+    public $module = self::DEFAULT_MODULE;
 
     /**
      * Контроллер.
      * @var string
      */
-    protected $controller = self::DEFAULT['controller'];
+    public $controller = self::DEFAULT_CONTROLLER;
 
     /**
      * Действие.
      * @var string
      */
-    protected $action = self::DEFAULT['action'];
+    public $action = self::DEFAULT_ACTION;
 
     /**
      * Параметры.
      * @var array
      */
-    protected $params = [];
+    public $params = [];
 
     /**
      * @param string|null $module - модуль
@@ -71,29 +63,6 @@ class Route
         $this->setReserved('controller', $controller);
         $this->setReserved('action', $action);
         $this->setParams($params);
-    }
-
-    /**
-     * @param string $name
-     * @return string|array|null
-     */
-    public function __get(string $name)
-    {
-        return $this->$name;
-    }
-
-    /**
-     * @param string $name
-     * @param mixed $value
-     * @return void
-     */
-    public function __set(string $name, $value)
-    {
-        if ($name == 'params') {
-            $this->setParams($value);
-        } elseif ($this->isReserved($name)) {
-            $this->setReserved($name, $value);
-        }
     }
 
     /**

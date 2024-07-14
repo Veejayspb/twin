@@ -58,56 +58,6 @@ final class RouteTest extends BaseTestCase
         );
     }
 
-    public function testGet()
-    {
-        $route = new Route;
-        $proxy = new ObjectProxy($route); /* @var Route $proxy */
-
-        $proxy->module = null;
-        $this->assertNull($route->module);
-
-        $proxy->module = 'mm';
-        $proxy->controller = 'cc';
-        $proxy->action = 'aa';
-        $proxy->params = self::PARAMS;
-
-        $this->assertSame(
-            ['mm', 'cc', 'aa', self::PARAMS],
-            [$route->module, $route->controller, $route->action, $route->params]
-        );
-    }
-
-    public function testSet()
-    {
-        foreach (self::NAMES as $name => $valid) {
-            $route = new Route('default', 'default', 'default', self::PARAMS);
-
-            $route->module = $name;
-            $this->assertSame($valid, $route->module == $name);
-
-            $route->controller = $name;
-            $this->assertSame($valid, $route->controller == $name);
-
-            $route->action = $name;
-            $this->assertSame($valid, $route->action == $name);
-        }
-
-        $route = new Route('default', 'default', 'default', self::PARAMS);
-        $proxy = new ObjectProxy($route);
-
-        $route->module = null;
-        $this->assertSame('', $proxy->module);
-
-        $route = new Route('default', 'default', 'default', self::PARAMS);
-        $proxy = new ObjectProxy($route);
-
-        $route->module = '';
-        $this->assertSame('', $proxy->module);
-
-        $route->params = self::PARAMS;
-        $this->assertSame(self::PARAMS, $proxy->params);
-    }
-
     public function testSetProperties()
     {
         $route = new Route;
