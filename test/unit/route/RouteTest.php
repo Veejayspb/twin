@@ -60,18 +60,16 @@ final class RouteTest extends BaseTestCase
 
     public function testSetProperties()
     {
-        $route = new Route;
-
-        $route->setProperties([
+        ($route = new Route)->setProperties([
             'module' => 'mmm',
         ]);
 
         $this->assertEquals(
-            new Route('mmm', 'site', 'index', []),
-            $route
+            ['mmm', 'site', 'index', []],
+            [$route->module, $route->controller, $route->action, $route->params]
         );
 
-        $route->setProperties([
+        ($route = new Route)->setProperties([
             'module' => null,
             'controller' => 'test',
             'action' => null,
@@ -79,19 +77,19 @@ final class RouteTest extends BaseTestCase
         ]);
 
         $this->assertEquals(
-            new Route(null, 'test', 'index', ['param-one' => 111]),
-            $route
+            [null, 'test', null, ['param-one' => 111]],
+            [$route->module, $route->controller, $route->action, $route->params]
         );
 
-        $route->setProperties([
+        ($route = new Route)->setProperties([
             'controller' => null,
             'action' => 'test',
             'param-two' => null,
         ]);
 
         $this->assertEquals(
-            new Route(null, 'site', 'test', ['param-two' => null]),
-            $route
+            ['', null, 'test', ['param-two' => null]],
+            [$route->module, $route->controller, $route->action, $route->params]
         );
     }
 

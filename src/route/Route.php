@@ -4,18 +4,15 @@ namespace twin\route;
 
 class Route
 {
-    /**
-     * Названия и значения зарезервированных параметров.
-     */
-    const DEFAULT = [
-        'module' => '',
-        'controller' => 'site',
-        'action' => 'index',
-    ];
-
     const DEFAULT_MODULE = '';
     const DEFAULT_CONTROLLER = 'site';
     const DEFAULT_ACTION = 'index';
+
+    const RESERVED = [
+        'module',
+        'controller',
+        'action',
+    ];
 
     /**
      * Паттерн зарезервированных названий параметров.
@@ -52,10 +49,10 @@ class Route
     public $params = [];
 
     /**
-     * @param string|null $module - модуль
-     * @param string|null $controller - контроллер
-     * @param string|null $action - действие
-     * @param array $params - параметры
+     * @param string|null $module
+     * @param string|null $controller
+     * @param string|null $action
+     * @param array $params
      */
     public function __construct(
         ?string $module = null,
@@ -71,7 +68,7 @@ class Route
 
     /**
      * Заполнить свойства объекта.
-     * Сначала заполняются module, controller, action.
+     * Сначала заполняются: module, controller, action.
      * Остальные значения попадают в params.
      * @param array $properties - данные
      * @return void
@@ -82,12 +79,12 @@ class Route
 
         foreach ($properties as $name => $value) {
             if ($this->isReserved($name)) {
-                $this->setReserved($name, $value);
+                $this->$name = $value;
                 unset($properties[$name]);
             }
         }
 
-        $this->setParams($properties);
+        $this->params = $properties;
     }
 
     /**
@@ -98,12 +95,12 @@ class Route
     {
         $result = [];
 
-        foreach (static::DEFAULT as $name => $value) {
-            if (empty($this->$name)) {
+        foreach (static::RESERVED as $reserved) {
+            if (empty($this->$reserved)) {
                 continue;
             }
 
-            $result[$name] = $this->$name;
+            $result[$reserved] = $this->$reserved;
         }
 
         return $result;
@@ -130,7 +127,7 @@ class Route
     public function parse(string $route): void
     {
         $parts = explode('/', $route);
-        $reservedParams = array_reverse(array_keys(static::DEFAULT)); // Разбор роута начинаем с конца (с действия)
+        $reservedParams = array_reverse(static::RESERVED); // Разбор роута начинаем с конца (с действия)
 
         foreach ($reservedParams as $name) {
             $part = array_pop($parts);
@@ -148,67 +145,6 @@ class Route
      */
     protected function isReserved(string $name): bool
     {
-        return array_key_exists($name, static::DEFAULT);
-    }
-
-    /**
-     * Является ли значение пустым.
-     * @param mixed $value
-     * @return bool
-     */
-    protected function isEmpty($value): bool
-    {
-        return in_array($value, [null, ''], true);
-    }
-
-    /**
-     * Является ли название модуля/контроллера/действия валидным.
-     * @param string $value
-     * @return bool
-     */
-    protected function validateReserved(string $value): bool
-    {
-        $pattern = '/^' . self::PATTERN . '$/';
-        return preg_match($pattern, $value);
-    }
-
-    /**
-     * Вернуть дефолтное значение зарезервированного параметра.
-     * @param string $name
-     * @return string|null
-     */
-    protected function getDefaultValue(string $name): ?string
-    {
-        return static::DEFAULT[$name] ?? null;
-    }
-
-    /**
-     * Указать значение модуля/контроллера/действия.
-     * @param string $name
-     * @param string|null $value
-     * @return void
-     */
-    protected function setReserved(string $name, ?string $value): void
-    {
-        if (!$this->isReserved($name)) {
-            return;
-        }
-
-        if ($this->isEmpty($value)) {
-            $this->$name = $this->getDefaultValue($name);
-        } elseif ($this->validateReserved($value)) {
-            $this->$name = $value;
-        }
-    }
-
-    /**
-     * Указать параметры.
-     * @param array $params
-     * @return void
-     * @todo: валидировать параметры (значениями массива могут быть объекты, массивы и т.д.)
-     */
-    protected function setParams(array $params): void
-    {
-        $this->params = $params;
+        return in_array($name, static::RESERVED);
     }
 }
