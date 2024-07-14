@@ -13,6 +13,10 @@ class Route
         'action' => 'index',
     ];
 
+    const DEFAULT_MODULE = '';
+    const DEFAULT_CONTROLLER = 'site';
+    const DEFAULT_ACTION = 'index';
+
     /**
      * Паттерн зарезервированных названий параметров.
      */
@@ -59,10 +63,10 @@ class Route
         ?string $action = null,
         array $params = []
     ) {
-        $this->setReserved('module', $module);
-        $this->setReserved('controller', $controller);
-        $this->setReserved('action', $action);
-        $this->setParams($params);
+        $this->module = $module ?: static::DEFAULT_MODULE;
+        $this->controller = $controller ?: static::DEFAULT_CONTROLLER;
+        $this->action = $action ?: static::DEFAULT_ACTION;
+        $this->params = $params;
     }
 
     /**
