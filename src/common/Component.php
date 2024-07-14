@@ -7,6 +7,14 @@ use twin\helper\ObjectHelper;
 abstract class Component
 {
     /**
+     * Список пустых значений свойств.
+     */
+    const EMPTY_VALUES = [
+        null,
+        [],
+    ];
+
+    /**
      * Список обязательных для заполнения свойств.
      * @var array
      */
@@ -54,11 +62,6 @@ abstract class Component
      */
     protected function isEmpty($value): bool
     {
-        $emptyValues = [
-            null,
-            [],
-        ];
-
-        return in_array($value, $emptyValues, true);
+        return in_array($value, static::EMPTY_VALUES, true);
     }
 }
