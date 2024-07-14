@@ -5,7 +5,7 @@ namespace twin\route;
 /**
  * Class Route
  *
- * @property string|null $module
+ * @property string $module
  * @property string $controller
  * @property string $action
  * @property array $params
@@ -16,7 +16,7 @@ class Route
      * Названия и значения зарезервированных параметров.
      */
     const DEFAULT = [
-        'module' => null,
+        'module' => '',
         'controller' => 'site',
         'action' => 'index',
     ];
@@ -33,7 +33,7 @@ class Route
 
     /**
      * Модуль.
-     * @var string|null
+     * @var string
      */
     protected $module = self::DEFAULT['module'];
 
@@ -169,7 +169,7 @@ class Route
     }
 
     /**
-     * Является ли указанный параметр зарегистрированным.
+     * Является ли указанный параметр зарезервированным.
      * @param string $name
      * @return bool
      */

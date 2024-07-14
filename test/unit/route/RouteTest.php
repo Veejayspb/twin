@@ -46,7 +46,7 @@ final class RouteTest extends BaseTestCase
         $route = new Route(null, null, null, self::PARAMS);
         $proxy = new ObjectProxy($route); /* @var Route $proxy */
         $this->assertSame(
-            [null, 'site', 'index', self::PARAMS],
+            ['', 'site', 'index', self::PARAMS],
             [$proxy->module, $proxy->controller, $proxy->action, $proxy->params]
         );
 
@@ -96,13 +96,13 @@ final class RouteTest extends BaseTestCase
         $proxy = new ObjectProxy($route);
 
         $route->module = null;
-        $this->assertNull($proxy->module);
+        $this->assertSame('', $proxy->module);
 
         $route = new Route('default', 'default', 'default', self::PARAMS);
         $proxy = new ObjectProxy($route);
 
         $route->module = '';
-        $this->assertNull($proxy->module);
+        $this->assertSame('', $proxy->module);
 
         $route->params = self::PARAMS;
         $this->assertSame(self::PARAMS, $proxy->params);
