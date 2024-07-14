@@ -9,7 +9,7 @@ abstract class WebController extends Controller
     /**
      * {@inheritdoc}
      */
-    protected function callAction(string $action, array $params)
+    protected function action(string $action, array $params)
     {
         $reflection = new ReflectionMethod($this, $action);
         $parameters = $reflection->getParameters();

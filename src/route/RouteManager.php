@@ -4,8 +4,9 @@ namespace twin\route;
 
 use twin\common\Component;
 use twin\common\Exception;
-use twin\helper\ObjectHelper;
+use twin\controller\Controller;
 use twin\helper\Request;
+use twin\helper\StringHelper;
 
 class RouteManager extends Component
 {
@@ -52,6 +53,12 @@ class RouteManager extends Component
     public $domain = '';
 
     /**
+     * Постфикс названия контроллера.
+     * @var string
+     */
+    public $controllerPostfix = 'Controller';
+
+    /**
      * {@inheritdoc}
      */
     protected $_requiredProperties = ['home', 'login', 'logout', 'error', 'namespaces', 'rules'];
@@ -64,16 +71,6 @@ class RouteManager extends Component
     public function getNamespace(?string $module): ?string
     {
         return $this->namespaces[$module] ?? null;
-    }
-
-    /**
-     * Вернуть название модуля по неймспейсу контроллера.
-     * @param string $namespace
-     * @return string|bool - FALSE, если модуль не найден
-     */
-    public function getModule(string $namespace)
-    {
-        return array_search($namespace, $this->namespaces);
     }
 
     /**
@@ -125,6 +122,45 @@ class RouteManager extends Component
     }
 
     /**
+     * Вернуть инстанс контроллера.
+     * @param string|null $module
+     * @param string $controller
+     * @return Controller|null
+     */
+    public function getController(?string $module, string $controller): ?Controller
+    {
+        $namespace = $this->getNamespace($module);
+
+        if (!$namespace) {
+            return null;
+        }
+
+        $controllerName = $this->getControllerName($controller);
+
+        if (!$controllerName) {
+            return null;
+        }
+
+        $className = $namespace . '\\' . $controllerName;
+
+        if (!is_subclass_of($className, Controller::class)) {
+            return null;
+        }
+
+        return new $className;
+    }
+
+    /**
+     * Преобразовать название контроллера в роуте в название класса.
+     * @param string $name - some-name
+     * @return string - SomeNameController
+     */
+    protected function getControllerName(string $name): string
+    {
+        return StringHelper::kabobToCamel($name) . $this->controllerPostfix;
+    }
+
+    /**
      * Определить название класса для обработки правила.
      * Если передано название класса, то этот класс и обрабатывает правило.
      * Если передан строковый роут, то обработкой занимается стандартный класс Rule.
@@ -161,8 +197,8 @@ class RouteManager extends Component
             }
 
             $rule = new $className; /* @var RuleInterface $rule */
-            $objectHelper = new ObjectHelper($rule);
-            $objectHelper->setProperties(compact('pattern', 'route'));
+            $rule->pattern = $pattern;
+            $rule->route = $route;
             $result = $func($rule);
 
             if ($result !== false) {

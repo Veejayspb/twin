@@ -5,8 +5,6 @@ namespace twin;
 use twin\asset\AssetManager;
 use twin\common\Component;
 use twin\common\Exception;
-use twin\controller\ConsoleController;
-use twin\controller\WebController;
 use twin\helper\Alias;
 use twin\helper\ConfigConstructor;
 use twin\helper\Request;
@@ -247,31 +245,31 @@ class Twin
             }
 
             $_GET = $route->params;
-            $namespace = $this->router->getNamespace($route->module);
+            $controller = $this->router->getController($route->module, $route->controller);
 
-            if ($namespace === null) {
-                throw new Exception(500, "Module not found: $route->module");
+            if (!$controller) {
+                throw new Exception(404, 'Controller not found');
             }
 
-            WebController::run($namespace, $route);
+            $controller->runAction($route->action, $route->params);
         } catch (Exception $e) {
             @ob_clean(); // Если исключение выбрасывается во view, то на страницу ошибки выводится часть целевого шаблона
             http_response_code($e->getCode());
 
             $route = new Route;
-            $route->parse(Twin::app()->router->error);
+            $route->parse(static::app()->router->error);
             $route->params = [
                 'code' => $e->getCode(),
                 'message' => $e->getMessage(),
             ];
 
-            $namespace = $this->router->getNamespace($route->module);
+            $controller = $this->router->getController($route->module, $route->controller);
 
-            if ($namespace === null) {
-                die('Error route not specified');
+            if (!$controller) {
+                die('Error action not exists');
             }
 
-            WebController::run($namespace, $route);
+            $controller->runAction($route->action, $route->params);
         }
     }
 
@@ -291,13 +289,13 @@ class Twin
 
             unset($argv[0], $argv[1]);
             $route->params = array_values($argv);
-            $namespace = $this->router->getNamespace($route->module);
+            $controller = $this->router->getController($route->module, $route->controller);
 
-            if ($namespace === null) {
-                throw new Exception(500, "Module not found: $route->module");
+            if (!$controller) {
+                throw new Exception(404, 'Controller not found');
             }
 
-            ConsoleController::run($namespace, $route);
+            $controller->runAction($route->action, $route->params);
         } catch (Exception $e) {
             echo "Error {$e->getCode()}: {$e->getMessage()}";
         }

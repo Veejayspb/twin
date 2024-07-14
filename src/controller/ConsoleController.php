@@ -37,7 +37,7 @@ abstract class ConsoleController extends Controller
      * {@inheritdoc}
      * @throws Exception
      */
-    protected function callAction(string $action, array $params)
+    protected function action(string $action, array $params)
     {
         $reflection = new ReflectionMethod($this, $action);
         $parameters = $reflection->getParameters();

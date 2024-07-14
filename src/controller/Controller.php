@@ -5,38 +5,38 @@ namespace twin\controller;
 use ReflectionClass;
 use ReflectionMethod;
 use twin\common\Exception;
-use twin\route\Route;
+use twin\helper\StringHelper;
 use twin\Twin;
 
 abstract class Controller
 {
     /**
-     * Постфикс названия контроллера.
+     * Префикс названия действия.
+     * @var string
      */
-    const POSTFIX = 'Controller';
+    protected $actionPrefix = 'action';
 
     /**
-     * Вызвать указанные контроллер/действие.
-     * @param string $namespace - неймспейс контроллера
-     * @param Route $route - роут
+     * Запуск действия
+     * @param string $action
+     * @param array $params
      * @return void
      * @throws Exception
      */
-    public static function run(string $namespace, Route $route)
+    public function runAction(string $action, array $params)
     {
-        $controller = static::getController($namespace, $route->controller);
-        $action = static::getActionName($route->action);
+        $actionName = $this->getActionName($action);
 
-        if (!$controller->actionExists($action)) {
+        if (!$this->actionExists($actionName)) {
             throw new Exception(404);
         }
 
         // Права доступа.
-        if (!$controller->access($action)) {
+        if (!$this->access($actionName)) {
             throw new Exception(403);
         }
 
-        $data = $controller->callAction($action, $route->params);
+        $data = $this->action($actionName, $params);
 
         echo Twin::app()->response->run($data);
     }
@@ -46,48 +46,9 @@ abstract class Controller
      * @param string $action - название действия
      * @return bool
      */
-    protected function access(string $action): bool
+    public function access(string $action): bool
     {
         return true;
-    }
-
-    /**
-     * Инстанцировать контроллер.
-     * @param string $namespace - неймспейс контроллера
-     * @param string $controller - название контроллера
-     * @return static
-     * @throws Exception
-     */
-    protected static function getController(string $namespace, string $controller): self
-    {
-        $controller = static::getControllerName($controller);
-        $controllerName = "$namespace\\$controller";
-
-        if (!class_exists($controllerName)) {
-            throw new Exception(404);
-        }
-
-        if (!is_subclass_of($controllerName, static::class)) {
-            throw new Exception(500, "$controllerName must extends " . static::class);
-        }
-
-        return new $controllerName;
-    }
-
-    /**
-     * Преобразовать название контроллера в роуте в название класса.
-     * @param string $name - some-name
-     * @return string - SomeNameController
-     */
-    protected static function getControllerName(string $name): string
-    {
-        $parts = explode('-', $name);
-
-        $parts = array_map(function ($part) {
-            return ucfirst($part);
-        }, $parts);
-
-        return implode('', $parts) . static::POSTFIX;
     }
 
     /**
@@ -95,16 +56,9 @@ abstract class Controller
      * @param string $name - some-name
      * @return string - someName
      */
-    protected static function getActionName(string $name): string
+    public function getActionName(string $name): string
     {
-        $parts = explode('-', $name);
-
-        $parts = array_map(function ($part) {
-            return ucfirst($part);
-        }, $parts);
-
-        $name = implode('', $parts);
-        return lcfirst($name);
+        return $this->actionPrefix . StringHelper::kabobToCamel($name);
     }
 
     /**
@@ -112,7 +66,7 @@ abstract class Controller
      * @param string $action - название действия
      * @return bool
      */
-    protected function actionExists(string $action): bool
+    public function actionExists(string $action): bool
     {
         $actions = $this->getActions();
         return in_array($action, $actions);
@@ -122,7 +76,7 @@ abstract class Controller
      * Названия действий текущего контроллера.
      * @return array
      */
-    protected function getActions(): array
+    public function getActions(): array
     {
         $class = new ReflectionClass($this);
         $methods = $class->getMethods(ReflectionMethod::IS_PUBLIC);
@@ -137,10 +91,10 @@ abstract class Controller
     }
 
     /**
-     * Вызов действия.
+     * Прямой вызов действия.
      * @param string $action - название действия
      * @param array $params - параметры
      * @return mixed
      */
-    abstract protected function callAction(string $action, array $params);
+    abstract protected function action(string $action, array $params);
 }
