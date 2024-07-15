@@ -14,7 +14,7 @@ class RouteManager extends Component
      * Роут главной страницы.
      * @var string
      */
-    public $home = '/site/index';
+    public $home = '/main/index';
 
     /**
      * Роут страницы login.
@@ -32,7 +32,7 @@ class RouteManager extends Component
      * Роут страницы ошибки.
      * @var string
      */
-    public $error = '/site/error';
+    public $error = '/main/error';
 
     /**
      * Неймспейсы контроллеров.

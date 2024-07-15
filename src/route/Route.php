@@ -5,7 +5,7 @@ namespace twin\route;
 class Route
 {
     const DEFAULT_MODULE = '';
-    const DEFAULT_CONTROLLER = 'site';
+    const DEFAULT_CONTROLLER = 'main';
     const DEFAULT_ACTION = 'index';
 
     const RESERVED = [
