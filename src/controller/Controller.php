@@ -32,7 +32,7 @@ abstract class Controller
         }
 
         // Права доступа.
-        if (!$this->access($actionName)) {
+        if (!$this->access($action)) {
             throw new Exception(403);
         }
 
