@@ -20,6 +20,9 @@ class Unique extends Validator
      */
     public function similar(string $attribute): bool
     {
+        $label = $this->model->getLabel($attribute);
+        $this->message = "$label не является уникальным";
+
         $table = $this->model::tableName();
         $pk = $this->db->getPk($table);
         $pkAttributes = $this->model->getAttributes($pk);
