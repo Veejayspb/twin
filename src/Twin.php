@@ -248,7 +248,7 @@ class Twin
             $controller = $this->router->getController($route->module, $route->controller);
 
             if (!$controller) {
-                throw new Exception(404, 'Controller not found');
+                throw new Exception(404);
             }
 
             $controller->runAction($route->action, $route->params);
