@@ -154,9 +154,9 @@ class PaginationWidget extends NavWidget
     /**
      * Сгенерировать адрес страницы.
      * @param int $page - номер страницы
-     * @return string
+     * @return string|null
      */
-    private function getUrl(int $page): string
+    private function getUrl(int $page): ?string
     {
         if ($page == 1) {
             $page = null;
