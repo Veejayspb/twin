@@ -18,6 +18,8 @@ use twin\widget\PaginationWidget;
  */
 class Pagination
 {
+    const DEFAULT_SIZE = 10;
+
     /**
      * Общее кол-во элементов.
      * @var int
@@ -34,14 +36,14 @@ class Pagination
      * Лимит элементов на одну страницу.
      * @var int
      */
-    protected $size = 10;
+    protected $size = self::DEFAULT_SIZE;
 
     /**
      * @param int $total
      * @param int $page
      * @param int $size
      */
-    public function __construct(int $total, int $page, int $size = 0)
+    public function __construct(int $total, int $page, int $size = self::DEFAULT_SIZE)
     {
         $this->setTotal($total);
         $this->setPage($page);
