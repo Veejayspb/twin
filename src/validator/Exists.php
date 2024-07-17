@@ -2,19 +2,27 @@
 
 namespace twin\validator;
 
+use twin\db\Database;
+
 class Exists extends Validator
 {
     /**
-     * Название модели, в которой осуществлять поиск зависимости.
-     * @var string
+     * Объект для работы с БД.
+     * @var Database
      */
-    public $class;
+    public $db;
 
     /**
-     * Название столбца, по которому определять зависимость.
+     * Название родительской таблицы.
      * @var string
      */
-    public $column = 'id';
+    public $table;
+
+    /**
+     * Условия для поиска по родительской таблице.
+     * @var array
+     */
+    public $conditions = [];
 
     /**
      * Имеется ли родительская запись.
@@ -24,9 +32,23 @@ class Exists extends Validator
     public function exists(string $attribute): bool
     {
         $this->message = 'Родительская запись не найдена';
+        $row = $this->db->findByAttributes($this->table, $this->conditions);
 
-        return (bool)($this->class)::findByAttributes([
-            $this->column => $this->model->$attribute,
-        ])->one();
+        return $row !== null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function run()
+    {
+        // Применять валидатор только к первому атрибуту
+        $attribute = current($this->attributes);
+
+        if (!$attribute) {
+            return;
+        }
+
+        $this->validateAttribute($attribute);
     }
 }
