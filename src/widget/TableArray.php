@@ -29,7 +29,7 @@ class TableArray extends Table
 
         $items = $this->sortItems($this->items);
         $offset = $this->getPagination()->offset;
-        $limit = $this->getPagination()->limit;
+        $limit = $this->getPagination()->size;
 
         return array_slice($items, $offset, $limit);
     }

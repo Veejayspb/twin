@@ -10,7 +10,7 @@ use twin\widget\PaginationWidget;
  * Class Pagination
  * @property-read int $total
  * @property-read int $page
- * @property-read int $limit
+ * @property-read int $size
  * @property-read int $offset - отступ
  * @property-read int $amount - кол-во страниц
  * @property-read int $from - порядковый номер первого отображаемого элемента
@@ -34,18 +34,18 @@ class Pagination
      * Лимит элементов на одну страницу.
      * @var int
      */
-    protected $limit = 10;
+    protected $size = 10;
 
     /**
      * @param int $total
      * @param int $page
-     * @param int $limit
+     * @param int $size
      */
-    public function __construct(int $total, int $page, int $limit = 0)
+    public function __construct(int $total, int $page, int $size = 0)
     {
         $this->setTotal($total);
         $this->setPage($page);
-        $this->setSize($limit);
+        $this->setSize($size);
     }
 
     /**
@@ -98,7 +98,7 @@ class Pagination
      */
     public function setSize(int $value): self
     {
-        $this->limit = $value <= 1 ? 1 : $value;
+        $this->size = $value <= 1 ? 1 : $value;
         return $this;
     }
 
@@ -110,7 +110,7 @@ class Pagination
     public function apply(Criteria $criteria): void
     {
         $criteria->offset = $this->offset;
-        $criteria->limit = $this->limit;
+        $criteria->limit = $this->size;
     }
 
     /**
@@ -137,7 +137,7 @@ class Pagination
      */
     protected function getOffset(): int
     {
-        return $this->limit * ($this->page - 1);
+        return $this->size * ($this->page - 1);
     }
 
     /**
@@ -146,7 +146,7 @@ class Pagination
      */
     protected function getAmount(): int
     {
-        return ceil($this->total / $this->limit);
+        return ceil($this->total / $this->size);
     }
 
     /**
@@ -155,7 +155,7 @@ class Pagination
      */
     protected function getFrom(): int
     {
-        return ($this->page - 1) * $this->limit + 1;
+        return ($this->page - 1) * $this->size + 1;
     }
 
     /**
@@ -164,7 +164,7 @@ class Pagination
      */
     protected function getTo(): int
     {
-        $result = $this->page * $this->limit;
+        $result = $this->page * $this->size;
         return min($this->total, $result);
     }
 }
