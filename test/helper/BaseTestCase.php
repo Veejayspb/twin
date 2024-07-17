@@ -9,7 +9,7 @@ use Throwable;
 abstract class BaseTestCase extends TestCase
 {
     /**
-     * Содержится ли подстрока в строке.
+     * Подстрока содержится в строке.
      * @param string $haystack
      * @param string $needle
      * @param string $message
@@ -19,6 +19,19 @@ abstract class BaseTestCase extends TestCase
     {
         $result = strstr($haystack, $needle);
         $this->assertTrue($result !== false, $message ?: "String isn't contains the needle: $needle");
+    }
+
+    /**
+     * Подстрока не содержится в строке.
+     * @param string $haystack
+     * @param string $needle
+     * @param string $message
+     * @return void
+     */
+    protected function assertStringNotContains(string $haystack, string $needle, string $message = ''): void
+    {
+        $result = strstr($haystack, $needle);
+        $this->assertTrue($result === false, $message ?: "String isn't contains the needle: $needle");
     }
 
     /**
