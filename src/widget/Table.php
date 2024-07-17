@@ -249,7 +249,7 @@ abstract class Table extends Widget
      */
     protected function setLimit(int $value)
     {
-        $this->getPagination()->setSize($value);
+        $this->getPagination()->size = $value;
     }
 
     /**

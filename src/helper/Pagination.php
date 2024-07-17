@@ -8,9 +8,9 @@ use twin\widget\PaginationWidget;
 
 /**
  * Class Pagination
- * @property-read int $total
- * @property-read int $page
- * @property-read int $size
+ * @property int $total
+ * @property int $page
+ * @property int $size
  * @property-read int $offset - отступ
  * @property-read int $amount - кол-во страниц
  * @property-read int $from - порядковый номер первого отображаемого элемента
@@ -72,36 +72,22 @@ class Pagination
     }
 
     /**
-     * Установить общее кол-во записей.
-     * @param int $value
-     * @return static
+     * @param string $name
+     * @param mixed $value
+     * @return void
      */
-    public function setTotal(int $value): self
+    public function __set(string $name, $value)
     {
-        $this->total = $value <= 0 ? 0 : $value;
-        return $this;
-    }
+        $parameters = [
+            'total',
+            'page',
+            'size',
+        ];
 
-    /**
-     * Установить номер страницы.
-     * @param int $value
-     * @return static
-     */
-    public function setPage(int $value): self
-    {
-        $this->page = $value <= 1 ? 1 : $value;
-        return $this;
-    }
-
-    /**
-     * Установить размер страницы.
-     * @param int $value
-     * @return static
-     */
-    public function setSize(int $value): self
-    {
-        $this->size = $value <= 1 ? 1 : $value;
-        return $this;
+        if (in_array($name, $parameters)) {
+            $method = 'set' . ucfirst($name);
+            $this->$method($value);
+        }
     }
 
     /**
@@ -131,6 +117,39 @@ class Pagination
         $properties['pagination'] = $this;
         $widget = new $class($properties); /* @var PaginationWidget $widget */
         return $widget->run();
+    }
+
+    /**
+     * Установить общее кол-во записей.
+     * @param int $value
+     * @return static
+     */
+    protected function setTotal(int $value): self
+    {
+        $this->total = $value <= 0 ? 0 : $value;
+        return $this;
+    }
+
+    /**
+     * Установить номер страницы.
+     * @param int $value
+     * @return static
+     */
+    protected function setPage(int $value): self
+    {
+        $this->page = $value <= 1 ? 1 : $value;
+        return $this;
+    }
+
+    /**
+     * Установить размер страницы.
+     * @param int $value
+     * @return static
+     */
+    protected function setSize(int $value): self
+    {
+        $this->size = $value <= 1 ? 1 : $value;
+        return $this;
     }
 
     /**
