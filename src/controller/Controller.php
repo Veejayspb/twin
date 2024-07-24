@@ -27,7 +27,7 @@ abstract class Controller
     {
         $actionName = $this->getActionName($action);
 
-        if (!$this->actionExists($actionName)) {
+        if (!$this->hasAction($actionName)) {
             throw new Exception(404);
         }
 
@@ -66,7 +66,7 @@ abstract class Controller
      * @param string $action - название действия
      * @return bool
      */
-    public function actionExists(string $action): bool
+    public function hasAction(string $action): bool
     {
         $actions = $this->getActions();
         return in_array($action, $actions);
