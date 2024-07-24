@@ -19,16 +19,16 @@ abstract class ConsoleController extends Controller
      * Ссылка на список команд.
      * @return array
      */
-    public function index()
+    public function actionIndex()
     {
-        return $this->help();
+        return $this->actionHelp();
     }
 
     /**
      * Список команд.
      * @return array
      */
-    public function help()
+    public function actionHelp()
     {
         return $this->help;
     }
