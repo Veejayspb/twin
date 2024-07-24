@@ -18,7 +18,7 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'helper' . DIRECTORY_SEPARATOR . 'A
 
 Alias::set('@root', dirname(__DIR__, 3));
 Alias::set('@twin', __DIR__);
-Alias::set('@web', $_SERVER['DOCUMENT_ROOT']);
+Alias::set('@public', $_SERVER['DOCUMENT_ROOT']);
 Alias::set('@self', dirname($_SERVER['DOCUMENT_ROOT']));
 Alias::set('@runtime', '@self/runtime');
 Alias::set('@vendor', '@root/vendor');

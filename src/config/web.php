@@ -29,7 +29,7 @@ return [
         ],
         'asset' => [
             'class' => AssetManager::class,
-            'publicationPath' => '@web/asset',
+            'publicationPath' => '@public/asset',
             'webPath' => '/asset',
         ],
     ],

@@ -12,7 +12,7 @@ class AssetManager extends Component
      * Путь до директории с asset доступной из WEB.
      * @var string
      */
-    public $publicationPath = '@web/asset';
+    public $publicationPath = '@public/asset';
 
     /**
      * Адрес директории с asset доступной из WEB.
