@@ -113,5 +113,22 @@ abstract class Controller
      * @param array $params - параметры
      * @return mixed
      */
-    abstract protected function action(string $action, array $params);
+    protected function action(string $action, array $params)
+    {
+        $reflection = new ReflectionMethod($this, $action);
+        $parameters = $reflection->getParameters();
+        $result = [];
+
+        foreach ($parameters as $i => $parameter) {
+            if (array_key_exists($parameter->name, $params)) {
+                $result[] = $params[$parameter->name];
+            } elseif (array_key_exists($i, $params)) {
+                $result[] = $params[$i];
+            } elseif (!$parameter->isOptional()) {
+                $result[] = null;
+            }
+        }
+
+        return call_user_func_array([$this, $action], $result);
+    }
 }

@@ -7,7 +7,7 @@ use twin\migration\Migration;
 use twin\migration\MigrationManager;
 use twin\Twin;
 
-class MigrationController extends ConsoleController
+class MigrationController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -18,6 +18,24 @@ class MigrationController extends ConsoleController
         'status - show list of new migrations',
         'apply {name} - apply all migrations up to specified (if name is empty, all migrations will be applied)',
     ];
+
+    /**
+     * Ссылка на список команд.
+     * @return array
+     */
+    public function actionIndex()
+    {
+        return $this->actionHelp();
+    }
+
+    /**
+     * Список команд.
+     * @return array
+     */
+    public function actionHelp()
+    {
+        return $this->help;
+    }
 
     /**
      * Создать новую миграцию.
