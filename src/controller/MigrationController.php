@@ -19,22 +19,13 @@ class MigrationController extends ConsoleController
         'apply {name} - apply all migrations up to specified (if name is empty, all migrations will be applied)',
     ];
 
-    public static function __url($name, $arguments)
-    {
-        echo 'normal: ';
-        echo get_called_class();
-        echo $name;
-        print_r($arguments);
-        die;
-    }
-
     /**
      * Создать новую миграцию.
      * @param string $name - название миграции
      * @return array
      * @throws Exception
      */
-    public function create($name)
+    public function actionCreate($name)
     {
         $manager = $this->getManager();
 
@@ -50,7 +41,7 @@ class MigrationController extends ConsoleController
      * @return array
      * @throws Exception
      */
-    public function status()
+    public function actionStatus()
     {
         $migrations = $this->getManager()->getNotAppliedMigrations();
         $count = count($migrations);
@@ -75,7 +66,7 @@ class MigrationController extends ConsoleController
      * @return array
      * @throws Exception
      */
-    public function apply($name = null)
+    public function actionApply($name = null)
     {
         $manager = $this->getManager();
 
