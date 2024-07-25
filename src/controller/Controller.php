@@ -83,11 +83,28 @@ abstract class Controller
         $result = [];
 
         foreach ($methods as $method) {
-            if ($method->isStatic()) continue;
+            if (
+                $method->isStatic() ||
+                $this->checkActionName($method->name)
+            ) {
+                continue;
+            }
+
             $result[] = $method->name;
         }
 
         return $result;
+    }
+
+    /**
+     * Проверка корректности названия действия.
+     * @param string $actionName
+     * @return bool
+     */
+    protected function checkActionName(string $actionName): bool
+    {
+        $prefixLength = strlen($this->actionPrefix);
+        return substr($actionName, 0, $prefixLength) != $this->actionPrefix;
     }
 
     /**
