@@ -3,31 +3,36 @@
 namespace twin\widget;
 
 use twin\helper\Html;
-use twin\helper\Pagination;
-use twin\helper\Request;
-use twin\helper\Url;
 
-/**
- * Class Table
- * @property-read int $limit - кол-во элементов на одну страницу
- *
- * @todo: фильтрация
- */
-abstract class Table extends Widget
+class Table extends Widget
 {
-    const ASC = 'asc';
-    const DESC = 'desc';
-
     /**
-     * Название GET-параметра для сортировки.
+     * Массив данных для вывода.
+     * @var array
      */
-    const SORT_PARAMETER = 'sort';
+    public $items = [];
 
     /**
      * Список столбцов.
-     * @var TableColumn[]
+     * ключ - название
+     * значение - коллбэк функция, которая получает через параметр элемент массива $rows
+     * @var array
      */
     public $columns = [];
+
+    /**
+     * Сопоставление названий столбцов и заголовков.
+     * @var array
+     */
+    public $labels = [];
+
+    /**
+     * Ширина столбцов.
+     * ключ - название
+     * значение - значение ширины (150, 20%)
+     * @var array
+     */
+    public $width = [];
 
     /**
      * HTML-атрибуты таблицы.
@@ -36,240 +41,122 @@ abstract class Table extends Widget
     public $htmlAttributes = [];
 
     /**
-     * Название GET-параметра с номером страницы.
-     * @var string
+     * Коллбэк-функция, определяющая атрибуты элементов TR.
+     * function ($item, $index) {
+     *     return [];
+     * }
+     * @var callable|null
      */
-    public $page = PaginationWidget::DEFAULT_PARAMETER;
+    public $trAttributes;
 
     /**
-     * Объект с хелпером-пагинатором.
-     * @var Pagination
+     * Коллбэк-функция, определяющая атрибуты элементов TD.
+     * function ($item, $name) {
+     *     return [];
+     * }
+     * @var callable|null
      */
-    protected $pagination;
+    public $tdAttributes;
 
     /**
-     * {@inheritdoc}
+     * Коллбэк-функция, определяющая атрибуты элементов TH.
+     * function ($name) {
+     *     return [];
+     * }
+     * @var callable|null
      */
-    public function __construct(array $properties = [])
-    {
-        parent::__construct($properties);
-
-        if (array_key_exists('limit', $properties)) {
-            $this->setLimit($properties['limit']);
-        }
-    }
-
-    /**
-     * @param string $name
-     * @return mixed
-     */
-    public function __get(string $name)
-    {
-        if ($name == 'limit') {
-            return $this->getPagination()->size;
-        } else {
-            return $this->$name;
-        }
-    }
+    public $thAttributes;
 
     /**
      * {@inheritdoc}
      */
     public function run(): string
     {
-        $pagination = $this->getPagination()->widget([
-            'parameter' => $this->page,
-        ]);
-
-        $result = Html::tag('div', [], $this->statistics());
-        $result.= $pagination;
-        $result.= $this->table();
-        $result.= $pagination;
-
-        return $result;
-    }
-
-    /**
-     * Разметка таблицы.
-     * @return string
-     */
-    protected function table(): string
-    {
-        $result = Html::tagOpen('table', $this->htmlAttributes);
-        $result.= $this->head();
-        $result.= $this->body();
-        $result.= Html::tagClose('table');
-
-        return $result;
-    }
-
-    /**
-     * Разметка заголовка таблицы.
-     * @return string
-     */
-    protected function head(): string
-    {
-        list($sortName, $sortType) = $this->getSortParameter();
-
-        $result = Html::tagOpen('thead');
-        $result.= Html::tagOpen('tr');
-        foreach ($this->columns as $column) {
-            $name = $column->label;
-
-            if ($column->sort) {
-                if ($column->name == $sortName) {
-                    $name.= $sortType == static::ASC ? ' &uarr;' : ' &darr;';
-                }
-                $type = $column->name == $sortName && $sortType == static::ASC ? static::DESC : static::ASC;
-                $sortParameter = $this->generateSortParameter($column->name, $type);
-                $url = Url::current([static::SORT_PARAMETER => $sortParameter]);
-                $name = Html::a($url, $name);
-            }
-
-            $result.= Html::tag('th', [], $name);
-        }
-        $result.= Html::tagClose('tr');
-        $result.= Html::tagClose('thead');
-
-        return $result;
-    }
-
-    /**
-     * Разметка тела таблицы.
-     * @return string
-     */
-    protected function body(): string
-    {
-        $items = $this->getItems();
-
-        $result = Html::tagOpen('thead');
-        foreach ($items as $item) {
-            $result.= $this->row($item);
-        }
-        $result.= Html::tagClose('thead');
-
-        return $result;
-    }
-
-    /**
-     * Разметка строки в теле таблицы.
-     * @param mixed $item
-     * @return string
-     */
-    protected function row($item): string
-    {
-        $result = Html::tagOpen('tr');
-        foreach ($this->columns as $column) {
-            $result.= Html::tagOpen('td');
-            $result.= call_user_func($column->value, $item);
-            $result.= Html::tagClose('td');
-        }
-        $result.= Html::tagClose('tr');
-
-        return $result;
-    }
-
-    /**
-     * Текст со статистикой.
-     * @return string
-     */
-    protected function statistics(): string
-    {
-        $pagination = $this->getPagination();
-        return "Показаны записи {$pagination->from}-{$pagination->to} из {$pagination->total}.";
-    }
-
-    /**
-     * Извлечь текущие параметры сортировки из GET-параметра.
-     * @return array
-     * первый элемент - название столбца
-     * второй элемент - тип сортировки
-     */
-    protected function getSortParameter(): array
-    {
-        $null = [null, null];
-
-        $sort = Request::get(static::SORT_PARAMETER);
-        if ($sort === null) return $null;
-
-        $ascDesc = static::ASC . '|' . static::DESC;
-        if (!preg_match("/^(.+)-($ascDesc)$/", $sort, $matches)) {
-            return $null;
-        }
-
-        return [$matches[1], $matches[2]];
-    }
-
-    /**
-     * Сгенерировать значение GET-параметра для сортировки.
-     * @param string $name - название столбца
-     * @param string $type - тип сортировки
-     * @return string
-     */
-    protected function generateSortParameter(string $name, string $type): string
-    {
-        return $name . '-' . $type;
-    }
-
-    /**
-     * Поиск столбца по его названию.
-     * @param string $name - название столбца
-     * @return TableColumn|bool - FALSE, если столбец не найден
-     */
-    protected function getColumnByName(string $name)
-    {
-        foreach ($this->columns as $column) {
-            if ($column->name == $name) {
-                return $column;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Вернуть объект с пагинатором.
-     * @return Pagination
-     */
-    protected function getPagination(): Pagination
-    {
-        if ($this->pagination !== null) {
-            return $this->pagination;
-        }
-
-        return $this->pagination = new Pagination(
-            $this->getTotal(),
-            $this->getPageNumber()
+        return Html::tag(
+            'table',
+            $this->htmlAttributes,
+            $this->colgroup() . $this->thead() . $this->tbody()
         );
     }
 
     /**
-     * Установить кол-во элементов на одну страницу.
-     * @param int $value
-     * @return void
+     * Настройки столбцов.
+     * @return string
      */
-    protected function setLimit(int $value)
+    protected function colgroup(): string
     {
-        $this->getPagination()->size = $value;
+        $result = [];
+
+        foreach ($this->columns as $name => $callback) {
+            $width = $this->width[$name] ?? null;
+            $result[] = Html::tag('col', ['width' => $width]);
+        }
+
+        $result = implode('', $result);
+        return Html::tag('colgroup', [], $result);
     }
 
     /**
-     * Номер текущей страницы.
-     * @return int
+     * Заголовок таблицы.
+     * @return string
      */
-    protected function getPageNumber(): int
+    protected function thead(): string
     {
-        return Request::get($this->page, 1);
+        $result = [];
+
+        foreach ($this->columns as $name => $callback) {
+            $thAttributes = is_callable($this->thAttributes) ? call_user_func_array($this->thAttributes, [$name]) : [];
+            $label = is_int($name) ? '' : $this->getLabel($name);
+            $result[] = Html::tag('th', $thAttributes, $label);
+        }
+
+        $result = implode('', $result);
+        $result = Html::tag('tr', [], $result);
+        return Html::tag('thead', [], $result);
     }
 
     /**
-     * Подсчет общего кол-ва элементов.
-     * @return int
+     * Тело таблицы.
+     * @return string
      */
-    abstract protected function getTotal(): int;
+    protected function tbody(): string
+    {
+        $result = [];
+
+        foreach (array_values($this->items) as $i => $item) {
+            $result[] = $this->row($item, $i);
+        }
+
+        $result = implode('', $result);
+        return Html::tag('tbody', [], $result);
+    }
 
     /**
-     * Вернуть массив данных для вывода.
-     * @return array
+     * Ряд таблицы.
+     * @param mixed $item
+     * @param int $index
+     * @return string
      */
-    abstract protected function getItems(): array;
+    protected function row($item, int $index): string
+    {
+        $result = [];
+        $trAttributes = is_callable($this->trAttributes) ? call_user_func_array($this->trAttributes, [$item, $index]) : [];
+
+        foreach ($this->columns as $name => $callback) {
+            $tdAttributes = is_callable($this->tdAttributes) ? call_user_func_array($this->tdAttributes, [$item, $name]) : [];
+            $result[] = Html::tag('td', (array)$tdAttributes, $callback($item));
+        }
+
+        return Html::tag('tr', (array)$trAttributes, implode('', $result));
+    }
+
+    /**
+     * Вернуть заголовок по названию столбца.
+     * @param string $name
+     * @return string
+     */
+    private function getLabel(string $name): string
+    {
+        return $this->labels[$name] ?? $name;
+    }
 }
