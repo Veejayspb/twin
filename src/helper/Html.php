@@ -123,9 +123,7 @@ class Html
      */
     public static function inputText($value, array $htmlAttributes = []): string
     {
-        $htmlAttributes['type'] = $htmlAttributes['type'] ?? 'text';
-        $htmlAttributes['value'] = $value;
-        return static::tagOpen('input', $htmlAttributes);
+        return static::input('text', $value, $htmlAttributes);
     }
 
     /**
@@ -136,9 +134,7 @@ class Html
      */
     public static function inputEmail($value, array $htmlAttributes = []): string
     {
-        $htmlAttributes['type'] = $htmlAttributes['type'] ?? 'email';
-        $htmlAttributes['value'] = $value;
-        return static::tagOpen('input', $htmlAttributes);
+        return static::input('email', $value, $htmlAttributes);
     }
 
     /**
@@ -149,9 +145,7 @@ class Html
      */
     public static function inputPassword($value, array $htmlAttributes = []): string
     {
-        $htmlAttributes['type'] = $htmlAttributes['type'] ?? 'password';
-        $htmlAttributes['value'] = $value;
-        return static::tagOpen('input', $htmlAttributes);
+        return static::input('password', $value, $htmlAttributes);
     }
 
     /**
@@ -162,9 +156,7 @@ class Html
      */
     public static function inputHidden($value, array $htmlAttributes = []): string
     {
-        $htmlAttributes['type'] = $htmlAttributes['type'] ?? 'hidden';
-        $htmlAttributes['value'] = $value;
-        return static::tagOpen('input', $htmlAttributes);
+        return static::input('hidden', $value, $htmlAttributes);
     }
 
     /**
@@ -174,8 +166,7 @@ class Html
      */
     public static function inputFile(array $htmlAttributes = []): string
     {
-        $htmlAttributes['type'] = $htmlAttributes['type'] ?? 'file';
-        return static::tagOpen('input', $htmlAttributes);
+        return static::input('file', null, $htmlAttributes);
     }
 
     /**
@@ -287,5 +278,19 @@ class Html
             $items[] = $class;
             $htmlAttributes['class'] = implode(static::SPACE, $items);
         }
+    }
+
+    /**
+     * Поле для ввода.
+     * @param string $type
+     * @param string|null $value
+     * @param array $htmlAttributes
+     * @return string
+     */
+    protected static function input(string $type, $value = null, array $htmlAttributes = []): string
+    {
+        $htmlAttributes['type'] = $htmlAttributes['type'] ?? $type;
+        $htmlAttributes['value'] = $htmlAttributes['value'] ?? $value;
+        return static::tagOpen('input', $htmlAttributes);
     }
 }
