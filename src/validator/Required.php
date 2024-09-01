@@ -5,6 +5,15 @@ namespace twin\validator;
 class Required extends Validator
 {
     /**
+     * Значения, которые считаются пустыми.
+     */
+    const EMPTY_VALUES = [
+        null,
+        '',
+        [],
+    ];
+
+    /**
      * {@inheritdoc}
      */
     public $message = 'Является обязательным атрибутом';
@@ -16,7 +25,7 @@ class Required extends Validator
      */
     public function notEmpty(string $attribute): bool
     {
-        return !in_array($this->model->$attribute, [null, ''], true);
+        return !in_array($this->model->$attribute, static::EMPTY_VALUES, true);
     }
 
     /**
