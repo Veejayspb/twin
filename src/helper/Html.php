@@ -268,6 +268,12 @@ class Html
      */
     public static function addCssClass(array &$htmlAttributes, string $class)
     {
+        $class = trim($class);
+
+        if ($class == '') {
+            return;
+        }
+
         if (array_key_exists('class', $htmlAttributes)) {
             $items = explode(static::SPACE, $htmlAttributes['class']);
         } else {

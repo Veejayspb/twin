@@ -178,5 +178,11 @@ final class HtmlTest extends BaseTestCase
 
         Html::addCssClass($attributes, 'two');
         $this->assertSame($expected, $attributes);
+
+        Html::addCssClass($attributes, '');
+        $this->assertSame($expected, $attributes);
+
+        Html::addCssClass($attributes, ' two');
+        $this->assertSame($expected, $attributes);
     }
 }
