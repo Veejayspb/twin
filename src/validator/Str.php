@@ -29,9 +29,21 @@ class Str extends Range
      */
     public function type(string $attribute): bool
     {
+        $value = $this->model->$attribute;
+        $type = gettype($value);
         $label = $this->model->getLabel($attribute);
         $this->message = "$label не является строкой";
-        return 'string' == gettype($this->model->$attribute);
+
+        if ($type == 'string') {
+            return true;
+        }
+
+        if (in_array($type, ['integer', 'double'])) {
+            $this->model->$attribute = (string)$value;
+            return true;
+        }
+
+        return false;
     }
 
     /**
