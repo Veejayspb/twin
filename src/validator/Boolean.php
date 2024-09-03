@@ -20,7 +20,14 @@ class Boolean extends Validator
      */
     public function type(string $attribute): bool
     {
-        $this->message = 'Должно равняться 0 или 1';
-        return in_array($this->model->$attribute, static::ALLOWED_VALUES, true);
+        $value = $this->model->$attribute;
+        $this->message = 'Должно равняться TRUE или FALSE';
+
+        if (!in_array($value, static::ALLOWED_VALUES, true)) {
+            return false;
+        }
+
+        $this->model->$attribute = (bool)$value;
+        return true;
     }
 }
