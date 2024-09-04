@@ -23,7 +23,7 @@ final class RequiredTest extends BaseTestCase
             ],
             [
                 'value' => [],
-                'expected' => true,
+                'expected' => false,
             ],
             [
                 'value' => 0,

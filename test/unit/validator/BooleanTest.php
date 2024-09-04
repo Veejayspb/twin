@@ -41,6 +41,14 @@ final class BooleanTest extends BaseTestCase
                 'value' => null,
                 'expected' => false,
             ],
+            [
+                'value' => '0',
+                'expected' => true,
+            ],
+            [
+                'value' => '1',
+                'expected' => true,
+            ],
         ];
 
         foreach ($items as $item) {
