@@ -13,7 +13,7 @@ class Integer extends Numeric
     {
         $value = $this->model->$attribute;
         $label = $this->model->getLabel($attribute);
-        $this->message = "$label не является целым числом";
+        $this->setMessage("$label не является целым числом");
         $type = gettype($value);
 
         if ($type == 'integer') {

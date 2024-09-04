@@ -31,7 +31,7 @@ class Exists extends Validator
      */
     public function exists(string $attribute): bool
     {
-        $this->message = 'Родительская запись не найдена';
+        $this->setMessage('Родительская запись не найдена');
         $row = $this->db->findByAttributes($this->table, $this->conditions);
 
         return $row !== null;

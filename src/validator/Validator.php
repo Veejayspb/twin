@@ -8,6 +8,8 @@ use ReflectionClass;
 
 abstract class Validator
 {
+    const DEFAULT_MESSAGE = 'Ошибка валидации';
+
     /**
      * Валидируемая модель.
      * @var Model
@@ -22,9 +24,9 @@ abstract class Validator
 
     /**
      * Текст ошибки валидации.
-     * @var string
+     * @var string|null
      */
-    public $message = 'Ошибка валидации';
+    public $message;
 
     /**
      * Разрешить NULL в качестве значения.
@@ -84,7 +86,7 @@ abstract class Validator
             $result = call_user_func([$this, $method], $attribute);
 
             if (!$result) {
-                $this->model->setError($attribute, $this->message);
+                $this->model->setError($attribute, $this->getMessage());
                 return;
             }
         }
@@ -94,7 +96,7 @@ abstract class Validator
      * Вернуть названия публичных нестатических методов.
      * @return array
      */
-    private function getPublicMethods(): array
+    protected function getPublicMethods(): array
     {
         $reflection = new ReflectionClass($this);
         $methods = $reflection->getMethods();
@@ -107,5 +109,26 @@ abstract class Validator
         }
 
         return $result;
+    }
+
+    /**
+     * Указать текст сообщения об ошибке.
+     * Если уже указано, то игнорируется.
+     * @param string $message
+     * @return void
+     */
+    protected function setMessage(string $message)
+    {
+        $this->message = $this->message ?: $message;
+    }
+
+    /**
+     * Вернуть текст сообщения об ошибке.
+     * Если не указан, то вернется сообщение по-умолчанию.
+     * @return string
+     */
+    protected function getMessage(): string
+    {
+        return $this->message ?: static::DEFAULT_MESSAGE;
     }
 }

@@ -21,7 +21,7 @@ class Boolean extends Validator
     public function type(string $attribute): bool
     {
         $value = $this->model->$attribute;
-        $this->message = 'Должно равняться TRUE или FALSE';
+        $this->setMessage('Должно равняться TRUE или FALSE');
 
         if (!in_array($value, static::ALLOWED_VALUES, true)) {
             return false;

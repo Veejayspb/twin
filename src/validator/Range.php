@@ -22,7 +22,7 @@ abstract class Range extends Validator
         }
 
         $label = $this->model->getLabel($attribute);
-        $this->message = "$label не входит в диапазон допустимых значений";
+        $this->setMessage("$label не входит в диапазон допустимых значений");
         return in_array($this->model->$attribute, $this->range);
     }
 }

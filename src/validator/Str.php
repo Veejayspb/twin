@@ -32,7 +32,7 @@ class Str extends Range
         $value = $this->model->$attribute;
         $type = gettype($value);
         $label = $this->model->getLabel($attribute);
-        $this->message = "$label не является строкой";
+        $this->setMessage("$label не является строкой");
 
         if ($type == 'string') {
             return true;
@@ -59,7 +59,7 @@ class Str extends Range
             return true;
         }
 
-        $this->message = "Длина поля \"$label\" должна быть больше или равна $this->min";
+        $this->setMessage("Длина поля \"$label\" должна быть больше или равна $this->min");
         return $this->min <= mb_strlen($this->model->$attribute);
     }
 
@@ -76,7 +76,7 @@ class Str extends Range
             return true;
         }
 
-        $this->message = "Длина $label должна быть меньше или равна $this->max";
+        $this->setMessage("Длина $label должна быть меньше или равна $this->max");
         return mb_strlen($this->model->$attribute) <= $this->max;
     }
 
@@ -93,7 +93,7 @@ class Str extends Range
             return true;
         }
 
-        $this->message = "$label не соответствует шаблону";
+        $this->setMessage("$label не соответствует шаблону");
         return preg_match($this->pattern, $this->model->$attribute);
     }
 }

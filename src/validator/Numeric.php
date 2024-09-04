@@ -29,7 +29,7 @@ abstract class Numeric extends Range
             return true;
         }
 
-        $this->message = "$label должен быть больше или равен $this->min";
+        $this->setMessage("$label должен быть больше или равен $this->min");
         return $this->min <= $this->model->$attribute;
     }
 
@@ -46,7 +46,7 @@ abstract class Numeric extends Range
             return true;
         }
 
-        $this->message = "$label должен быть меньше или равен $this->max";
+        $this->setMessage("$label должен быть меньше или равен $this->max");
         return $this->model->$attribute <= $this->max;
     }
 }

@@ -13,7 +13,7 @@ class Double extends Numeric
     {
         $value = $this->model->$attribute;
         $label = $this->model->getLabel($attribute);
-        $this->message = "$label не является числом";
+        $this->setMessage("$label не является числом");
         $type = gettype($value);
 
         if ($type == 'integer' || $type == 'double') {
