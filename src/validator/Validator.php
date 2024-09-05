@@ -10,6 +10,12 @@ abstract class Validator
 {
     const DEFAULT_MESSAGE = 'Ошибка валидации';
 
+    const EMPTY_VALUES = [
+        null,
+        '',
+        [],
+    ];
+
     /**
      * Валидируемая модель.
      * @var Model
@@ -130,5 +136,15 @@ abstract class Validator
     protected function getMessage(): string
     {
         return $this->message ?: static::DEFAULT_MESSAGE;
+    }
+
+    /**
+     * Является ли значение пустым.
+     * @param mixed $value
+     * @return bool
+     */
+    protected static function isEmpty($value): bool
+    {
+        return in_array($value, static::EMPTY_VALUES, true);
     }
 }
