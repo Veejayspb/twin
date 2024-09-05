@@ -78,11 +78,7 @@ abstract class Validator
 
         $value = $this->model->getAttribute($attribute);
 
-        if ($value === '') {
-            return;
-        }
-
-        if ($this->null === true && $value === null) {
+        if ($this->null === true && static::isEmpty($value)) {
             return;
         }
 
