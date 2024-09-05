@@ -27,10 +27,21 @@ class Required extends Validator
     /**
      * {@inheritdoc}
      */
-    protected function run()
+    protected function validateAttribute(string $attribute)
     {
-        foreach ($this->attributes as $attribute) {
-            $this->validateAttribute($attribute);
+        if (!$this->model->hasAttribute($attribute)) {
+            return;
+        }
+
+        $methods = $this->getPublicMethods();
+
+        foreach ($methods as $method) {
+            $result = call_user_func([$this, $method], $attribute);
+
+            if (!$result) {
+                $this->model->setError($attribute, $this->getMessage());
+                return;
+            }
         }
     }
 }
