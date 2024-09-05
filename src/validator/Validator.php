@@ -72,11 +72,13 @@ abstract class Validator
      */
     protected function validateAttribute(string $attribute)
     {
-        if (!$this->model->hasAttribute($attribute)) {
+        $model = $this->model;
+
+        if (!$model->hasAttribute($attribute) || $model->hasError($attribute)) {
             return;
         }
 
-        $value = $this->model->getAttribute($attribute);
+        $value = $model->getAttribute($attribute);
 
         if ($this->null === true && static::isEmpty($value)) {
             return;
@@ -88,7 +90,7 @@ abstract class Validator
             $result = call_user_func([$this, $method], $attribute);
 
             if (!$result) {
-                $this->model->setError($attribute, $this->getMessage());
+                $model->setError($attribute, $this->getMessage());
                 return;
             }
         }
