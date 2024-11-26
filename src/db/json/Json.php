@@ -4,11 +4,9 @@ namespace twin\db\json;
 
 use twin\criteria\JsonCriteria;
 use twin\db\Database;
-use twin\event\Event;
 use twin\helper\Alias;
 use twin\helper\ArrayHelper;
 use twin\migration\Migration;
-use twin\model\Model;
 
 class Json extends Database
 {
@@ -92,70 +90,6 @@ class Json extends Database
 
         unset($data[$key]);
         return $this->setData($table, $data);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function insertModel(Model $model): bool
-    {
-        $event = $model->event();
-        $event->notify(Event::BEFORE_INSERT);
-
-        $table = $model::tableName();
-        $attributes = $model->getAttributes();
-
-        if (array_key_exists(static::PK_FIELD, $attributes)) {
-            unset($attributes[static::PK_FIELD]);
-        }
-
-        $key = $this->insert($table, $attributes);
-
-        if (!$key) {
-            return false;
-        }
-
-        $model->setAttribute(static::PK_FIELD, $key);
-        $event->notify(Event::AFTER_INSERT);
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function updateModel(Model $model): bool
-    {
-        $event = $model->event();
-        $event->notify(Event::BEFORE_UPDATE);
-
-        if (!$model->hasAttribute(static::PK_FIELD)) {
-            return false;
-        }
-
-        $table = $model::tableName();
-        $attributes = $model->getAttributes();
-        $key = $model->getAttribute(static::PK_FIELD);
-        unset($attributes[static::PK_FIELD]);
-
-        $result = $this->update($table, $attributes, $key);
-        $event->notify(Event::AFTER_UPDATE);
-
-        return $result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function deleteModel(Model $model): bool
-    {
-        if (!$model->hasAttribute(static::PK_FIELD)) {
-            return false;
-        }
-
-        $table = $model::tableName();
-        $key = $model->getAttribute(static::PK_FIELD);
-
-        return $this->delete($table, $key);
     }
 
     /**

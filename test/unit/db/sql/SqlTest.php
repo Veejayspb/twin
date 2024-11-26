@@ -247,43 +247,6 @@ final class SqlTest extends BaseTestCase
         $this->assertSame('ROLLBACK', self::$lastSql);
     }
 
-    public function testInsertModel()
-    {
-        $model = $this->getModel();
-        $table = $model::tableName();
-        $db = $this->getSql(true);
-        $result = $db->insertModel($model);
-
-        $this->assertTrue($result);
-        $this->assertSame("INSERT INTO `$table` (`id`) VALUES (:id)", self::$lastSql);
-        $this->assertSame([':id' => $model->id], self::$lastParams);
-    }
-
-    public function testUpdateModel()
-    {
-        $model = $this->getModel();
-        $table = $model::tableName();
-        $db = $this->getSql(true);
-        $result = $db->updateModel($model);
-        $prefix = Sql::PREFIX;
-
-        $this->assertTrue($result);
-        $this->assertSame("UPDATE `$table` SET `id`=:{$prefix}id WHERE `id`=:id", self::$lastSql);
-        $this->assertSame([':id' => $model->id, ':' . Sql::PREFIX . 'id' => $model->id], self::$lastParams);
-    }
-
-    public function testDeleteModel()
-    {
-        $model = $this->getModel();
-        $table = $model::tableName();
-        $db = $this->getSql(true);
-        $result = $db->deleteModel($model);
-
-        $this->assertTrue($result);
-        $this->assertSame("DELETE FROM `$table` WHERE `id`=:id", self::$lastSql);
-        $this->assertSame([':id' => $model->id], self::$lastParams);
-    }
-
     public function testCreateMigrationTable()
     {
         // Эмуляция ошибки в PDO

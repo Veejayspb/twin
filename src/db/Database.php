@@ -6,7 +6,6 @@ use twin\common\Component;
 use twin\common\Exception;
 use twin\criteria\Criteria;
 use twin\migration\Migration;
-use twin\model\Model;
 
 abstract class Database extends Component
 {
@@ -52,38 +51,6 @@ abstract class Database extends Component
     }
 
     /**
-     * Поиск моделей, используя критерии.
-     * @param string $modelName
-     * @param Criteria $criteria
-     * @return array
-     * @throws Exception
-     */
-    public function findModels(string $modelName, Criteria $criteria): array
-    {
-        if (!is_subclass_of($modelName, Model::class)) {
-            throw new Exception(500, 'Wrong modelName specified in Database::findModels().');
-        }
-
-        $criteria->from = $modelName::tableName();
-        $data = $this->findAll($criteria);
-        return $modelName::propagate($data);
-    }
-
-    /**
-     * Поиск модели, используя критерии.
-     * @param string $modelName
-     * @param Criteria $criteria
-     * @return Model|null
-     * @throws Exception
-     */
-    public function findModel(string $modelName, Criteria $criteria): ?Model
-    {
-        $criteria->limit = 1;
-        $models = $this->findModels($modelName, $criteria);
-        return $models ? current($models) : null;
-    }
-
-    /**
      * Поиск всех записей по значению атрибутов.
      * @param string $table
      * @param array $attributes
@@ -105,27 +72,6 @@ abstract class Database extends Component
      * @return array
      */
     abstract public function getPk(string $table): array;
-
-    /**
-     * Создать модель.
-     * @param Model $model
-     * @return bool
-     */
-    abstract public function insertModel(Model $model): bool;
-
-    /**
-     * Обновить модель.
-     * @param Model $model
-     * @return bool
-     */
-    abstract public function updateModel(Model $model): bool;
-
-    /**
-     * Удалить модель.
-     * @param Model $model
-     * @return bool
-     */
-    abstract public function deleteModel(Model $model): bool;
 
     /**
      * Создать таблицу для миграций.

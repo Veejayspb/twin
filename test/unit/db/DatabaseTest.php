@@ -1,6 +1,5 @@
 <?php
 
-use test\helper\TestModel;
 use twin\criteria\Criteria;
 use twin\db\Database;
 use test\helper\BaseTestCase;
@@ -42,29 +41,6 @@ final class DatabaseTest extends BaseTestCase
         $result = $db->findAll($criteria);
 
         $this->assertSame($criteria->queryResult, $result);
-    }
-
-    public function testFindModels()
-    {
-        $criteria = $this->getCriteria();
-        $db = $this->getDatabase();
-        $result = $db->findModels(TestModel::class, $criteria);
-        $expected = [
-            (new TestModel)->setAttributes(['id' => 1, 'name' => 'first-name']),
-            (new TestModel)->setAttributes(['id' => 2, 'name' => 'second-name']),
-        ];
-
-        $this->assertEquals($expected, $result);
-    }
-
-    public function testFindModel()
-    {
-        $criteria = $this->getCriteria();
-        $db = $this->getDatabase();
-        $result = $db->findModel(TestModel::class, $criteria);
-        $expected = (new TestModel)->setAttributes(['id' => 1, 'name' => 'first-name']);
-
-        $this->assertEquals($expected, $result);
     }
 
     /**

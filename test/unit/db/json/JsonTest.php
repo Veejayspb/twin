@@ -75,66 +75,6 @@ final class JsonTest extends BaseTestCase
         $this->assertSame([], $data);
     }
 
-    public function testInsertModel()
-    {
-        $model = $this->getModel();
-        $path = Alias::get('@test/temp/table.json');
-        $db = new Json(self::CONFIG);
-
-        $model->{Json::PK_FIELD} = 'hash';
-        $model->id = 1;
-        $result = $db->insertModel($model);
-        $data = json_decode(file_get_contents($path), true);
-        $key = $model->{Json::PK_FIELD};
-
-        $this->assertTrue($result);
-        $this->assertArrayNotHasKey('hash', $data);
-        $this->assertSame([$key => ['id' => 1]], $data);
-    }
-
-    public function testUpdateModel()
-    {
-        $path = Alias::get('@test/temp/table.json');
-        $data = ['hash' => ['id' => 1]];
-        file_put_contents($path, json_encode($data));
-        $model = $this->getModel();
-        $db = new Json(self::CONFIG);
-
-        $model->{Json::PK_FIELD} = 'not-exists';
-        $model->id = 2;
-        $result = $db->updateModel($model);
-
-        $this->assertFalse($result);
-
-        $model->{Json::PK_FIELD} = 'hash';
-        $result = $db->updateModel($model);
-        $data = json_decode(file_get_contents($path), true);
-
-        $this->assertTrue($result);
-        $this->assertSame(['hash' => ['id' => 2]], $data);
-    }
-
-    public function testDeleteModel()
-    {
-        $path = Alias::get('@test/temp/table.json');
-        $data = ['hash' => ['id' => 1]];
-        file_put_contents($path, json_encode($data));
-        $model = $this->getModel();
-        $db = new Json(self::CONFIG);
-
-        $model->{Json::PK_FIELD} = 'not-exists';
-        $result = $db->deleteModel($model);
-
-        $this->assertTrue($result);
-
-        $model->{Json::PK_FIELD} = 'hash';
-        $result = $db->deleteModel($model);
-        $data = json_decode(file_get_contents($path), true);
-
-        $this->assertTrue($result);
-        $this->assertSame([], $data);
-    }
-
     public function testCreateMigrationTable()
     {
         $db = new Json(self::CONFIG);

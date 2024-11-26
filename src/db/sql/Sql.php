@@ -5,10 +5,8 @@ namespace twin\db\sql;
 use PDO;
 use twin\criteria\SqlCriteria;
 use twin\db\Database;
-use twin\event\Event;
 use twin\helper\ArrayHelper;
 use twin\migration\Migration;
-use twin\model\Model;
 
 abstract class Sql extends Database
 {
@@ -250,82 +248,6 @@ abstract class Sql extends Database
     public function transactionRollback(): bool
     {
         return $this->execute('ROLLBACK');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function insertModel(Model $model): bool
-    {
-        $event = $model->event();
-        $event->notify(Event::BEFORE_INSERT);
-
-        $table = $model::tableName();
-        $id = $this->insert($table, $model->getAttributes());
-
-        if ($id === false) {
-            return false;
-        }
-
-        $aiAttribute = $this->getAutoIncrement($table);
-
-        if ($aiAttribute !== false) {
-            $model->setAttribute($aiAttribute, $id);
-        }
-
-        $event->notify(Event::AFTER_INSERT);
-
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function updateModel(Model $model): bool
-    {
-        $event = $model->event();
-        $event->notify(Event::BEFORE_UPDATE);
-
-        $table = $model::tableName();
-        $pk = $this->getPk($table);
-        $pkAttributes = $model->getAttributes($pk);
-
-        $params = ArrayHelper::column($pkAttributes, function ($k, $v) {
-            return ":$k";
-        }, function ($k, $v) {
-            return $v;
-        });
-
-        $where = ArrayHelper::stringExpression($pkAttributes, function ($key) {
-            return "`$key`=:$key";
-        }, ' AND ');
-
-        $result = $this->update($table, $model->getAttributes(), $where, $params);
-        $event->notify(Event::AFTER_UPDATE);
-
-        return $result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function deleteModel(Model $model): bool
-    {
-        $table = $model::tableName();
-        $pk = $this->getPk($table);
-        $pkAttributes = $model->getAttributes($pk);
-
-        $params = ArrayHelper::column($pkAttributes, function ($k, $v) {
-            return ":$k";
-        }, function ($k, $v) {
-            return $v;
-        });
-
-        $where = ArrayHelper::stringExpression($pkAttributes, function ($key) {
-            return "`$key`=:$key";
-        }, ' AND ');
-
-        return $this->delete($table, $where, $params);
     }
 
     /**
