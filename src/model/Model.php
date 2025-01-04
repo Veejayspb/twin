@@ -125,32 +125,11 @@ abstract class Model
 
     /**
      * Вернуть массив ошибок валидации.
-     * @param array $attributes - если не указано, то вернет все ошибки
      * @return array
      */
-    public function getErrors(array $attributes = []): array
+    public function getErrors(): array
     {
-        if (empty($attributes)) {
-            return $this->_errors;
-        }
-
-        $result = [];
-
-        foreach ($attributes as $attribute) {
-            if (!is_string($attribute)) {
-                continue;
-            }
-
-            $message = $this->getError($attribute);
-
-            if ($message === null) {
-                continue;
-            }
-
-            $result[$attribute] = $message;
-        }
-
-        return $result;
+        return $this->_errors;
     }
 
     /**
