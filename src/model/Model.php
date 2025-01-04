@@ -3,6 +3,7 @@
 namespace twin\model;
 
 use ReflectionClass;
+use ReflectionProperty;
 use twin\event\Event;
 use twin\event\EventOwnerTrait;
 use twin\helper\StringHelper;
@@ -199,13 +200,38 @@ abstract class Model
     }
 
     /**
+     * Атрибуты модели.
+     * @return array
+     */
+    public function attributeNames(): array
+    {
+        $reflection = new ReflectionClass($this);
+        $properties = $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
+        $attributes = [];
+
+        foreach ($properties as $property) {
+            if ($property->isStatic()) {
+                continue;
+            }
+
+            $attributes[] = $property->name;
+        }
+
+        return $attributes;
+    }
+
+    /**
      * Вернуть значение атрибута.
      * @param string $name
      * @return mixed
      */
     public function getAttribute(string $name)
     {
-        return $this->_attributes[$name] ?? null;
+        if ($this->hasAttribute($name)) {
+            return $this->$name;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -217,7 +243,7 @@ abstract class Model
     public function setAttribute(string $name, $value): void
     {
         if ($this->hasAttribute($name)) {
-            $this->_attributes[$name] = $value;
+            $this->$name = $value;
         }
     }
 
@@ -343,10 +369,4 @@ abstract class Model
      * @return void
      */
     protected function rules(): void {}
-
-    /**
-     * Атрибуты модели.
-     * @return array
-     */
-    abstract protected function attributeNames(): array;
 }

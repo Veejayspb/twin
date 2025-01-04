@@ -6,7 +6,6 @@ use test\helper\BaseTestCase;
 use test\helper\Temp;
 use twin\migration\Migration;
 use twin\migration\MigrationManager;
-use twin\model\Model;
 
 final class JsonTest extends BaseTestCase
 {
@@ -216,25 +215,6 @@ final class JsonTest extends BaseTestCase
     {
         $manager = new MigrationManager(['alias' => '@test/temp']);
         return $this->mock(Migration::class, $class, [$manager]);
-    }
-
-    /**
-     * @return Model
-     */
-    protected function getModel(): Model
-    {
-        return new class extends Model
-        {
-            public static function tableName(): string
-            {
-                return 'table';
-            }
-
-            protected function attributeNames(): array
-            {
-                return [Json::PK_FIELD, 'id'];
-            }
-        };
     }
 
     /**

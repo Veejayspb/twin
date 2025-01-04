@@ -11,22 +11,14 @@ use twin\model\Model;
  */
 final class TestModel extends Model
 {
+    public $id;
+    public $name;
+
     /**
      * {@inheritdoc}
      */
     public static function tableName(): string
     {
         return 'test';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function attributeNames(): array
-    {
-        return [
-            'id',
-            'name',
-        ];
     }
 }
