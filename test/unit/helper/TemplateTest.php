@@ -1,11 +1,11 @@
 <?php
 
-use twin\helper\template\Template;
 use test\helper\BaseTestCase;
 use test\helper\ObjectProxy;
 use test\helper\Temp;
+use twin\helper\Template;
 
-class TemplateTest extends BaseTestCase
+final class TemplateTest extends BaseTestCase
 {
     public function testConstruct()
     {

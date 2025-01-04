@@ -6,7 +6,7 @@ use DateTime;
 use ReflectionClass;
 use twin\common\Exception;
 use twin\db\Database;
-use twin\helper\template\Template;
+use twin\helper\Template;
 
 abstract class Migration
 {
@@ -33,7 +33,7 @@ abstract class Migration
     /**
      * Алиас шаблона для класса.
      */
-    const TEMPLATE_ALIAS = '@twin/helper/template/tpl/migration.tpl';
+    const TEMPLATE_ALIAS = '@twin/helper/template/migration.tpl';
 
     /**
      * Компонент с менеджером миграций.
