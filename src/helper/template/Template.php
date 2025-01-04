@@ -4,6 +4,11 @@ namespace twin\helper\template;
 
 use twin\helper\Alias;
 
+/**
+ * Класс, который создает новый документ на основе шаблона с плейсхолдерами вида {{placeholder}}, заменяя их на конкретные значения.
+ *
+ * Class Template
+ */
 class Template
 {
     /**
