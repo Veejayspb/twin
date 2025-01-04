@@ -12,12 +12,6 @@ abstract class Model
     use EventOwnerTrait;
 
     /**
-     * Значения атрибутов.
-     * @var array
-     */
-    protected $_attributes = [];
-
-    /**
      * Ошибки валидации.
      * @var array
      */
@@ -26,46 +20,6 @@ abstract class Model
     public function __construct()
     {
         $this->event()->notify(Event::AFTER_INIT);
-    }
-
-    /**
-     * @param string $name
-     * @return mixed
-     */
-    public function __get(string $name)
-    {
-        return $this->getAttribute($name);
-    }
-
-    /**
-     * @param string $name
-     * @param mixed $value
-     * @return void
-     */
-    public function __set(string $name, $value)
-    {
-        $this->setAttribute($name, $value);
-    }
-
-    /**
-     * @param string $name
-     * @return bool
-     */
-    public function __isset(string $name): bool
-    {
-        $value = $this->getAttribute($name);
-        return isset($value);
-    }
-
-    /**
-     * @param string $name
-     * @return void
-     */
-    public function __unset(string $name)
-    {
-        if (array_key_exists($name, $this->_attributes)) {
-            unset($this->_attributes[$name]);
-        }
     }
 
     /**
