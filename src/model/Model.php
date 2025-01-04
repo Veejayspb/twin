@@ -6,7 +6,6 @@ use ReflectionClass;
 use ReflectionProperty;
 use twin\event\Event;
 use twin\event\EventOwnerTrait;
-use twin\helper\StringHelper;
 
 abstract class Model
 {
@@ -345,23 +344,6 @@ abstract class Model
         $event->notify(Event::AFTER_VALIDATE);
 
         return !$this->hasErrors();
-    }
-
-    /**
-     * Название таблицы в БД.
-     * @return string
-     */
-    public static function tableName(): string
-    {
-        $reflection = new ReflectionClass(static::class);
-
-        if ($reflection->isAnonymous()) {
-            return '';
-        }
-
-        $className = $reflection->getShortName();
-        $name = StringHelper::camelToKabob($className);
-        return str_replace('-', '_', $name);
     }
 
     /**
