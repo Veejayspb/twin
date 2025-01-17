@@ -19,6 +19,12 @@ abstract class FormField extends Widget
     public $attribute;
 
     /**
+     * HTML-атрибуты.
+     * @var array
+     */
+    public $htmlAttributes = [];
+
+    /**
      * Родительский виджет с формой.
      * @var Form
      */

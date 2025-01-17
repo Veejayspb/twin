@@ -232,14 +232,14 @@ class Form extends Widget
 
     /**
      * Вызов виджета.
+     * @param string $class - класс виджета
      * @param Model $model - модель
      * @param string $attribute - название атрибута
-     * @param string $class - класс виджета
-     * @param array $properties - свойства
+     * @param array $htmlAttributes - свойства
      * @return string
      * @throws Exception
      */
-    public function widget(Model $model, string $attribute, string $class, array $properties = []): string
+    public function widget(string $class, Model $model, string $attribute, array $htmlAttributes = []): string
     {
         if (!is_subclass_of($class, FormField::class)) {
             throw new Exception(500, "$class must extends " . FormField::class);
@@ -248,8 +248,9 @@ class Form extends Widget
         $properties = [
             'model' => $model,
             'attribute' => $attribute,
+            'htmlAttributes' => $htmlAttributes,
             'parent' => $this,
-        ] + $properties;
+        ];
 
         $widget = new $class($properties); /* @var FormField $widget */
         return $widget->run();
