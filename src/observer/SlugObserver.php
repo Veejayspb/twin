@@ -1,8 +1,7 @@
 <?php
 
-namespace twin\event\observer;
+namespace twin\observer;
 
-use twin\event\AbstractObserver;
 use twin\event\Event;
 use twin\helper\StringHelper;
 use twin\model\Model;

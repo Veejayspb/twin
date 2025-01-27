@@ -2,6 +2,8 @@
 
 namespace twin\event;
 
+use twin\observer\AbstractObserver;
+
 class Event
 {
     const AFTER_INIT = 'after-init';

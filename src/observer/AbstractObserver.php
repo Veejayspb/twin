@@ -1,7 +1,8 @@
 <?php
 
-namespace twin\event;
+namespace twin\observer;
 
+use twin\event\Event;
 use twin\helper\ObjectHelper;
 
 abstract class AbstractObserver
