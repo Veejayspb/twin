@@ -3,23 +3,15 @@
 namespace twin\model;
 
 use twin\event\Event;
-use twin\event\EventOwnerTrait;
 
 abstract class Form extends Entity
 {
-    use EventOwnerTrait;
-
     /**
      * Ошибки валидации.
      * @var array
      * @todo: может возникнуть коллизия с названиями атрибутов
      */
     protected array $_errors = [];
-
-    public function __construct()
-    {
-        $this->event()->notify(Event::AFTER_INIT);
-    }
 
     /**
      * Ярлыки атрибутов.
