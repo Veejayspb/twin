@@ -5,15 +5,12 @@ namespace twin\model;
 use ReflectionClass;
 use ReflectionProperty;
 use twin\event\Event;
-use twin\event\EventOwnerTrait;
 
 abstract class Entity
 {
-    use EventOwnerTrait;
-
     public function __construct()
     {
-        $this->event()->notify(Event::AFTER_INIT);
+        Event::instance($this)->notify(Event::AFTER_INIT);
     }
 
     /**

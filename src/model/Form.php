@@ -129,7 +129,7 @@ abstract class Form extends Entity
      */
     public function validate(array $attributes = []): bool
     {
-        $event = $this->event();
+        $event = Event::instance($this);
         $event->notify(Event::BEFORE_VALIDATE);
         $this->rules();
 
