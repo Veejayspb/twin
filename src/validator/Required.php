@@ -12,7 +12,7 @@ class Required extends Validator
     public function notEmpty(string $attribute): bool
     {
         $this->setMessage('Является обязательным атрибутом');
-        return !static::isEmpty($this->model->$attribute);
+        return !static::isEmpty($this->form->$attribute);
     }
 
     /**
@@ -20,7 +20,7 @@ class Required extends Validator
      */
     protected function validateAttribute(string $attribute)
     {
-        if (!$this->model->hasAttribute($attribute)) {
+        if (!$this->form->hasAttribute($attribute)) {
             return;
         }
 
@@ -30,7 +30,7 @@ class Required extends Validator
             $result = call_user_func([$this, $method], $attribute);
 
             if (!$result) {
-                $this->model->setError($attribute, $this->getMessage());
+                $this->form->setError($attribute, $this->getMessage());
                 return;
             }
         }

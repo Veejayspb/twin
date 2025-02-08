@@ -13,6 +13,6 @@ class Email extends Str
     {
         $this->setMessage('Некорректный email-адрес');
         $pattern = "/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/u";
-        return preg_match($pattern, $this->model->$attribute, $matches);
+        return preg_match($pattern, $this->form->$attribute, $matches);
     }
 }

@@ -12,7 +12,7 @@ class Date extends Validator
     public function type(string $attribute): bool
     {
         $this->setMessage("$attribute не является строкой"); // TODO: использовать label вместо названия атрибута
-        return 'string' == gettype($this->model->$attribute);
+        return 'string' == gettype($this->form->$attribute);
     }
 
     /**
@@ -25,7 +25,7 @@ class Date extends Validator
         $pattern = '/^(\d{4})-(\d{2})-(\d{2})$/';
         $this->setMessage("$attribute не является датой"); // TODO: использовать label вместо названия атрибута
 
-        if (!preg_match($pattern, $this->model->$attribute, $matches)) {
+        if (!preg_match($pattern, $this->form->$attribute, $matches)) {
             return false;
         }
 

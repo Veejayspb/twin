@@ -28,7 +28,7 @@ abstract class Numeric extends Range
         }
 
         $this->setMessage("$attribute должен быть больше или равен $this->min"); // TODO: использовать label вместо названия атрибута
-        return $this->min <= $this->model->$attribute;
+        return $this->min <= $this->form->$attribute;
     }
 
     /**
@@ -43,6 +43,6 @@ abstract class Numeric extends Range
         }
 
         $this->setMessage("$attribute должен быть меньше или равен $this->max"); // TODO: использовать label вместо названия атрибута
-        return $this->model->$attribute <= $this->max;
+        return $this->form->$attribute <= $this->max;
     }
 }

@@ -3,7 +3,7 @@
 namespace twin\validator;
 
 use twin\helper\ObjectHelper;
-use twin\model\Model;
+use twin\model\Form;
 use ReflectionClass;
 
 abstract class Validator
@@ -18,9 +18,9 @@ abstract class Validator
 
     /**
      * Валидируемая модель.
-     * @var Model
+     * @var Form
      */
-    protected $model;
+    protected $form;
 
     /**
      * Валидируемые атрибуты.
@@ -41,15 +41,15 @@ abstract class Validator
     public $null = false;
 
     /**
-     * @param Model $model - валидируемая модель
+     * @param Form $form - валидируемая форма
      * @param array $attributes - валидируемые атрибуты
      * @param array $properties - значения свойств
      */
-    public function __construct(Model $model, array $attributes, array $properties = [])
+    public function __construct(Form $form, array $attributes, array $properties = [])
     {
         (new ObjectHelper($this))->setProperties($properties);
 
-        $this->model = $model;
+        $this->form = $form;
         $this->attributes = $attributes;
         $this->run();
     }
@@ -72,13 +72,13 @@ abstract class Validator
      */
     protected function validateAttribute(string $attribute)
     {
-        $model = $this->model;
+        $form = $this->form;
 
-        if (!$model->hasAttribute($attribute) || $model->hasError($attribute)) {
+        if (!$form->hasAttribute($attribute) || $form->hasError($attribute)) {
             return;
         }
 
-        $value = $model->getAttribute($attribute);
+        $value = $form->getAttribute($attribute);
 
         if ($this->null === true && static::isEmpty($value)) {
             return;
@@ -90,7 +90,7 @@ abstract class Validator
             $result = call_user_func([$this, $method], $attribute);
 
             if (!$result) {
-                $model->setError($attribute, $this->getMessage());
+                $form->setError($attribute, $this->getMessage());
                 return;
             }
         }

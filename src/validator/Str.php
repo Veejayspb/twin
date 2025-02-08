@@ -29,7 +29,7 @@ class Str extends Range
      */
     public function type(string $attribute): bool
     {
-        $value = $this->model->$attribute;
+        $value = $this->form->$attribute;
         $type = gettype($value);
         $this->setMessage("$attribute не является строкой"); // TODO: использовать label вместо названия атрибута
 
@@ -38,7 +38,7 @@ class Str extends Range
         }
 
         if (in_array($type, ['integer', 'double'])) {
-            $this->model->$attribute = (string)$value;
+            $this->form->$attribute = (string)$value;
             return true;
         }
 
@@ -57,7 +57,7 @@ class Str extends Range
         }
 
         $this->setMessage("Длина поля \"$attribute\" должна быть больше или равна $this->min"); // TODO: использовать label вместо названия атрибута
-        return $this->min <= mb_strlen($this->model->$attribute);
+        return $this->min <= mb_strlen($this->form->$attribute);
     }
 
     /**
@@ -72,7 +72,7 @@ class Str extends Range
         }
 
         $this->setMessage("Длина $attribute должна быть меньше или равна $this->max"); // TODO: использовать label вместо названия атрибута
-        return mb_strlen($this->model->$attribute) <= $this->max;
+        return mb_strlen($this->form->$attribute) <= $this->max;
     }
 
     /**
@@ -87,6 +87,6 @@ class Str extends Range
         }
 
         $this->setMessage("$attribute не соответствует шаблону"); // TODO: использовать label вместо названия атрибута
-        return preg_match($this->pattern, $this->model->$attribute);
+        return preg_match($this->pattern, $this->form->$attribute);
     }
 }
