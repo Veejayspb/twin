@@ -11,8 +11,9 @@ class Double extends Numeric
      */
     public function type(string $attribute): bool
     {
+        $label = $this->form->getLabel($attribute);
         $value = $this->form->$attribute;
-        $this->setMessage("$attribute не является числом"); // TODO: использовать label вместо названия атрибута
+        $this->setMessage("$label не является числом");
         $type = gettype($value);
 
         if ($type == 'integer' || $type == 'double') {
