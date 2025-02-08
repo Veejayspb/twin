@@ -12,8 +12,7 @@ class Integer extends Numeric
     public function type(string $attribute): bool
     {
         $value = $this->model->$attribute;
-        $label = $this->model->getLabel($attribute);
-        $this->setMessage("$label не является целым числом");
+        $this->setMessage("$attribute не является целым числом"); // TODO: использовать label вместо названия атрибута
         $type = gettype($value);
 
         if ($type == 'integer') {

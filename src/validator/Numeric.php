@@ -23,13 +23,11 @@ abstract class Numeric extends Range
      */
     public function min(string $attribute): bool
     {
-        $label = $this->model->getLabel($attribute);
-
         if ($this->min === null) {
             return true;
         }
 
-        $this->setMessage("$label должен быть больше или равен $this->min");
+        $this->setMessage("$attribute должен быть больше или равен $this->min"); // TODO: использовать label вместо названия атрибута
         return $this->min <= $this->model->$attribute;
     }
 
@@ -40,13 +38,11 @@ abstract class Numeric extends Range
      */
     public function max(string $attribute): bool
     {
-        $label = $this->model->getLabel($attribute);
-
         if ($this->max === null) {
             return true;
         }
 
-        $this->setMessage("$label должен быть меньше или равен $this->max");
+        $this->setMessage("$attribute должен быть меньше или равен $this->max"); // TODO: использовать label вместо названия атрибута
         return $this->model->$attribute <= $this->max;
     }
 }

@@ -12,8 +12,7 @@ class Double extends Numeric
     public function type(string $attribute): bool
     {
         $value = $this->model->$attribute;
-        $label = $this->model->getLabel($attribute);
-        $this->setMessage("$label не является числом");
+        $this->setMessage("$attribute не является числом"); // TODO: использовать label вместо названия атрибута
         $type = gettype($value);
 
         if ($type == 'integer' || $type == 'double') {

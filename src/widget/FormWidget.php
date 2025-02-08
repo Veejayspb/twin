@@ -57,9 +57,8 @@ class FormWidget extends Widget
      */
     public function label(Model $model, string $attribute, array $htmlAttributes = []): string
     {
-        $label = $model->getLabel($attribute);
         $htmlAttributes['for'] = $htmlAttributes['for'] ?? $this->getAttributeId($model, $attribute);
-        return Html::label($label, $htmlAttributes);
+        return Html::label($attribute, $htmlAttributes); // TODO: использовать label вместо названия атрибута
     }
 
     /**

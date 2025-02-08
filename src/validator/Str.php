@@ -31,8 +31,7 @@ class Str extends Range
     {
         $value = $this->model->$attribute;
         $type = gettype($value);
-        $label = $this->model->getLabel($attribute);
-        $this->setMessage("$label не является строкой");
+        $this->setMessage("$attribute не является строкой"); // TODO: использовать label вместо названия атрибута
 
         if ($type == 'string') {
             return true;
@@ -53,13 +52,11 @@ class Str extends Range
      */
     public function min(string $attribute): bool
     {
-        $label = $this->model->getLabel($attribute);
-
         if ($this->min === null) {
             return true;
         }
 
-        $this->setMessage("Длина поля \"$label\" должна быть больше или равна $this->min");
+        $this->setMessage("Длина поля \"$attribute\" должна быть больше или равна $this->min"); // TODO: использовать label вместо названия атрибута
         return $this->min <= mb_strlen($this->model->$attribute);
     }
 
@@ -70,13 +67,11 @@ class Str extends Range
      */
     public function max(string $attribute): bool
     {
-        $label = $this->model->getLabel($attribute);
-
         if ($this->max === null) {
             return true;
         }
 
-        $this->setMessage("Длина $label должна быть меньше или равна $this->max");
+        $this->setMessage("Длина $attribute должна быть меньше или равна $this->max"); // TODO: использовать label вместо названия атрибута
         return mb_strlen($this->model->$attribute) <= $this->max;
     }
 
@@ -87,13 +82,11 @@ class Str extends Range
      */
     public function pattern(string $attribute): bool
     {
-        $label = $this->model->getLabel($attribute);
-
         if ($this->pattern === null) {
             return true;
         }
 
-        $this->setMessage("$label не соответствует шаблону");
+        $this->setMessage("$attribute не соответствует шаблону"); // TODO: использовать label вместо названия атрибута
         return preg_match($this->pattern, $this->model->$attribute);
     }
 }

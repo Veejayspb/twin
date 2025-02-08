@@ -21,8 +21,7 @@ abstract class Range extends Validator
             return true;
         }
 
-        $label = $this->model->getLabel($attribute);
-        $this->setMessage("$label не входит в диапазон допустимых значений");
+        $this->setMessage("$attribute не входит в диапазон допустимых значений"); // TODO: использовать label вместо названия атрибута
         return in_array($this->model->$attribute, $this->range);
     }
 }
