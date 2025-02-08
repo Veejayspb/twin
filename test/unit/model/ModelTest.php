@@ -11,17 +11,6 @@ final class ModelTest extends TestCase
         'public' => self::ERROR_MSG,
     ];
 
-    public function testGetLabel()
-    {
-        $model = $this->getModel();
-
-        $actual = $model->getLabel('public');
-        $this->assertSame('Some label', $actual);
-
-        $actual = $model->getLabel('not_exists');
-        $this->assertSame('not_exists', $actual);
-    }
-
     public function testSetError()
     {
         $model = $this->getModel();

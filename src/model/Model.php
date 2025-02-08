@@ -21,26 +21,6 @@ abstract class Model extends Entity
     }
 
     /**
-     * Ярлыки атрибутов.
-     * @return array
-     */
-    public function labels(): array
-    {
-        return [];
-    }
-
-    /**
-     * Ярлык атрибута.
-     * @param string $attribute - название атрибута
-     * @return string
-     */
-    public function getLabel(string $attribute): string
-    {
-        $labels = $this->labels();
-        return $labels[$attribute] ?? $attribute;
-    }
-
-    /**
      * Добавить ошибку валидации атрибута.
      * @param string $attribute - название атрибута
      * @param string $message - текст ошибки

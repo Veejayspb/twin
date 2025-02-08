@@ -3,7 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use twin\model\Entity;
 
-class EntityTest extends TestCase
+final class EntityTest extends TestCase
 {
     public function testAttributeNames()
     {
@@ -106,7 +106,7 @@ class EntityTest extends TestCase
     /**
      * @return Entity
      */
-    private function getEntity()
+    private function getEntity(): Entity
     {
         return new class extends Entity
         {
