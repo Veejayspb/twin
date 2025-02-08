@@ -4,7 +4,7 @@ namespace twin\widget;
 
 use twin\common\Exception;
 use twin\helper\Html;
-use twin\model\Model;
+use twin\model\Form;
 use ReflectionClass;
 
 class FormWidget extends Widget
@@ -50,27 +50,28 @@ class FormWidget extends Widget
 
     /**
      * Тег LABEL.
-     * @param Model $model - модель
+     * @param Form $form - форма
      * @param string $attribute - название атрибута
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public function label(Model $model, string $attribute, array $htmlAttributes = []): string
+    public function label(Form $form, string $attribute, array $htmlAttributes = []): string
     {
-        $htmlAttributes['for'] = $htmlAttributes['for'] ?? $this->getAttributeId($model, $attribute);
-        return Html::label($attribute, $htmlAttributes); // TODO: использовать label вместо названия атрибута
+        $label = $form->getLabel($attribute);
+        $htmlAttributes['for'] = $htmlAttributes['for'] ?? $this->getAttributeId($form, $attribute);
+        return Html::label($label, $htmlAttributes);
     }
 
     /**
      * Вывод ошибки.
-     * @param Model $model - модель
+     * @param Form $form - форма
      * @param string $attribute - название атрибута
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public function error(Model $model, string $attribute, array $htmlAttributes = []): string
+    public function error(Form $form, string $attribute, array $htmlAttributes = []): string
     {
-        $error = $model->getError($attribute);
+        $error = $form->getError($attribute);
         return $error ? Html::tag('div', $htmlAttributes, $error) : '';
     }
 
@@ -87,144 +88,144 @@ class FormWidget extends Widget
 
     /**
      * Текстовое поле.
-     * @param Model $model - модель
+     * @param Form $form - форма
      * @param string $attribute - название атрибута
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public function inputText(Model $model, string $attribute, array $htmlAttributes = []): string
+    public function inputText(Form $form, string $attribute, array $htmlAttributes = []): string
     {
-        $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
-        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
-        return Html::inputText($model->$attribute, $htmlAttributes);
+        $htmlAttributes['name'] = $this->getAttributeName($form, $attribute);
+        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($form, $attribute);
+        return Html::inputText($form->$attribute, $htmlAttributes);
     }
 
     /**
      * Поле для электронной почты.
-     * @param Model $model - модель
+     * @param Form $form - форма
      * @param string $attribute - название атрибута
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public function inputEmail(Model $model, string $attribute, array $htmlAttributes = []): string
+    public function inputEmail(Form $form, string $attribute, array $htmlAttributes = []): string
     {
-        $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
-        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
-        return Html::inputEmail($model->$attribute, $htmlAttributes);
+        $htmlAttributes['name'] = $this->getAttributeName($form, $attribute);
+        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($form, $attribute);
+        return Html::inputEmail($form->$attribute, $htmlAttributes);
     }
 
     /**
      * Поле для пароля.
-     * @param Model $model - модель
+     * @param Form $form - форма
      * @param string $attribute - название атрибута
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public function inputPassword(Model $model, string $attribute, array $htmlAttributes = []): string
+    public function inputPassword(Form $form, string $attribute, array $htmlAttributes = []): string
     {
-        $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
-        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
-        return Html::inputPassword($model->$attribute, $htmlAttributes);
+        $htmlAttributes['name'] = $this->getAttributeName($form, $attribute);
+        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($form, $attribute);
+        return Html::inputPassword($form->$attribute, $htmlAttributes);
     }
 
     /**
      * Скрытое поле.
-     * @param Model $model - модель
+     * @param Form $form - форма
      * @param string $attribute - название атрибута
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public function inputHidden(Model $model, string $attribute, array $htmlAttributes = []): string
+    public function inputHidden(Form $form, string $attribute, array $htmlAttributes = []): string
     {
-        $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
-        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
-        return Html::inputHidden($model->$attribute, $htmlAttributes);
+        $htmlAttributes['name'] = $this->getAttributeName($form, $attribute);
+        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($form, $attribute);
+        return Html::inputHidden($form->$attribute, $htmlAttributes);
     }
 
     /**
      * Поле для загрузки файла.
-     * @param Model $model - модель
+     * @param Form $form - форма
      * @param string $attribute - название атрибута
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public function inputFile(Model $model, string $attribute, array $htmlAttributes = []): string
+    public function inputFile(Form $form, string $attribute, array $htmlAttributes = []): string
     {
         $this->htmlAttributes['enctype'] = 'multipart/form-data';
-        $name = $this->getAttributeName($model, $attribute);
+        $name = $this->getAttributeName($form, $attribute);
         if (!empty($htmlAttributes['multiple'])) {
             $name.= '[]';
         }
         $htmlAttributes['name'] = $name;
-        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
+        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($form, $attribute);
         return Html::inputFile($htmlAttributes);
     }
 
     /**
      * Текстовая область.
-     * @param Model $model - модель
+     * @param Form $form - форма
      * @param string $attribute - название атрибута
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public function textArea(Model $model, string $attribute, array $htmlAttributes = []): string
+    public function textArea(Form $form, string $attribute, array $htmlAttributes = []): string
     {
-        $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
-        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
-        return Html::textArea($model->$attribute, $htmlAttributes);
+        $htmlAttributes['name'] = $this->getAttributeName($form, $attribute);
+        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($form, $attribute);
+        return Html::textArea($form->$attribute, $htmlAttributes);
     }
 
     /**
      * Выпадающий список.
-     * @param Model $model - модель
+     * @param Form $form - форма
      * @param string $attribute - название атрибута
      * @param array $options - список опций
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public function select(Model $model, string $attribute, array $options = [], array $htmlAttributes = []): string
+    public function select(Form $form, string $attribute, array $options = [], array $htmlAttributes = []): string
     {
         $result = '';
-        $name = $this->getAttributeName($model, $attribute);
+        $name = $this->getAttributeName($form, $attribute);
         if (isset($htmlAttributes['multiple'])) {
             $result.= Html::inputHidden(true, ['name' => $name]);
             $name.= '[]';
         }
         $htmlAttributes['name'] = $name;
-        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
-        $result.= Html::select($model->$attribute, $options, $htmlAttributes);
+        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($form, $attribute);
+        $result.= Html::select($form->$attribute, $options, $htmlAttributes);
         return $result;
     }
 
     /**
      * Радиокнопки.
-     * @param Model $model - модель
+     * @param Form $form - форма
      * @param string $attribute - название атрибута
      * @param array $options - список опций
      * @param array $htmlAttributes - HTML-атрибуты
      * @param string $separator - разделитель
      * @return string
      */
-    public function radio(Model $model, string $attribute, array $options = [], array $htmlAttributes = [], string $separator = PHP_EOL): string
+    public function radio(Form $form, string $attribute, array $options = [], array $htmlAttributes = [], string $separator = PHP_EOL): string
     {
-        $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
-        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
-        return Html::radio($model->$attribute, $options, $htmlAttributes, $separator);
+        $htmlAttributes['name'] = $this->getAttributeName($form, $attribute);
+        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($form, $attribute);
+        return Html::radio($form->$attribute, $options, $htmlAttributes, $separator);
     }
 
     /**
      * Чекбокс.
-     * @param Model $model - модель
+     * @param Form $form - форма
      * @param string $attribute - название атрибута
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public function checkbox(Model $model, string $attribute, array $htmlAttributes = []): string
+    public function checkbox(Form $form, string $attribute, array $htmlAttributes = []): string
     {
-        $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
+        $htmlAttributes['name'] = $this->getAttributeName($form, $attribute);
         $result = Html::inputHidden(0, $htmlAttributes);
-        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
-        $htmlAttributes['checked'] = (bool)$model->$attribute;
+        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($form, $attribute);
+        $htmlAttributes['checked'] = (bool)$form->$attribute;
         $result.= Html::checkbox(1, $htmlAttributes);
         return $result;
     }
@@ -232,20 +233,20 @@ class FormWidget extends Widget
     /**
      * Вызов виджета.
      * @param string $class - класс виджета
-     * @param Model $model - модель
+     * @param Form $form - форма
      * @param string $attribute - название атрибута
      * @param array $htmlAttributes - свойства
      * @return string
      * @throws Exception
      */
-    public function widget(string $class, Model $model, string $attribute, array $htmlAttributes = []): string
+    public function widget(string $class, Form $form, string $attribute, array $htmlAttributes = []): string
     {
         if (!is_subclass_of($class, FormField::class)) {
             throw new Exception(500, "$class must extends " . FormField::class);
         }
 
         $properties = [
-            'model' => $model,
+            'model' => $form,
             'attribute' => $attribute,
             'htmlAttributes' => $htmlAttributes,
             'parent' => $this,
@@ -256,27 +257,27 @@ class FormWidget extends Widget
     }
 
     /**
-     * Сгенерировать название поля формы на основе модели и атрибута.
-     * @param Model $model - модель
+     * Сгенерировать название поля на основе формы и атрибута.
+     * @param Form $form - форма
      * @param string $attribute - название атрибута
      * @return string
      */
-    public function getAttributeName(Model $model, string $attribute): string
+    public function getAttributeName(Form $form, string $attribute): string
     {
-        $reflection = new ReflectionClass($model);
+        $reflection = new ReflectionClass($form);
         $className = $reflection->getShortName();
         return "{$className}[$attribute]";
     }
 
     /**
-     * Сгенерировать ID поля формы на основе модели и атрибута.
-     * @param Model $model - модель
+     * Сгенерировать ID поля на основе формы и атрибута.
+     * @param Form $form - форма
      * @param string $attribute - название атрибута
      * @return string
      */
-    public function getAttributeId(Model $model, string $attribute): string
+    public function getAttributeId(Form $form, string $attribute): string
     {
-        $reflection = new ReflectionClass($model);
+        $reflection = new ReflectionClass($form);
         $className = $reflection->getShortName();
         return mb_strtolower("$className-$attribute", 'utf-8');
     }
