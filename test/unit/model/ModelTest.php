@@ -120,34 +120,6 @@ final class ModelTest extends TestCase
         $this->assertSame([], $actual);
     }
 
-    public function testSafe()
-    {
-        $model = $this->getModel();
-
-        $actual = $model->safe();
-        $this->assertSame(['public'], $actual);
-    }
-
-    public function testIsSafeAttribute()
-    {
-        $model = $this->getModel();
-
-        $actual = $model->isSafeAttribute('public');
-        $this->assertTrue($actual);
-
-        $actual = $model->isSafeAttribute('protected');
-        $this->assertFalse($actual);
-
-        $actual = $model->isSafeAttribute('private');
-        $this->assertFalse($actual);
-
-        $actual = $model->isSafeAttribute('static');
-        $this->assertFalse($actual);
-
-        $actual = $model->isSafeAttribute('not_exists');
-        $this->assertFalse($actual);
-    }
-
     public function testValidate()
     {
         $model = $this->getModel();

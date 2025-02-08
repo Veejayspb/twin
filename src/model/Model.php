@@ -110,26 +110,6 @@ abstract class Model extends Entity
     }
 
     /**
-     * Названия безопасных атрибутов.
-     * @return array
-     */
-    public function safe(): array
-    {
-        return $this->attributeNames();
-    }
-
-    /**
-     * Является ли атрибут безопасным.
-     * @param string $name - название атрибута
-     * @return bool
-     */
-    public function isSafeAttribute(string $name): bool
-    {
-        $safeAttributes = $this->safe();
-        return in_array($name, $safeAttributes);
-    }
-
-    /**
      * Валидация.
      * @param array $attributes - названия атрибутов для валидации (если не указать, то провалидируются все)
      * @return bool
