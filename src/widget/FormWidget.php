@@ -7,7 +7,7 @@ use twin\helper\Html;
 use twin\model\Model;
 use ReflectionClass;
 
-class Form extends Widget
+class FormWidget extends Widget
 {
     /**
      * Адрес отправки формы.
