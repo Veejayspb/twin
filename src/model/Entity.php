@@ -4,13 +4,12 @@ namespace twin\model;
 
 use ReflectionClass;
 use ReflectionProperty;
-use twin\event\Event;
 
 abstract class Entity
 {
     public function __construct()
     {
-        Event::instance($this)->notify(Event::AFTER_INIT);
+
     }
 
     /**

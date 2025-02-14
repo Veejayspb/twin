@@ -2,8 +2,6 @@
 
 namespace twin\model;
 
-use twin\event\Event;
-
 abstract class Form extends Entity
 {
     /**
@@ -129,8 +127,6 @@ abstract class Form extends Entity
      */
     public function validate(array $attributes = []): bool
     {
-        $event = Event::instance($this);
-        $event->notify(Event::BEFORE_VALIDATE);
         $this->rules();
 
         // Сбросить ошибки атрибутов, для которых не требуется валидация
@@ -142,8 +138,6 @@ abstract class Form extends Entity
 
             $this->clearErrors($clearAttributes);
         }
-
-        $event->notify(Event::AFTER_VALIDATE);
 
         return !$this->hasErrors();
     }
