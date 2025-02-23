@@ -173,22 +173,13 @@ abstract class Model
     /**
      * Присвоить значения атрибутов.
      * @param array $attributes - значения атрибутов
-     * @param bool $safeOnly - только безопасные
-     * @return static
+     * @return void
      */
-    public function setAttributes(array $attributes, bool $safeOnly = true): self
+    public function setAttributes(array $attributes): void
     {
-        $names = $safeOnly ? $this->safe() : $this->attributeNames();
-
         foreach ($attributes as $name => $value) {
-            if (!in_array($name, $names)) {
-                continue;
-            }
-
             $this->setAttribute($name, $value);
         }
-
-        return $this;
     }
 
     /**
@@ -222,26 +213,6 @@ abstract class Model
     {
         $names = $this->attributeNames();
         return in_array($name, $names);
-    }
-
-    /**
-     * Названия безопасных атрибутов.
-     * @return array
-     */
-    public function safe(): array
-    {
-        return $this->attributeNames();
-    }
-
-    /**
-     * Является ли атрибут безопасным.
-     * @param string $name - название атрибута
-     * @return bool
-     */
-    public function isSafeAttribute(string $name): bool
-    {
-        $safeAttributes = $this->safe();
-        return in_array($name, $safeAttributes);
     }
 
     /**
