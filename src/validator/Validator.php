@@ -74,7 +74,7 @@ abstract class Validator
     {
         $model = $this->model;
 
-        if (!$model->hasAttribute($attribute) || $model->hasError($attribute)) {
+        if (!$model->hasAttribute($attribute) || $model->error()->hasError($attribute)) {
             return;
         }
 
@@ -90,7 +90,7 @@ abstract class Validator
             $result = call_user_func([$this, $method], $attribute);
 
             if (!$result) {
-                $model->setError($attribute, $this->getMessage());
+                $model->error()->setError($attribute, $this->getMessage());
                 return;
             }
         }

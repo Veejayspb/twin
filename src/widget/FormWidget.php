@@ -71,7 +71,7 @@ class FormWidget extends Widget
      */
     public function error(Model $model, string $attribute, array $htmlAttributes = []): string
     {
-        $error = $model->getError($attribute);
+        $error = $model->error()->getError($attribute);
         return $error ? Html::tag('div', $htmlAttributes, $error) : '';
     }
 

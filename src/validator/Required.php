@@ -30,7 +30,7 @@ class Required extends Validator
             $result = call_user_func([$this, $method], $attribute);
 
             if (!$result) {
-                $this->model->setError($attribute, $this->getMessage());
+                $this->model->error()->setError($attribute, $this->getMessage());
                 return;
             }
         }
