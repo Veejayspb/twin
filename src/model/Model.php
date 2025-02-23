@@ -4,7 +4,6 @@ namespace twin\model;
 
 use ReflectionClass;
 use ReflectionProperty;
-use twin\event\Event;
 
 abstract class Model
 {
@@ -13,11 +12,6 @@ abstract class Model
      * @var array
      */
     protected $_errors = [];
-
-    public function __construct()
-    {
-        Event::instance($this)->notify(Event::AFTER_INIT);
-    }
 
     /**
      * Ярлыки атрибутов.
@@ -257,8 +251,6 @@ abstract class Model
      */
     public function validate(array $attributes = []): bool
     {
-        $event = Event::instance($this);
-        $event->notify(Event::BEFORE_VALIDATE);
         $this->rules();
 
         // Сбросить ошибки атрибутов, для которых не требуется валидация
@@ -270,8 +262,6 @@ abstract class Model
 
             $this->clearErrors($clearAttributes);
         }
-
-        $event->notify(Event::AFTER_VALIDATE);
 
         return !$this->hasErrors();
     }
