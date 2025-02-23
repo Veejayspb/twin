@@ -5,12 +5,9 @@ namespace twin\model;
 use ReflectionClass;
 use ReflectionProperty;
 use twin\event\Event;
-use twin\event\EventOwnerTrait;
 
 abstract class Model
 {
-    use EventOwnerTrait;
-
     /**
      * Ошибки валидации.
      * @var array
@@ -19,7 +16,7 @@ abstract class Model
 
     public function __construct()
     {
-        $this->event()->notify(Event::AFTER_INIT);
+        Event::instance($this)->notify(Event::AFTER_INIT);
     }
 
     /**
@@ -260,7 +257,7 @@ abstract class Model
      */
     public function validate(array $attributes = []): bool
     {
-        $event = $this->event();
+        $event = Event::instance($this);
         $event->notify(Event::BEFORE_VALIDATE);
         $this->rules();
 
