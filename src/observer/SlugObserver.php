@@ -7,10 +7,6 @@ use twin\helper\StringHelper;
 
 class SlugObserver extends AbstractObserver
 {
-    public array $events = [
-        'test',
-    ];
-
     /**
      * Название свойства из которого берем текст.
      * @var string
