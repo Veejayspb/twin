@@ -62,7 +62,7 @@ abstract class Model
      * @param string $name
      * @return mixed
      */
-    public function getAttribute(string $name)
+    public function getAttribute(string $name): mixed
     {
         if ($this->hasAttribute($name)) {
             return $this->$name;
@@ -77,7 +77,7 @@ abstract class Model
      * @param mixed $value
      * @return void
      */
-    public function setAttribute(string $name, $value): void
+    public function setAttribute(string $name, mixed $value): void
     {
         if ($this->hasAttribute($name)) {
             $this->$name = $value;
