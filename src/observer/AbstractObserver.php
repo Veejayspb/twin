@@ -5,6 +5,7 @@ namespace twin\observer;
 use SplObserver;
 use SplSubject;
 use twin\event\EventManager;
+use twin\helper\ObjectHelper;
 
 abstract class AbstractObserver implements SplObserver
 {
@@ -19,11 +20,8 @@ abstract class AbstractObserver implements SplObserver
      */
     public function __construct(array $properties = [])
     {
-        foreach ($properties as $name => $value) {
-            if (property_exists($this, $name)) {
-                $this->$name = $value;
-            }
-        }
+        $objectHelper = new ObjectHelper($this);
+        $objectHelper->setProperties($properties);
     }
 
     /**
