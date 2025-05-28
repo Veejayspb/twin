@@ -66,7 +66,7 @@ class EventManager implements SplSubject
      */
     public function getObservers(): array
     {
-        return $this->observers;
+        return array_values($this->observers);
     }
 
     /**
