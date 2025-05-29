@@ -43,38 +43,38 @@ class Twin
      * Название приложения.
      * @var string
      */
-    public $name = 'Twin Application';
+    public string $name = 'Twin Application';
 
     /**
      * Язык приложения.
      * @var string
      */
-    public $language = 'ru';
+    public string $language = 'ru';
 
     /**
      * Параметры.
      * @var array
      */
-    public $params = [];
+    public array $params = [];
 
     /**
      * Индикатор запуска приложения.
      * @var bool
      */
-    protected $running = false;
+    protected bool $running = false;
 
     /**
      * Компоненты.
      * @var Component[]
      */
-    protected $components = [];
+    protected array $components = [];
 
     /**
      * Экземпляр приложения.
      * @var static
      */
-    protected static $instance;
-    
+    protected static self $instance;
+
     protected function __construct()
     {
         mb_internal_encoding('UTF-8');
@@ -95,7 +95,7 @@ class Twin
      * Вернуть экземпляр приложения.
      * @return static
      */
-    public static function app(): self
+    public static function app(): static
     {
         return static::$instance = static::$instance ?: new static;
     }
@@ -179,9 +179,9 @@ class Twin
      * Значение указанного параметра.
      * @param string $name - название параметра в формате: path.to.param
      * @param mixed|null $default - значение, которое вернется, если параметр не найден
-     * @return mixed|null
+     * @return mixed
      */
-    public static function param(string $name, $default = null)
+    public static function param(string $name, mixed $default = null): mixed
     {
         $param = static::app()->params;
         $parts = explode('.', $name);
@@ -201,9 +201,9 @@ class Twin
      * Импорт файла.
      * @param string $alias - алиас пути до файла
      * @param bool $once - использовать require_once
-     * @return mixed|bool - FALSE, если файл не существует; TRUE, если $once=true и файл уже был импортирован
+     * @return mixed - FALSE, если файл не существует; TRUE, если $once=true и файл уже был импортирован
      */
-    public static function import(string $alias, bool $once = false)
+    public static function import(string $alias, bool $once = false): mixed
     {
         $path = Alias::get($alias);
 

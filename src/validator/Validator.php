@@ -20,25 +20,25 @@ abstract class Validator
      * Валидируемая модель.
      * @var Model
      */
-    protected $model;
+    protected Model $model;
 
     /**
      * Валидируемые атрибуты.
      * @var array
      */
-    protected $attributes;
+    protected array $attributes;
 
     /**
      * Текст ошибки валидации.
      * @var string|null
      */
-    public $message;
+    public ?string $message;
 
     /**
      * Разрешить NULL в качестве значения.
      * @var bool
      */
-    public $null = false;
+    public bool $null = false;
 
     /**
      * @param Model $model - валидируемая модель
@@ -58,7 +58,7 @@ abstract class Validator
      * Запуск публичных методов валидации.
      * @return void
      */
-    protected function run()
+    protected function run(): void
     {
         foreach ($this->attributes as $attribute) {
             $this->validateAttribute($attribute);
@@ -70,7 +70,7 @@ abstract class Validator
      * @param string $attribute - название атрибута
      * @return void
      */
-    protected function validateAttribute(string $attribute)
+    protected function validateAttribute(string $attribute): void
     {
         $model = $this->model;
 
@@ -121,7 +121,7 @@ abstract class Validator
      * @param string $message
      * @return void
      */
-    protected function setMessage(string $message)
+    protected function setMessage(string $message): void
     {
         $this->message = $this->message ?: $message;
     }
@@ -141,7 +141,7 @@ abstract class Validator
      * @param mixed $value
      * @return bool
      */
-    protected static function isEmpty($value): bool
+    protected static function isEmpty(mixed $value): bool
     {
         return in_array($value, static::EMPTY_VALUES, true);
     }

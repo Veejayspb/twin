@@ -28,25 +28,25 @@ class Route
      * Модуль.
      * @var string
      */
-    public $module = self::DEFAULT_MODULE;
+    public string $module = self::DEFAULT_MODULE;
 
     /**
      * Контроллер.
      * @var string
      */
-    public $controller = self::DEFAULT_CONTROLLER;
+    public string $controller = self::DEFAULT_CONTROLLER;
 
     /**
      * Действие.
      * @var string
      */
-    public $action = self::DEFAULT_ACTION;
+    public string $action = self::DEFAULT_ACTION;
 
     /**
      * Параметры.
      * @var array
      */
-    public $params = [];
+    public array $params = [];
 
     /**
      * @param string|null $module

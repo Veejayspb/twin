@@ -15,7 +15,7 @@ abstract class AbstractFile
      * Путь до файла/директории.
      * @var string
      */
-    protected $path;
+    protected string $path;
 
     /**
      * @param string $path
@@ -103,7 +103,7 @@ abstract class AbstractFile
      * @param bool $force - перезапись уже существующих файлов
      * @return static|bool
      */
-    abstract public function copy(string $path, bool $force = false);
+    abstract public function copy(string $path, bool $force = false): bool|static;
 
     /**
      * Перенести.

@@ -15,12 +15,12 @@ class CacheFile extends Cache
      * Путь до директории с файлами кеша.
      * @var string
      */
-    public $path = '@runtime/cache';
+    public string $path = '@runtime/cache';
 
     /**
      * {@inheritdoc}
      */
-    protected $_requiredProperties = ['path'];
+    protected array $_requiredProperties = ['path'];
 
     /**
      * {@inheritdoc}
@@ -34,7 +34,7 @@ class CacheFile extends Cache
     /**
      * {@inheritdoc}
      */
-    protected function extractItem(string $key)
+    protected function extractItem(string $key): bool|CacheItem
     {
         $item = new CacheItem;
         $item->key = $key;

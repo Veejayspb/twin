@@ -19,7 +19,7 @@ class Html
      * @var int
      * @see uniqueStr()
      */
-    protected static $uniqueNumber = 0;
+    protected static int $uniqueNumber = 0;
 
     /**
      * Экранирование спецсимволов.
@@ -61,9 +61,9 @@ class Html
      * @param string $content - содержимое тега
      * @return string
      */
-    public static function tag(string $name, array $htmlAttributes = [], $content = ''): string
+    public static function tag(string $name, array $htmlAttributes = [], string $content = ''): string
     {
-        return (string)new Tag($name, $htmlAttributes, (string)$content);
+        return (string)new Tag($name, $htmlAttributes, $content);
     }
 
     /**
@@ -121,7 +121,7 @@ class Html
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public static function inputText($value, array $htmlAttributes = []): string
+    public static function inputText(string $value, array $htmlAttributes = []): string
     {
         return static::input('text', $value, $htmlAttributes);
     }
@@ -132,7 +132,7 @@ class Html
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public static function inputEmail($value, array $htmlAttributes = []): string
+    public static function inputEmail(string $value, array $htmlAttributes = []): string
     {
         return static::input('email', $value, $htmlAttributes);
     }
@@ -143,7 +143,7 @@ class Html
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public static function inputPassword($value, array $htmlAttributes = []): string
+    public static function inputPassword(string $value, array $htmlAttributes = []): string
     {
         return static::input('password', $value, $htmlAttributes);
     }
@@ -154,7 +154,7 @@ class Html
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public static function inputHidden($value, array $htmlAttributes = []): string
+    public static function inputHidden(string $value, array $htmlAttributes = []): string
     {
         return static::input('hidden', $value, $htmlAttributes);
     }
@@ -175,19 +175,19 @@ class Html
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public static function textArea($value, array $htmlAttributes = []): string
+    public static function textArea(string $value, array $htmlAttributes = []): string
     {
         return static::tag('textarea', $htmlAttributes, $value);
     }
 
     /**
      * Выпадающий список.
-     * @param string|array $value - значение / массив значений (если есть атрибут multiple)
+     * @param array|string $value - значение / массив значений (если есть атрибут multiple)
      * @param array $options - список опций
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public static function select($value, array $options, array $htmlAttributes = []): string
+    public static function select(array|string $value, array $options, array $htmlAttributes = []): string
     {
         $value = (array)$value;
         $result = static::tagOpen('select', $htmlAttributes);
@@ -211,7 +211,7 @@ class Html
      * @param string $separator - разделитель
      * @return string
      */
-    public static function radio($value, array $options, array $htmlAttributes = [], string $separator = PHP_EOL): string
+    public static function radio(string $value, array $options, array $htmlAttributes = [], string $separator = PHP_EOL): string
     {
         $result = [];
         $htmlAttributes['type'] = 'radio';
@@ -235,11 +235,11 @@ class Html
 
     /**
      * Чекбокс.
-     * @param string|int $value - значение
+     * @param int|string $value - значение
      * @param array $htmlAttributes - HTML-атрибуты
      * @return string
      */
-    public static function checkbox($value = 1, array $htmlAttributes = []): string
+    public static function checkbox(int|string $value = 1, array $htmlAttributes = []): string
     {
         $htmlAttributes['type'] = $htmlAttributes['type'] ?? 'checkbox';
         $htmlAttributes['value'] = $value;
@@ -293,7 +293,7 @@ class Html
      * @param array $htmlAttributes
      * @return string
      */
-    protected static function input(string $type, $value = null, array $htmlAttributes = []): string
+    protected static function input(string $type, string|null $value = null, array $htmlAttributes = []): string
     {
         $htmlAttributes['type'] = $htmlAttributes['type'] ?? $type;
         $htmlAttributes['value'] = $htmlAttributes['value'] ?? $value;

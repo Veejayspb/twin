@@ -9,21 +9,21 @@ class JqueryuiAsset extends Asset
     /**
      * {@inheritdoc}
      */
-    public $css = [
+    public array $css = [
         'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css',
     ];
 
     /**
      * {@inheritdoc}
      */
-    public $js = [
+    public array $js = [
         'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js',
     ];
 
     /**
      * {@inheritdoc}
      */
-    public $depends = [
+    public array $depends = [
         JqueryAsset::class,
     ];
 }

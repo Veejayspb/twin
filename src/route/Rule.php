@@ -10,18 +10,18 @@ class Rule implements RuleInterface
      * Паттерн.
      * @var string
      */
-    public $pattern;
+    public string $pattern;
 
     /**
      * Текстовый роут.
      * @var string
      */
-    public $route;
+    public string $route;
 
     /**
      * {@inheritdoc}
      */
-    public function parseUrl(string $url)
+    public function parseUrl(string $url): Route|bool
     {
         // Убрать из адреса GET-параметры.
         $address = new Address($url);
@@ -48,7 +48,7 @@ class Rule implements RuleInterface
     /**
      * {@inheritdoc}
      */
-    public function createUrl(Route $route)
+    public function createUrl(Route $route): bool|string
     {
         $address = new Address;
         $url = $this->pattern;
@@ -93,7 +93,7 @@ class Rule implements RuleInterface
      * NULL нужно для того, чтобы можно было убирать параметры из адреса: Url::current(['param' => null])
      * @return bool
      */
-    private function replacePlaceholder(string &$str, string $name, $value): bool
+    private function replacePlaceholder(string &$str, string $name, ?string $value): bool
     {
         $str = preg_replace_callback("/<$name(:(.+?))?>/", function ($m) use ($value) {
 
@@ -139,7 +139,7 @@ class Rule implements RuleInterface
      * @param string $url - адрес
      * @return array|bool - FALSE, если адрес не соответствует паттерну.
      */
-    private function extractPlaceholders(string $url)
+    private function extractPlaceholders(string $url): bool|array
     {
         $pattern = str_replace('/', '\/', $this->pattern);
 

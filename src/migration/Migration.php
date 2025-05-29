@@ -39,7 +39,7 @@ abstract class Migration
      * Компонент с менеджером миграций.
      * @var MigrationManager
      */
-    protected $manager;
+    protected MigrationManager $manager;
 
     /**
      * @param MigrationManager $manager

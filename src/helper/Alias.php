@@ -13,7 +13,7 @@ final class Alias
      * Список алиасов.
      * @var array
      */
-    protected static $aliases = [];
+    protected static array $aliases = [];
 
     /**
      * Установить значение алиаса.

@@ -13,7 +13,7 @@ class Template
      * Путь до шаблона.
      * @var string
      */
-    protected $path;
+    protected string $path;
 
     /**
      * @param string $alias - алиас пути до шаблона

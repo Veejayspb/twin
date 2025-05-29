@@ -18,7 +18,7 @@ abstract class Asset
      * @var array
      *
      */
-    public $css = [];
+    public array $css = [];
 
     /**
      * Адреса или пути до JS-файлов.
@@ -27,7 +27,7 @@ abstract class Asset
      * {lib}/script.js
      * @var array
      */
-    public $js = [];
+    public array $js = [];
 
     /**
      * Пути до директорий, которые необходимо опубликовать.
@@ -37,19 +37,19 @@ abstract class Asset
      * @var array
      * @see $css, $js
      */
-    public $publish = [];
+    public array $publish = [];
 
     /**
      * Названия классов asset, от которых зависит данный.
      * @var array
      */
-    public $depends = [];
+    public array $depends = [];
 
     /**
      * Компонент управляющий asset.
      * @var AssetManager $assetManager
      */
-    private $assetManager;
+    private AssetManager $assetManager;
 
     /**
      * Адреса опубликованных asset и их плейсхолдеры.
@@ -57,7 +57,7 @@ abstract class Asset
      * Значение - адрес ресурса.
      * @var array
      */
-    private $placeholders = [];
+    private array $placeholders = [];
 
     /**
      * @param AssetManager $assetManager - компонент управляющий asset
@@ -72,7 +72,7 @@ abstract class Asset
      * Регистрация текущего asset.
      * @return static
      */
-    public static function register(): self
+    public static function register(): static
     {
         return Twin::app()->asset->register(static::class);
     }
@@ -130,11 +130,11 @@ abstract class Asset
     /**
      * Подготовить CSS-тег для вывода в шаблон.
      * @param Tag $tag - исходный тег LINK
-     * @param string|int $key - ключ, указанный в массиве $this->css
+     * @param int|string $key - ключ, указанный в массиве $this->css
      * @return Tag
      * @see $css
      */
-    protected function prepareCss(Tag $tag, $key): Tag
+    protected function prepareCss(Tag $tag, int|string $key): Tag
     {
         return $tag;
     }
@@ -142,11 +142,11 @@ abstract class Asset
     /**
      * Подготовить JS-тег для вывода в шаблон.
      * @param Tag $tag - исходный тег SCRIPT
-     * @param string|int $key - ключ, указанный в массиве $this->js
+     * @param int|string $key - ключ, указанный в массиве $this->js
      * @return Tag
      * @see $js
      */
-    protected function prepareJs(Tag $tag, $key): Tag
+    protected function prepareJs(Tag $tag, int|string $key): Tag
     {
         return $tag;
     }
@@ -157,7 +157,7 @@ abstract class Asset
      * @return string|bool - FALSE в случае отсутствия директории
      * @todo: если изменились вложенные директории, то дата изменения род. директории не изменится
      */
-    protected function hash(string $path)
+    protected function hash(string $path): bool|string
     {
         if (!is_dir($path)) {
             return false;
@@ -184,7 +184,7 @@ abstract class Asset
      * @throws Exception
      * @see $placeholders
      */
-    protected function publish()
+    protected function publish(): void
     {
         foreach ($this->publish as $name => $path) {
             $from = Alias::get($path);

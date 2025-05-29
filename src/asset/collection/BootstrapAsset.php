@@ -10,28 +10,28 @@ class BootstrapAsset extends Asset
     /**
      * {@inheritdoc}
      */
-    public $css = [
+    public array $css = [
         'main' => 'https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css',
     ];
 
     /**
      * {@inheritdoc}
      */
-    public $js = [
+    public array $js = [
         'main' => 'https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js',
     ];
 
     /**
      * {@inheritdoc}
      */
-    public $depends = [
+    public array $depends = [
         JqueryAsset::class,
     ];
 
     /**
      * {@inheritdoc}
      */
-    protected function prepareCss(Tag $tag, $key): Tag
+    protected function prepareCss(Tag $tag, int|string $key): Tag
     {
         if ($key == 'main') {
             $tag->integrity = 'sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu';
@@ -43,7 +43,7 @@ class BootstrapAsset extends Asset
     /**
      * {@inheritdoc}
      */
-    protected function prepareJs(Tag $tag, $key): Tag
+    protected function prepareJs(Tag $tag, int|string $key): Tag
     {
         if ($key == 'main') {
             $tag->integrity = 'sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd';

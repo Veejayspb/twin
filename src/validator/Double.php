@@ -11,8 +11,8 @@ class Double extends Numeric
      */
     public function type(string $attribute): bool
     {
-        $label = $this->form->getLabel($attribute);
-        $value = $this->form->$attribute;
+        $label = $this->model->getLabel($attribute);
+        $value = $this->model->$attribute;
         $this->setMessage("$label не является числом");
         $type = gettype($value);
 
@@ -21,7 +21,7 @@ class Double extends Numeric
         }
 
         if ($type == 'string' && preg_match('/^-?[0-9]+(\.[0-9]+)?$/', $value)) {
-            $this->form->$attribute = (double)$value;
+            $this->model->$attribute = (double)$value;
             return true;
         }
 

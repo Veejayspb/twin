@@ -10,19 +10,19 @@ class NavWidget extends Widget
      * Пункты меню.
      * @var NavItem[]
      */
-    public $items = [];
+    public array $items = [];
 
     /**
      * HTML-атрибуты главного тега UL.
      * @var array
      */
-    public $htmlAttributes = [];
+    public array $htmlAttributes = [];
 
     /**
      * CSS-класс активного пункта меню.
      * @var string
      */
-    public $activeClass = 'active';
+    public string $activeClass = 'active';
 
     /**
      * {@inheritdoc}

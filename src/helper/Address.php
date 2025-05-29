@@ -17,31 +17,31 @@ class Address
      * HTTP/HTTPS.
      * @var bool
      */
-    protected $ssl = false;
+    protected bool $ssl = false;
 
     /**
      * Имя домена.
-     * @var string|null
+     * @var string
      */
-    protected $domain = '';
+    protected string $domain = '';
 
     /**
      * Относительный путь.
      * @var string
      */
-    protected $path = '';
+    protected string $path = '';
 
     /**
      * GET-параметры.
      * @var array
      */
-    protected $params = [];
+    protected array $params = [];
 
     /**
      * Якорь.
      * @var string
      */
-    protected $anchor = '';
+    protected string $anchor = '';
 
     /**
      * @param string $url - адрес
@@ -76,7 +76,7 @@ class Address
      * @param string $name
      * @param mixed $value
      */
-    public function __set(string $name, $value)
+    public function __set(string $name, mixed $value)
     {
         if ($name == 'params' && is_array($value)) {
             if (array_key_exists('#', $value)) {

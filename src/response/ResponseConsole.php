@@ -6,9 +6,9 @@ class ResponseConsole extends Response
 {
     /**
      * {@inheritdoc}
-     * @param array $data
+     * @param mixed $data
      */
-    public function run($data): string
+    public function run(mixed $data): string
     {
         return implode(PHP_EOL, (array)$data);
     }

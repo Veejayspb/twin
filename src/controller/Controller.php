@@ -14,7 +14,7 @@ abstract class Controller
      * Префикс названия действия.
      * @var string
      */
-    protected $actionPrefix = 'action';
+    protected string $actionPrefix = 'action';
 
     /**
      * Запуск действия
@@ -23,7 +23,7 @@ abstract class Controller
      * @return void
      * @throws Exception
      */
-    public function runAction(string $action, array $params)
+    public function runAction(string $action, array $params): void
     {
         $actionName = $this->getActionName($action);
 
@@ -113,7 +113,7 @@ abstract class Controller
      * @param array $params - параметры
      * @return mixed
      */
-    protected function action(string $action, array $params)
+    protected function action(string $action, array $params): mixed
     {
         $reflection = new ReflectionMethod($this, $action);
         $parameters = $reflection->getParameters();

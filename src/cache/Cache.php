@@ -10,9 +10,9 @@ abstract class Cache extends Component
      * Получить информацию из актуального кеша.
      * @param string $key - ключ
      * @param mixed|null $default - значение по-умолчанию в случае отсутствия кеша
-     * @return mixed|null
+     * @return mixed
      */
-    public function get(string $key, $default = null)
+    public function get(string $key, mixed $default = null): mixed
     {
         $item = $this->extractItem($key);
         if ($item === false) return $default;
@@ -27,7 +27,7 @@ abstract class Cache extends Component
      * @param int $ttl - время жизни в секундах (Time To Live)
      * @return bool
      */
-    public function set(string $key, $value, int $ttl): bool
+    public function set(string $key, mixed $value, int $ttl): bool
     {
         $item = new CacheItem;
         $item->key = $key;
@@ -66,7 +66,7 @@ abstract class Cache extends Component
      * @param string $key - ключ
      * @return CacheItem|bool - FALSE в случае ошибки
      */
-    abstract protected function extractItem(string $key);
+    abstract protected function extractItem(string $key): bool|CacheItem;
 
     /**
      * Сохранить объект с данными кеша в хранилище.

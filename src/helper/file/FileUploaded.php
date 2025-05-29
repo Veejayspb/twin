@@ -17,32 +17,32 @@ class FileUploaded extends File
      * Название файла.
      * @var string - text.txt
      */
-    public $name;
+    public string $name;
 
     /**
      * Тип файла.
      * @var string - text/plain
      */
-    public $type;
+    public string $type;
 
     /**
      * Код ошибки.
      * @var int
      */
-    public $error;
+    public int $error;
 
     /**
      * Размер файла в байтах
      * @var int
      */
-    public $size;
+    public int $size;
 
     /**
      * Инстанцировать объект и заполнить свойства.
      * @param array $properties - свойства объекта
      * @return static
      */
-    public static function instance(array $properties): self
+    public static function instance(array $properties): static
     {
         $path = $properties['tmp_name'] ?? '';
         $file = new static($path);

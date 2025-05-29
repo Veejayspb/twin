@@ -8,7 +8,7 @@ class Exception extends \Exception
      * Сообщения об ошибках по-умолчанию.
      * @var array
      */
-    protected $errors = [
+    protected array $errors = [
         300 => 'Multiple choices',
         301 => 'Moved permanently',
         302 => 'Moved temporarily',

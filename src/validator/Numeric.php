@@ -8,13 +8,13 @@ abstract class Numeric extends Range
      * Минимальное значение.
      * @var int|null
      */
-    public $min;
+    public ?int $min;
 
     /**
      * Максимальное значение.
      * @var int|null
      */
-    public $max;
+    public ?int $max;
 
     /**
      * Ниже минимального значения.
@@ -27,9 +27,9 @@ abstract class Numeric extends Range
             return true;
         }
 
-        $label = $this->form->getLabel($attribute);
+        $label = $this->model->getLabel($attribute);
         $this->setMessage("$label должен быть больше или равен $this->min");
-        return $this->min <= $this->form->$attribute;
+        return $this->min <= $this->model->$attribute;
     }
 
     /**
@@ -43,8 +43,8 @@ abstract class Numeric extends Range
             return true;
         }
 
-        $label = $this->form->getLabel($attribute);
+        $label = $this->model->getLabel($attribute);
         $this->setMessage("$label должен быть меньше или равен $this->max");
-        return $this->form->$attribute <= $this->max;
+        return $this->model->$attribute <= $this->max;
     }
 }

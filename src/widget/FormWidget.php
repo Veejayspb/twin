@@ -13,19 +13,19 @@ class FormWidget extends Widget
      * Адрес отправки формы.
      * @var string
      */
-    public $action = '';
+    public string $action = '';
 
     /**
      * Метод отправки формы.
      * @var string
      */
-    public $method = 'post';
+    public string $method = 'post';
 
     /**
      * HTML-атрибуты.
      * @var array
      */
-    public $htmlAttributes = [];
+    public array $htmlAttributes = [];
 
     /**
      * {@inheritdoc}

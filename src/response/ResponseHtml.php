@@ -7,7 +7,7 @@ class ResponseHtml extends Response
     /**
      * {@inheritdoc}
      */
-    protected $headers = [
+    protected array $headers = [
         'Content-type' => 'text/html',
     ];
 }

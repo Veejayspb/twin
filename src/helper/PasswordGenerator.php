@@ -15,7 +15,7 @@ class PasswordGenerator
      * значение - список символов в строку
      * @var array
      */
-    protected $collections = [];
+    protected array $collections = [];
 
     public function __construct()
     {
@@ -73,7 +73,7 @@ class PasswordGenerator
      * @param string $collection - список символов в строку
      * @return static
      */
-    public function addCollection(string $collection): self
+    public function addCollection(string $collection): static
     {
         $hash = $this->getCollectionHash($collection);
         $this->collections[$hash] = $collection;
@@ -85,7 +85,7 @@ class PasswordGenerator
      * @param string $collection - список символов в строку
      * @return static
      */
-    public function removeCollection(string $collection): self
+    public function removeCollection(string $collection): static
     {
         $hash = $this->getCollectionHash($collection);
 
@@ -100,7 +100,7 @@ class PasswordGenerator
      * Очистить список коллекций.
      * @return static
      */
-    public function clearCollections(): self
+    public function clearCollections(): static
     {
         $this->collections = [];
         return $this;

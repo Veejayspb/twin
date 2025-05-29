@@ -14,18 +14,18 @@ class MigrationManager extends Component
      * Алиас пути директории с файлами миграций.
      * @var string
      */
-    public $alias = '@self/migration';
+    public string $alias = '@self/migration';
 
     /**
      * Название таблицы с миграциями.
      * @var string
      */
-    public $table = 'migration';
+    public string $table = 'migration';
 
     /**
      * {@inheritdoc}
      */
-    protected $_requiredProperties = ['alias', 'table'];
+    protected array $_requiredProperties = ['alias', 'table'];
 
     /**
      * Создать новую миграцию.

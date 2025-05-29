@@ -19,7 +19,7 @@ class ConfigConstructor
      * Данные конфига.
      * @var array
      */
-    protected $data;
+    protected array $data;
 
     /**
      * @param array $data
@@ -56,7 +56,7 @@ class ConfigConstructor
      * Вернуть объект с родительским конфигом.
      * @return static|null
      */
-    public function getParent(): ?self
+    public function getParent(): ?static
     {
         if (!array_key_exists('parent', $this->data) || !is_string($this->data['parent'])) {
             return null;

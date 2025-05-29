@@ -10,14 +10,14 @@ class IcofontAsset extends Asset
     /**
      * {@inheritdoc}
      */
-    public $css = [
+    public array $css = [
         '{main}/icofont/icofont.min.css',
     ];
 
     /**
      * {@inheritdoc}
      */
-    public $publish = [
+    public array $publish = [
         'main' => '@twin/asset/collection/src',
     ];
 

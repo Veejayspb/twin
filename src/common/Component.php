@@ -18,7 +18,7 @@ abstract class Component
      * Список обязательных для заполнения свойств.
      * @var array
      */
-    protected $_requiredProperties = [];
+    protected array $_requiredProperties = [];
 
     /**
      * @param array $properties - свойства объекта
@@ -60,7 +60,7 @@ abstract class Component
      * @param mixed $value
      * @return bool
      */
-    protected function isEmpty($value): bool
+    protected function isEmpty(mixed $value): bool
     {
         return in_array($value, static::EMPTY_VALUES, true);
     }

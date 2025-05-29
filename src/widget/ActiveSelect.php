@@ -17,7 +17,7 @@ class ActiveSelect extends ActiveWidget
      * Список опций.
      * @var array
      */
-    public $options = [];
+    public array $options = [];
 
     /**
      * {@inheritdoc}
@@ -42,21 +42,21 @@ class ActiveSelectAsset extends Asset
     /**
      * {@inheritdoc}
      */
-    public $js = [
+    public array $js = [
         '{main}/ActiveSelect/script.js',
     ];
 
     /**
      * {@inheritdoc}
      */
-    public $publish = [
+    public array $publish = [
         'main' => '@twin/widget/src',
     ];
 
     /**
      * {@inheritdoc}
      */
-    public $depends = [
+    public array $depends = [
         JqueryAsset::class,
     ];
 }

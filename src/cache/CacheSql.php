@@ -2,7 +2,6 @@
 
 namespace twin\cache;
 
-use twin\common\Exception;
 use twin\db\sql\Sql;
 use twin\Twin;
 
@@ -12,18 +11,18 @@ class CacheSql extends Cache
      * Название компонента с БД SQL.
      * @var string
      */
-    public $db;
+    public string $db;
 
     /**
      * Название таблицы БД.
      * @var string
      */
-    public $table = 'cache';
+    public string $table = 'cache';
 
     /**
      * {@inheritdoc}
      */
-    protected $_requiredProperties = ['db', 'table'];
+    protected array $_requiredProperties = ['db', 'table'];
 
     /**
      * Создать таблицу для кеша в БД.
@@ -42,7 +41,7 @@ class CacheSql extends Cache
     /**
      * {@inheritdoc}
      */
-    protected function extractItem(string $key)
+    protected function extractItem(string $key): bool|CacheItem
     {
         $item = new CacheItem();
         $item->key = $key;

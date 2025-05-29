@@ -12,7 +12,7 @@ class MigrationController extends Controller
     /**
      * {@inheritdoc}
      */
-    protected $help = [
+    protected array $help = [
         'help - reference',
         'create {name} - create new migration',
         'status - show list of new migrations',

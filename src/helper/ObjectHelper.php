@@ -11,7 +11,7 @@ class ObjectHelper
      * Исходный объект.
      * @var object
      */
-    protected $object;
+    protected object $object;
 
     /**
      * @param object $object

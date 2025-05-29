@@ -11,8 +11,8 @@ class Integer extends Numeric
      */
     public function type(string $attribute): bool
     {
-        $label = $this->form->getLabel($attribute);
-        $value = $this->form->$attribute;
+        $label = $this->model->getLabel($attribute);
+        $value = $this->model->$attribute;
         $this->setMessage("$label не является целым числом");
         $type = gettype($value);
 
@@ -21,7 +21,7 @@ class Integer extends Numeric
         }
 
         if ($type == 'string' && preg_match('/^-?[0-9]+$/', $value)) {
-            $this->form->$attribute = (int)$value;
+            $this->model->$attribute = (int)$value;
             return true;
         }
 

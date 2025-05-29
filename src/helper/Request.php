@@ -16,43 +16,43 @@ class Request
      * Протокол.
      * @var string - http/https
      */
-    public static $scheme;
+    public static string $scheme;
 
     /**
      * Адрес хоста.
      * @var string - domain.ru
      */
-    public static $host;
+    public static string $host;
 
     /**
      * Текущий адрес.
      * @var string - /index.php?id=1
      */
-    public static $url;
+    public static string $url;
 
     /**
      * IP адрес.
      * @var string
      */
-    public static $ip;
+    public static string $ip;
 
     /**
      * Метод.
      * @var string - GET, POST, PUT, DELETE
      */
-    public static $method;
+    public static string $method;
 
     /**
      * Заголовки.
      * @var array
      */
-    public static $headers = [];
+    public static array $headers = [];
 
     /**
      * Время запроса.
      * @var int
      */
-    public static $timestamp;
+    public static int $timestamp;
 
     /**
      * Проверка на AJAX-запрос.
@@ -84,9 +84,9 @@ class Request
      * Вернуть значение GET-параметра.
      * @param string $name - название параметра
      * @param mixed $default - значение по-умолчанию
-     * @return mixed|null
+     * @return mixed
      */
-    public static function get(string $name, $default = null)
+    public static function get(string $name, mixed $default = null): mixed
     {
         return $_GET[$name] ?? $default;
     }
@@ -95,9 +95,9 @@ class Request
      * Вернуть значение POST-параметра.
      * @param string $name - название параметра
      * @param mixed $default - значение по-умолчанию
-     * @return mixed|null
+     * @return mixed
      */
-    public static function post(string $name, $default = null)
+    public static function post(string $name, mixed $default = null): mixed
     {
         return $_POST[$name] ?? $default;
     }
@@ -106,9 +106,9 @@ class Request
      * Вернуть значение REQUEST-параметра.
      * @param string $name - название параметра
      * @param mixed $default - значение по-умолчанию
-     * @return mixed|null
+     * @return mixed
      */
-    public static function request(string $name, $default = null)
+    public static function request(string $name, mixed $default = null): mixed
     {
         return $_REQUEST[$name] ?? $default;
     }

@@ -8,19 +8,19 @@ final class CacheItem
      * Ключ.
      * @var string
      */
-    public $key;
+    public string $key;
 
     /**
      * Данные кеша.
      * @var mixed
      */
-    public $data;
+    public mixed $data;
 
     /**
      * Дата истечения кеша.
      * @var int
      */
-    public $expires = 0;
+    public int $expires = 0;
 
     /**
      * @param array $properties - свойства объекта

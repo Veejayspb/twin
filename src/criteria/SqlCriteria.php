@@ -20,31 +20,31 @@ class SqlCriteria extends Criteria
      * Поля для выборки.
      * @var array - если пустой массив, то выбираются все поля
      */
-    public $select = [];
+    public array $select = [];
 
     /**
      * Присоединение других таблиц.
      * @var array
      */
-    public $join = [];
+    public array $join = [];
 
     /**
      * Строка с условиями.
      * @var string
      */
-    public $where = '';
+    public string $where = '';
 
     /**
      * Группировка по полям.
      * @var array
      */
-    public $group = [];
+    public array $group = [];
 
     /**
      * Параметры.
      * @var array
      */
-    public $params = [];
+    public array $params = [];
 
     /**
      * {@inheritdoc}
@@ -72,7 +72,7 @@ class SqlCriteria extends Criteria
         $result[] = "FROM `$this->from`";
 
         if ($this->join) {
-            $result[] = implode($this->join, ' ');
+            $result[] = implode(' ', $this->join);
         }
 
         if ($this->where) {

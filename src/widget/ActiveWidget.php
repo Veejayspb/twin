@@ -15,25 +15,25 @@ abstract class ActiveWidget extends Widget
      * Адрес отправки запроса.
      * @var string
      */
-    public $url;
+    public string $url;
 
     /**
      * Фиксированные POST-параметры.
      * @var array
      */
-    public $params = [];
+    public array $params = [];
 
     /**
      * Текущее состояние виджета.
      * @var mixed
      */
-    public $value;
+    public mixed $value;
 
     /**
      * HTML-атрибуты.
      * @var array
      */
-    public $htmlAttributes = [];
+    public array $htmlAttributes = [];
 
     /**
      * Сформировать итоговый массив HTML-атрибутов.
@@ -53,7 +53,7 @@ abstract class ActiveWidget extends Widget
      * @param mixed $value - новое значение
      * @return string
      */
-    public static function response($value): string
+    public static function response(mixed $value): string
     {
         header('Content-Type: application/json');
         return json_encode(['value' => $value]);

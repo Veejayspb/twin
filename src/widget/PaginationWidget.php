@@ -34,7 +34,7 @@ class PaginationWidget extends NavWidget
     /**
      * {@inheritdoc}
      */
-    public $htmlAttributes = [
+    public array $htmlAttributes = [
         'class' => 'pagination',
     ];
 

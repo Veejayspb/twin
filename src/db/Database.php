@@ -13,7 +13,7 @@ abstract class Database extends Component
      * Название БД.
      * @var string
      */
-    public $dbname;
+    public string $dbname;
 
     /**
      * {@inheritdoc}

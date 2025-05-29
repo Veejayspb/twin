@@ -10,19 +10,19 @@ class Exists extends Validator
      * Объект для работы с БД.
      * @var Database
      */
-    public $db;
+    public Database $db;
 
     /**
      * Название родительской таблицы.
      * @var string
      */
-    public $table;
+    public string $table;
 
     /**
      * Условия для поиска по родительской таблице.
      * @var array
      */
-    public $conditions = [];
+    public array $conditions = [];
 
     /**
      * Имеется ли родительская запись.
@@ -40,7 +40,7 @@ class Exists extends Validator
     /**
      * {@inheritdoc}
      */
-    protected function run()
+    protected function run(): void
     {
         // Применять валидатор только к первому атрибуту
         $attribute = current($this->attributes);

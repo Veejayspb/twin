@@ -20,14 +20,14 @@ class Boolean extends Validator
      */
     public function type(string $attribute): bool
     {
-        $value = $this->form->$attribute;
+        $value = $this->model->$attribute;
         $this->setMessage('Должно равняться TRUE или FALSE');
 
         if (!in_array($value, static::ALLOWED_VALUES, true)) {
             return false;
         }
 
-        $this->form->$attribute = (bool)$value;
+        $this->model->$attribute = (bool)$value;
         return true;
     }
 }

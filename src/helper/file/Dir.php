@@ -36,7 +36,7 @@ class Dir extends AbstractFile
      * {@inheritdoc}
      * @return static|bool
      */
-    public function copy(string $path, bool $force = false)
+    public function copy(string $path, bool $force = false): bool|static
     {
         if (!file_exists($this->path)) {
             return false;
@@ -186,7 +186,7 @@ class Dir extends AbstractFile
      * @param bool $force - удалить одноименный файл (если сущ-ет)
      * @return static|false
      */
-    public function createDirectory(string $name, bool $force = false)
+    public function createDirectory(string $name, bool $force = false): bool|static
     {
         $path = $this->path . DIRECTORY_SEPARATOR . $name;
 
@@ -218,7 +218,7 @@ class Dir extends AbstractFile
      * @param bool $force - перезаписать одноименную директорию/файл (если сущ-ет)
      * @return File|false
      */
-    public function createFile(string $name, string $content, bool $force = false)
+    public function createFile(string $name, string $content, bool $force = false): bool|File
     {
         $path = $this->path . DIRECTORY_SEPARATOR . $name;
 

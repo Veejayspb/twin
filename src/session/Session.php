@@ -16,24 +16,24 @@ class Session extends Component
      * Автоматический старт сессии при запуске приложения.
      * @var bool
      */
-    public $autoStart = true;
+    public bool $autoStart = true;
 
     /**
      * Время жизни куки сессии.
      * @var int
      */
-    public $lifeTime = 0;
+    public int $lifeTime = 0;
 
     /**
      * Путь/алиас директории для сохранения файлов с данными сессии.
      * @var string|null
      */
-    public $savePath;
+    public ?string $savePath;
 
     /**
      * {@inheritdoc}
      */
-    protected $_requiredProperties = ['autoStart', 'lifeTime'];
+    protected array $_requiredProperties = ['autoStart', 'lifeTime'];
 
     /**
      * {@inheritdoc}
@@ -123,7 +123,7 @@ class Session extends Component
      * @param mixed $value - значение
      * @return void
      */
-    public function set(string $name, $value): void
+    public function set(string $name, mixed $value): void
     {
         $name = $this->getName($name);
         $_SESSION[$name] = $value;
@@ -132,10 +132,10 @@ class Session extends Component
     /**
      * Вернуть параметр из сессии.
      * @param string $name - название параметра
-     * @param mixed|null $default - значение по-умолчанию
-     * @return mixed|null - NULL, если параметр отсутствует
+     * @param mixed $default - значение по-умолчанию
+     * @return mixed - NULL, если параметр отсутствует
      */
-    public function get(string $name, $default = null)
+    public function get(string $name, mixed $default = null): mixed
     {
         $name = $this->getName($name);
         return $_SESSION[$name] ?? $default;

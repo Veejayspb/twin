@@ -17,7 +17,7 @@ class FileType
      * Данные по расширениям и mime-типам.
      * @var array
      */
-    protected static $data;
+    protected static array $data;
 
     /**
      * Вернуть все расширения, соответствующие указанному mime-типу.

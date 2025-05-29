@@ -14,54 +14,54 @@ class RouteManager extends Component
      * Роут главной страницы.
      * @var string
      */
-    public $home = '/main/index';
+    public string $home = '/main/index';
 
     /**
      * Роут страницы login.
      * @var string
      */
-    public $login = '/auth/login';
+    public string $login = '/auth/login';
 
     /**
      * Роут страницы logout.
      * @var string
      */
-    public $logout = '/auth/logout';
+    public string $logout = '/auth/logout';
 
     /**
      * Роут страницы ошибки.
      * @var string
      */
-    public $error = '/main/error';
+    public string $error = '/main/error';
 
     /**
      * Неймспейсы контроллеров.
      * @var array
      */
-    public $namespaces = [];
+    public array $namespaces = [];
 
     /**
      * Правила роутинга.
      * @var array
      */
-    public $rules = [];
+    public array $rules = [];
 
     /**
      * Адрес домена.
      * @var string - https://domain.ru
      */
-    public $domain = '';
+    public string $domain = '';
 
     /**
      * Постфикс названия контроллера.
      * @var string
      */
-    public $controllerPostfix = 'Controller';
+    public string $controllerPostfix = 'Controller';
 
     /**
      * {@inheritdoc}
      */
-    protected $_requiredProperties = ['home', 'login', 'logout', 'error', 'namespaces', 'rules'];
+    protected array $_requiredProperties = ['home', 'login', 'logout', 'error', 'namespaces', 'rules'];
 
     /**
      * Вернуть неймспейс контроллеров указанного модуля.
@@ -91,7 +91,7 @@ class RouteManager extends Component
      * @param string $url - адрес
      * @return Route|bool - FALSE в случае ошибки
      */
-    public function parseUrl(string $url)
+    public function parseUrl(string $url): bool|Route
     {
         return $this->compareRoutes(function (RuleInterface $rule) use ($url) {
             return $rule->parseUrl($url);
@@ -102,9 +102,9 @@ class RouteManager extends Component
      * Создать адрес.
      * @param Route $route - роут
      * @param bool $absolute - абсолютный адрес
-     * @return string|bool
+     * @return bool|string|Route
      */
-    public function createUrl(Route $route, bool $absolute = false)
+    public function createUrl(Route $route, bool $absolute = false): bool|string|Route
     {
         $url = $this->compareRoutes(function (RuleInterface $rule) use ($route) {
             return $rule->createUrl($route);
@@ -186,7 +186,7 @@ class RouteManager extends Component
      * @return Route|bool - FALSE, если ни одно правило не соответствует
      * @throws Exception
      */
-    private function compareRoutes(callable $func)
+    private function compareRoutes(callable $func): bool|Route
     {
         foreach ($this->rules as $pattern => $route) {
             $className = $this->getRuleClass($route);

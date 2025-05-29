@@ -12,30 +12,30 @@ class AssetManager extends Component
      * Путь до директории с asset доступной из WEB.
      * @var string
      */
-    public $publicationPath = '@public/asset';
+    public string $publicationPath = '@public/asset';
 
     /**
      * Адрес директории с asset доступной из WEB.
      * @var string
      */
-    public $webPath = '/asset';
+    public string $webPath = '/asset';
 
     /**
      * Принудительная публикация asset.
      * @var bool
      */
-    public $force = false;
+    public bool $force = false;
 
     /**
      * Добавленные asset.
      * @var Asset[]
      */
-    protected $assets = [];
+    protected array $assets = [];
 
     /**
      * {@inheritdoc}
      */
-    protected $_requiredProperties = ['publicationPath', 'webPath'];
+    protected array $_requiredProperties = ['publicationPath', 'webPath'];
 
     /**
      * Зарегистрировать asset.
@@ -81,7 +81,7 @@ class AssetManager extends Component
      * Очистить список asset.
      * @return void
      */
-    public function clear()
+    public function clear(): void
     {
         $this->assets = [];
     }

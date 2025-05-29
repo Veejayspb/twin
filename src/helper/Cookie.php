@@ -37,7 +37,7 @@ class Cookie
      * @param mixed|null $default - значение по-умолчанию
      * @return string|null
      */
-    public static function get(string $name, $default = null)
+    public static function get(string $name, mixed $default = null): ?string
     {
         $name = static::getName($name);
         return $_COOKIE[$name] ?? $default;

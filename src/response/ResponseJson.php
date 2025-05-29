@@ -7,15 +7,15 @@ class ResponseJson extends Response
     /**
      * {@inheritdoc}
      */
-    protected $headers = [
+    protected array $headers = [
         'Content-type' => 'application/json',
     ];
 
     /**
      * {@inheritdoc}
-     * @param array $data
+     * @param mixed $data
      */
-    public function run($data): string
+    public function run(mixed $data): string
     {
         $data = (array)$data;
         return json_encode($data);

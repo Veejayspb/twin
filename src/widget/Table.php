@@ -10,7 +10,7 @@ class Table extends Widget
      * Массив данных для вывода.
      * @var array
      */
-    public $items = [];
+    public array $items = [];
 
     /**
      * Список столбцов.
@@ -18,13 +18,13 @@ class Table extends Widget
      * значение - коллбэк функция, которая получает через параметр элемент массива $rows
      * @var array
      */
-    public $columns = [];
+    public array $columns = [];
 
     /**
      * Сопоставление названий столбцов и заголовков.
      * @var array
      */
-    public $labels = [];
+    public array $labels = [];
 
     /**
      * Ширина столбцов.
@@ -32,13 +32,13 @@ class Table extends Widget
      * значение - значение ширины (150, 20%)
      * @var array
      */
-    public $width = [];
+    public array $width = [];
 
     /**
      * HTML-атрибуты таблицы.
      * @var array
      */
-    public $htmlAttributes = [];
+    public array $htmlAttributes = [];
 
     /**
      * Коллбэк-функция, определяющая атрибуты элементов TR.
@@ -137,7 +137,7 @@ class Table extends Widget
      * @param int $index
      * @return string
      */
-    protected function row($item, int $index): string
+    protected function row(mixed $item, int $index): string
     {
         $result = [];
         $trAttributes = is_callable($this->trAttributes) ? call_user_func_array($this->trAttributes, [$item, $index]) : [];

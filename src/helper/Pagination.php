@@ -24,19 +24,19 @@ class Pagination
      * Общее кол-во элементов.
      * @var int
      */
-    protected $total;
+    protected int $total;
 
     /**
      * Номер страницы.
      * @var int
      */
-    protected $page = 1;
+    protected int $page = 1;
 
     /**
      * Лимит элементов на одну страницу.
      * @var int
      */
-    protected $size = self::DEFAULT_SIZE;
+    protected int $size = self::DEFAULT_SIZE;
 
     /**
      * @param int $total
@@ -76,7 +76,7 @@ class Pagination
      * @param mixed $value
      * @return void
      */
-    public function __set(string $name, $value)
+    public function __set(string $name, mixed $value)
     {
         $parameters = [
             'total',
@@ -124,7 +124,7 @@ class Pagination
      * @param int $value
      * @return static
      */
-    protected function setTotal(int $value): self
+    protected function setTotal(int $value): static
     {
         $this->total = $value <= 0 ? 0 : $value;
         return $this;
@@ -135,7 +135,7 @@ class Pagination
      * @param int $value
      * @return static
      */
-    protected function setPage(int $value): self
+    protected function setPage(int $value): static
     {
         $this->page = $value <= 1 ? 1 : $value;
         return $this;
@@ -146,7 +146,7 @@ class Pagination
      * @param int $value
      * @return static
      */
-    protected function setSize(int $value): self
+    protected function setSize(int $value): static
     {
         $this->size = $value <= 1 ? 1 : $value;
         return $this;

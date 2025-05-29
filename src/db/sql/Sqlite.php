@@ -16,17 +16,17 @@ class Sqlite extends Sql
      * Путь до директории с файлами БД.
      * @var string
      */
-    public $alias = '@runtime/db/sqlite';
+    public string $alias = '@runtime/db/sqlite';
 
     /**
      * {@inheritdoc}
      */
-    protected $_requiredProperties = ['dbname', 'path'];
+    protected array $_requiredProperties = ['dbname', 'path'];
 
     /**
      * {@inheritdoc}
      */
-    public function getTables()
+    public function getTables(): bool|array
     {
         $sql = "SELECT `name` FROM `sqlite_master` WHERE type='table' ORDER BY 'name'";
         $items = $this->query($sql);
@@ -65,7 +65,7 @@ class Sqlite extends Sql
     /**
      * {@inheridoc}
      */
-    public function getAutoIncrement(string $table)
+    public function getAutoIncrement(string $table): bool|string
     {
         $items = $this->query("PRAGMA table_info ('$table')");
 

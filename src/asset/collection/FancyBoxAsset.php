@@ -9,21 +9,21 @@ class FancyBoxAsset extends Asset
     /**
      * {@inheritdoc}
      */
-    public $css = [
+    public array $css = [
         'https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css',
     ];
 
     /**
      * {@inheritdoc}
      */
-    public $js = [
+    public array $js = [
         'https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js',
     ];
 
     /**
      * {@inheritdoc}
      */
-    public $depends = [
+    public array $depends = [
         JqueryAsset::class,
     ];
 }

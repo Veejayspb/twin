@@ -2,7 +2,6 @@
 
 namespace twin\widget;
 
-use twin\controller\Controller;
 use twin\helper\Html;
 use twin\helper\Tag;
 use twin\route\RouteManager;
@@ -14,46 +13,46 @@ class NavItem extends Widget
      * Ярлык.
      * @var string
      */
-    public $label = '';
+    public string $label = '';
 
     /**
      * Адрес ссылки.
      * Если не указано, ссылка не формируется.
      * @var string|null
      */
-    public $url;
+    public ?string $url;
 
     /**
      * Видимость пункта.
      * @var bool
      */
-    public $visible = true;
+    public bool $visible = true;
 
     /**
      * Активен ли пункт.
      * Если не указано, то выставляется автоматически.
      * @var bool|null
      */
-    public $active;
+    public ?bool $active;
 
     /**
      * Дополнительные данные, вставляемые в конце пункта.
      * Используется для создания вложенных пунктов.
      * @var string
      */
-    public $extra = '';
+    public string $extra = '';
 
     /**
      * HTML-атрибуты пункта меню <li>...</li>.
      * @var array
      */
-    public $htmlAttributes = [];
+    public array $htmlAttributes = [];
 
     /**
      * HTML-атрибуты ссылки <a>...</a>.
      * @var array
      */
-    public $linkAttributes = [];
+    public array $linkAttributes = [];
 
     /**
      * {@inheritdoc}

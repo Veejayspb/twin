@@ -9,12 +9,12 @@ interface RuleInterface
      * @param string $url - адрес
      * @return Route|bool - FALSE, если адрес не соответствует текущему правилу
      */
-    public function parseUrl(string $url);
+    public function parseUrl(string $url): bool|Route;
 
     /**
      * Создание адреса.
      * @param Route $route - объект роута
      * @return string|bool - FALSE, если не удалось создать адрес
      */
-    public function createUrl(Route $route);
+    public function createUrl(Route $route): bool|string;
 }

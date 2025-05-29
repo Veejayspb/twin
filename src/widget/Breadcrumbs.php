@@ -10,25 +10,25 @@ class Breadcrumbs extends Widget
      * Тег контейнера.
      * @var string
      */
-    public $tagContainer = 'ol';
+    public string $tagContainer = 'ol';
 
     /**
      * Тег пункта.
      * @var string
      */
-    public $tagItem = 'li';
+    public string $tagItem = 'li';
 
     /**
      * Класс активного пункта.
      * @var string
      */
-    public $activeClass = 'active';
+    public string $activeClass = 'active';
 
     /**
      * HTML-атрибуты контейнера.
      * @var array
      */
-    public $htmlAttributes = [
+    public array $htmlAttributes = [
         'class' => 'breadcrumb',
     ];
 
@@ -38,7 +38,7 @@ class Breadcrumbs extends Widget
      * Ключ - название пункта
      * Значение - url страницы
      */
-    public $items = [
+    public array $items = [
         #'Главная' => '/',
     ];
 
@@ -76,7 +76,7 @@ class Breadcrumbs extends Widget
      * @param string|null $url - адрес
      * @return string
      */
-    private function renderItem(string $label, $url = null): string
+    private function renderItem(string $label, ?string $url = null): string
     {
         return Html::tag($this->tagItem, [
             'class' => $url === null ? $this->activeClass : null,
@@ -89,7 +89,7 @@ class Breadcrumbs extends Widget
      * @param string|null $url - адрес
      * @return string
      */
-    private function a(string $label, $url = null): string
+    private function a(string $label, ?string $url = null): string
     {
         if ($url === null) {
             return $label;

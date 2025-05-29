@@ -20,23 +20,23 @@ class Mysql extends Sql
      * Имя пользователя.
      * @var string
      */
-    public $username;
+    public string $username;
 
     /**
      * Пароль.
      * @var string
      */
-    public $password;
+    public string $password;
 
     /**
      * {@inheritdoc}
      */
-    protected $_requiredProperties = ['dbname', 'username', 'password'];
+    protected array $_requiredProperties = ['dbname', 'username', 'password'];
 
     /**
      * {@inheritdoc}
      */
-    public function getTables()
+    public function getTables(): bool|array
     {
         $sql = 'SHOW TABLES';
         $items = $this->query($sql);
@@ -72,7 +72,7 @@ class Mysql extends Sql
     /**
      * {@inheridoc}
      */
-    public function getAutoIncrement(string $table)
+    public function getAutoIncrement(string $table): bool|string
     {
         $items = $this->query("SHOW FULL COLUMNS FROM `$table`");
 

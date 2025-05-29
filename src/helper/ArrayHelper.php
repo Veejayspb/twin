@@ -49,7 +49,7 @@ class ArrayHelper
      * @param array $search - искомые ключи и значения
      * @return int|string|bool - FALSE, если индекс не найден
      */
-    public static function findByParams(array $items, array $search)
+    public static function findByParams(array $items, array $search): bool|int|string
     {
         foreach ($items as $i => $item) {
             $item = (array)$item;

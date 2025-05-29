@@ -19,7 +19,7 @@ abstract class Sql extends Database
      * Идентификатор соединения.
      * @var PDO
      */
-    protected $connection;
+    protected PDO $connection;
 
     /**
      * Осуществить запрос в БД и вернуть ответ.
@@ -27,7 +27,7 @@ abstract class Sql extends Database
      * @param array $params - параметры
      * @return array|bool - FALSE в случае ошибки
      */
-    public function query(string $sql, array $params = [])
+    public function query(string $sql, array $params = []): bool|array
     {
         $statement = $this->connection->prepare($sql);
 
@@ -110,7 +110,7 @@ abstract class Sql extends Database
      * @param array $data - данные
      * @return string|bool - ID новой записи, либо FALSE в случае ошибки
      */
-    public function insert(string $table, array $data)
+    public function insert(string $table, array $data): bool|string
     {
         if (empty($data)) {
             return false;
@@ -312,7 +312,7 @@ abstract class Sql extends Database
      * @param string $table - название таблицы
      * @return string|bool - FALSE в случае отсутствия автоинкремента, либо ошибки
      */
-    abstract public function getAutoIncrement(string $table);
+    abstract public function getAutoIncrement(string $table): bool|string;
 
     /**
      * Начать транзакцию.
@@ -324,5 +324,5 @@ abstract class Sql extends Database
      * Список таблиц.
      * @return array|bool - FALSE в случае ошибки
      */
-    abstract public function getTables();
+    abstract public function getTables(): bool|array;
 }

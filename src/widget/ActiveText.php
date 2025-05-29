@@ -46,21 +46,21 @@ class ActiveTextAsset extends Asset
     /**
      * {@inheritdoc}
      */
-    public $js = [
+    public array $js = [
         '{main}/ActiveText/script.js',
     ];
 
     /**
      * {@inheritdoc}
      */
-    public $publish = [
+    public array $publish = [
         'main' => '@twin/widget/src',
     ];
 
     /**
      * {@inheritdoc}
      */
-    public $depends = [
+    public array $depends = [
         JqueryAsset::class,
     ];
 }

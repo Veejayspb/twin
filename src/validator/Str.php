@@ -8,19 +8,19 @@ class Str extends Range
      * Минимальная длина
      * @var int|null
      */
-    public $min;
+    public ?int $min;
 
     /**
      * Максимальная длина.
      * @var int|null
      */
-    public $max;
+    public ?int $max;
 
     /**
      * Регулярное выражение для сравнения.
      * @var string|null
      */
-    public $pattern;
+    public ?string $pattern;
 
     /**
      * Является ли строкой.
@@ -29,8 +29,8 @@ class Str extends Range
      */
     public function type(string $attribute): bool
     {
-        $label = $this->form->getLabel($attribute);
-        $value = $this->form->$attribute;
+        $label = $this->model->getLabel($attribute);
+        $value = $this->model->$attribute;
         $type = gettype($value);
         $this->setMessage("$label не является строкой");
 
@@ -39,7 +39,7 @@ class Str extends Range
         }
 
         if (in_array($type, ['integer', 'double'])) {
-            $this->form->$attribute = (string)$value;
+            $this->model->$attribute = (string)$value;
             return true;
         }
 
@@ -57,9 +57,9 @@ class Str extends Range
             return true;
         }
 
-        $label = $this->form->getLabel($attribute);
+        $label = $this->model->getLabel($attribute);
         $this->setMessage("Длина поля \"$label\" должна быть больше или равна $this->min");
-        return $this->min <= mb_strlen($this->form->$attribute);
+        return $this->min <= mb_strlen($this->model->$attribute);
     }
 
     /**
@@ -73,9 +73,9 @@ class Str extends Range
             return true;
         }
 
-        $label = $this->form->getLabel($attribute);
+        $label = $this->model->getLabel($attribute);
         $this->setMessage("Длина $label должна быть меньше или равна $this->max");
-        return mb_strlen($this->form->$attribute) <= $this->max;
+        return mb_strlen($this->model->$attribute) <= $this->max;
     }
 
     /**
@@ -89,8 +89,8 @@ class Str extends Range
             return true;
         }
 
-        $label = $this->form->getLabel($attribute);
+        $label = $this->model->getLabel($attribute);
         $this->setMessage("$label не соответствует шаблону");
-        return preg_match($this->pattern, $this->form->$attribute);
+        return preg_match($this->pattern, $this->model->$attribute);
     }
 }

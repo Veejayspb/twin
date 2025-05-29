@@ -37,7 +37,7 @@ class File extends AbstractFile
     /**
      * {@inheritdoc}
      */
-    public function copy(string $path, bool $force = false)
+    public function copy(string $path, bool $force = false): bool|static
     {
         if (
             !file_exists($this->path) ||
@@ -109,7 +109,7 @@ class File extends AbstractFile
      * Вернуть содержимое файла.
      * @return string|bool
      */
-    public function getContent()
+    public function getContent(): bool|string
     {
         return @file_get_contents($this->path);
     }

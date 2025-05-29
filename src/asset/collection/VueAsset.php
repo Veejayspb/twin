@@ -9,7 +9,7 @@ class VueAsset extends Asset
     /**
      * {@inheritdoc}
      */
-    public $js = [
+    public array $js = [
         'https://unpkg.com/vue@3',
     ];
 }

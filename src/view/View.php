@@ -25,49 +25,49 @@ class View extends Component
      * Алиас пути до шаблона.
      * @var string
      */
-    public $layoutPath = '@self/view/layout/main.php';
+    public string $layoutPath = '@self/view/layout/main.php';
 
     /**
      * Алиас пути до директории с видами.
      * @var string
      */
-    public $alias = '@self/view';
+    public string $alias = '@self/view';
 
     /**
      * Расположение скриптов - в BODY.
      * Если FALSE, то скрипты будут размещены в HEAD.
      * @var bool
      */
-    public $scriptBody = true;
+    public bool $scriptBody = true;
 
     /**
      * Заголовок страницы.
      * @var string
      */
-    public $title = 'Page title';
+    public string $title = 'Page title';
 
     /**
      * Хлебные крошки.
      * @var array
      */
-    public $breadcrumbs = ['Главная' => '/'];
+    public array $breadcrumbs = ['Главная' => '/'];
 
     /**
      * Дополнительный контент для вывода в HEAD.
      * @var array
      */
-    protected $head = [];
+    protected array $head = [];
 
     /**
      * Дополнительный контент для вывода в BODY.
      * @var array
      */
-    protected $body = [];
+    protected array $body = [];
 
     /**
      * {@inheritdoc}
      */
-    protected $_requiredProperties = ['layoutPath', 'alias'];
+    protected array $_requiredProperties = ['layoutPath', 'alias'];
 
     /**
      * Рендер вида без шаблона.

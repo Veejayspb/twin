@@ -10,23 +10,23 @@ abstract class FormField extends Widget
      * Модель.
      * @var Model
      */
-    public $model;
+    public Model $model;
 
     /**
      * Название атрибута.
      * @var string
      */
-    public $attribute;
+    public string $attribute;
 
     /**
      * HTML-атрибуты.
      * @var array
      */
-    public $htmlAttributes = [];
+    public array $htmlAttributes = [];
 
     /**
      * Родительский виджет с формой.
      * @var FormWidget
      */
-    public $parent;
+    public FormWidget $parent;
 }

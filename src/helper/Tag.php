@@ -45,19 +45,19 @@ class Tag
      * Название тега.
      * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * Содержимое тега.
      * @var string
      */
-    protected $content = '';
+    protected string $content = '';
 
     /**
      * Атрибуты тега.
      * @var array
      */
-    protected $attributes = [];
+    protected array $attributes = [];
 
     /**
      * @param string $name - название тега
@@ -136,7 +136,7 @@ class Tag
      * @param mixed $value - значение атрибута
      * @return bool
      */
-    public function setAttribute($name, $value): bool
+    public function setAttribute(mixed $name, mixed $value): bool
     {
         if (!$this->isValidAttributeName($name) || !$this->isValidAttributeValue($value)) {
             return false;
@@ -217,7 +217,7 @@ class Tag
      * @param mixed $value
      * @return bool
      */
-    protected function isEmptyAttributeValue($value): bool
+    protected function isEmptyAttributeValue(mixed $value): bool
     {
         return in_array($value, [null, false], true);
     }
@@ -227,7 +227,7 @@ class Tag
      * @param mixed $name
      * @return bool
      */
-    protected function isValidAttributeName($name): bool
+    protected function isValidAttributeName(mixed $name): bool
     {
         return
             is_string($name) &&
@@ -239,7 +239,7 @@ class Tag
      * @param mixed $value
      * @return bool
      */
-    protected function isValidAttributeValue($value): bool
+    protected function isValidAttributeValue(mixed $value): bool
     {
         $type = gettype($value);
         return in_array($type, ['string', 'integer', 'boolean', 'NULL']);
@@ -266,7 +266,7 @@ class Tag
      * @param true|string|array $value
      * @return string
      */
-    private function renderAttribute(string $key, $value): string
+    private function renderAttribute(string $key, mixed $value): string
     {
         if ($value === true) {
             return $key;

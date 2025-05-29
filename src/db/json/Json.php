@@ -24,12 +24,12 @@ class Json extends Database
      * Путь до директории с файлами БД.
      * @var string
      */
-    public $alias = '@runtime/db/json';
+    public string $alias = '@runtime/db/json';
 
     /**
      * {@inheritdoc}
      */
-    protected $_requiredProperties = ['dbname', 'alias'];
+    protected array $_requiredProperties = ['dbname', 'alias'];
 
     /**
      * Добавить запись.
@@ -37,7 +37,7 @@ class Json extends Database
      * @param array $row - данные
      * @return string|bool
      */
-    public function insert(string $table, array $row)
+    public function insert(string $table, array $row): bool|string
     {
         $key = $this->generateKey($table);
 

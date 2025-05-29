@@ -21,35 +21,35 @@ class Identity
      * Идентификатор пользователя.
      * @var int|null
      */
-    private $id;
+    private ?int $id;
 
     /**
      * Произвольная строка для генерации токена.
      * @var string
      * @see createToken()
      */
-    protected $secretString = 'you should change this string';
+    protected string $secretString = 'you should change this string';
 
     /**
      * Объект текущего класса.
      * @var static
      */
-    protected static $instance;
+    protected static self $instance;
 
     protected function __construct()
     {
         $this->restoreId();
     }
 
-    final private function __clone() {}
+    private function __clone() {}
 
     /**
      * Объект текущего класса.
      * @return static
      */
-    public static function instance(): self
+    public static function instance(): static
     {
-        return static::$instance = static::$instance ?: new static;
+        return self::$instance = self::$instance ?: new static;
     }
 
     /**

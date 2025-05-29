@@ -11,7 +11,7 @@ class Response extends Component
      * Список заголовков, которые будут зарегистрированы.
      * @var array
      */
-    protected $headers = [];
+    protected array $headers = [];
 
     /**
      * {@inheritdoc}
@@ -27,7 +27,7 @@ class Response extends Component
      * @param mixed $data
      * @return string
      */
-    public function run($data): string
+    public function run(mixed $data): string
     {
         return (string)$data;
     }

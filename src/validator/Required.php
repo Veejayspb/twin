@@ -18,7 +18,7 @@ class Required extends Validator
     /**
      * {@inheritdoc}
      */
-    protected function validateAttribute(string $attribute)
+    protected function validateAttribute(string $attribute): void
     {
         if (!$this->model->hasAttribute($attribute)) {
             return;

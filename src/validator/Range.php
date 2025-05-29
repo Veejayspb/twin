@@ -8,7 +8,7 @@ abstract class Range extends Validator
      * Диапазон конкретных значений.
      * @var array
      */
-    public $range = [];
+    public array $range = [];
 
     /**
      * Входит ли в диапазон конкретных значений.
@@ -21,8 +21,8 @@ abstract class Range extends Validator
             return true;
         }
 
-        $label = $this->form->getLabel($attribute);
+        $label = $this->model->getLabel($attribute);
         $this->setMessage("$label не входит в диапазон допустимых значений");
-        return in_array($this->form->$attribute, $this->range);
+        return in_array($this->model->$attribute, $this->range);
     }
 }

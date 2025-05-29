@@ -16,13 +16,13 @@ class Flash
      * Имеющиеся флеш-сообщения.
      * @var array
      */
-    protected $messages = [];
+    protected array $messages = [];
 
     /**
      * Экземпляр текущего класса.
      * @var static
      */
-    private static $instance;
+    private static self $instance;
 
     private function __construct()
     {
@@ -56,7 +56,7 @@ class Flash
      * Вернуть экземпляр текущего класса.
      * @return static
      */
-    protected static function instance(): self
+    protected static function instance(): static
     {
         return self::$instance = self::$instance ?: new static;
     }
