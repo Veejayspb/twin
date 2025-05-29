@@ -3,6 +3,7 @@
 namespace twin\observer;
 
 use SplSubject;
+use twin\Twin;
 
 class DateObserver extends AbstractObserver
 {
@@ -24,7 +25,7 @@ class DateObserver extends AbstractObserver
     public function update(SplSubject $subject): void
     {
         $owner = $subject->getOwner();
-        $date = date($this->format);
+        $date = Twin::date()->format($this->format);
         $owner->{$this->property} = $date;
     }
 }
