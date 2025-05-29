@@ -42,7 +42,7 @@ class FileUploaded extends File
      * @param array $properties - свойства объекта
      * @return static
      */
-    public static function instance(array $properties): static
+    public static function instance(array $properties): self
     {
         $path = $properties['tmp_name'] ?? '';
         $file = new static($path);

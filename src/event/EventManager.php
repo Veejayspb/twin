@@ -114,7 +114,7 @@ class EventManager implements SplSubject
      * @param object $owner
      * @return static
      */
-    public static function instance(object $owner): static
+    public static function instance(object $owner): self
     {
         $objectId = spl_object_id($owner);
 

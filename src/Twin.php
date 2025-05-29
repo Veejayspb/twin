@@ -95,9 +95,9 @@ class Twin
      * Вернуть экземпляр приложения.
      * @return static
      */
-    public static function app(): static
+    public static function app(): self
     {
-        return static::$instance = static::$instance ?: new static;
+        return static::$instance = static::$instance ?? new static;
     }
 
     /**

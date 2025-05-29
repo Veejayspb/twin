@@ -56,9 +56,9 @@ class Flash
      * Вернуть экземпляр текущего класса.
      * @return static
      */
-    protected static function instance(): static
+    protected static function instance(): self
     {
-        return self::$instance = self::$instance ?: new static;
+        return self::$instance = self::$instance ?? new static;
     }
 
     /**

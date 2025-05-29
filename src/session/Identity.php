@@ -47,9 +47,9 @@ class Identity
      * Объект текущего класса.
      * @return static
      */
-    public static function instance(): static
+    public static function instance(): self
     {
-        return self::$instance = self::$instance ?: new static;
+        return self::$instance = self::$instance ?? new static;
     }
 
     /**

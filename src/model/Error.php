@@ -40,7 +40,7 @@ class Error
      * @param Model $model
      * @return static
      */
-    public static function instance(Model $model): static
+    public static function instance(Model $model): self
     {
         $id = spl_object_id($model);
 
