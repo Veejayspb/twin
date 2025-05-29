@@ -115,7 +115,7 @@ final class TwinTest extends BaseTestCase
         $this->assertSame($expected, $proxy->components);
     }
 
-    public function testGetParam()
+    public function testParam()
     {
         Twin::app()->params = [
             'one-1',
@@ -139,6 +139,11 @@ final class TwinTest extends BaseTestCase
         $this->assertSame('321', Twin::param('one-3.two-2.three-1'));
         $this->assertSame(null, Twin::param('one-3.two-2.three-2'));
         $this->assertSame($std, Twin::param('one-3.two-2.three-3'));
+    }
+
+    public function testDate()
+    {
+        $this->assertSame(Twin::date(), Twin::date());
     }
 
     public function testImport()

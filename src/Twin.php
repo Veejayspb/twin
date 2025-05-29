@@ -2,6 +2,7 @@
 
 namespace twin;
 
+use DateTime;
 use twin\asset\AssetManager;
 use twin\common\Component;
 use twin\common\Exception;
@@ -62,6 +63,12 @@ class Twin
      * @var bool
      */
     protected bool $running = false;
+
+    /**
+     * Время запуска приложения.
+     * @var DateTime
+     */
+    protected DateTime $date;
 
     /**
      * Компоненты.
@@ -195,6 +202,15 @@ class Twin
         }
 
         return $param;
+    }
+
+    /**
+     * Вернуть дату запуска приложения.
+     * @return DateTime
+     */
+    public static function date(): DateTime
+    {
+        return static::app()->date ??= new DateTime;
     }
 
     /**
