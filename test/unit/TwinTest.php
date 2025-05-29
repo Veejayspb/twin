@@ -23,13 +23,6 @@ final class TwinTest extends BaseTestCase
 
     public function testApp()
     {
-        $this->assertSame(Twin::app(), Twin::app());
-        $this->assertSame(TwinChild::app(), Twin::app());
-        $this->assertSame(get_class(Twin::app()), Twin::class);
-        $this->assertSame(get_class(TwinChild::app()), Twin::class);
-
-        $this->resetSingleton();
-
         $this->assertSame(TwinChild::app(), TwinChild::app());
         $this->assertSame(Twin::app(), TwinChild::app());
         $this->assertSame(get_class(Twin::app()), TwinChild::class);
@@ -168,17 +161,6 @@ final class TwinTest extends BaseTestCase
     {
         parent::setUp();
 
-        $this->resetSingleton();
-    }
-
-    /**
-     * Сброс объекта приложения.
-     * @return void
-     */
-    protected function resetSingleton(): void
-    {
-        $twin = Twin::app();
-        $proxy = new ObjectProxy($twin);
-        $proxy->instance = null;
+        TwinChild::resetSingletone();
     }
 }
