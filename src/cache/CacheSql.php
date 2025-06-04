@@ -41,9 +41,9 @@ class CacheSql extends Cache
     /**
      * {@inheritdoc}
      */
-    protected function extractItem(string $key): bool|CacheItem
+    protected function extractItem(string $key): ?CacheItem
     {
-        $item = new CacheItem();
+        $item = new CacheItem;
         $item->key = $key;
 
         $connection = $this->getConnection();
@@ -52,7 +52,7 @@ class CacheSql extends Cache
             ':hash' => $item->getHash(),
         ]);
         $data = array_shift($data);
-        if ($data === null) return false;
+        if ($data === null) return null;
         return $item->setProperties($data);
     }
 
@@ -74,7 +74,7 @@ class CacheSql extends Cache
         if ($dbItem) {
             return $connection->update($this->table, $data, 'hash=:hash', [':hash' => $item->getHash()]);
         } else {
-            return false !== $connection->insert($this->table, $data);
+            return null !== $connection->insert($this->table, $data);
         }
     }
 

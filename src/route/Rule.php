@@ -21,20 +21,20 @@ class Rule implements RuleInterface
     /**
      * {@inheritdoc}
      */
-    public function parseUrl(string $url): Route|bool
+    public function parseUrl(string $url): ?Route
     {
         // Убрать из адреса GET-параметры.
         $address = new Address($url);
         $placeholders = $this->extractPlaceholders($address->path);
 
-        if ($placeholders === false) {
-            return false;
+        if ($placeholders === null) {
+            return null;
         }
 
         $strRoute = $this->fillRoute($placeholders); // Строковый роут вида: module/controller/action или controller/action
 
         if (!preg_match(Route::ROUTE_PATTERN, $strRoute)) {
-            return false;
+            return null;
         }
 
         $route = new Route;
@@ -48,7 +48,7 @@ class Rule implements RuleInterface
     /**
      * {@inheritdoc}
      */
-    public function createUrl(Route $route): bool|string
+    public function createUrl(Route $route): ?string
     {
         $address = new Address;
         $url = $this->pattern;
@@ -58,7 +58,7 @@ class Rule implements RuleInterface
         $strRoute = $this->fillRoute($reserved);
 
         if ($strRoute != $route->stringify()) {
-            return false;
+            return null;
         }
 
         // Замена зарезервированных параметров
@@ -77,7 +77,7 @@ class Rule implements RuleInterface
             }
         }
 
-        if ($this->hasPlaceholders($url)) return false;
+        if ($this->hasPlaceholders($url)) return null;
 
         $address->path = $url;
         $address->params = $params;
@@ -137,9 +137,9 @@ class Rule implements RuleInterface
     /**
      * Извлечь значения плейсхолдеров из адреса, согласно паттерну.
      * @param string $url - адрес
-     * @return array|bool - FALSE, если адрес не соответствует паттерну.
+     * @return array|null
      */
-    private function extractPlaceholders(string $url): bool|array
+    private function extractPlaceholders(string $url): ?array
     {
         $pattern = str_replace('/', '\/', $this->pattern);
 
@@ -151,7 +151,7 @@ class Rule implements RuleInterface
         }, $pattern);
 
         if (!preg_match_all("/^$pattern$/", $url, $m)) {
-            return false;
+            return null;
         }
 
         $result = [];

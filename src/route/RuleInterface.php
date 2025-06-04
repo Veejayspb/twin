@@ -7,14 +7,14 @@ interface RuleInterface
     /**
      * Разбор адреса.
      * @param string $url - адрес
-     * @return Route|bool - FALSE, если адрес не соответствует текущему правилу
+     * @return Route|null - NULL, если адрес не соответствует текущему правилу
      */
-    public function parseUrl(string $url): bool|Route;
+    public function parseUrl(string $url): ?Route;
 
     /**
      * Создание адреса.
      * @param Route $route - объект роута
-     * @return string|bool - FALSE, если не удалось создать адрес
+     * @return string|null - NULL, если не удалось создать адрес
      */
-    public function createUrl(Route $route): bool|string;
+    public function createUrl(Route $route): ?string;
 }

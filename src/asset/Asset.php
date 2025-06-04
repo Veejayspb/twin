@@ -154,13 +154,13 @@ abstract class Asset
     /**
      * Генерация CRC32-хэша для использования в кач-ве названия новой директории.
      * @param string $path - путь до директории
-     * @return string|bool - FALSE в случае отсутствия директории
+     * @return string|null - NULL в случае отсутствия директории
      * @todo: если изменились вложенные директории, то дата изменения род. директории не изменится
      */
-    protected function hash(string $path): bool|string
+    protected function hash(string $path): ?string
     {
         if (!is_dir($path)) {
-            return false;
+            return null;
         }
 
         $str = $path . filemtime($path);

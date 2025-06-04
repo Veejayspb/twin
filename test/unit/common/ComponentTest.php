@@ -68,7 +68,7 @@ final class ComponentTest extends BaseTestCase
         $code = $this->catchExceptionCode(function () {
             $this->object = new class() extends Component {
                 public $a;
-                protected $_requiredProperties = ['a', 'b'];
+                protected array $_requiredProperties = ['a', 'b'];
             };
         });
 
@@ -77,7 +77,7 @@ final class ComponentTest extends BaseTestCase
         $code = $this->catchExceptionCode(function () {
             $this->object = new class([]) extends Component {
                 public $a;
-                protected $_requiredProperties = ['a', 'b'];
+                protected array $_requiredProperties = ['a', 'b'];
             };
         });
 
@@ -86,7 +86,7 @@ final class ComponentTest extends BaseTestCase
         $code = $this->catchExceptionCode(function () {
             $this->object = new class([]) extends Component {
                 public $a;
-                protected $_requiredProperties = ['a', 'b'];
+                protected array $_requiredProperties = ['a', 'b'];
             };
         });
 
@@ -95,7 +95,7 @@ final class ComponentTest extends BaseTestCase
         $code = $this->catchExceptionCode(function () {
             $this->object = new class(['a' => 'aaa', 'b' => 'bbb']) extends Component {
                 public $a;
-                protected $_requiredProperties = ['a', 'b'];
+                protected array $_requiredProperties = ['a', 'b'];
             };
         });
 
@@ -106,7 +106,7 @@ final class ComponentTest extends BaseTestCase
         $code = $this->catchExceptionCode(function () {
             $this->object = new class(['a' => null]) extends Component {
                 public $a;
-                protected $_requiredProperties = ['a'];
+                protected array $_requiredProperties = ['a'];
             };
         });
 
@@ -115,7 +115,7 @@ final class ComponentTest extends BaseTestCase
         $code = $this->catchExceptionCode(function () {
             $this->object = new class(['a' => []]) extends Component {
                 public $a;
-                protected $_requiredProperties = ['a'];
+                protected array $_requiredProperties = ['a'];
             };
         });
 

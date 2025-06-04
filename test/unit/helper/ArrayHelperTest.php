@@ -116,7 +116,7 @@ final class ArrayHelperTest extends BaseTestCase
             ],
             [
                 'params' => ['five' => 5],
-                'expected' => false,
+                'expected' => null,
             ],
             [
                 'params' => [],
@@ -130,7 +130,7 @@ final class ArrayHelperTest extends BaseTestCase
         }
 
         $actual = ArrayHelper::findByParams([], []);
-        $this->assertSame(false, $actual);
+        $this->assertNull($actual);
     }
 
     public function testStringExpression()

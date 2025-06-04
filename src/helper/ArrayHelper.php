@@ -47,9 +47,9 @@ class ArrayHelper
      * Найти в наборе массивов искомые ключ/значение, и вернуть индекс первого подходящего.
      * @param array $items - набор массивов или объектов
      * @param array $search - искомые ключи и значения
-     * @return int|string|bool - FALSE, если индекс не найден
+     * @return int|string|null
      */
-    public static function findByParams(array $items, array $search): bool|int|string
+    public static function findByParams(array $items, array $search): int|string|null
     {
         foreach ($items as $i => $item) {
             $item = (array)$item;
@@ -60,7 +60,7 @@ class ArrayHelper
             }
         }
 
-        return false;
+        return null;
     }
 
     /**

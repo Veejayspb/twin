@@ -89,9 +89,9 @@ class RouteManager extends Component
     /**
      * Разобрать адрес.
      * @param string $url - адрес
-     * @return Route|bool - FALSE в случае ошибки
+     * @return Route|null
      */
-    public function parseUrl(string $url): bool|Route
+    public function parseUrl(string $url): ?Route
     {
         return $this->compareRoutes(function (RuleInterface $rule) use ($url) {
             return $rule->parseUrl($url);
@@ -102,9 +102,9 @@ class RouteManager extends Component
      * Создать адрес.
      * @param Route $route - роут
      * @param bool $absolute - абсолютный адрес
-     * @return bool|string|Route
+     * @return string|Route|null
      */
-    public function createUrl(Route $route, bool $absolute = false): bool|string|Route
+    public function createUrl(Route $route, bool $absolute = false): null|string|Route
     {
         $url = $this->compareRoutes(function (RuleInterface $rule) use ($route) {
             return $rule->createUrl($route);
@@ -118,7 +118,7 @@ class RouteManager extends Component
             return $this->domain . $url;
         }
 
-        return false;
+        return null;
     }
 
     /**
@@ -183,10 +183,10 @@ class RouteManager extends Component
     /**
      * Выбрать правило, удовлетворяющее коллбэк-функции.
      * @param callable $func - функция, проверяющая соответствие роута
-     * @return Route|bool - FALSE, если ни одно правило не соответствует
+     * @return mixed - NULL, если ни одно правило не соответствует
      * @throws Exception
      */
-    private function compareRoutes(callable $func): bool|Route
+    private function compareRoutes(callable $func): mixed
     {
         foreach ($this->rules as $pattern => $route) {
             $className = $this->getRuleClass($route);
@@ -201,11 +201,11 @@ class RouteManager extends Component
             $rule->route = $route;
             $result = $func($rule);
 
-            if ($result !== false) {
+            if ($result !== null) {
                 return $result;
             }
         }
 
-        return false;
+        return null;
     }
 }

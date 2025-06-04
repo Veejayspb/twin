@@ -29,6 +29,6 @@ final class ExceptionTest extends BaseTestCase
 
         $exception = new Exception(0);
         $this->assertSame(0, $exception->getCode());
-        $this->assertNull($exception->getMessage());
+        $this->assertSame('', $exception->getMessage());
     }
 }

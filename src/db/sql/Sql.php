@@ -108,12 +108,12 @@ abstract class Sql extends Database
      * Добавить запись.
      * @param string $table - название таблицы
      * @param array $data - данные
-     * @return string|bool - ID новой записи, либо FALSE в случае ошибки
+     * @return string|null - ID новой записи
      */
-    public function insert(string $table, array $data): bool|string
+    public function insert(string $table, array $data): ?string
     {
         if (empty($data)) {
-            return false;
+            return null;
         }
 
         $keys = array_keys($data);
@@ -128,7 +128,7 @@ abstract class Sql extends Database
         $result = $this->execute($sql, array_combine($placeholders, $data));
 
         if (!$result) {
-            return false;
+            return null;
         }
 
         return $this->connection->lastInsertId();
@@ -292,7 +292,7 @@ abstract class Sql extends Database
             'timestamp' => time(),
         ]);
 
-        return $result !== false;
+        return $result !== null;
     }
 
     /**

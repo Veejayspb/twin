@@ -34,15 +34,15 @@ class CacheFile extends Cache
     /**
      * {@inheritdoc}
      */
-    protected function extractItem(string $key): bool|CacheItem
+    protected function extractItem(string $key): ?CacheItem
     {
         $item = new CacheItem;
         $item->key = $key;
 
         $path = $this->getFilePath($item);
-        if (!file_exists($path)) return false;
+        if (!file_exists($path)) return null;
         $content = file_get_contents($path);
-        if ($content === false) return false;
+        if ($content === false) return null;
         $data = json_decode($content, true);
         return $item->setProperties($data);
     }

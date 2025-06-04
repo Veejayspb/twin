@@ -39,14 +39,14 @@ final class RouteTest extends BaseTestCase
         $route = new Route;
         $proxy = new ObjectProxy($route); /* @var Route $proxy */
         $this->assertEquals(
-            [null, 'site', 'index', []],
+            ['', 'main', 'index', []],
             [$proxy->module, $proxy->controller, $proxy->action, $proxy->params]
         );
 
         $route = new Route(null, null, null, self::PARAMS);
         $proxy = new ObjectProxy($route); /* @var Route $proxy */
         $this->assertSame(
-            ['', 'site', 'index', self::PARAMS],
+            ['', 'main', 'index', self::PARAMS],
             [$proxy->module, $proxy->controller, $proxy->action, $proxy->params]
         );
 
@@ -65,30 +65,30 @@ final class RouteTest extends BaseTestCase
         ]);
 
         $this->assertEquals(
-            ['mmm', 'site', 'index', []],
+            ['mmm', 'main', 'index', []],
             [$route->module, $route->controller, $route->action, $route->params]
         );
 
         ($route = new Route)->setProperties([
-            'module' => null,
+            'module' => '',
             'controller' => 'test',
-            'action' => null,
+            'action' => '',
             'param-one' => 111,
         ]);
 
         $this->assertEquals(
-            [null, 'test', null, ['param-one' => 111]],
+            ['', 'test', '', ['param-one' => 111]],
             [$route->module, $route->controller, $route->action, $route->params]
         );
 
         ($route = new Route)->setProperties([
-            'controller' => null,
+            'controller' => '',
             'action' => 'test',
             'param-two' => null,
         ]);
 
         $this->assertEquals(
-            ['', null, 'test', ['param-two' => null]],
+            ['', '', 'test', ['param-two' => null]],
             [$route->module, $route->controller, $route->action, $route->params]
         );
     }
@@ -124,7 +124,7 @@ final class RouteTest extends BaseTestCase
 
         $this->assertSame('m/c/a', $proxy->stringify());
 
-        $proxy->module = null;
+        $proxy->module = '';
 
         $this->assertSame('c/a', $proxy->stringify());
     }

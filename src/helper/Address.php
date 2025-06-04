@@ -96,7 +96,7 @@ class Address
 
     /**
      * @param string $name
-     * @return string|bool|null
+     * @return mixed
      */
     public function __get(string $name)
     {

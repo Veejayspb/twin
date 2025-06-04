@@ -35,14 +35,14 @@ class Json extends Database
      * Добавить запись.
      * @param string $table - название таблицы
      * @param array $row - данные
-     * @return string|bool
+     * @return string|null - ключ новой записи
      */
-    public function insert(string $table, array $row): bool|string
+    public function insert(string $table, array $row): ?string
     {
         $key = $this->generateKey($table);
 
         if ($key === null) {
-            return false;
+            return null;
         }
 
         $data = $this->getData($table);
@@ -51,7 +51,7 @@ class Json extends Database
         if ($this->setData($table, $data)) {
             return $key;
         } else {
-            return false;
+            return null;
         }
     }
 

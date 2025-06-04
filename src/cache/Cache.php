@@ -15,7 +15,7 @@ abstract class Cache extends Component
     public function get(string $key, mixed $default = null): mixed
     {
         $item = $this->extractItem($key);
-        if ($item === false) return $default;
+        if (!$item) return $default;
         if ($item->isExpired()) return $default;
         return $item->data;
     }
@@ -45,7 +45,7 @@ abstract class Cache extends Component
     public function exists(string $key): bool
     {
         $item = $this->extractItem($key);
-        if ($item === false) return false;
+        if (!$item) return false;
         return !$item->isExpired();
     }
 
@@ -57,16 +57,16 @@ abstract class Cache extends Component
     public function expires(string $key): int
     {
         $item = $this->extractItem($key);
-        if ($item === false) return 0;
+        if (!$item) return 0;
         return $item->expires - time();
     }
 
     /**
      * Извлечь объект с данными кеша из хранилища.
      * @param string $key - ключ
-     * @return CacheItem|bool - FALSE в случае ошибки
+     * @return CacheItem|null
      */
-    abstract protected function extractItem(string $key): bool|CacheItem;
+    abstract protected function extractItem(string $key): ?CacheItem;
 
     /**
      * Сохранить объект с данными кеша в хранилище.
