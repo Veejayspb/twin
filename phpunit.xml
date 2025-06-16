@@ -3,7 +3,6 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.6/phpunit.xsd"
     bootstrap="test/bootstrap.php"
-    cacheResultFile=".phpunit.cache/test-results"
     beStrictAboutCoversAnnotation="true"
     beStrictAboutOutputDuringTests="true"
     beStrictAboutTodoAnnotatedTests="true"
@@ -11,19 +10,9 @@
     failOnRisky="true"
     failOnWarning="true"
     verbose="true">
-
     <testsuites>
         <testsuite name="default">
             <directory>test</directory>
         </testsuite>
     </testsuites>
-
-    <coverage
-        cacheDirectory=".phpunit.cache/code-coverage"
-        processUncoveredFiles="true">
-        <include>
-            <directory suffix=".php">/</directory>
-        </include>
-    </coverage>
-
 </phpunit>
