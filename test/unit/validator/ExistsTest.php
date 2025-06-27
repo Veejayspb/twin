@@ -50,13 +50,13 @@ class ExistsTest extends BaseTestCase
     {
         return new class extends Database
         {
-            public function findByAttributes(string $table, array $attributes): ?array
+            public function findByAttributes(string $table, array $conditions): ?array
             {
-                $id = $attributes['id'] ?? 0;
+                $id = $conditions['id'] ?? 0;
                 return in_array($id, ExistsTest::IDS_EXISTS) ? [] : null;
             }
 
-            public function findAllByAttributes(string $table, array $attributes): array
+            public function findAllByAttributes(string $table, array $conditions): array
             {
                 return [];
             }

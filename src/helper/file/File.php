@@ -155,4 +155,14 @@ class File extends AbstractFile
         $name = $this->getName();
         return StringHelper::getExtFromName($name);
     }
+
+    /**
+     * Извлечь название файла без расширения.
+     * @return string
+     */
+    public function getNameWithoutExt(): string
+    {
+        $name = $this->getName();
+        return pathinfo($name, PATHINFO_FILENAME);
+    }
 }
