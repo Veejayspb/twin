@@ -224,6 +224,20 @@ abstract class Sql extends Database
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function createMigrationTable(string $table): bool
+    {
+        return $this->createTable($table, [
+            'hash' => 'VARCHAR(32) NOT NULL',
+            'name' => 'TEXT NOT NULL',
+            'timestamp' => 'INT NOT NULL',
+        ], [
+            'PRIMARY KEY (`hash`)',
+        ]);
+    }
+
+    /**
      * Сгенерировать SQL-выражение вида:
      * a=:a AND b=:b
      * a=:a, b=:b

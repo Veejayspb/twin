@@ -197,6 +197,15 @@ class Json extends Database
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function createMigrationTable(string $table): bool
+    {
+        $data = $this->getData($table);
+        return $this->setData($table, $data);
+    }
+
+    /**
      * Извлечь данные из таблицы.
      * @param string $table - название таблицы
      * @return array

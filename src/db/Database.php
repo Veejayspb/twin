@@ -125,6 +125,13 @@ abstract class Database extends Component
     abstract public function delete(string $table, array $conditions): bool;
 
     /**
+     * Создать таблицу для миграций.
+     * @param string $table - название таблицы с миграциями
+     * @return bool
+     */
+    abstract public function createMigrationTable(string $table): bool;
+
+    /**
      * Подключение к БД.
      * @return bool
      */
