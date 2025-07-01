@@ -96,41 +96,35 @@ final class MigrationTest extends BaseTestCase
 
     public function testIsApplied()
     {
-        foreach ([true, false] as $expected) {
-            $db = $this->mock(Database::class, null, null, ['isMigrationApplied' => $expected]);
+        $db = $this->mock(Database::class, null, null, ['findByAttributes' => null]);
+        $migration = $this->getMigration(self::CLASS_NAME, ['getDb' => $db]);
+        $this->assertFalse($migration->isApplied());
 
-            $migration = $this->getMigration(self::CLASS_NAME, [
-                'getDb' => $db,
-            ]);
-
-            $this->assertSame($expected, $migration->isApplied());
-        }
+        $db = $this->mock(Database::class, null, null, ['findByAttributes' => []]);
+        $migration = $this->getMigration(self::CLASS_NAME, ['getDb' => $db]);
+        $this->assertTrue($migration->isApplied());
     }
 
     public function testApply()
     {
-        foreach ([true, false] as $expected) {
-            $db = $this->mock(Database::class, null, null, ['addMigration' => $expected]);
+        $db = $this->mock(Database::class, null, null, ['insert' => null]);
+        $migration = $this->getMigration(self::CLASS_NAME, ['getDb' => $db]);
+        $this->assertFalse($migration->apply());
 
-            $migration = $this->getMigration(self::CLASS_NAME, [
-                'getDb' => $db,
-            ]);
-
-            $this->assertSame($expected, $migration->apply());
-        }
+        $db = $this->mock(Database::class, null, null, ['insert' => []]);
+        $migration = $this->getMigration(self::CLASS_NAME, ['getDb' => $db]);
+        $this->assertTrue($migration->apply());
     }
 
     public function testCancel()
     {
-        foreach ([true, false] as $expected) {
-            $db = $this->mock(Database::class, null, null, ['deleteMigration' => $expected]);
+        $db = $this->mock(Database::class, null, null, ['delete' => true]);
+        $migration = $this->getMigration(self::CLASS_NAME, ['getDb' => $db]);
+        $this->assertTrue($migration->cancel());
 
-            $migration = $this->getMigration(self::CLASS_NAME, [
-                'getDb' => $db,
-            ]);
-
-            $this->assertSame($expected, $migration->cancel());
-        }
+        $db = $this->mock(Database::class, null, null, ['delete' => false]);
+        $migration = $this->getMigration(self::CLASS_NAME, ['getDb' => $db]);
+        $this->assertFalse($migration->cancel());
     }
 
     public function testCreate()
@@ -170,7 +164,7 @@ final class MigrationTest extends BaseTestCase
      * @param array $methods
      * @return Migration
      */
-    protected function getMigration(string $class, array $methods = []): Migration
+    protected function getMigration(string $class, array $methods = []): object
     {
         $migrationManager = $this->getMigrationManager();
         return $this->mock(Migration::class, $class, [$migrationManager], $methods);

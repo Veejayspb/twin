@@ -134,7 +134,7 @@ class MigrationController extends Controller
                     continue;
                 }
 
-                if ($migration->apply()) {
+                if ($migration->up() && $migration->apply()) {
                     $result[] = 'Migration up: ' . $migration->getClass();
                 } else {
                     throw new Exception(500, 'Error while migrating up: ' . $migration->getClass());
@@ -162,7 +162,7 @@ class MigrationController extends Controller
             }
 
             if ($migration->getDate()->diff($target->getDate())->invert) {
-                if ($migration->cancel()) {
+                if ($migration->down() && $migration->cancel()) {
                     $result[] = 'Migration down: ' . $migration->getClass();
                 } else {
                     throw new Exception(500, 'Error while migrating down: ' . $migration->getClass());

@@ -48,10 +48,10 @@ abstract class Migration
     public function __construct(MigrationManager $manager)
     {
         $this->manager = $manager;
-        $class = $this->getClass();
         $isValidClass = $this->isValidClass();
 
         if (!$isValidClass) {
+            $class = $this->getClass();
             throw new Exception(500, "Wrong migration name: $class");
         }
     }
@@ -124,11 +124,15 @@ abstract class Migration
             return false;
         }
 
-        return $db->isMigrationApplied($this);
+        $row = $db->findByAttributes($this->manager->table, [
+            'hash' => $this->getHash(),
+        ]);
+
+        return $row !== null;
     }
 
     /**
-     * Применить миграцию и добавить об этом запись в БД.
+     * Добавить запись о миграции в БД.
      * @return bool
      */
     public function apply(): bool
@@ -139,11 +143,17 @@ abstract class Migration
             return false;
         }
 
-        return $db->addMigration($this);
+        $result = $db->insert($this->manager->table, [
+            'hash' => $this->getHash(),
+            'name' => $this->getClass(),
+            'timestamp' => time(),
+        ]);
+
+        return $result !== null;
     }
 
     /**
-     * Отменить миграцию и удалить запись об этом из БД.
+     * Удалить запись о миграции из БД.
      * @return bool
      */
     public function cancel(): bool
@@ -154,7 +164,9 @@ abstract class Migration
             return false;
         }
 
-        return $db->deleteMigration($this);
+        return $db->delete($this->manager->table, [
+            'hash' => $this->getHash(),
+        ]);
     }
 
     /**
