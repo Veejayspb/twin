@@ -153,7 +153,7 @@ class File extends AbstractFile
     public function getExtFromName(): ?string
     {
         $name = $this->getName();
-        return StringHelper::getExtFromName($name);
+        return pathinfo($name, PATHINFO_EXTENSION) ?: null;
     }
 
     /**

@@ -56,21 +56,6 @@ final class StringHelperTest extends BaseTestCase
         $this->assertSame('2 ед 2', $result);
     }
 
-    public function testGetExtFromName()
-    {
-        $pairs = [
-            'image.jpg' => 'jpg',
-            'some.text.txt' => 'txt',
-            'noext' => null,
-            '' => null,
-        ];
-
-        foreach ($pairs as $name => $expected) {
-            $ext = StringHelper::getExtFromName($name);
-            $this->assertSame($expected, $ext);
-        }
-    }
-
     public function testCamelToKabob()
     {
         $pairs = [

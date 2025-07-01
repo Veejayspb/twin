@@ -42,16 +42,6 @@ class StringHelper
     }
 
     /**
-     * Извлечь расширение из названия файла.
-     * @param string $name - название или путь до файла
-     * @return string|null
-     */
-    public static function getExtFromName(string $name): ?string
-    {
-        return pathinfo($name, PATHINFO_EXTENSION) ?: null;
-    }
-
-    /**
      * Преобразовать стиль названия из CAMEL в KABOB.
      * Допустимы только символы: A-Z, a-z, 0-9
      * @param string $str - SomeName
