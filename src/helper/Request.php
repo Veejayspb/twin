@@ -14,33 +14,33 @@ class Request
 {
     /**
      * Протокол.
-     * @var string - http/https
+     * @var string|null - http/https
      */
-    public static string $scheme;
+    public static ?string $scheme;
 
     /**
      * Адрес хоста.
-     * @var string - domain.ru
+     * @var string|null - domain.ru
      */
-    public static string $host;
+    public static ?string $host;
 
     /**
      * Текущий адрес.
-     * @var string - /index.php?id=1
+     * @var string|null - /index.php?id=1
      */
-    public static string $url;
+    public static ?string $url;
 
     /**
      * IP адрес.
-     * @var string
+     * @var string|null
      */
-    public static string $ip;
+    public static ?string $ip;
 
     /**
      * Метод.
-     * @var string - GET, POST, PUT, DELETE
+     * @var string|null - GET, POST, PUT, DELETE
      */
-    public static string $method;
+    public static ?string $method;
 
     /**
      * Заголовки.
