@@ -50,8 +50,8 @@ final class AliasTest extends BaseTestCase
         $actual = $this->object->get('@c');
         $this->assertSame('bbb/ccc', $actual);
 
-        $actual = $this->object->get('@notexists');
-        $this->assertSame('@notexists', $actual);
+        $this->expectExceptionCode(500);
+        $this->object->get('@notexists');
     }
 
     /**

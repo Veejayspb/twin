@@ -37,6 +37,7 @@ final class Alias
      * Вернуть значение алиаса.
      * @param string $alias - "@alias/path"
      * @return string - path/to/dir
+     * @throws Exception
      */
     public static function get(string $alias): string
     {
@@ -50,7 +51,7 @@ final class Alias
         $key = $matches[0];
 
         if (!array_key_exists($key, self::$aliases)) {
-            return $alias;
+            throw new Exception(500, "Undefined alias: $key");
         }
 
         $result = str_replace($key, self::$aliases[$key], $alias);
