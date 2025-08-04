@@ -2,6 +2,8 @@
 
 namespace twin\helper;
 
+use twin\common\Exception;
+
 final class Alias
 {
     /**
@@ -26,6 +28,11 @@ final class Alias
         $pattern = '/^' . self::PATTERN . '$/';
 
         if (!preg_match($pattern, $alias)) {
+            return false;
+        }
+
+        // Алиас не должен ссылаться на самого себя
+        if ($alias == substr($path, 0, strlen($alias))) {
             return false;
         }
 

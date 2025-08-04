@@ -31,6 +31,10 @@ final class AliasTest extends BaseTestCase
         $result = $this->object->set('@not-allowed', 'na');
         $this->assertFalse($result);
         $this->assertSame($data, $this->object->aliases);
+
+        $result = $this->object->set('@a', '@a/test/path');
+        $this->assertFalse($result);
+        $this->assertSame($data, $this->object->aliases);
     }
 
     public function testGet()
