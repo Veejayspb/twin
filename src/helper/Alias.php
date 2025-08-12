@@ -29,6 +29,11 @@ final class Alias
             return false;
         }
 
+        // Алиас не должен ссылаться на самого себя
+        if ($alias == substr($path, 0, strlen($alias))) {
+            return false;
+        }
+
         self::$aliases[$alias] = $path;
         return true;
     }
