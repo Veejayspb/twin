@@ -2,59 +2,78 @@
 
 use twin\helper\Alias;
 use test\helper\BaseTestCase;
-use test\helper\ObjectProxy;
 
 final class AliasTest extends BaseTestCase
 {
-    /**
-     * @var ObjectProxy|Alias
-     */
-    protected $object;
-
     public function testSet()
     {
-        $result = $this->object->set('@a', 'aaa');
-        $data['@a'] = 'aaa';
+        $result = Alias::set('@a', 'a');
         $this->assertTrue($result);
-        $this->assertSame($data, $this->object->aliases);
+        $this->assertSame('a', Alias::get('@a'));
 
-        $result = $this->object->set('@b', 'bbb');
-        $data['@b'] = 'bbb';
+        $result = Alias::set('@a', '');
         $this->assertTrue($result);
-        $this->assertSame($data, $this->object->aliases);
+        $this->assertSame('', Alias::get('@a'));
 
-        $result = $this->object->set('@a', '');
-        $data['@a'] = '';
-        $this->assertTrue($result);
-        $this->assertSame($data, $this->object->aliases);
-
-        $result = $this->object->set('@not-allowed', 'na');
+        $result = Alias::set('@not-allowed', 'na');
         $this->assertFalse($result);
-        $this->assertSame($data, $this->object->aliases);
+        $this->assertSame('@not-allowed', Alias::get('@not-allowed'));
 
-        $result = $this->object->set('@a', '@a/test/path');
+        $result = Alias::set('@a', '@a/test/path');
         $this->assertFalse($result);
-        $this->assertSame($data, $this->object->aliases);
+        $this->assertSame('', Alias::get('@a'));
+    }
+
+    public function testIsset()
+    {
+        $this->assertFalse(Alias::isset('@a'));
+
+        Alias::set('@a', 'a');
+        $this->assertTrue(Alias::isset('@a'));
+
+        Alias::set('@b', '');
+        $this->assertTrue(Alias::isset('@b'));
+
+        Alias::set('@not-allowed', 'na');
+        $this->assertFalse(Alias::isset('@not-allowed'));
+
+        Alias::set('@c', '@c/test/path');
+        $this->assertFalse(Alias::isset('@c'));
+    }
+
+    public function testUnset()
+    {
+        Alias::set('@a', 'a');
+        Alias::set('@b', 'b');
+
+        $this->assertTrue(Alias::isset('@a'));
+        $this->assertTrue(Alias::isset('@b'));
+
+        Alias::unset('@a');
+        $this->assertFalse(Alias::isset('@a'));
+        $this->assertTrue(Alias::isset('@b'));
+
+        Alias::unset('@b');
+        $this->assertFalse(Alias::isset('@a'));
+        $this->assertFalse(Alias::isset('@b'));
     }
 
     public function testGet()
     {
-        $this->object->aliases = [
-            '@a' => 'aaa',
-            '@b' => 'bbb',
-            '@c' => '@b/ccc',
-        ];
+        Alias::set('@a', 'a');
+        Alias::set('@b', 'b');
+        Alias::set('@c', '@b/c');
 
-        $actual = $this->object->get('@a');
-        $this->assertSame('aaa', $actual);
+        $actual = Alias::get('@a');
+        $this->assertSame('a', $actual);
 
-        $actual = $this->object->get('@b/yyy');
-        $this->assertSame('bbb/yyy', $actual);
+        $actual = Alias::get('@b/y');
+        $this->assertSame('b/y', $actual);
 
-        $actual = $this->object->get('@c');
-        $this->assertSame('bbb/ccc', $actual);
+        $actual = Alias::get('@c');
+        $this->assertSame('b/c', $actual);
 
-        $actual = $this->object->get('@notexists');
+        $actual = Alias::get('@notexists');
         $this->assertSame('@notexists', $actual);
     }
 
@@ -65,7 +84,9 @@ final class AliasTest extends BaseTestCase
     {
         parent::setUp();
 
-        $this->object = new ObjectProxy(new Alias);
-        $this->object->aliases = [];
+        $reflection = new ReflectionClass(new Alias);
+        $property = $reflection->getProperty('aliases');
+        $property->setAccessible(true);
+        $property->setValue(null, []);
     }
 }

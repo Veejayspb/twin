@@ -39,6 +39,28 @@ final class Alias
     }
 
     /**
+     * Проверка на сущ-ие указанного алиаса.
+     * @param string $alias
+     * @return bool
+     */
+    public static function isset(string $alias): bool
+    {
+        return array_key_exists($alias, self::$aliases);
+    }
+
+    /**
+     * Удаление алиаса.
+     * @param string $alias
+     * @return void
+     */
+    public static function unset(string $alias): void
+    {
+        if (self::isset($alias)) {
+            unset(self::$aliases[$alias]);
+        }
+    }
+
+    /**
      * Вернуть значение алиаса.
      * @param string $alias - "@alias/path"
      * @return string - path/to/dir
