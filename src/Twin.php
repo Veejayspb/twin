@@ -15,15 +15,6 @@ use twin\route\Route;
 use twin\route\RouteManager;
 use twin\view\View;
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'helper' . DIRECTORY_SEPARATOR . 'Alias.php';
-
-Alias::set('@root', dirname(__DIR__, 3));
-Alias::set('@twin', __DIR__);
-Alias::set('@public', $_SERVER['DOCUMENT_ROOT']);
-Alias::set('@self', dirname($_SERVER['DOCUMENT_ROOT']));
-Alias::set('@runtime', '@self/runtime');
-Alias::set('@vendor', '@root/vendor');
-
 /**
  * Class Twin
  *
@@ -85,6 +76,12 @@ class Twin
     protected function __construct()
     {
         mb_internal_encoding('UTF-8');
+
+        Alias::set('@root', dirname(__DIR__, 3));
+        Alias::set('@twin', __DIR__);
+        Alias::set('@self', '@root/app');
+        Alias::set('@public', '@self/public');
+        Alias::set('@runtime', '@self/runtime');
     }
 
     private function __clone() {}
