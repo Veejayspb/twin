@@ -132,6 +132,21 @@ final class ModelTest extends TestCase
         $this->assertTrue($actual);
     }
 
+    public function testPropagate()
+    {
+        $model = $this->getModel();
+        $actual = $model::propagate([
+            ['public' => 'one'],
+            ['protected' => 'two'],
+            ['undefined' => 'three'],
+        ]);
+
+        $this->assertCount(3, $actual);
+        $this->assertSame('one', $actual[0]->public);
+        $this->assertSame('public', $actual[1]->public);
+        $this->assertSame('public', $actual[2]->public);
+    }
+
     /**
      * @return Model
      */

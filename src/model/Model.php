@@ -152,6 +152,24 @@ abstract class Model
     }
 
     /**
+     * Преобразовать массив данных в массив моделей.
+     * @param array $data
+     * @return static[]
+     */
+    public static function propagate(array $data): array
+    {
+        $models = [];
+
+        foreach ($data as $row) {
+            $model = new static;
+            $model->setAttributes($row);
+            $models[] = $model;
+        }
+
+        return $models;
+    }
+
+    /**
      * Вызов набора пользовательских валидаторов.
      * @return void
      */
