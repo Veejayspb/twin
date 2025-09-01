@@ -80,7 +80,12 @@ final class Alias
             return $alias;
         }
 
-        $result = str_replace($key, self::$aliases[$key], $alias);
+        $result = str_replace(
+            ['/', '\\', $key],
+            [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, self::$aliases[$key]],
+            $alias
+        );
+
         return self::get($result);
     }
 }

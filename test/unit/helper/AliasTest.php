@@ -60,6 +60,8 @@ final class AliasTest extends BaseTestCase
 
     public function testGet()
     {
+        $ds = DIRECTORY_SEPARATOR;
+
         Alias::set('@a', 'a');
         Alias::set('@b', 'b');
         Alias::set('@c', '@b/c');
@@ -68,10 +70,13 @@ final class AliasTest extends BaseTestCase
         $this->assertSame('a', $actual);
 
         $actual = Alias::get('@b/y');
-        $this->assertSame('b/y', $actual);
+        $this->assertSame("b{$ds}y", $actual);
+
+        $actual = Alias::get('@b\y');
+        $this->assertSame("b{$ds}y", $actual);
 
         $actual = Alias::get('@c');
-        $this->assertSame('b/c', $actual);
+        $this->assertSame("b{$ds}c", $actual);
 
         $actual = Alias::get('@notexists');
         $this->assertSame('@notexists', $actual);
