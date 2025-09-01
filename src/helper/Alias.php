@@ -76,17 +76,11 @@ final class Alias
 
         $key = $matches[0];
 
-        if (!array_key_exists($key, self::$aliases)) {
+        if (!self::isset($key)) {
             return $alias;
         }
 
         $result = str_replace($key, self::$aliases[$key], $alias);
-
-        // Если в пути остался алиас, то выполнить повторное преобразование
-        if (preg_match($pattern, $result)) {
-            return self::get($result);
-        }
-
-        return $result;
+        return self::get($result);
     }
 }
