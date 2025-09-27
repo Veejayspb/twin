@@ -5,6 +5,7 @@ namespace twin;
 use DateTime;
 use twin\asset\AssetManager;
 use twin\common\Component;
+use twin\common\Container;
 use twin\common\Exception;
 use twin\helper\Alias;
 use twin\helper\ConfigConstructor;
@@ -50,6 +51,12 @@ class Twin
     public array $params = [];
 
     /**
+     * DI контейнер.
+     * @var Container
+     */
+    public Container $di;
+
+    /**
      * Индикатор запуска приложения.
      * @var bool
      */
@@ -82,6 +89,8 @@ class Twin
         Alias::set('@self', '@root/app');
         Alias::set('@public', '@self/public');
         Alias::set('@runtime', '@self/runtime');
+
+        $this->di = new Container;
     }
 
     private function __clone() {}
