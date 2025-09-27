@@ -11,6 +11,6 @@ use twin\model\Model;
  */
 final class TestModel extends Model
 {
-    public $id;
-    public $name;
+    public mixed $id;
+    public mixed $name;
 }

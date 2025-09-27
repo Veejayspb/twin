@@ -19,7 +19,8 @@
         "ext-mbstring": "*",
         "ext-pdo": "*",
         "ext-gd": "*",
-        "ext-fileinfo": "*"
+        "ext-fileinfo": "*",
+        "psr/container": "^2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.6"
