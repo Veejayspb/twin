@@ -2,12 +2,11 @@
 
 namespace twin\view;
 
-use twin\common\Component;
 use twin\helper\Html;
 use twin\helper\Tag;
 use twin\Twin;
 
-class View extends Component
+class View
 {
     use RenderTrait;
 

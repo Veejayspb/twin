@@ -2,13 +2,12 @@
 
 namespace twin\route;
 
-use twin\common\Component;
 use twin\common\Exception;
 use twin\controller\Controller;
 use twin\helper\Request;
 use twin\helper\StringHelper;
 
-class RouteManager extends Component
+class RouteManager
 {
     /**
      * Роут главной страницы.

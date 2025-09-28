@@ -2,9 +2,7 @@
 
 namespace twin\i18n;
 
-use twin\common\Component;
-
-class I18n extends Component
+class I18n
 {
     const DEFAULT = self::ENGLISH;
 
@@ -24,9 +22,6 @@ class I18n extends Component
      */
     protected array $storages = [];
 
-    /**
-     * {@inheritdoc}
-     */
     public function __construct()
     {
         $this->addStorage(new StorageFile);

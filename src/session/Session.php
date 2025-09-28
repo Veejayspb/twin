@@ -2,10 +2,9 @@
 
 namespace twin\session;
 
-use twin\common\Component;
 use twin\helper\Alias;
 
-class Session extends Component
+class Session
 {
     /**
      * Префикс параметров.
@@ -30,9 +29,6 @@ class Session extends Component
      */
     public ?string $savePath;
 
-    /**
-     * {@inheritdoc}
-     */
     public function __construct()
     {
         $savePath = $this->getSavePath();

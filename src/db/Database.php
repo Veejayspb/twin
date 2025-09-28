@@ -2,10 +2,9 @@
 
 namespace twin\db;
 
-use twin\common\Component;
 use twin\common\Exception;
 
-abstract class Database extends Component
+abstract class Database
 {
     /**
      * Название базы данных.
@@ -14,7 +13,6 @@ abstract class Database extends Component
     public string $dbName;
 
     /**
-     * {@inheritdoc}
      * @throws Exception
      */
     public function __construct()

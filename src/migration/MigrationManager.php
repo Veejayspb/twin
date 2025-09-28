@@ -4,11 +4,10 @@ namespace twin\migration;
 
 use DirectoryIterator;
 use m_000000_000000_init;
-use twin\common\Component;
 use twin\helper\Alias;
 use twin\Twin;
 
-class MigrationManager extends Component
+class MigrationManager
 {
     /**
      * Алиас пути директории с файлами миграций.

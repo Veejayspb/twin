@@ -2,11 +2,10 @@
 
 namespace twin\asset;
 
-use twin\common\Component;
 use twin\common\Exception;
 use twin\helper\Tag;
 
-class AssetManager extends Component
+class AssetManager
 {
     /**
      * Путь до директории с asset доступной из WEB.

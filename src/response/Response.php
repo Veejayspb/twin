@@ -2,10 +2,9 @@
 
 namespace twin\response;
 
-use twin\common\Component;
 use twin\helper\Header;
 
-class Response extends Component
+class Response
 {
     /**
      * Список заголовков, которые будут зарегистрированы.
@@ -13,9 +12,6 @@ class Response extends Component
      */
     protected array $headers = [];
 
-    /**
-     * {@inheritdoc}
-     */
     public function __construct()
     {
         $this->registerHeaders();
