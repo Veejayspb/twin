@@ -17,10 +17,8 @@ abstract class Database extends Component
      * {@inheritdoc}
      * @throws Exception
      */
-    public function __construct(array $properties = [])
+    public function __construct()
     {
-        parent::__construct($properties);
-
         if (!$this->connect()) {
             throw new Exception(500, 'Database connection error: ' . get_called_class());
         }

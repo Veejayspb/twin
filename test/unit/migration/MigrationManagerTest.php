@@ -30,9 +30,8 @@ final class MigrationManagerTest extends BaseTestCase
             'na|me' => false, // Недопустимый символ
         ];
 
-        $manager = new MigrationManager([
-            'alias' => '@test/temp',
-        ]);
+        $manager = new MigrationManager;
+        $manager->alias = '@test/temp';
 
         foreach ($items as $name => $expected) {
             $actual = $manager->create($name);
@@ -42,9 +41,8 @@ final class MigrationManagerTest extends BaseTestCase
 
     public function testGetMigrations()
     {
-        $manager = new MigrationManager([
-            'alias' => '@test/temp',
-        ]);
+        $manager = new MigrationManager;
+        $manager->alias = '@test/temp';
         $count = 3;
 
         // Создание миграций

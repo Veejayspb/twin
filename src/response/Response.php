@@ -16,9 +16,8 @@ class Response extends Component
     /**
      * {@inheritdoc}
      */
-    public function __construct(array $properties = [])
+    public function __construct()
     {
-        parent::__construct($properties);
         $this->registerHeaders();
     }
 

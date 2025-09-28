@@ -9,6 +9,7 @@ use twin\common\Container;
 use twin\common\Exception;
 use twin\helper\Alias;
 use twin\helper\ConfigConstructor;
+use twin\helper\ObjectHelper;
 use twin\helper\Request;
 use twin\migration\MigrationManager;
 use twin\response\Response;
@@ -348,7 +349,8 @@ class Twin
             }
 
             $className = $properties['class'];
-            $object = new $className($properties);
+            $object = new $className;
+            (new ObjectHelper($object))->setProperties($properties);
             $this->setComponent($name, $object);
         }
     }

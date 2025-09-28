@@ -175,7 +175,9 @@ final class MigrationTest extends BaseTestCase
      */
     protected function getMigrationManager(): MigrationManager
     {
-        return new MigrationManager(['alias' => '@test/temp']);
+        $manager = new MigrationManager;
+        $manager->alias = '@test/temp';
+        return $manager;
     }
 
     /**
