@@ -110,7 +110,7 @@ class Html
      */
     public static function submit(string $value, array $htmlAttributes = []): string
     {
-        $htmlAttributes['type'] = $htmlAttributes['type'] ?? 'submit';
+        $htmlAttributes['type'] ??= 'submit';
         $htmlAttributes['value'] = $value;
         return static::tagOpen('input', $htmlAttributes);
     }
@@ -241,7 +241,7 @@ class Html
      */
     public static function checkbox(int|string $value = 1, array $htmlAttributes = []): string
     {
-        $htmlAttributes['type'] = $htmlAttributes['type'] ?? 'checkbox';
+        $htmlAttributes['type'] ??= 'checkbox';
         $htmlAttributes['value'] = $value;
         return static::tagOpen('input', $htmlAttributes);
     }
@@ -295,8 +295,8 @@ class Html
      */
     protected static function input(string $type, string|null $value = null, array $htmlAttributes = []): string
     {
-        $htmlAttributes['type'] = $htmlAttributes['type'] ?? $type;
-        $htmlAttributes['value'] = $htmlAttributes['value'] ?? $value;
+        $htmlAttributes['type'] ??= $type;
+        $htmlAttributes['value'] ??= $value;
         return static::tagOpen('input', $htmlAttributes);
     }
 }

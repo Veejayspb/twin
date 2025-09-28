@@ -110,7 +110,7 @@ class Twin
      */
     public static function app(): self
     {
-        return static::$instance = static::$instance ?? new static;
+        return static::$instance ??= new static;
     }
 
     /**

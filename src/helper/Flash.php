@@ -58,7 +58,7 @@ class Flash
      */
     protected static function instance(): self
     {
-        return self::$instance = self::$instance ?? new static;
+        return static::$instance ??= new static;
     }
 
     /**

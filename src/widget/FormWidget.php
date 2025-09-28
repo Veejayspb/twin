@@ -58,7 +58,7 @@ class FormWidget extends Widget
     public function label(Model $model, string $attribute, array $htmlAttributes = []): string
     {
         $label = $model->getLabel($attribute);
-        $htmlAttributes['for'] = $htmlAttributes['for'] ?? $this->getAttributeId($model, $attribute);
+        $htmlAttributes['for'] ??= $this->getAttributeId($model, $attribute);
         return Html::label($label, $htmlAttributes);
     }
 
@@ -96,7 +96,7 @@ class FormWidget extends Widget
     public function inputText(Model $model, string $attribute, array $htmlAttributes = []): string
     {
         $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
-        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
+        $htmlAttributes['id'] ??= $this->getAttributeId($model, $attribute);
         return Html::inputText($model->$attribute, $htmlAttributes);
     }
 
@@ -110,7 +110,7 @@ class FormWidget extends Widget
     public function inputEmail(Model $model, string $attribute, array $htmlAttributes = []): string
     {
         $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
-        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
+        $htmlAttributes['id'] ??= $this->getAttributeId($model, $attribute);
         return Html::inputEmail($model->$attribute, $htmlAttributes);
     }
 
@@ -124,7 +124,7 @@ class FormWidget extends Widget
     public function inputPassword(Model $model, string $attribute, array $htmlAttributes = []): string
     {
         $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
-        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
+        $htmlAttributes['id'] ??= $this->getAttributeId($model, $attribute);
         return Html::inputPassword($model->$attribute, $htmlAttributes);
     }
 
@@ -138,7 +138,7 @@ class FormWidget extends Widget
     public function inputHidden(Model $model, string $attribute, array $htmlAttributes = []): string
     {
         $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
-        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
+        $htmlAttributes['id'] ??= $this->getAttributeId($model, $attribute);
         return Html::inputHidden($model->$attribute, $htmlAttributes);
     }
 
@@ -157,7 +157,7 @@ class FormWidget extends Widget
             $name.= '[]';
         }
         $htmlAttributes['name'] = $name;
-        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
+        $htmlAttributes['id'] ??= $this->getAttributeId($model, $attribute);
         return Html::inputFile($htmlAttributes);
     }
 
@@ -171,7 +171,7 @@ class FormWidget extends Widget
     public function textArea(Model $model, string $attribute, array $htmlAttributes = []): string
     {
         $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
-        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
+        $htmlAttributes['id'] ??= $this->getAttributeId($model, $attribute);
         return Html::textArea($model->$attribute, $htmlAttributes);
     }
 
@@ -192,7 +192,7 @@ class FormWidget extends Widget
             $name.= '[]';
         }
         $htmlAttributes['name'] = $name;
-        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
+        $htmlAttributes['id'] ??= $this->getAttributeId($model, $attribute);
         $result.= Html::select($model->$attribute, $options, $htmlAttributes);
         return $result;
     }
@@ -209,7 +209,7 @@ class FormWidget extends Widget
     public function radio(Model $model, string $attribute, array $options = [], array $htmlAttributes = [], string $separator = PHP_EOL): string
     {
         $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
-        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
+        $htmlAttributes['id'] ??= $this->getAttributeId($model, $attribute);
         return Html::radio($model->$attribute, $options, $htmlAttributes, $separator);
     }
 
@@ -224,7 +224,7 @@ class FormWidget extends Widget
     {
         $htmlAttributes['name'] = $this->getAttributeName($model, $attribute);
         $result = Html::inputHidden(0, $htmlAttributes);
-        $htmlAttributes['id'] = $htmlAttributes['id'] ?? $this->getAttributeId($model, $attribute);
+        $htmlAttributes['id'] ??= $this->getAttributeId($model, $attribute);
         $htmlAttributes['checked'] = (bool)$model->$attribute;
         $result.= Html::checkbox(1, $htmlAttributes);
         return $result;
