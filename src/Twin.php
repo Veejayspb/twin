@@ -4,7 +4,6 @@ namespace twin;
 
 use DateTime;
 use twin\asset\AssetManager;
-use twin\common\Component;
 use twin\common\Container;
 use twin\common\Exception;
 use twin\helper\Alias;
@@ -71,7 +70,7 @@ class Twin
 
     /**
      * Компоненты.
-     * @var Component[]
+     * @var array
      */
     protected array $components = [];
 
@@ -98,7 +97,7 @@ class Twin
 
     /**
      * @param string $name - название компонента
-     * @return Component|null
+     * @return object|null
      */
     public function __get(string $name)
     {
@@ -139,7 +138,7 @@ class Twin
 
     /**
      * Список компонентов.
-     * @return Component[]
+     * @return array
      */
     public function getComponents(): array
     {
@@ -149,9 +148,9 @@ class Twin
     /**
      * Вернуть компонент.
      * @param string $name - название компонента
-     * @return Component|null
+     * @return object|null
      */
-    public function getComponent(string $name): ?Component
+    public function getComponent(string $name): ?object
     {
         return $this->components[$name] ?? null;
     }
@@ -159,9 +158,9 @@ class Twin
     /**
      * Найти компонент указанного класса.
      * @param string $class - name\space\Component
-     * @return Component|null
+     * @return object|null
      */
-    public function findComponent(string $class): ?Component
+    public function findComponent(string $class): ?object
     {
         $components = $this->getComponents();
 
@@ -177,10 +176,10 @@ class Twin
     /**
      * Регистрация компонента.
      * @param string $name - название компонента
-     * @param Component|null $component - объект с компонентом
+     * @param object|null $component - объект с компонентом
      * @return void
      */
-    public function setComponent(string $name, ?Component $component): void
+    public function setComponent(string $name, ?object $component): void
     {
         if ($component === null) {
             $this->unsetComponent($name);
