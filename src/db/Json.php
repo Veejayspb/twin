@@ -32,11 +32,6 @@ class Json extends Database
     /**
      * {@inheritdoc}
      */
-    protected array $_requiredProperties = ['dbName', 'pkField', 'alias'];
-
-    /**
-     * {@inheritdoc}
-     */
     public function getPk(string $table): array
     {
         return [$this->pkField];

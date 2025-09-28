@@ -15,11 +15,6 @@ abstract class Database extends Component
 
     /**
      * {@inheritdoc}
-     */
-    protected array $_requiredProperties = ['dbName'];
-
-    /**
-     * {@inheritdoc}
      * @throws Exception
      */
     public function __construct(array $properties = [])

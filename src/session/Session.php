@@ -33,11 +33,6 @@ class Session extends Component
     /**
      * {@inheritdoc}
      */
-    protected array $_requiredProperties = ['autoStart', 'lifeTime'];
-
-    /**
-     * {@inheritdoc}
-     */
     public function __construct(array $properties = [])
     {
         parent::__construct($properties);

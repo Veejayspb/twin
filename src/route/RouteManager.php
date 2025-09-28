@@ -59,11 +59,6 @@ class RouteManager extends Component
     public string $controllerPostfix = 'Controller';
 
     /**
-     * {@inheritdoc}
-     */
-    protected array $_requiredProperties = ['home', 'login', 'logout', 'error', 'namespaces', 'rules'];
-
-    /**
      * Вернуть неймспейс контроллеров указанного модуля.
      * @param string|null $module - название модуля
      * @return string|null

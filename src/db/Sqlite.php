@@ -21,11 +21,6 @@ class Sqlite extends Sql
     /**
      * {@inheritdoc}
      */
-    protected array $_requiredProperties = ['dbName', 'alias'];
-
-    /**
-     * {@inheritdoc}
-     */
     public function getTables(): array
     {
         $sql = "SELECT `name` FROM `sqlite_master` WHERE `type`='table' ORDER BY 'name'";

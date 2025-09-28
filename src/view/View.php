@@ -65,11 +65,6 @@ class View extends Component
     protected array $body = [];
 
     /**
-     * {@inheritdoc}
-     */
-    protected array $_requiredProperties = ['layoutPath', 'alias'];
-
-    /**
      * Рендер вида без шаблона.
      * @param string $route - текстовый роут
      * @param array $data - данные

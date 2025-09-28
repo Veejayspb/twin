@@ -31,11 +31,6 @@ class Mysql extends Sql
     /**
      * {@inheritdoc}
      */
-    protected array $_requiredProperties = ['dbName', 'username', 'password'];
-
-    /**
-     * {@inheritdoc}
-     */
     public function getTables(): array
     {
         $sql = 'SHOW TABLES';

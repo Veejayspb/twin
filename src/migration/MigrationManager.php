@@ -23,11 +23,6 @@ class MigrationManager extends Component
     public string $table = 'migration';
 
     /**
-     * {@inheritdoc}
-     */
-    protected array $_requiredProperties = ['alias', 'table'];
-
-    /**
      * Создать новую миграцию.
      * @param string $name - название миграции
      * @return bool
