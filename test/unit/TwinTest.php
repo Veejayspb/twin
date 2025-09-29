@@ -29,23 +29,6 @@ final class TwinTest extends BaseTestCase
         $this->assertSame(get_class(TwinChild::app()), TwinChild::class);
     }
 
-    /*public function testRun()
-    {
-        // TODO...
-    }*/
-
-    public function testGetComponents()
-    {
-        $twin = Twin::app();
-        $proxy = new ObjectProxy($twin);
-
-        $proxy->components = [];
-        $this->assertSame($proxy->components, $twin->getComponents());
-
-        $proxy->components = ['test' => new View];
-        $this->assertSame($proxy->components, $twin->getComponents());
-    }
-
     public function testGetComponent()
     {
         $twin = Twin::app();

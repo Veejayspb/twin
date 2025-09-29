@@ -139,15 +139,6 @@ class Twin
     }
 
     /**
-     * Список компонентов.
-     * @return array
-     */
-    public function getComponents(): array
-    {
-        return $this->components;
-    }
-
-    /**
      * Вернуть компонент.
      * @param string $name - название компонента
      * @return object|null
