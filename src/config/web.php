@@ -3,6 +3,7 @@
 use twin\asset\AssetManager;
 use twin\helper\Request;
 use twin\response\ResponseHtml;
+use twin\session\Session;
 use twin\view\View;
 
 return [
@@ -31,6 +32,9 @@ return [
             'class' => AssetManager::class,
             'publicationPath' => '@public/asset',
             'webPath' => '/asset',
+        ],
+        'session' => [
+            'class' => Session::class,
         ],
     ],
 ];

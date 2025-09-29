@@ -4,7 +4,6 @@ namespace twin\controller;
 
 use twin\common\Exception;
 use twin\migration\Migration;
-use twin\migration\MigrationManager;
 use twin\Twin;
 
 class MigrationController extends Controller
@@ -45,9 +44,7 @@ class MigrationController extends Controller
      */
     public function actionCreate($name)
     {
-        $manager = $this->getManager();
-
-        if (!$manager->create($name)) {
+        if (!Twin::app()->migration->create($name)) {
             throw new Exception(400, 'Error while creating new migration file');
         }
 
@@ -61,7 +58,7 @@ class MigrationController extends Controller
      */
     public function actionStatus()
     {
-        $migrations = $this->getManager()->getNotAppliedMigrations();
+        $migrations = Twin::app()->migration->getNotAppliedMigrations();
         $count = count($migrations);
         $result = [];
 
@@ -86,7 +83,7 @@ class MigrationController extends Controller
      */
     public function actionApply($name = null)
     {
-        $manager = $this->getManager();
+        $manager = Twin::app()->migration;
 
         if ($name === null) {
             $target = $manager->getLastMigration();
@@ -171,21 +168,5 @@ class MigrationController extends Controller
         }
 
         return $result;
-    }
-
-    /**
-     * Компонент с менеджером миграций.
-     * @return MigrationManager
-     * @throws Exception
-     */
-    protected function getManager(): MigrationManager
-    {
-        $component = Twin::app()->findComponent(MigrationManager::class); /* @var MigrationManager $component */
-
-        if ($component) {
-            return $component;
-        }
-
-        throw new Exception(400, 'No migration manager was found among components');
     }
 }

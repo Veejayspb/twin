@@ -2,7 +2,6 @@
 
 namespace twin\helper;
 
-use twin\session\Session;
 use twin\Twin;
 
 class Flash
@@ -26,22 +25,13 @@ class Flash
 
     private function __construct()
     {
-        $session = $this->getSession();
-
-        if (!$session) {
-            return;
-        }
-
-        $this->messages = (array)$session->get(static::STORAGE_NAME);
+        $messages = Twin::app()->session->get(static::STORAGE_NAME, []);
+        $this->messages = (array)$messages;
     }
 
     public function __destruct()
     {
-        $session = $this->getSession();
-
-        if (!$session) {
-            return;
-        }
+        $session = Twin::app()->session;
 
         if (empty($this->messages)) {
             $session->delete(static::STORAGE_NAME);
@@ -116,14 +106,5 @@ class Flash
         if (static::has($name)) {
             unset(static::instance()->messages[$name]);
         }
-    }
-
-    /**
-     * Вернуть экземпляр сессии.
-     * @return Session|null
-     */
-    private function getSession(): ?Session
-    {
-        return Twin::app()->findComponent(Session::class);
     }
 }

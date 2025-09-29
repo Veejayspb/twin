@@ -59,31 +59,6 @@ final class TwinTest extends BaseTestCase
         $this->assertSame($view, $twin->getComponent('view'));
     }
 
-    public function testFindComponent()
-    {
-        $twin = Twin::app();
-        $proxy = new ObjectProxy($twin);
-
-        $view = new View;
-        $child = new class extends View {};
-
-        $this->assertNull($twin->findComponent('notexists'));
-
-        $proxy->components = [
-            'child' => $child,
-            'view' => $view,
-        ];
-
-        $this->assertSame($child, $twin->findComponent(View::class));
-
-        $proxy->components = [
-            'view' => $view,
-            'child' => $child,
-        ];
-
-        $this->assertSame($child, $twin->findComponent(get_class($child)));
-    }
-
     public function testSetComponent()
     {
         $twin = Twin::app();

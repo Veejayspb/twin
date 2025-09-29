@@ -3,7 +3,6 @@
 namespace twin\helper;
 
 use twin\route\Route;
-use twin\route\RouteManager;
 use twin\Twin;
 
 class Url
@@ -17,13 +16,8 @@ class Url
      */
     public static function to(string $strRoute, array $params = [], bool $absolute = false): ?string
     {
-        $routeManager = static::getRouteManager();
-
-        if (!$routeManager) {
-            return null;
-        }
-
-        $route = $routeManager->getCurrentRoute();
+        $router = Twin::app()->router;
+        $route = $router->getCurrentRoute();
 
         if (!$route) {
             return null;
@@ -33,7 +27,7 @@ class Url
         $route->parse($strRoute);
         $route->params = $params;
 
-        return $routeManager->createUrl($route, $absolute) ?: null;
+        return $router->createUrl($route, $absolute) ?: null;
     }
 
     /**
@@ -44,79 +38,47 @@ class Url
      */
     public static function current(array $params = [], bool $absolute = false): ?string
     {
-        $routeManager = static::getRouteManager();
-
-        if (!$routeManager) {
-            return null;
-        }
-
-        $route = $routeManager->getCurrentRoute();
+        $router = Twin::app()->router;
+        $route = $router->getCurrentRoute();
 
         if (!$route) {
             return null;
         }
 
         $route->params = $params + $route->params;
-        return $routeManager->createUrl($route, $absolute) ?: null;
+        return $router->createUrl($route, $absolute) ?: null;
     }
 
     /**
      * Адрес главной страницы.
      * @param array $params - параметры
      * @param bool $absolute - абсолютный адрес
-     * @return string|null
+     * @return string
      */
-    public static function home(array $params = [], bool $absolute = false): ?string
+    public static function home(array $params = [], bool $absolute = false): string
     {
-        $routeManager = static::getRouteManager();
-
-        if (!$routeManager) {
-            return null;
-        }
-
-        return static::to($routeManager->home, $params, $absolute);
+        return static::to(Twin::app()->router->home, $params, $absolute);
     }
 
     /**
      * Адрес страницы login.
      * @param array $params - параметры
      * @param bool $absolute - абсолютный адрес
-     * @return string|null
+     * @return string
      */
-    public static function login(array $params = [], bool $absolute = false): ?string
+    public static function login(array $params = [], bool $absolute = false): string
     {
-        $routeManager = static::getRouteManager();
-
-        if (!$routeManager) {
-            return null;
-        }
-
-        return static::to($routeManager->login, $params, $absolute);
+        return static::to(Twin::app()->router->login, $params, $absolute);
     }
 
     /**
      * Адрес страницы logout.
      * @param array $params - параметры
      * @param bool $absolute - абсолютный адрес
-     * @return string|null
+     * @return string
      */
-    public static function logout(array $params = [], bool $absolute = false): ?string
+    public static function logout(array $params = [], bool $absolute = false): string
     {
-        $routeManager = static::getRouteManager();
-
-        if (!$routeManager) {
-            return null;
-        }
-
-        return static::to($routeManager->logout, $params, $absolute);
-    }
-
-    /**
-     * Вернуть роутер для генерации адреса.
-     * @return RouteManager|null
-     */
-    protected static function getRouteManager(): ?RouteManager
-    {
-        return Twin::app()->findComponent(RouteManager::class);
+        return static::to(Twin::app()->router->logout, $params, $absolute);
     }
 }

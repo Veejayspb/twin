@@ -3,7 +3,6 @@
 namespace twin\session;
 
 use twin\helper\Cookie;
-use twin\Twin;
 
 class Identity
 {
@@ -21,35 +20,29 @@ class Identity
      * Идентификатор пользователя.
      * @var int|null
      */
-    private ?int $id;
+    protected ?int $id = null;
 
     /**
      * Произвольная строка для генерации токена.
      * @var string
-     * @see createToken()
      */
-    protected string $secretString = 'you should change this string';
+    protected string $secretString;
 
     /**
-     * Объект текущего класса.
-     * @var static
+     * Компонент с сессией.
+     * @var Session
      */
-    protected static self $instance;
+    protected Session $session;
 
-    protected function __construct()
+    /**
+     * @param Session $session
+     * @param string $secretString
+     */
+    public function __construct(Session $session, string $secretString)
     {
+        $this->session = $session;
+        $this->secretString = $secretString;
         $this->restoreId();
-    }
-
-    private function __clone() {}
-
-    /**
-     * Объект текущего класса.
-     * @return static
-     */
-    public static function instance(): self
-    {
-        return static::$instance ??= new static;
     }
 
     /**
@@ -91,13 +84,8 @@ class Identity
      */
     public function logout(): void
     {
-        $session = $this->getSession();
+        $this->session->destroy();
 
-        if (!$session) {
-            return;
-        }
-
-        $session->destroy();
         Cookie::delete(static::TOKEN);
         Cookie::delete(static::IDENTITY);
     }
@@ -130,13 +118,7 @@ class Identity
      */
     protected function restoreId(): void
     {
-        $session = $this->getSession();
-
-        if (!$session) {
-            return;
-        }
-
-        $id = $session->get(static::IDENTITY);
+        $id = $this->session->get(static::IDENTITY);
 
         if ($id !== null) {
             $this->id = $id;
@@ -149,14 +131,5 @@ class Identity
         if ($id !== null && $this->checkToken($token, $id)) {
             $this->id = $id;
         }
-    }
-
-    /**
-     * Компонент SESSION.
-     * @return Session|null
-     */
-    protected function getSession(): ?Session
-    {
-        return Twin::app()->findComponent(Session::class);
     }
 }

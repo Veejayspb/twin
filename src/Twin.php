@@ -14,6 +14,7 @@ use twin\migration\MigrationManager;
 use twin\response\Response;
 use twin\route\Route;
 use twin\route\RouteManager;
+use twin\session\Session;
 use twin\view\View;
 
 /**
@@ -24,6 +25,7 @@ use twin\view\View;
  * @property-read AssetManager $asset
  * @property-read MigrationManager $migration
  * @property-read Response $response
+ * @property-read Session $session
  */
 class Twin
 {
@@ -153,24 +155,6 @@ class Twin
     public function getComponent(string $name): ?object
     {
         return $this->components[$name] ?? null;
-    }
-
-    /**
-     * Найти компонент указанного класса.
-     * @param string $class - name\space\Component
-     * @return object|null
-     */
-    public function findComponent(string $class): ?object
-    {
-        $components = $this->getComponents();
-
-        foreach ($components as $component) {
-            if (is_a($component, $class)) {
-                return $component;
-            }
-        }
-
-        return null;
     }
 
     /**
