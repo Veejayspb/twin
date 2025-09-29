@@ -35,12 +35,6 @@ class Twin
     public string $language = 'ru';
 
     /**
-     * Параметры.
-     * @var array
-     */
-    public array $params = [];
-
-    /**
      * DI контейнер.
      * @var Container
      */
