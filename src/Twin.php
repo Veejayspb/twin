@@ -29,12 +29,6 @@ class Twin
     public string $name = 'Twin Application';
 
     /**
-     * Язык приложения.
-     * @var string
-     */
-    public string $language = 'ru';
-
-    /**
      * DI контейнер.
      * @var Container
      */
