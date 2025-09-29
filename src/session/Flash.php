@@ -1,9 +1,12 @@
 <?php
 
-namespace twin\helper;
+namespace twin\session;
 
-use twin\Twin;
-
+/**
+ * Класс для управления флеш-сообщениями.
+ *
+ * Class Flash
+ */
 class Flash
 {
     /**
@@ -12,43 +15,34 @@ class Flash
     const STORAGE_NAME = 'flash';
 
     /**
+     * Компонент с сессией.
+     * @var Session
+     */
+    protected Session $session;
+
+    /**
      * Имеющиеся флеш-сообщения.
      * @var array
      */
     protected array $messages = [];
 
     /**
-     * Экземпляр текущего класса.
-     * @var static
+     * @param Session $session
      */
-    private static self $instance;
-
-    private function __construct()
+    public function __construct(Session $session)
     {
-        $messages = Twin::app()->di->session->get(static::STORAGE_NAME, []);
+        $this->session = $session;
+        $messages = $session->get(static::STORAGE_NAME, []);
         $this->messages = (array)$messages;
     }
 
     public function __destruct()
     {
-        $session = Twin::app()->di->session;
-
         if (empty($this->messages)) {
-            $session->delete(static::STORAGE_NAME);
+            $this->session->delete(static::STORAGE_NAME);
         } else {
-            $session->set(static::STORAGE_NAME, $this->messages);
+            $this->session->set(static::STORAGE_NAME, $this->messages);
         }
-    }
-
-    private function __clone() {}
-
-    /**
-     * Вернуть экземпляр текущего класса.
-     * @return static
-     */
-    protected static function instance(): self
-    {
-        return static::$instance ??= new static;
     }
 
     /**
@@ -56,12 +50,9 @@ class Flash
      * @param string $name - название
      * @return bool
      */
-    public static function has(string $name): bool
+    public function has(string $name): bool
     {
-        return array_key_exists(
-            $name,
-            static::instance()->messages
-        );
+        return array_key_exists($name, $this->messages);
     }
 
     /**
@@ -70,16 +61,16 @@ class Flash
      * @param bool $clear - очистить сообщение
      * @return string|null - NULL, если флеш-сообщение отсутствует
      */
-    public static function get(string $name, bool $clear = true): ?string
+    public function get(string $name, bool $clear = true): ?string
     {
-        if (!static::has($name)) {
+        if (!$this->has($name)) {
             return null;
         }
 
-        $result = (string)static::instance()->messages[$name];
+        $result = (string)$this->messages[$name];
 
         if ($clear) {
-            static::delete($name);
+            $this->delete($name);
         }
 
         return $result;
@@ -91,9 +82,9 @@ class Flash
      * @param string $value - сообщение
      * @return void
      */
-    public static function set(string $name, string $value): void
+    public function set(string $name, string $value): void
     {
-        static::instance()->messages[$name] = $value;
+        $this->messages[$name] = $value;
     }
 
     /**
@@ -101,10 +92,12 @@ class Flash
      * @param string $name - название
      * @return void
      */
-    public static function delete(string $name): void
+    public function delete(string $name): void
     {
-        if (static::has($name)) {
-            unset(static::instance()->messages[$name]);
+        $has = $this->has($name);
+
+        if ($has) {
+            unset($this->messages[$name]);
         }
     }
 }

@@ -7,6 +7,7 @@ use twin\asset\AssetManager;
 use twin\migration\MigrationManager;
 use twin\response\Response;
 use twin\route\RouteManager;
+use twin\session\Flash;
 use twin\session\Identity;
 use twin\session\Session;
 use twin\view\View;
@@ -32,6 +33,7 @@ use twin\view\View;
  * @property-read Session $session
  * @property-read MigrationManager $migration
  * @property-read Identity $identity
+ * @property-read Flash $flash
  */
 class Container implements ContainerInterface
 {
