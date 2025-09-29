@@ -160,16 +160,12 @@ class Twin
     /**
      * Регистрация компонента.
      * @param string $name - название компонента
-     * @param object|null $component - объект с компонентом
+     * @param object $component - объект с компонентом
      * @return void
      */
-    public function setComponent(string $name, ?object $component): void
+    public function setComponent(string $name, object $component): void
     {
-        if ($component === null) {
-            $this->unsetComponent($name);
-        } else {
-            $this->components[$name] = $component;
-        }
+        $this->components[$name] = $component;
     }
 
     /**
@@ -221,18 +217,6 @@ class Twin
             return require_once $path;
         } else {
             return require $path;
-        }
-    }
-
-    /**
-     * Удаление компонента.
-     * @param string $name - название компонента
-     * @return void
-     */
-    protected function unsetComponent(string $name): void
-    {
-        if (array_key_exists($name, $this->components)) {
-            unset($this->components[$name]);
         }
     }
 

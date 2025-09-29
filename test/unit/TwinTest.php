@@ -77,10 +77,6 @@ final class TwinTest extends BaseTestCase
         $twin->setComponent('test', $view2);
         $expected['test'] = $view2;
         $this->assertSame($expected, $proxy->components);
-
-        $twin->setComponent('test', null);
-        unset($expected['test']);
-        $this->assertSame($expected, $proxy->components);
     }
 
     public function testParam()
