@@ -27,7 +27,7 @@ class Session
      * Путь/алиас директории для сохранения файлов с данными сессии.
      * @var string|null
      */
-    public ?string $savePath;
+    public ?string $savePath = null;
 
     public function __construct()
     {
