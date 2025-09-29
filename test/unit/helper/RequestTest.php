@@ -3,7 +3,7 @@
 use twin\helper\Request;
 use test\helper\BaseTestCase;
 
-class RequestTest extends BaseTestCase
+final class RequestTest extends BaseTestCase
 {
     public function testIsAjax()
     {
