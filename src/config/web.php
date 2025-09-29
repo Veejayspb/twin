@@ -32,3 +32,4 @@ $twin->di->set('response', fn() => new ResponseHtml);
 $twin->di->set('view', fn() => new View);
 $twin->di->set('asset', fn() => new AssetManager);
 $twin->di->set('session', fn() => new Session);
+$twin->di->set('identity', fn() => new Identity($twin->di->session, 'secret string'));
