@@ -103,28 +103,6 @@ class Twin
     }
 
     /**
-     * Значение указанного параметра.
-     * @param string $name - название параметра в формате: path.to.param
-     * @param mixed|null $default - значение, которое вернется, если параметр не найден
-     * @return mixed
-     */
-    public static function param(string $name, mixed $default = null): mixed
-    {
-        $param = static::app()->params;
-        $parts = explode('.', $name);
-
-        foreach ($parts as $part) {
-            if (array_key_exists($part, $param)) {
-                $param = $param[$part];
-            } else {
-                return $default;
-            }
-        }
-
-        return $param;
-    }
-
-    /**
      * Вернуть дату запуска приложения.
      * @return DateTime
      */

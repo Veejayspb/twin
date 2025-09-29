@@ -16,32 +16,6 @@ final class TwinTest extends BaseTestCase
         $this->assertSame(get_class(TwinChild::app()), TwinChild::class);
     }
 
-    public function testParam()
-    {
-        Twin::app()->params = [
-            'one-1',
-            'one-2' => 2,
-            'one-3' => [
-                'two-1' => false,
-                'two-2' => [
-                    'three-1' => '321',
-                    'three-2' => null,
-                    'three-3' => $std = new stdClass,
-                ],
-            ],
-        ];
-
-        $this->assertSame(null, Twin::param('notexists'));
-        $this->assertSame('default', Twin::param('notexists', 'default'));
-
-        $this->assertSame('one-1', Twin::param('0'));
-        $this->assertSame(2, Twin::param('one-2', 'default'));
-        $this->assertSame(false, Twin::param('one-3.two-1'));
-        $this->assertSame('321', Twin::param('one-3.two-2.three-1'));
-        $this->assertSame(null, Twin::param('one-3.two-2.three-2'));
-        $this->assertSame($std, Twin::param('one-3.two-2.three-3'));
-    }
-
     public function testDate()
     {
         $this->assertSame(Twin::date(), Twin::date());
