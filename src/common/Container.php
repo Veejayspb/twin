@@ -3,6 +3,12 @@
 namespace twin\common;
 
 use Psr\Container\ContainerInterface;
+use twin\asset\AssetManager;
+use twin\migration\MigrationManager;
+use twin\response\Response;
+use twin\route\RouteManager;
+use twin\session\Session;
+use twin\view\View;
 
 /**
  * DI контейнер с компонентами.
@@ -13,9 +19,17 @@ use Psr\Container\ContainerInterface;
  *     return new Component;
  * });
  * $c->get(Component::class);
- * $c->get('anyString');
+ * $c->get('anyString'); // Similar
+ * $c->anyString;        // Similar
  *
  * Class Container
+ *
+ * @property-read RouteManager $router
+ * @property-read Response $response
+ * @property-read View $view
+ * @property-read AssetManager $asset
+ * @property-read Session $session
+ * @property-read MigrationManager $migration
  */
 class Container implements ContainerInterface
 {
@@ -30,6 +44,15 @@ class Container implements ContainerInterface
      * @var array
      */
     protected array $instances = [];
+
+    /**
+     * @param string $name
+     * @return object
+     */
+    public function __get(string $name)
+    {
+        return $this->get($name);
+    }
 
     /**
      * Регистрация компонента.
@@ -62,6 +85,7 @@ class Container implements ContainerInterface
 
         $definition = $this->definitions[$id];
         $instance = $definition($this);
+
         return $this->instances[$id] = $instance;
     }
 
