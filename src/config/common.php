@@ -6,7 +6,6 @@ use twin\route\RouteManager;
 use twin\Twin;
 
 $twin = Twin::app();
-$twin->name = 'Twin application';
 
 $twin->di->set('router', fn() => new RouteManager);
 $twin->di->set('response', fn() => new Response);

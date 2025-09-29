@@ -23,12 +23,6 @@ class Twin
     const VERSION = '0.6.0';
 
     /**
-     * Название приложения.
-     * @var string
-     */
-    public string $name = 'Twin Application';
-
-    /**
      * DI контейнер.
      * @var Container
      */
