@@ -76,7 +76,7 @@ class NavItem extends Widget
             return false;
         }
 
-        $router = Twin::app()->router;
+        $router = Twin::app()->di->router;
         $route = $router->parseUrl($this->url);
 
         if (!$route) {

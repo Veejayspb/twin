@@ -2,7 +2,6 @@
 
 use twin\db\Database;
 use twin\migration\Migration;
-use twin\Twin;
 
 class {{class}} extends Migration
 {
@@ -27,6 +26,6 @@ class {{class}} extends Migration
      */
     protected function getDb(): ?Database
     {
-        return Twin::app()->db; // TODO: Return real db component.
+        // TODO: Return database component.
     }
 }

@@ -74,7 +74,7 @@ abstract class Asset
      */
     public static function register(): static
     {
-        return Twin::app()->asset->register(static::class);
+        return Twin::app()->di->asset->register(static::class);
     }
 
     /**

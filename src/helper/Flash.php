@@ -25,13 +25,13 @@ class Flash
 
     private function __construct()
     {
-        $messages = Twin::app()->session->get(static::STORAGE_NAME, []);
+        $messages = Twin::app()->di->session->get(static::STORAGE_NAME, []);
         $this->messages = (array)$messages;
     }
 
     public function __destruct()
     {
-        $session = Twin::app()->session;
+        $session = Twin::app()->di->session;
 
         if (empty($this->messages)) {
             $session->delete(static::STORAGE_NAME);

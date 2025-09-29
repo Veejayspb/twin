@@ -38,7 +38,7 @@ abstract class Controller
 
         $data = $this->action($actionName, $params);
 
-        echo Twin::app()->response->run($data);
+        echo Twin::app()->di->response->run($data);
     }
 
     /**

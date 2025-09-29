@@ -16,7 +16,7 @@ class Url
      */
     public static function to(string $strRoute, array $params = [], bool $absolute = false): ?string
     {
-        $router = Twin::app()->router;
+        $router = Twin::app()->di->router;
         $route = $router->getCurrentRoute();
 
         if (!$route) {
@@ -38,7 +38,7 @@ class Url
      */
     public static function current(array $params = [], bool $absolute = false): ?string
     {
-        $router = Twin::app()->router;
+        $router = Twin::app()->di->router;
         $route = $router->getCurrentRoute();
 
         if (!$route) {
@@ -57,7 +57,7 @@ class Url
      */
     public static function home(array $params = [], bool $absolute = false): string
     {
-        return static::to(Twin::app()->router->home, $params, $absolute);
+        return static::to(Twin::app()->di->router->home, $params, $absolute);
     }
 
     /**
@@ -68,7 +68,7 @@ class Url
      */
     public static function login(array $params = [], bool $absolute = false): string
     {
-        return static::to(Twin::app()->router->login, $params, $absolute);
+        return static::to(Twin::app()->di->router->login, $params, $absolute);
     }
 
     /**
@@ -79,6 +79,6 @@ class Url
      */
     public static function logout(array $params = [], bool $absolute = false): string
     {
-        return static::to(Twin::app()->router->logout, $params, $absolute);
+        return static::to(Twin::app()->di->router->logout, $params, $absolute);
     }
 }
