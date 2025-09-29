@@ -11,9 +11,9 @@ use twin\view\View;
 
 require __DIR__ . DIRECTORY_SEPARATOR . 'common.php';
 
-$twin = Twin::app();
+$di = Twin::app()->di;
 
-$twin->di->set('router', function () {
+$di->set('router', function () {
     $router = new RouteManager;
     $router->namespaces = [
         '' => 'app\\controller',
@@ -28,8 +28,8 @@ $twin->di->set('router', function () {
     $router->domain = Request::$scheme . '://' . Request::$host;
     return $router;
 });
-$twin->di->set('response', fn() => new ResponseHtml);
-$twin->di->set('view', fn() => new View);
-$twin->di->set('asset', fn() => new AssetManager);
-$twin->di->set('session', fn() => new Session);
-$twin->di->set('identity', fn() => new Identity($twin->di->session, 'secret string'));
+$di->set('response', fn() => new ResponseHtml);
+$di->set('view', fn() => new View);
+$di->set('asset', fn() => new AssetManager);
+$di->set('session', fn() => new Session);
+$di->set('identity', fn() => new Identity($di->session, 'secret string'));

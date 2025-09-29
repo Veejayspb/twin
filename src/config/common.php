@@ -5,8 +5,8 @@ use twin\response\Response;
 use twin\route\RouteManager;
 use twin\Twin;
 
-$twin = Twin::app();
+$di = Twin::app()->di;
 
-$twin->di->set('router', fn() => new RouteManager);
-$twin->di->set('response', fn() => new Response);
-$twin->di->set('i18n', fn() => new I18n);
+$di->set('router', fn() => new RouteManager);
+$di->set('response', fn() => new Response);
+$di->set('i18n', fn() => new I18n);

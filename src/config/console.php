@@ -7,9 +7,9 @@ use twin\Twin;
 
 require __DIR__ . DIRECTORY_SEPARATOR . 'common.php';
 
-$twin = Twin::app();
+$di = Twin::app()->di;
 
-$twin->di->set('router', function () {
+$di->set('router', function () {
     $router = new RouteManager;
     $router->namespaces = [
         '' => 'console\\controller',
@@ -22,5 +22,5 @@ $twin->di->set('router', function () {
     ];
     return $router;
 });
-$twin->di->set('response', fn() => new ResponseConsole);
-$twin->di->set('migration', fn() => new MigrationManager);
+$di->set('response', fn() => new ResponseConsole);
+$di->set('migration', fn() => new MigrationManager);
