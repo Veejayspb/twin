@@ -33,32 +33,32 @@ class AssetManager
 
     /**
      * Зарегистрировать asset.
-     * @param string $name - название подключаемого класса asset
+     * @param string $class - название подключаемого класса asset
      * @return Asset
      * @throws Exception
      */
-    public function register(string $name): Asset
+    public function register(string $class): Asset
     {
-        if ($this->has($name)) {
-            return $this->assets[$name];
+        if ($this->has($class)) {
+            return $this->assets[$class];
         }
 
-        if (!class_exists($name)) {
-            throw new Exception(500, "Can't found asset class: $name");
+        if (!class_exists($class)) {
+            throw new Exception(500, "Can't found asset class: $class");
         }
 
-        if (!is_subclass_of($name, Asset::class)) {
-            throw new Exception(500, "$name must extends " . Asset::class);
+        if (!is_subclass_of($class, Asset::class)) {
+            throw new Exception(500, "$class must extends " . Asset::class);
         }
 
-        $asset = new $name($this); /* @var Asset $asset */
+        $asset = new $class($this); /* @var Asset $asset */
 
         // Регистрация asset, от которых зависит текущий
-        foreach ($asset->depends as $class) {
-            $this->register($class);
+        foreach ($asset->depends as $depends) {
+            $this->register($depends);
         }
 
-        return $this->assets[$name] = $asset;
+        return $this->assets[$class] = $asset;
     }
 
     /**
