@@ -33,7 +33,7 @@ class Session
     {
         $savePath = $this->getSavePath();
 
-        if ($savePath !== null && $this->createPath()) {
+        if ($this->createPath()) {
             ini_set('session.save_path', $savePath);
         }
 
@@ -158,14 +158,14 @@ class Session
     }
 
     /**
-     * Создать директорию для хранения файлов сессий.
+     * Создать директорию для хранения файлов сессий, если она не существует.
      * @return bool
      */
-    private function createPath(): bool
+    protected function createPath(): bool
     {
         $savePath = $this->getSavePath();
 
-        if (is_dir($savePath)) {
+        if (is_null($savePath) || is_dir($savePath)) {
             return true;
         }
 
@@ -177,7 +177,7 @@ class Session
      * @param string $name - название параметра
      * @return string
      */
-    private function getName(string $name): string
+    protected function getName(string $name): string
     {
         return static::NAME_PREFIX . $name;
     }
