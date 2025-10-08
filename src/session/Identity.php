@@ -2,8 +2,6 @@
 
 namespace twin\session;
 
-use twin\helper\Cookie;
-
 class Identity
 {
     /**
@@ -35,13 +33,22 @@ class Identity
     protected Session $session;
 
     /**
+     * Компонент с куки.
+     * @var Cookie
+     */
+    protected Cookie $cookie;
+
+    /**
      * @param Session $session
+     * @param Cookie $cookie
      * @param string $secretString
      */
-    public function __construct(Session $session, string $secretString)
+    public function __construct(Session $session, Cookie $cookie, string $secretString)
     {
         $this->session = $session;
+        $this->cookie = $cookie;
         $this->secretString = $secretString;
+
         $this->restoreId();
     }
 
@@ -74,8 +81,8 @@ class Identity
         $this->id = $id;
         $token = $this->createToken($id);
 
-        Cookie::set(static::IDENTITY, $id, $expire);
-        Cookie::set(static::TOKEN, $token, $expire);
+        $this->cookie->set(static::IDENTITY, $id, $expire);
+        $this->cookie->set(static::TOKEN, $token, $expire);
     }
 
     /**
@@ -86,8 +93,8 @@ class Identity
     {
         $this->session->destroy();
 
-        Cookie::delete(static::TOKEN);
-        Cookie::delete(static::IDENTITY);
+        $this->cookie->delete(static::TOKEN);
+        $this->cookie->delete(static::IDENTITY);
     }
 
     /**
@@ -125,8 +132,8 @@ class Identity
             return;
         }
 
-        $id = Cookie::get(static::IDENTITY);
-        $token = Cookie::get(static::TOKEN);
+        $id = $this->cookie->get(static::IDENTITY);
+        $token = $this->cookie->get(static::TOKEN);
 
         if ($id !== null && $this->checkToken($token, $id)) {
             $this->id = $id;
