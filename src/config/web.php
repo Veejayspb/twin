@@ -4,6 +4,7 @@ use twin\asset\AssetManager;
 use twin\helper\Request;
 use twin\response\ResponseHtml;
 use twin\route\RouteManager;
+use twin\session\Cookie;
 use twin\session\Flash;
 use twin\session\Identity;
 use twin\session\Session;
@@ -32,6 +33,7 @@ $di->set('router', function () {
 $di->set('response', fn() => new ResponseHtml);
 $di->set('view', fn() => new View);
 $di->set('asset', fn() => new AssetManager);
+$di->set('cookie', fn() => new Cookie);
 $di->set('session', fn() => new Session);
 $di->set('identity', fn() => new Identity($di->session, 'secret string'));
 $di->set('flash', fn() => new Flash($di->session));
