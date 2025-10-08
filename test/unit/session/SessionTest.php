@@ -18,7 +18,7 @@ final class SessionTest extends BaseTestCase
         foreach ($values as $value) {
             $key = 'key' . rand(1, 3);
             $session->set($key, $value);
-            $expected[Session::NAME_PREFIX . $key] = $value;
+            $expected[$session->prefix . $key] = $value;
             $this->assertSame($expected, $_SESSION);
         }
     }
@@ -30,7 +30,7 @@ final class SessionTest extends BaseTestCase
         $key = 'key';
         $value = 'value';
         $_SESSION = [
-            Session::NAME_PREFIX . $key => $value,
+            $session->prefix . $key => $value,
         ];
 
         // Значение не задано
@@ -48,7 +48,7 @@ final class SessionTest extends BaseTestCase
         $key = 'key';
         $value = 'value';
         $_SESSION = [
-            Session::NAME_PREFIX . $key => $value,
+            $session->prefix . $key => $value,
         ];
 
         $session->delete('key');

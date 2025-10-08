@@ -8,8 +8,9 @@ class Session
 {
     /**
      * Префикс параметров.
+     * @var string
      */
-    const NAME_PREFIX = 's_';
+    public string $prefix = 'twin_';
 
     /**
      * Автоматический старт сессии при запуске приложения.
@@ -179,6 +180,6 @@ class Session
      */
     protected function getName(string $name): string
     {
-        return static::NAME_PREFIX . $name;
+        return $this->prefix. $name;
     }
 }
