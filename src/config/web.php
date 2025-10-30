@@ -35,5 +35,5 @@ $di->set('view', fn() => new View);
 $di->set('asset', fn() => new AssetManager);
 $di->set('cookie', fn() => new Cookie);
 $di->set('session', fn() => new Session);
-$di->set('identity', fn() => new Identity($di->session, $di->cookie, 'secret string'));
+$di->set('identity', fn() => new Identity($di->get('session'), $di->get('cookie'), 'secret string'));
 $di->set('flash', fn() => new Flash($di->session));

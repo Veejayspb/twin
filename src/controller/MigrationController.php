@@ -44,7 +44,7 @@ class MigrationController extends Controller
      */
     public function actionCreate($name)
     {
-        if (!Twin::app()->di->migration->create($name)) {
+        if (!Twin::app()->di->get('migration')->create($name)) {
             throw new Exception(400, 'Error while creating new migration file');
         }
 
@@ -58,7 +58,7 @@ class MigrationController extends Controller
      */
     public function actionStatus()
     {
-        $migrations = Twin::app()->di->migration->getNotAppliedMigrations();
+        $migrations = Twin::app()->di->get('migration')->getNotAppliedMigrations();
         $count = count($migrations);
         $result = [];
 
@@ -83,7 +83,7 @@ class MigrationController extends Controller
      */
     public function actionApply($name = null)
     {
-        $manager = Twin::app()->di->migration;
+        $manager = Twin::app()->di->get('migration');
 
         if ($name === null) {
             $target = $manager->getLastMigration();

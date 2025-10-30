@@ -186,7 +186,7 @@ class View
      */
     protected function getCss(): array
     {
-        return Twin::app()->di->asset->getCss();
+        return Twin::app()->di->get('asset')->getCss();
     }
 
     /**
@@ -195,6 +195,6 @@ class View
      */
     protected function getJs(): array
     {
-        return Twin::app()->di->asset->getJs();
+        return Twin::app()->di->get('asset')->getJs();
     }
 }

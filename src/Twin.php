@@ -122,14 +122,14 @@ class Twin
     protected function runWeb(): void
     {
         try {
-            $route = $this->di->router->parseUrl(Request::$url);
+            $route = $this->di->get('router')->parseUrl(Request::$url);
 
             if ($route === false) {
                 throw new Exception(404);
             }
 
             $_GET = $route->params;
-            $controller = $this->di->router->getController($route->module, $route->controller);
+            $controller = $this->di->get('router')->getController($route->module, $route->controller);
 
             if (!$controller) {
                 throw new Exception(404);
@@ -141,13 +141,13 @@ class Twin
             http_response_code($e->getCode());
 
             $route = new Route;
-            $route->parse(static::app()->di->router->error);
+            $route->parse(static::app()->di->get('router')->error);
             $route->params = [
                 'code' => $e->getCode(),
                 'message' => $e->getMessage(),
             ];
 
-            $controller = $this->di->router->getController($route->module, $route->controller);
+            $controller = $this->di->get('router')->getController($route->module, $route->controller);
 
             if (!$controller) {
                 die('Error action not exists');
@@ -165,7 +165,7 @@ class Twin
     {
         try {
             global $argv;
-            $route = $this->di->router->parseUrl((string)$argv[1]);
+            $route = $this->di->get('router')->parseUrl((string)$argv[1]);
 
             if ($route === false) {
                 throw new Exception(404);
@@ -173,7 +173,7 @@ class Twin
 
             unset($argv[0], $argv[1]);
             $route->params = array_values($argv);
-            $controller = $this->di->router->getController($route->module, $route->controller);
+            $controller = $this->di->get('router')->getController($route->module, $route->controller);
 
             if (!$controller) {
                 throw new Exception(404, 'Controller not found');
