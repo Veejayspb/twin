@@ -25,7 +25,7 @@ use twin\view\View;
  * @property-read Identity $identity
  * @property-read Flash $flash
  */
-class Container extends \veejay\container\Container
+class Container extends \Veejay\Container\Container
 {
 
 }
